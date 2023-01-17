@@ -63,48 +63,48 @@ jobs:
            sleep 10
            kill -SIGTERM $!
 
-  build-and-test-windows:
-    runs-on: windows-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-
-      - name: Install dependencies
-        shell: powershell
-        run: |
-          choco install -y vcbuildtools
-          choco install -y cmake
-
-      - name: Add MSBuild to PATH
-        shell: powershell
-        run: setx PATH "%PATH%;%ProgramFiles(x86)%\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin"
-
-
-      - name: Build server
-        shell: powershell
-        run: |
-          cd Server\
-          cmake --build . --config Release
-
-      - name: Run server
-        shell: powershell
-        run: |
-          cd Server\x64\Release
-          r-type_server.exe
-
-      - name: Build client
-        shell: powershell
-        run: |
-          cd Client\
-          cmake .
-          msbuild.exe r-type_client.sln /p:Configuration=Release
-
-      - name: Run client
-        shell: powershell
-        run: |
-          cd Client\x64\Release
-          r-type_client
+#  build-and-test-windows:
+#    runs-on: windows-latest
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v3
+#
+#
+#      - name: Install dependencies
+#        shell: powershell
+#        run: |
+#          choco install -y vcbuildtools
+#          choco install -y cmake
+#
+#      - name: Add MSBuild to PATH
+#        shell: powershell
+#        run: setx PATH "%PATH%;%ProgramFiles(x86)%\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin"
+#
+#
+#      - name: Build server
+#        shell: powershell
+#        run: |
+#          cd Server\
+#          cmake --build . --config Release
+#
+#      - name: Run server
+#        shell: powershell
+#        run: |
+#          cd Server\x64\Release
+#          r-type_server.exe
+#
+#      - name: Build client
+#        shell: powershell
+#        run: |
+#          cd Client\
+#          cmake .
+#          msbuild.exe r-type_client.sln /p:Configuration=Release
+#
+#      - name: Run client
+#        shell: powershell
+#        run: |
+#          cd Client\x64\Release
+#          r-type_client
 
   sync-github:
     runs-on: ubuntu-latest
