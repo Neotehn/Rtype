@@ -7,13 +7,6 @@ on:
         - main
 
 jobs:
-  merge_job:
-    if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          echo PR #${{ github.event.number }} has been merged
-
   build-and-test-linux:
     runs-on: ubuntu-latest
     steps:
@@ -108,6 +101,3 @@ jobs:
         run: |
           cd Client\x64\Release
           r-type_client
-
-
-
