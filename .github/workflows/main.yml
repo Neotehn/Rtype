@@ -121,6 +121,3 @@ jobs:
           destination_repo: "git@github.com:EpitechPromo2025/B-CPP-500-BER-5-2-rtype-gylian.karsch.git"
           destination_branch: "refs/heads/*"
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-
-
