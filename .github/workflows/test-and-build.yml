@@ -1,16 +1,12 @@
 name: Build and Test
 on:
-  pull_request:
-    types: [ closed ]
+    pull_request:
+        types: [ opened, synchronize, reopened ]
+    push:
+      branches:
+        - main
 
 jobs:
-  merge_job:
-    if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          echo PR #${{ github.event.number }} has been merged
-
   build-and-test-linux:
     runs-on: ubuntu-latest
     steps:
@@ -105,19 +101,3 @@ jobs:
         run: |
           cd Client\x64\Release
           r-type_client
-
-  sync:
-    runs-on: ubuntu-latest
-    needs: [build-and-test-linux, merge_job]
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@main
-
-      - name: git-sync
-        uses: wei/git-sync@v3
-        with:
-          source_repo: "git@github.com:Neotehn/Rtype.git"
-          source_branch: "refs/remotes/source/*"
-          destination_repo: "git@github.com:EpitechPromo2025/B-CPP-500-BER-5-2-rtype-gylian.karsch.git"
-          destination_branch: "refs/heads/*"
-          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
