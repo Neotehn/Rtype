@@ -1,0 +1,7 @@
+cmake-build-debug/
+.idea/
+CMakeFiles/
+r-type_server
+Makefile
+CMakeCache.txt
+cmake_install.cmake
