@@ -1,0 +1,117 @@
+name: Build and Test
+on: [push]
+
+jobs:
+  build-and-test-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install libgl1-mesa-dev
+          sudo apt-get install libglx-dev
+          sudo apt-get install libudev-dev
+          sudo apt-get install libopenal-dev
+          sudo apt-get install libvorbis-dev
+          sudo apt-get install libflac-dev
+          sudo apt-get install libogg-dev
+          sudo apt-get install libsfml-dev
+          sudo apt-get install libxrandr-dev
+          sudo apt-get install libx11-dev
+          sudo apt-get install libxcursor-dev
+          sudo apt-get install xvfb
+          sudo apt-get install cmake
+
+      - name: Build server
+        run: |
+          cd Server
+          cmake .
+          make
+
+      - name: Run server
+        run: |
+          cd Server
+          ./r-type_server
+
+      - name: Start virtual framebuffer
+        run: |
+          export DISPLAY=:99
+          Xvfb :99 -screen 0 1280x1024x24 &
+
+      - name: Build client
+        run: |
+          cd Client
+          cmake .
+          make
+
+      - name: Run client
+        run: |
+          cd Client
+           xvfb-run -a ./r-type_client &
+           sleep 10
+           kill -SIGTERM $!
+
+  build-and-test-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+
+      - name: Install dependencies
+        shell: powershell
+        run: |
+          choco install -y vcbuildtools
+          choco install -y cmake
+
+      - name: Add MSBuild to PATH
+        shell: powershell
+        run: setx PATH "%PATH%;%ProgramFiles(x86)%\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin"
+
+
+      - name: Build server
+        shell: powershell
+        run: |
+          cd Server\
+          cmake --build . --config Release
+
+      - name: Run server
+        shell: powershell
+        run: |
+          cd Server\x64\Release
+          r-type_server.exe
+
+      - name: Build client
+        shell: powershell
+        run: |
+          cd Client\
+          cmake .
+          msbuild.exe r-type_client.sln /p:Configuration=Release
+
+      - name: Run client
+        shell: powershell
+        run: |
+          cd Client\x64\Release
+          r-type_client
+
+  sync:
+    runs-on: ubuntu-latest
+    needs: [build-and-test-linux]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@main
+
+      - name: git-sync
+        uses: wei/git-sync@v3
+        with:
+          source_repo: "git@github.com:Neotehn/Rtype.git"
+          source_branch: "refs/remotes/source/*"
+          destination_repo: "git@github.com:EpitechPromo2025/B-CPP-500-BER-5-2-rtype-gylian.karsch.git"
+          destination_branch: "refs/heads/*"
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+
+
