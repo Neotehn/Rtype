@@ -8,6 +8,7 @@ Player::Player(std::string sprite_path) {
   _body.setOrigin(_body.getSize().x / 2, _body.getSize().y / 2);
   _body.setPosition(x_pos, y_pos);
   _body.setTexture(&_texture);
+  _speed = 10;
 }
 
 bool Player::loadFromFile(std::string filepath) {
@@ -28,25 +29,25 @@ void Player::display(sf::RenderWindow &window) {
 void Player::setPosition(float x, float y) { _sprite.setPosition(x, y); }
 
 void Player::moveUp() {
-  if (y_pos > 10) y_pos--;
+  if (y_pos > _speed) y_pos -= _speed;
   // std::cout << "Fly up in function" << std::endl;
   // std::cout << y_pos << std::endl;
 }
 
 void Player::moveDown() {
-  if (y_pos < 1550) y_pos++;
+  if (y_pos < 1550) y_pos += _speed;
   // std::cout << "Fly down in function" << std::endl;
   // std::cout << y_pos << std::endl;
 }
 
 void Player::accelerate() {
-  if (x_pos < 600) x_pos++;
+  if (x_pos < 600) x_pos += _speed;
   // std::cout << "accelerate in function" << std::endl;
   // std::cout << x_pos << std::endl;
 }
 
 void Player::decelerate() {
-  if (x_pos > 50) x_pos--;
+  if (x_pos > 50) x_pos -= _speed;
   // std::cout << "decelerate in switch" << std::endl;
   // std::cout << x_pos << std::endl;
 }

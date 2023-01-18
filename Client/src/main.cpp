@@ -5,7 +5,7 @@
 
 int main() {
   Player player("./sprites/starship.png");
-  sf::RenderWindow window(sf::VideoMode(800, 1400), "SFML works!");
+  sf::RenderWindow window(sf::VideoMode(800, 1400), "R-Type Epitech");
 
   while (window.isOpen()) {
     sf::Event event;

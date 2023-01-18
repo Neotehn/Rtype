@@ -9,11 +9,11 @@ class Player {
   sf::Sprite _sprite;
   sf::Texture _texture;
   sf::RectangleShape _body;
+  float _speed;
   float x_pos;
   float y_pos;
 
  public:
-  // constructor to load the sprite
   Player(std::string sprite_path);
   bool loadFromFile(std::string filepath);
   void display(sf::RenderWindow &window);
