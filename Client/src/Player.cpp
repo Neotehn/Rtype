@@ -10,7 +10,7 @@ Player::Player(std::string sprite_path) {
   _body.setRotation(180);
   _speed = 10;
   _velocity = sf::Vector2f(_position);
-  _angle = 0.0f;
+  _angle = 90.0f;
 }
 
 bool Player::loadFromFile(std::string filepath) {
@@ -33,11 +33,7 @@ void Player::setPosition(float x, float y) {
 }
 void Player::move(sf::Vector2f direction)
 {
-  _velocity = direction * _speed;
-  if (direction.x == -1)
-    _angle = -90;
-  else if (direction.x == 1)
-    _angle = 90;
+   _velocity = direction * _speed;
   _body.setRotation(_angle);
 }
 
