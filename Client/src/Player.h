@@ -10,8 +10,9 @@ class Player {
   sf::Texture _texture;
   sf::RectangleShape _body;
   float _speed;
-  float x_pos;
-  float y_pos;
+  sf::Vector2f _velocity;
+  sf::Vector2f _position;
+  float _angle;
 
  public:
   Player(std::string sprite_path);
@@ -19,10 +20,8 @@ class Player {
   void display(sf::RenderWindow &window);
   void setPosition(float x, float y);
   void handlePlayerInput(sf::Event &event);
-  void moveUp();
-  void moveDown();
-  void accelerate();
-  void decelerate();
+  void move(sf::Vector2f direction);
+  void update();
 };
 
 #endif  // R_TYPE_CLIENT_PLAYER_H

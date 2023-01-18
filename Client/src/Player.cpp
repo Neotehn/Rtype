@@ -1,14 +1,16 @@
 #include "Player.h"
+#include <math.h>
 Player::Player(std::string sprite_path) {
   loadFromFile(sprite_path);
-  setPosition(100, 100);
-  x_pos = 300;
-  y_pos = 200;
+  setPosition(300, 300);
   _body.setSize({100, 100});
   _body.setOrigin(_body.getSize().x / 2, _body.getSize().y / 2);
-  _body.setPosition(x_pos, y_pos);
+  _body.setPosition(_position);
   _body.setTexture(&_texture);
+  _body.setRotation(180);
   _speed = 10;
+  _velocity = sf::Vector2f(_position);
+  _angle = 0.0f;
 }
 
 bool Player::loadFromFile(std::string filepath) {
@@ -22,67 +24,50 @@ bool Player::loadFromFile(std::string filepath) {
 }
 
 void Player::display(sf::RenderWindow &window) {
-  ;
   window.draw(_body);
 }
 
-void Player::setPosition(float x, float y) { _sprite.setPosition(x, y); }
-
-void Player::moveUp() {
-  if (y_pos > _speed) y_pos -= _speed;
-  // std::cout << "Fly up in function" << std::endl;
-  // std::cout << y_pos << std::endl;
+void Player::setPosition(float x, float y) {
+  _sprite.setPosition(x, y);
+  _body.setPosition(x, y);
 }
-
-void Player::moveDown() {
-  if (y_pos < 1550) y_pos += _speed;
-  // std::cout << "Fly down in function" << std::endl;
-  // std::cout << y_pos << std::endl;
-}
-
-void Player::accelerate() {
-  if (x_pos < 600) x_pos += _speed;
-  // std::cout << "accelerate in function" << std::endl;
-  // std::cout << x_pos << std::endl;
-}
-
-void Player::decelerate() {
-  if (x_pos > 50) x_pos -= _speed;
-  // std::cout << "decelerate in switch" << std::endl;
-  // std::cout << x_pos << std::endl;
+void Player::move(sf::Vector2f direction)
+{
+  _velocity = direction * _speed;
+  if (direction.y == -1)
+    _angle = 0;
+  else if (direction.y == 1)
+    _angle = 180;
+  else if (direction.x == -1)
+    _angle = -90;
+  else if (direction.x == 1)
+    _angle = 90;
+  _body.setRotation(_angle);
 }
 
 void Player::handlePlayerInput(sf::Event &event) {
-  switch (event.key.code) {
+  switch (event.key.code)
+  {
     case sf::Keyboard::W:
-      moveUp();
-      // std::cout << "Fly up in switch" << std::endl;
-      // std::cout << y_pos << std::endl;
-      setPosition(x_pos, y_pos);
-      _body.setPosition(x_pos, y_pos);
+      move(sf::Vector2f(0,-1));
       break;
     case sf::Keyboard::S:
-      moveDown();
-      // std::cout << "Fly down in switch" << std::endl;
-      // std::cout << y_pos << std::endl;
-      setPosition(x_pos, y_pos);
-      _body.setPosition(x_pos, y_pos);
+      move(sf::Vector2f(0,1));
       break;
     case sf::Keyboard::D:
-      accelerate();
-      // std::cout << "accelerate in switch" << std::endl;
-      // std::cout << x_pos << std::endl;
-      setPosition(x_pos, y_pos);
-      _body.setPosition(x_pos, y_pos);
+      move(sf::Vector2f(1,0));
       break;
     case sf::Keyboard::A:
-      decelerate();
-      // std::cout << "decelerate in switch" << std::endl;
-      // std::cout << x_pos << std::endl;
-      setPosition(x_pos, y_pos);
-      _body.setPosition(x_pos, y_pos);
+      move(sf::Vector2f(-1,0));
       break;
     default:
       break;
   }
+}
+
+void Player::update() {
+  _position += _velocity;
+  _body.setPosition(_position);
+  if (_velocity.x != 0 || _velocity.y != 0)
+    _velocity *= 0.99f;
 }
