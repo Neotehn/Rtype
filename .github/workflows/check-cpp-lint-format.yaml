@@ -13,6 +13,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           style: file
+          ignore: 'Client/_deps|Client/CMakeFiles|Server/_deps|Server/CMakeFiles'
 
       - name: check if files follow linting rules
         if: steps.linter.outputs.checks-failed > 0
