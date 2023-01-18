@@ -22,6 +22,7 @@ class Player {
   void handlePlayerInput(sf::Event &event);
   void move(sf::Vector2f direction);
   void update();
+  sf::Vector2f getPosition() { return _position; }
 };
 
 #endif  // R_TYPE_CLIENT_PLAYER_H
