@@ -34,11 +34,7 @@ void Player::setPosition(float x, float y) {
 void Player::move(sf::Vector2f direction)
 {
   _velocity = direction * _speed;
-  if (direction.y == -1)
-    _angle = 0;
-  else if (direction.y == 1)
-    _angle = 180;
-  else if (direction.x == -1)
+  if (direction.x == -1)
     _angle = -90;
   else if (direction.x == 1)
     _angle = 90;
