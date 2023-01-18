@@ -1,15 +1,14 @@
 #include "Player.h"
-#include <math.h>
+
 Player::Player(std::string sprite_path) {
   loadFromFile(sprite_path);
-  setPosition(300, 300);
   _body.setSize({100, 100});
+  _position = {300, 300};
   _body.setOrigin(_body.getSize().x / 2, _body.getSize().y / 2);
-  _body.setPosition(_position);
+  setPosition(_position.x, _position.y);
   _body.setTexture(&_texture);
-  _body.setRotation(180);
   _speed = 10;
-  _velocity = sf::Vector2f(_position);
+  _velocity = sf::Vector2f(0,0);
   _angle = 90.0f;
 }
 
@@ -57,7 +56,19 @@ void Player::handlePlayerInput(sf::Event &event) {
   }
 }
 
-void Player::update() {
+void Player::update(sf::Vector2f windowSize) {
+  if (_position.x <= _body.getSize().x / 2) {
+    _velocity.x = 1;
+  }
+  else if (_position.x + _body.getSize().x >= windowSize.x +  _body.getSize().x / 2) {
+    _velocity.x = -1;
+  }
+  if (_position.y <= _body.getSize().y / 2) {
+    _velocity.y = 1;
+  }
+  else if (_position.y + _body.getSize().y >= windowSize.y +  _body.getSize().y / 2) {
+    _velocity.y = -1;
+  }
   _position += _velocity;
   _body.setPosition(_position);
   if (_velocity.x != 0 || _velocity.y != 0)

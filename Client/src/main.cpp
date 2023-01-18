@@ -13,6 +13,7 @@ int main() {
     std::cerr << "Error loading background texture" << std::endl;
   sf::Sprite background(backgroundTexture);
   sf::RenderWindow window(sf::VideoMode(800, 1400), "R-Type Epitech");
+  sf::Vector2f windowSize =sf::Vector2f (window.getSize().x, window.getSize().y);
   window.setFramerateLimit(60);
   float playerX = player.getPosition().x;
   background.setPosition(sf::Vector2f(-(playerX * 0.1), 0));
@@ -25,6 +26,7 @@ int main() {
       }
     }
     window.clear();
+    player.update(windowSize);
     background.move(-0.1f, 0.0f);
     window.draw(background);
     player.update();
