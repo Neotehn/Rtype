@@ -21,7 +21,7 @@ class Player {
   void setPosition(float x, float y);
   void handlePlayerInput(sf::Event &event);
   void move(sf::Vector2f direction);
-  void update();
+  void update(sf::Vector2f windowSize);
 };
 
 #endif  // R_TYPE_CLIENT_PLAYER_H

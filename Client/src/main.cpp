@@ -5,6 +5,7 @@
 int main() {
   Player player("./sprites/starship.png");
   sf::RenderWindow window(sf::VideoMode(800, 1400), "R-Type Epitech");
+  sf::Vector2f windowSize =sf::Vector2f (window.getSize().x, window.getSize().y);
   window.setFramerateLimit(60);
   while (window.isOpen()) {
     sf::Event event;
@@ -15,7 +16,7 @@ int main() {
       }
     }
     window.clear();
-    player.update();
+    player.update(windowSize);
     player.display(window);
     window.display();
   }
