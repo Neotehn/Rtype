@@ -1,7 +1,4 @@
-#include <iostream>
-
 #include "Player.hpp"
-#include "SFML/Graphics.hpp"
 
 int main() {
   Player player("./sprites/starship.png");
