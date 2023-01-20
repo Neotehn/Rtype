@@ -1,5 +1,5 @@
-#ifndef R_TYPE_CLIENT_PLAYER_H
-#define R_TYPE_CLIENT_PLAYER_H
+#ifndef R_TYPE_CLIENT_PLAYER_HPP
+#define R_TYPE_CLIENT_PLAYER_HPP
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
@@ -24,4 +24,4 @@ class Player {
   void update(sf::Vector2f windowSize);
 };
 
-#endif  // R_TYPE_CLIENT_PLAYER_H
+#endif  // R_TYPE_CLIENT_PLAYER_HPP
