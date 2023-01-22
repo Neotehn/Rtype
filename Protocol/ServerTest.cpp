@@ -1,79 +1,59 @@
-#include <iostream>
-#include <winsock2.h>
-using namespace std;
+// Server side implementation of UDP client-server model
+#include <bits/stdc++.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
 
-#pragma comment(lib,"ws2_32.lib") // Winsock Library
-#pragma warning(disable:4996) 
+#define PORT	 8080
+#define MAXLINE 1024
 
-#define BUFLEN 512
-#define PORT 8888
+// Driver code
+int main() {
+	int sockfd;
+	char buffer[MAXLINE];
+	const char *hello = "Hello from server";
+	struct sockaddr_in servaddr, cliaddr;
+	
+	// Creating socket file descriptor
+	if ( (sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0 ) {
+		perror("socket creation failed");
+		exit(EXIT_FAILURE);
+	}
+	
+	memset(&servaddr, 0, sizeof(servaddr));
+	memset(&cliaddr, 0, sizeof(cliaddr));
+	
+	// Filling server information
+	servaddr.sin_family = AF_INET; // IPv4
+	servaddr.sin_addr.s_addr = INADDR_ANY;
+	servaddr.sin_port = htons(PORT);
+	
+	// Bind the socket with the server address
+	if ( bind(sockfd, (const struct sockaddr *)&servaddr,
+			sizeof(servaddr)) < 0 )
+	{
+		perror("bind failed");
+		exit(EXIT_FAILURE);
+	}
+	
+	socklen_t len;
+    int n;
 
-int main()
-{
-    system("title UDP Server");
+	len = sizeof(cliaddr); //len is value/result
 
-    sockaddr_in server, client;
-
-    // initialise winsock
-    WSADATA wsa;
-    printf("Initialising Winsock...");
-    if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
-    {
-        printf("Failed. Error Code: %d", WSAGetLastError());
-        exit(0);
-    }
-    printf("Initialised.\n");
-
-    // create a socket
-    SOCKET server_socket;
-    if ((server_socket = socket(AF_INET, SOCK_DGRAM, 0)) == INVALID_SOCKET)
-    {
-        printf("Could not create socket: %d", WSAGetLastError());
-    }
-    printf("Socket created.\n");
-
-    // prepare the sockaddr_in structure
-    server.sin_family = AF_INET;
-    server.sin_addr.s_addr = INADDR_ANY;
-    server.sin_port = htons(PORT);
-
-    // bind
-    if (bind(server_socket, (sockaddr*)&server, sizeof(server)) == SOCKET_ERROR)
-    {
-        printf("Bind failed with error code: %d", WSAGetLastError());
-        exit(EXIT_FAILURE);
-    }
-    puts("Bind done.");
-
-    while (true)
-    {
-        printf("Waiting for data...");
-        fflush(stdout);
-        char message[BUFLEN] = {};
-
-        // try to receive some data, this is a blocking call
-        int message_len;
-        int slen = sizeof(sockaddr_in);
-        if (message_len = recvfrom(server_socket, message, BUFLEN, 0, (sockaddr*)&client, &slen) == SOCKET_ERROR)
-        {
-            printf("recvfrom() failed with error code: %d", WSAGetLastError());
-            exit(0);
-        }
-
-        // print details of the client/peer and the data received
-        printf("Received packet from %s:%d\n", inet_ntoa(client.sin_addr), ntohs(client.sin_port));
-        printf("Data: %s\n", message);
-
-        cin.getline(message, BUFLEN);
-
-        // reply the client with 2the same data
-        if (sendto(server_socket, message, strlen(message), 0, (sockaddr*)&client, sizeof(sockaddr_in)) == SOCKET_ERROR)
-        {
-            printf("sendto() failed with error code: %d", WSAGetLastError());
-            return 3;
-        }
-    }
-
-    closesocket(server_socket);
-    WSACleanup();
+	n = recvfrom(sockfd, (char *)buffer, MAXLINE,
+				MSG_WAITALL, ( struct sockaddr *) &cliaddr,
+				&len);
+	buffer[n] = '\0';
+	printf("Client : %s\n", buffer);
+	sendto(sockfd, (const char *)hello, strlen(hello),
+		MSG_CONFIRM, (const struct sockaddr *) &cliaddr,
+			len);
+	std::cout<<"Hello message sent."<<std::endl;
+	
+	return 0;
 }
