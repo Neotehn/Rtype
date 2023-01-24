@@ -1,18 +1,9 @@
 #include <iostream>
 
-#include "SFML/Graphics.hpp"
+#include "./gameEngine/inc/Menu.hpp"
 
 int main() {
-  std::cout << "Hello, World Client!" << std::endl;
-  sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-
-  while (window.isOpen()) {
-    sf::Event event;
-    while (window.pollEvent(event)) {
-      if (event.type == sf::Event::Closed) window.close();
-    }
-    window.clear();
-    window.display();
-  }
+  Menu window(sf::VideoMode(1920, 1080));
+  window.runMenu();
   return 0;
 }

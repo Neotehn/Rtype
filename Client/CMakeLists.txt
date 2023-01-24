@@ -1,7 +1,11 @@
 cmake_minimum_required(VERSION 3.24)
 project(r-type_client)
 
-
+set(CLIENT_HPP src/gameEngine/inc/Menu.hpp
+                src/gameEngine/inc/Button.hpp)
+set(CLIENT_SRC src/gameEngine/src/Menu.cpp
+                src/gameEngine/src/Button.cpp
+                src/main.cpp)
 
 include(FetchContent)
 FetchContent_Declare(SFML
@@ -11,7 +15,7 @@ FetchContent_MakeAvailable(SFML)
 
 find_package(OpenGL REQUIRED OPTIONAL_COMPONENTS OpenGL)
 include_directories(${OPENGL_INCLUDE_DIR})
-add_executable(r-type_client src/main.cpp)
+add_executable(r-type_client ${CLIENT_SRC} ${CLIENT_HPP})
 
 target_link_libraries(r-type_client PRIVATE ${OPENGL_LIBRARIES} sfml-graphics)
 
