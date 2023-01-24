@@ -5,24 +5,24 @@
 #include <iostream>
 
 class Player {
- private:
-  sf::Sprite _sprite;
-  sf::Texture _texture;
-  sf::RectangleShape _body;
-  float _speed;
-  sf::Vector2f _velocity;
-  sf::Vector2f _position;
-  float _angle;
-
  public:
   Player(std::string sprite_path);
-  bool loadFromFile(std::string filepath);
-  void display(sf::RenderWindow &window);
-  void setPosition(float x, float y);
-  void handlePlayerInput(sf::Event &event);
-  void move(sf::Vector2f direction);
-  void update(sf::Vector2f windowSize);
-  sf::Vector2f getPosition() { return _position; }
+  bool loadFromFile(std::string t_filepath);
+  void display(sf::RenderWindow &t_window);
+  void setPosition(float t_x, float t_y);
+  void handlePlayerInput(sf::Event &t_event);
+  void move(sf::Vector2f t_direction);
+  void update(sf::Vector2f t_windowSize);
+  sf::Vector2f getPosition() { return m_position; }
+
+ private:
+  sf::Sprite m_sprite;
+  sf::Texture m_texture;
+  sf::RectangleShape m_body;
+  float m_speed;
+  sf::Vector2f m_velocity;
+  sf::Vector2f m_position;
+  float m_angle;
 };
 
 #endif  // R_TYPE_CLIENT_PLAYER_HPP

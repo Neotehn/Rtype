@@ -1,40 +1,40 @@
 #include "Player.hpp"
 
-Player::Player(std::string sprite_path) {
-  loadFromFile(sprite_path);
-  _body.setSize({100, 100});
-  _position = {300, 300};
-  _body.setOrigin(_body.getSize().x / 2, _body.getSize().y / 2);
-  setPosition(_position.x, _position.y);
-  _body.setTexture(&_texture);
-  _speed = 10;
-  _velocity = sf::Vector2f(0, 0);
-  _angle = 90.0f;
+Player::Player(std::string t_sprite_path) {
+  loadFromFile(t_sprite_path);
+  m_body.setSize({100, 100});
+  m_position = {300, 300};
+  m_body.setOrigin(m_body.getSize().x / 2, m_body.getSize().y / 2);
+  setPosition(m_position.x, m_position.y);
+  m_body.setTexture(&m_texture);
+  m_speed = 10;
+  m_velocity = sf::Vector2f(0, 0);
+  m_angle = 90.0f;
 }
 
-bool Player::loadFromFile(std::string filepath) {
+bool Player::loadFromFile(std::string t_filepath) {
   sf::Image image;
-  if (!_texture.loadFromFile(filepath)) {
+  if (!m_texture.loadFromFile(t_filepath)) {
     std::cerr << "Error loading sprite" << std::endl;
     return false;
   }
-  _sprite.setTexture(_texture);
+  m_sprite.setTexture(m_texture);
   return true;
 }
 
-void Player::display(sf::RenderWindow &window) { window.draw(_body); }
+void Player::display(sf::RenderWindow &window) { window.draw(m_body); }
 
 void Player::setPosition(float x, float y) {
-  _sprite.setPosition(x, y);
-  _body.setPosition(x, y);
+  m_sprite.setPosition(x, y);
+  m_body.setPosition(x, y);
 }
 void Player::move(sf::Vector2f direction) {
-  _velocity = direction * _speed;
-  _body.setRotation(_angle);
+  m_velocity = direction * m_speed;
+  m_body.setRotation(m_angle);
 }
 
-void Player::handlePlayerInput(sf::Event &event) {
-  switch (event.key.code) {
+void Player::handlePlayerInput(sf::Event &t_event) {
+  switch (t_event.key.code) {
     case sf::Keyboard::W:
       move(sf::Vector2f(0, -1));
       break;
@@ -51,19 +51,19 @@ void Player::handlePlayerInput(sf::Event &event) {
 }
 
 void Player::update(sf::Vector2f windowSize) {
-  if (_position.x <= _body.getSize().x / 2) {
-    _velocity.x = 1;
-  } else if (_position.x + _body.getSize().x >=
-             windowSize.x + _body.getSize().x / 2) {
-    _velocity.x = -1;
+  if (m_position.x <= m_body.getSize().x / 2) {
+    m_velocity.x = 1;
+  } else if (m_position.x + m_body.getSize().x >=
+             windowSize.x + m_body.getSize().x / 2) {
+    m_velocity.x = -1;
   }
-  if (_position.y <= _body.getSize().y / 2) {
-    _velocity.y = 1;
-  } else if (_position.y + _body.getSize().y >=
-             windowSize.y + _body.getSize().y / 2) {
-    _velocity.y = -1;
+  if (m_position.y <= m_body.getSize().y / 2) {
+    m_velocity.y = 1;
+  } else if (m_position.y + m_body.getSize().y >=
+             windowSize.y + m_body.getSize().y / 2) {
+    m_velocity.y = -1;
   }
-  _position += _velocity;
-  _body.setPosition(_position);
-  if (_velocity.x != 0 || _velocity.y != 0) _velocity *= 0.99f;
+  m_position += m_velocity;
+  m_body.setPosition(m_position);
+  if (m_velocity.x != 0 || m_velocity.y != 0) m_velocity *= 0.99f;
 }
