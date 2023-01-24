@@ -25,9 +25,7 @@ void Player::setPosition(float x, float y) {
   m_body.setPosition(x, y);
 }
 
-void Player::move(sf::Vector2f direction) {
-  m_velocity = direction * m_speed;
-}
+void Player::move(sf::Vector2f direction) { m_velocity = direction * m_speed; }
 
 void Player::handlePlayerInput(const sf::Event &t_event) {
   switch (t_event.key.code) {
