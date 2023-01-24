@@ -10,24 +10,26 @@ struct Pos {
 };
 
 class SpriteECS {
-  public:
-  SpriteECS(std::string t_sprite_path) { loadFromFile(t_sprite_path);}
+ public:
+  SpriteECS(std::string t_sprite_path) {
+    m_texture->loadFromFile(t_sprite_path);
+    m_sprite.setTexture(*m_texture);
+  }
+
+  const sf::Sprite* getSprite() const { return &m_sprite; }
+
   bool loadFromFile(std::string t_filepath) {
-    if (!m_texture.loadFromFile(t_filepath)) {
+    if (!m_texture->loadFromFile(t_filepath)) {
       std::cerr << "Error loading sprite" << std::endl;
       return false;
     }
-    m_sprite.setTexture(m_texture);
+    m_sprite.setTexture(*m_texture);
     return true;
   };
+
  private:
   sf::Sprite m_sprite;
-
- public:
-  const sf::Sprite& getSprite() const { return m_sprite; }
-
- private:
-  sf::Texture m_texture;
+  sf::Texture* m_texture = new sf::Texture();
 };
 
 #endif  // ECS_DATATYPESECS_HPP_
