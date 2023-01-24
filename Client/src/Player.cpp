@@ -22,7 +22,7 @@ bool Player::loadFromFile(std::string t_filepath) {
   return true;
 }
 
-void Player::display(sf::RenderWindow &window) { window.draw(m_body); }
+void Player::display(sf::RenderWindow &t_window) { t_window.draw(m_body); }
 
 void Player::setPosition(float x, float y) {
   m_sprite.setPosition(x, y);
@@ -33,7 +33,7 @@ void Player::move(sf::Vector2f direction) {
   m_body.setRotation(m_angle);
 }
 
-void Player::handlePlayerInput(sf::Event &t_event) {
+void Player::handlePlayerInput(const sf::Event &t_event) {
   switch (t_event.key.code) {
     case sf::Keyboard::W:
       move(sf::Vector2f(0, -1));

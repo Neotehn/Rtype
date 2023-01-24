@@ -4,8 +4,7 @@ int main() {
   Player player("./sprites/starship.png");
   sf::Texture backgroundTexture;
 
-  sf::RenderWindow window(sf::VideoMode(800, 1400),
-                          "R-Type Epitech");
+  sf::RenderWindow window(sf::VideoMode(800, 1400), "R-Type Epitech");
   sf::Vector2f windowSize =
       sf::Vector2f(window.getSize().x, window.getSize().y);
   window.setFramerateLimit(60);

@@ -1,8 +1,8 @@
-#ifndef R_TYPE_CLIENT_PLAYER_HPP
-#define R_TYPE_CLIENT_PLAYER_HPP
+#ifndef CLIENT_SRC_PLAYER_HPP_
+#define CLIENT_SRC_PLAYER_HPP_
 
-#include <SFML/Graphics.hpp>
 #include <iostream>
+#include <SFML/Graphics.hpp>
 
 class Player {
  public:
@@ -10,7 +10,7 @@ class Player {
   bool loadFromFile(std::string t_filepath);
   void display(sf::RenderWindow &t_window);
   void setPosition(float t_x, float t_y);
-  void handlePlayerInput(sf::Event &t_event);
+  void handlePlayerInput(const sf::Event &t_event);
   void move(sf::Vector2f t_direction);
   void update(sf::Vector2f t_windowSize);
   sf::Vector2f getPosition() { return m_position; }
@@ -25,4 +25,4 @@ class Player {
   float m_angle;
 };
 
-#endif  // R_TYPE_CLIENT_PLAYER_HPP
+#endif  // CLIENT_SRC_PLAYER_HPP_
