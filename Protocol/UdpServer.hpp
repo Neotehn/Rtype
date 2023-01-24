@@ -19,7 +19,8 @@ class UdpServer : public IProtocol
 
   private:
     void startListening();
-    void handleListening(const boost::system::error_code& error, std::size_t bytes_transferred);
+    void handleListening(const boost::system::error_code& error,
+                         std::size_t bytes_transferred);
     void handleSend(std::shared_ptr<std::string> msg,
                     const boost::system::error_code& ec,
                     std::size_t bytes_transferred);

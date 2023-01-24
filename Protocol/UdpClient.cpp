@@ -1,7 +1,7 @@
-#include "UdpClient.hpp"
+#include "Protocol/UdpClient.hpp"
 
 UdpClient::UdpClient(boost::asio::io_service& io_service,
-                     const std::string& host, const std::string& port) : 
+                     const std::string& host, const std::string& port) :
                      _io_service(io_service), _socket(io_service),
                      _remoteEndpoint(udp::v4(), stoi(port))
 {

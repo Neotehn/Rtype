@@ -5,9 +5,9 @@
 
 class IProtocol {
   public:
-    //virtual ~IProtocol() = default;
-    //void createSocket()
-    //void create
+    // virtual ~IProtocol() = default;
+    // void createSocket()
+    // void create
 };
 
 #endif /* !PROTOCOL_IPROTOCOL_HPP_ */
