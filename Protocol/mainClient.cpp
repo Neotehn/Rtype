@@ -1,14 +1,16 @@
-#include "UdpClient.hpp"
 #include <memory>
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 #include <string>
 #include <iostream>
 
-int main() {
-    boost::asio::io_service io_service;
-	UdpClient client(io_service, "localhost", "27000");
+#include "UdpClient.hpp"
 
-	client.sendMessage("Hello, World!\n");
-    return 0;
+int main()
+{
+  boost::asio::io_service io_service;
+  UdpClient client(io_service, "localhost", "27000");
+
+  client.sendMessage("Hello, World!\n");
+  return 0;
 }
