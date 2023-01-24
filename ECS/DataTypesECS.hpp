@@ -1,0 +1,33 @@
+#ifndef ECS_DATATYPESECS_HPP_
+#define ECS_DATATYPESECS_HPP_
+
+#include <SFML/Graphics.hpp>
+#include <iostream>
+
+struct Pos {
+  sf::Vector2f velocity;
+  sf::Vector2f position;
+};
+
+class SpriteECS {
+  public:
+  SpriteECS(std::string t_sprite_path) { loadFromFile(t_sprite_path);}
+  bool loadFromFile(std::string t_filepath) {
+    if (!m_texture.loadFromFile(t_filepath)) {
+      std::cerr << "Error loading sprite" << std::endl;
+      return false;
+    }
+    m_sprite.setTexture(m_texture);
+    return true;
+  };
+ private:
+  sf::Sprite m_sprite;
+
+ public:
+  const sf::Sprite& getSprite() const { return m_sprite; }
+
+ private:
+  sf::Texture m_texture;
+};
+
+#endif  // ECS_DATATYPESECS_HPP_
