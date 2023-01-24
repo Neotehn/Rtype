@@ -1,0 +1,21 @@
+# https://github.com/cpp-linter/cpp-linter-action
+name: cpp-linter check
+
+on: [ push, pull_request ]
+
+jobs:
+  cpp-linter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: cpp-linter/cpp-linter-action@v2
+        id: linter
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          style: file
+          ignore: 'Client/_deps|Client/CMakeFiles|Server/_deps|Server/CMakeFiles'
+
+      - name: check if files follow linting rules
+        if: steps.linter.outputs.checks-failed > 0
+        run: echo "Some files failed the linting checks!"
