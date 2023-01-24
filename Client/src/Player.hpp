@@ -1,8 +1,8 @@
 #ifndef CLIENT_SRC_PLAYER_HPP_
 #define CLIENT_SRC_PLAYER_HPP_
 
-#include <iostream>
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 class Player {
  public:
