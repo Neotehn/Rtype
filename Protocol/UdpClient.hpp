@@ -9,23 +9,24 @@
 #include <iostream>
 #include <sstream>
 
-#include "Protocol/IProtocol.hpp"
+#include "./IProtocol.hpp"
 
 using boost::asio::ip::udp;
 
 class UdpClient : public IProtocol
 {
-  public:
-    UdpClient(boost::asio::io_service &io_service,
-    const std::string& host, const std::string& port);
-    ~UdpClient();
-    void sendMessage(const std::string&);
+public:
+  UdpClient(boost::asio::io_service &io_service,
+            const std::string &host,
+            const std::string &port);
+  ~UdpClient();
+  void sendMessage(const std::string &);
 
-  private:
-    udp::socket _socket;
-    udp::endpoint _remoteEndpoint;
-    std::array<char, 1024> _recvBuffer;
-    boost::asio::io_service& _io_service;
+private:
+  udp::socket _socket;
+  udp::endpoint _remoteEndpoint;
+  std::array<char, 1024> _recvBuffer;
+  boost::asio::io_service &_io_service;
 };
 
 #endif /* !PROTOCOL_UDPCLIENT_HPP_ */

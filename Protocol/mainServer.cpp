@@ -5,7 +5,7 @@
 #include <string>
 #include <iostream>
 
-#include "Protocol/UdpServer.hpp"
+#include "./UdpServer.hpp"
 
 int main()
 {
@@ -14,7 +14,8 @@ int main()
     boost::asio::io_service io_service;
     UdpServer server(io_service);
     io_service.run();
-  } catch (const std::exception& er)
+  }
+  catch (const std::exception &er)
   {
     std::cerr << er.what() << std::endl;
   }
