@@ -11,7 +11,7 @@ FetchContent_MakeAvailable(SFML)
 
 find_package(OpenGL REQUIRED OPTIONAL_COMPONENTS OpenGL)
 include_directories(${OPENGL_INCLUDE_DIR})
-add_executable(r-type_client src/main.cpp)
+add_executable(r-type_client src/main.cpp src/Player.cpp src/Player.hpp)
 
 target_link_libraries(r-type_client PRIVATE ${OPENGL_LIBRARIES} sfml-graphics)
 
