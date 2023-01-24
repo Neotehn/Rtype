@@ -1,4 +1,4 @@
-#include "Udp.hpp"
+#include "UdpServer.hpp"
 #include <memory>
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
@@ -8,10 +8,10 @@
 int main() {
     try {
         boost::asio::io_service io_service;
-        Udp server{io_service};
+        UdpServer server(io_service);
         io_service.run();
     } catch (const std::exception& er) {
-        std::cerr << ex.what() << std::endl;
+        std::cerr << er.what() << std::endl;
     }
     return 0;
 }

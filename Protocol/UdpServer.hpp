@@ -1,5 +1,5 @@
-#ifndef PROTOCOL_UDP_HPP_
-#define PROTOCOL_UDP_HPP_
+#ifndef PROTOCOL_UDPSERVER_HPP_
+#define PROTOCOL_UDPSERVER_HPP_
 
 #include <memory>
 #include <boost/asio.hpp>
@@ -9,12 +9,12 @@
 
 #include "IProtocol.hpp"
 
-using boost::asio::ip::udp
+using boost::asio::ip::udp;
 
-class Udp : public IProtocol {
+class UdpServer : public IProtocol {
     public:
-        Udp(boost::asio::io_service &io_service);
-        ~Udp();
+        UdpServer(boost::asio::io_service &);
+        ~UdpServer();
 
     private:
         void startListening();
@@ -22,10 +22,8 @@ class Udp : public IProtocol {
         void handleSend(std::shared_ptr<std::string> msg, const boost::system::error_code& ec, std::size_t bytes_transferred);
 
         udp::socket _socket;
-        udp::endpoint _remoteEndpoint;
+        udp::endpoint _endpoint;
         std::array<char, 1024> _recvBuffer;
-
-    
 };
 
-#endif /* !PROTOCOL_UDP_HPP_ */
+#endif /* !PROTOCOL_UDPSERVER_HPP_ */
