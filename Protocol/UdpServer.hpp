@@ -2,22 +2,21 @@
 #define PROTOCOL_UDPSERVER_HPP_
 
 #include <memory>
-#include <boost/asio.hpp>
-#include <boost/bind.hpp>
 #include <string>
 #include <iostream>
+#include <boost/asio.hpp>
+#include <boost/bind.hpp>
 
 #include "./IProtocol.hpp"
 
 using boost::asio::ip::udp;
 
-class UdpServer : public IProtocol
-{
-public:
+class UdpServer : public IProtocol {
+ public:
   UdpServer(boost::asio::io_service &);
   ~UdpServer();
 
-private:
+ private:
   void startListening();
   void handleListening(const boost::system::error_code &error,
                        std::size_t bytes_transferred);

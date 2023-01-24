@@ -3,9 +3,8 @@
 
 #include <memory>
 
-class IProtocol
-{
-public:
+class IProtocol {
+ public:
   // virtual ~IProtocol() = default;
   // void createSocket()
   // void create

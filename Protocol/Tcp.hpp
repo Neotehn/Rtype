@@ -5,12 +5,10 @@
 
 #include "IProtocol.hpp"
 
-class Tcp : public IProtocol 
-{
-  public:
+class Tcp : public IProtocol {
+ public:
     Tcp();
     ~Tcp();
-    
 };
 
 #endif /* !PROTOCOL_TCP_HPP_ */
