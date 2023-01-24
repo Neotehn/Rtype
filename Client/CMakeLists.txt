@@ -2,9 +2,15 @@ cmake_minimum_required(VERSION 3.24)
 project(r-type_client)
 
 set(CLIENT_HPP src/gameEngine/inc/Menu.hpp
+                src/gameEngine/inc/Sprite.hpp
+                src/gameEngine/inc/Settings.hpp
+                src/gameEngine/inc/Core.hpp
                 src/gameEngine/inc/Button.hpp)
 set(CLIENT_SRC src/gameEngine/src/Menu.cpp
                 src/gameEngine/src/Button.cpp
+                src/gameEngine/src/Sprite.cpp
+                src/gameEngine/src/Settings.cpp
+                src/gameEngine/src/Core.cpp
                 src/main.cpp)
 
 include(FetchContent)

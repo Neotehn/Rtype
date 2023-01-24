@@ -2,11 +2,11 @@
 ** EPITECH PROJECT, 2023
 ** Rtype
 ** File description:
-** menu
+** Settings
 */
 
-#ifndef MENU_HPP_
-#define MENU_HPP_
+#ifndef SETTINGS_HPP_
+#define SETTINGS_HPP_
 
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
@@ -16,23 +16,18 @@
 #include "Button.hpp"
 #include "Sprite.hpp"
 
-class Menu : public Sprite {
+class Settings : public Sprite {
  public:
-  Menu(sf::RenderWindow &window);
-  int runMenu();
-  void setSettings(bool x) { m_in_settings = x; }
-  void setGame(bool x) { m_in_game = x; }
+  Settings(sf::RenderWindow &window);
+  ~Settings();
+  int runSettings();
 
  private:
   void display();
   void handleEvents();
-
   sf::RenderWindow &m_window;
-  bool m_in_game;
+  Button m_btn_main;
   bool m_in_settings;
-  sf::Font m_font;
-  Button m_start_btn;
-  Button m_settings_btn;
 };
 
-#endif /* !MENU_HPP_ */
+#endif /* !SETTINGS_HPP_ */

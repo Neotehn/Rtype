@@ -1,9 +1,9 @@
 #include <iostream>
 
-#include "./gameEngine/inc/Menu.hpp"
+#include "./gameEngine/inc/Core.hpp"
 
 int main() {
-  Menu window(sf::VideoMode(1920, 1080));
-  window.runMenu();
+  Core core(sf::VideoMode(1280, 720));
+  core.loop();
   return 0;
 }
