@@ -4,6 +4,7 @@ using boost::asio::ip::udp;
 
 UdpServer::UdpServer(boost::asio::io_service &io_service) :
 _socket(io_service, udp::endpoint(udp::v4(), 27000)) {
+  std::cout << "hello folk" << std::endl;
   startListening();
 }
 
