@@ -8,4 +8,5 @@ CPackSourceConfig.cmake
 Makefile
 _deps
 r-type_client
-Client/cmake-build-debug
+Client/cmake-build-debug/
+Client/.idea

@@ -24,6 +24,8 @@ EntityManager init() {
   body.setPosition(player_pos->position);
   body.setTexture(player_sprite.getTexture());
   body.setRotation(90.0);
+  body.setOutlineColor(sf::Color::Red);
+  body.setOutlineThickness(5);
   sf::RectangleShape *player_body = entity_manager.Assign<sf::RectangleShape>(player, body);
   return entity_manager;
 }

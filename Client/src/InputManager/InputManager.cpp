@@ -15,15 +15,19 @@ void InputManager::recordInputs(const sf::Event &t_event)
   switch (t_event.key.code) {
     case sf::Keyboard::W:
       this->m_input_queue.push_back(sf::Keyboard::W);
+      printf("W");
       break;
     case sf::Keyboard::S:
       this->m_input_queue.push_back(sf::Keyboard::S);
+      printf("S");
       break;
     case sf::Keyboard::D:
       this->m_input_queue.push_back(sf::Keyboard::D);
+      printf("D");
       break;
     case sf::Keyboard::A:
       this->m_input_queue.push_back(sf::Keyboard::A);
+      printf("a");
       break;
   }
 

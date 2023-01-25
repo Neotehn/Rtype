@@ -21,7 +21,7 @@ void MovementSystem::update() {
     Pos* player = (*m_em.get()).Get<Pos>(ent);
     float* speed = (*m_em.get()).Get<float>(ent);
         sf::RectangleShape* body = (*m_em.get()).Get<sf::RectangleShape>(ent);
-    sf::Vector2f direction = player->velocity;
+    sf::Vector2f direction = {0, 0};
     if (m_event_queue.checkIfKeyPressed(sf::Keyboard::A)) {
       direction.x = -1;
     }
@@ -34,26 +34,13 @@ void MovementSystem::update() {
     if (m_event_queue.checkIfKeyPressed(sf::Keyboard::S)) {
       direction.y = 1;
     }
-
-    player->velocity = direction * *speed;
-    std::cout << direction.x << " " << direction.y << std::endl;
-
-    if (player->position.x <= body->getSize().x / 2) {
-      player->velocity.x = 1;
-    } else if (player->position.x + body->getSize().x >=
-               800 + body->getSize().x / 2) {
-      player->velocity.x = -1;
-    }
-    if (player->position.y <= body->getSize().y / 2) {
-      player->velocity.y = 1;
-    } else if (player->position.y + body->getSize().y >=
-               1400 + body->getSize().y / 2) {
-      player->velocity.y = -1;
+    if (direction.x != 0 || direction.y != 0) {
+      player->velocity = direction * *speed;
     }
     player->position += player->velocity;
     body->setPosition(player->position);
     if (player->velocity.x != 0 || player->velocity.y != 0) player->velocity *= 0.99f;
-
+    std::cout << "Player position: " << player->position.x << " " << player->position.y << std::endl;
   }
 
 }
