@@ -13,18 +13,18 @@
 
 class ComponentPool {
  public:
-  ComponentPool(size_t elementsize) {
-    elementSize = elementsize;
-    data = new char[elementSize * MAX_ENTITIES];
+  ComponentPool(size_t t_element_size) {
+    m_element_size = t_element_size;
+    m_data = new char[m_element_size * MAX_ENTITIES];
   }
 
-  ~ComponentPool() { delete[] data; }
+  ~ComponentPool() { delete[] m_data; }
 
-  void *get(size_t index) { return data + index * elementSize; }
+  void *get(size_t index) { return m_data + index * m_element_size; }
 
  private:
-  char *data;
-  size_t elementSize;
+  char *m_data;
+  size_t m_element_size;
 };
 
 #endif  // ECS_COMPONENTPOOL_HPP_
