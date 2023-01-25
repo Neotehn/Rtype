@@ -18,7 +18,7 @@ int main() {
       threads.emplace_back([&]{io_service.run();});
     }
 
-    for (auto& thread : threads) {
+    for (auto &thread : threads) {
       if (thread.joinable()) {
         thread.join();
       }

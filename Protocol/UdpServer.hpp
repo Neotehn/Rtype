@@ -18,15 +18,15 @@ class UdpServer : public IProtocol {
 
  private:
   void startListening();
-  void handleListening(const boost::system::error_code &error,
-                       std::size_t bytes_transferred);
-  void handleSend(std::shared_ptr<std::string> msg,
-                  const boost::system::error_code &ec,
-                  std::size_t bytes_transferred);
+  void handleListening(const boost::system::error_code &t_error,
+                       std::size_t t_bytes_transferred);
+  void handleSend(std::shared_ptr<std::string> t_msg,
+                  const boost::system::error_code &t_ec,
+                  std::size_t t_bytes_transferred);
 
-  udp::socket _socket;
-  udp::endpoint _endpoint;
-  std::array<char, 1024> _recvBuffer;
+  udp::socket m_socket;
+  udp::endpoint m_endpoint;
+  std::array<char, 1024> m_recvBuffer;
 };
 
 #endif /* !PROTOCOL_UDPSERVER_HPP_ */

@@ -14,17 +14,17 @@ using boost::asio::ip::udp;
 
 class UdpClient : public IProtocol {
  public:
-  UdpClient(boost::asio::io_service &io_service,
-            const std::string &host,
-            const std::string &port);
+  UdpClient(boost::asio::io_service &t_io_service,
+            const std::string &t_host,
+            const std::string &t_port);
   ~UdpClient();
   void sendMessage(const std::string &);
 
  private:
-  udp::socket _socket;
-  udp::endpoint _remoteEndpoint;
-  std::array<char, 1024> _recvBuffer;
-  boost::asio::io_service &_io_service;
+  udp::socket m_socket;
+  udp::endpoint m_remoteEndpoint;
+  std::array<char, 1024> m_recvBuffer;
+  boost::asio::io_service &m_io_service;
 };
 
 #endif /* !PROTOCOL_UDPCLIENT_HPP_ */
