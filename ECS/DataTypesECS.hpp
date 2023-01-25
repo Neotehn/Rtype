@@ -3,7 +3,11 @@
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include "../Client/src/EventQueue.hpp"
 
+struct SystemData {
+  EventQueue event_queue;
+};
 
 struct Pos {
   sf::Vector2f velocity;
@@ -33,6 +37,7 @@ class SpriteECS {
  private:
   sf::Sprite m_sprite;
   sf::Texture* m_texture = new sf::Texture();
+
 };
 
 #endif  // ECS_DATATYPESECS_HPP_

@@ -1,6 +1,9 @@
 #include "../../ECS/EntityManager.hpp"
-#include "../../ECS/EntityViewer.hpp"
-#include "Player.hpp"
+#include "../../ECS/ISystem.hpp"
+#include "InputManager/InputManager.hpp"
+#include "Systems/DisplaySystem.hpp"
+#include "Systems/MovementSystem.hpp"
+
 
 int counter;
 
@@ -11,47 +14,47 @@ EntityManager init() {
   SpriteECS *background_sprite = entity_manager.Assign<SpriteECS>(background, SpriteECS("./sprites/background2.jpg"));
 
   EntityID player = entity_manager.createNewEntity();
-  Pos *player_pos = entity_manager.Assign<Pos>(player, Pos({{0, 0}, {300, 300}}));
-  SpriteECS *player_sprite = entity_manager.Assign<SpriteECS>(player, SpriteECS("./sprites/starship.png"));
-  float *player_speed = entity_manager.Assign<float>(player, float(10));
+  SpriteECS player_sprite = SpriteECS("./sprites/starship.png");
 
+  float *player_speed = entity_manager.Assign<float>(player, float(10));
+  Pos *player_pos = entity_manager.Assign<Pos>(player, Pos{ sf::Vector2f(0, 0), sf::Vector2f(300, 300)});
+
+  sf::RectangleShape body;
+  body.setSize({200, 200});
+  body.setPosition(player_pos->position);
+  body.setTexture(player_sprite.getTexture());
+  body.setRotation(90.0);
+  sf::RectangleShape *player_body = entity_manager.Assign<sf::RectangleShape>(player, body);
   return entity_manager;
 }
 
 
 int main() {
   EntityManager entity_manager = init();
+  std::vector<std::shared_ptr<ISystem>> systems;
 
+  InputManager input_manager;
 
   sf::RenderWindow window(sf::VideoMode(800, 1400), "R-Type Epitech");
   window.setFramerateLimit(60);
+
+  systems.push_back(std::make_shared<DisplaySystem>(std::make_shared<EntityManager>(entity_manager), window));
+  systems.push_back(std::make_shared<MovementSystem>(std::make_shared<EntityManager>(entity_manager)));
 
   while (window.isOpen()) {
     sf::Event event;
     while (window.pollEvent(event)) {
       if (event.type == sf::Event::Closed) window.close();
-      if (event.type == sf::Event::KeyPressed) {
-        //player.handlePlayerInput(event);
-      }
+      input_manager.recordInputs(event);
+
     }
-    window.clear();
-    //background.move(-0.1f, 0.0f);
+    SystemData data = {.event_queue= input_manager.getInputs()};
 
-
-    for ( EntityID ent : EntityViewer<Pos, SpriteECS, float>(entity_manager))
-    {
-      printf("Entity %d has a position and a sprite and speed\n", GetEntityIndex(ent));
-        float* player_speed = entity_manager.Get<float>(ent);
-        std::cout << "Player speed: " << *player_speed << std::endl;
+    for (std::shared_ptr<ISystem> system : systems) {
+      system->updateData(data);
+      system->update();
     }
 
-    for (EntityID ent : EntityViewer<SpriteECS>(entity_manager))
-    {
-      printf("Entity(SPRITE) %d has a sprite\n", GetEntityIndex(ent));
-      SpriteECS* sprite = entity_manager.Get<SpriteECS>(ent);
-      window.draw(*(sprite)->getSprite());
-    }
-    window.display();
   }
   return 0;
 }
