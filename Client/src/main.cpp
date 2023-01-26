@@ -25,7 +25,7 @@ EntityManager init() {
   body.setTexture(player_sprite.getTexture());
   body.setRotation(90.0);
   body.setOutlineColor(sf::Color::Red);
-  body.setOutlineThickness(5);
+  //body.setOutlineThickness(5);
   sf::RectangleShape *player_body = entity_manager.Assign<sf::RectangleShape>(player, body);
   return entity_manager;
 }
@@ -37,7 +37,7 @@ int main() {
 
   InputManager input_manager;
 
-  sf::RenderWindow window(sf::VideoMode(800, 1400), "R-Type Epitech");
+  sf::RenderWindow window(sf::VideoMode(800, 800), "R-Type Epitech");
   window.setFramerateLimit(60);
 
   systems.push_back(std::make_shared<DisplaySystem>(std::make_shared<EntityManager>(entity_manager), window));

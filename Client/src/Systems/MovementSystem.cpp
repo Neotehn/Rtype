@@ -6,6 +6,21 @@
 */
 #include "MovementSystem.hpp"
 
+void keepPlayerInsideScreen(sf::Vector2f& t_position, const sf::Vector2f& t_size) {
+  int screen_width = 800;
+  int screen_height = 800;
+  if (t_position.x - t_size.x <= 0) {
+    t_position.x = t_size.x;
+  } else if (t_position.x >= screen_width) {
+    t_position.x = screen_width;
+  }
+  if (t_position.y < 0) {
+    t_position.y = 0;
+  } else if (t_position.y + t_size.y  >= screen_height) {
+    t_position.y = screen_height - t_size.y;
+  }
+}
+
 MovementSystem::MovementSystem(std::shared_ptr<EntityManager> t_em) {
   m_em = t_em;
 }
@@ -38,9 +53,15 @@ void MovementSystem::update() {
       player->velocity = direction * *speed;
     }
     player->position += player->velocity;
+    keepPlayerInsideScreen(player->position, body->getSize());
     body->setPosition(player->position);
+
+
+
     if (player->velocity.x != 0 || player->velocity.y != 0) player->velocity *= 0.99f;
     std::cout << "Player position: " << player->position.x << " " << player->position.y << std::endl;
   }
 
 }
+
+
