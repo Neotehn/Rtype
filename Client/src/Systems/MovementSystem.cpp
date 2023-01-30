@@ -40,6 +40,10 @@ void MovementSystem::update() {
        EntityViewer<int, float, sf::Vector2f, SpriteECS>(*m_em.get())) {
     updateBackground(ent);
   }
+  for (EntityID ent :
+       EntityViewer<float, sf::Vector2f, sf::RectangleShape>(*m_em.get())) {
+    updateBullets(ent);
+  }
 }
 
 void MovementSystem::updatePlayer(EntityID t_ent) {
@@ -81,7 +85,18 @@ void MovementSystem::updateBackground(EntityID t_ent) {
   if (pos->x <= *limit) {
     pos->x = 0;
   }
-  std::cout << "Bg position of " << getEntityIndex(t_ent) << ": " << pos->x
-            << " " << pos->y << std::endl;
+  //  std::cout << "Bg position of " << getEntityIndex(t_ent) << ": " << pos->x
+  //            << " " << pos->y << std::endl;
   sprite->setPosition(*pos);
+}
+
+void MovementSystem::updateBullets(EntityID t_ent) {
+  sf::RectangleShape* body = (*m_em.get()).Get<sf::RectangleShape>(t_ent);
+  sf::Vector2f* pos = (*m_em.get()).Get<sf::Vector2f>(t_ent);
+  float* speed = (*m_em.get()).Get<float>(t_ent);
+  pos->x += *speed;
+  if (pos->x >= 800) {
+    m_em->destroyEntity(t_ent);
+  }
+  body->setPosition(*pos);
 }

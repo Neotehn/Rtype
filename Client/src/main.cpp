@@ -3,7 +3,7 @@
 #include "InputManager/InputManager.hpp"
 #include "Systems/DisplaySystem.hpp"
 #include "Systems/MovementSystem.hpp"
-
+#include "Systems/ShootingSystem.hpp"
 
 int counter;
 
@@ -56,6 +56,8 @@ EntityManager init() {
 
 int main() {
   EntityManager entity_manager = init();
+  std::shared_ptr<EntityManager> entity_manager_ptr =
+      std::make_shared<EntityManager>(entity_manager);
   std::vector<std::shared_ptr<ISystem>> systems;
 
   InputManager input_manager;
@@ -63,17 +65,18 @@ int main() {
   sf::RenderWindow window(sf::VideoMode(800, 800), "R-Type Epitech");
   window.setFramerateLimit(60);
 
-  systems.push_back(std::make_shared<DisplaySystem>(std::make_shared<EntityManager>(entity_manager), window));
-  systems.push_back(std::make_shared<MovementSystem>(std::make_shared<EntityManager>(entity_manager)));
+  systems.push_back(
+      std::make_shared<DisplaySystem>(entity_manager_ptr, window));
+  systems.push_back(std::make_shared<MovementSystem>(entity_manager_ptr));
+  systems.push_back(std::make_shared<ShootingSystem>(entity_manager_ptr));
 
   while (window.isOpen()) {
     sf::Event event;
     while (window.pollEvent(event)) {
       if (event.type == sf::Event::Closed) window.close();
       input_manager.recordInputs(event);
-
     }
-    SystemData data = {.event_queue= input_manager.getInputs()};
+    SystemData data = {.event_queue = input_manager.getInputs()};
 
     for (std::shared_ptr<ISystem> system : systems) {
       system->updateData(data);

@@ -9,8 +9,7 @@ DisplaySystem::~DisplaySystem() {}
 
 void DisplaySystem::update() {
     m_window->clear();
-    for (EntityID ent : EntityViewer<SpriteECS>(*m_em.get()))
-    {
+    for (EntityID ent : EntityViewer<SpriteECS>(*m_em.get())) {
       SpriteECS* sprite = (*m_em.get()).Get<SpriteECS>(ent);
       m_window->draw(*(sprite)->getSprite());
     }

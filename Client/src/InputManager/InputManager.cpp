@@ -9,9 +9,9 @@ InputManager::InputManager()
 
 
 // -4 = UP ; -3 = LEFT ; -2 = DOWN ; -1 = RIGHT
-void InputManager::recordInputs(const sf::Event &t_event)
-{
-
+void InputManager::recordInputs(const sf::Event &t_event) {
+  // TODO: we need to link the events with the entity id from corresponding
+  //  player
   switch (t_event.key.code) {
     case sf::Keyboard::W:
       this->m_input_queue.push_back(sf::Keyboard::W);
@@ -28,6 +28,9 @@ void InputManager::recordInputs(const sf::Event &t_event)
     case sf::Keyboard::A:
       this->m_input_queue.push_back(sf::Keyboard::A);
       printf("a");
+      break;
+    case sf::Keyboard::Space:
+      this->m_input_queue.push_back(sf::Keyboard::Space);
       break;
   }
 
