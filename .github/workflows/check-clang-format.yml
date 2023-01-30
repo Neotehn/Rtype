@@ -1,16 +1,16 @@
-# # https://github.com/jidicula/clang-format-action
-# name: clang-format check
+# https://github.com/jidicula/clang-format-action
+name: clang-format check
 
-# on: [ push, pull_request ]
+on: [ push, pull_request ]
 
-# jobs:
-#   formatting-check:
-#     name: Formatting Check
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v3
-#       - name: Run clang-format style check for C++ programs.
-#         uses: jidicula/clang-format-action@v4.10.1
-#         with:
-#           clang-format-version: '13'
-#           exclude-regex: 'CMakeFiles'
+jobs:
+  formatting-check:
+    name: Formatting Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run clang-format style check for C++ programs.
+        uses: jidicula/clang-format-action@v4.10.1
+        with:
+          clang-format-version: '13'
+          exclude-regex: 'CMakeFiles'
