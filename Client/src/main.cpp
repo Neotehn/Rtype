@@ -10,14 +10,37 @@ int counter;
 EntityManager init() {
   EntityManager entity_manager;
 
-  EntityID background = entity_manager.createNewEntity();
-  SpriteECS *background_sprite = entity_manager.Assign<SpriteECS>(background, SpriteECS("./sprites/background2.jpg"));
+  // background layer 1
+  EntityID background1 = entity_manager.createNewEntity();
+  entity_manager.Assign<int>(background1, (-272 * 5));
+  entity_manager.Assign<float>(background1, 1);
+  entity_manager.Assign<sf::Vector2f>(background1, sf::Vector2f(0, 0));
+  entity_manager.Assign<SpriteECS>(
+      background1, SpriteECS("./sprites/background/bg1.png", {5, 5}));
 
+  // background layer 2
+  EntityID background2 = entity_manager.createNewEntity();
+  entity_manager.Assign<int>(background2, (-272 * 10));
+  entity_manager.Assign<float>(background2, 2);
+  entity_manager.Assign<sf::Vector2f>(background2, sf::Vector2f(0, 160));
+  entity_manager.Assign<SpriteECS>(
+      background2, SpriteECS("./sprites/background/bg2.png", {4, 4}));
+
+  // background layer 3
+  EntityID background3 = entity_manager.createNewEntity();
+  entity_manager.Assign<int>(background3, (-272 * 5));
+  entity_manager.Assign<float>(background3, 3);
+  entity_manager.Assign<sf::Vector2f>(background3, sf::Vector2f(0, 0));
+  entity_manager.Assign<SpriteECS>(
+      background3, SpriteECS("./sprites/background/bg3.png", {5, 5}));
+
+  // player
   EntityID player = entity_manager.createNewEntity();
   SpriteECS player_sprite = SpriteECS("./sprites/starship.png");
 
   float *player_speed = entity_manager.Assign<float>(player, float(10));
-  Pos *player_pos = entity_manager.Assign<Pos>(player, Pos{ sf::Vector2f(0, 0), sf::Vector2f(300, 300)});
+  Pos *player_pos = entity_manager.Assign<Pos>(
+      player, Pos{sf::Vector2f(0, 0), sf::Vector2f(300, 300)});
 
   sf::RectangleShape body;
   body.setSize({200, 200});

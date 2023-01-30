@@ -16,14 +16,17 @@ struct Pos {
 
 class SpriteECS {
  public:
-  SpriteECS(std::string t_sprite_path) {
+  SpriteECS(std::string t_sprite_path, sf::Vector2f t_scale = {1, 1}) {
     m_texture->loadFromFile(t_sprite_path);
     m_sprite.setTexture(*m_texture);
+    m_sprite.setScale(t_scale);
   }
 
   const sf::Sprite* getSprite() const { return &m_sprite; }
 
   const sf::Texture* getTexture() const { return m_texture; }
+
+  void setPosition(sf::Vector2f pos) { m_sprite.setPosition(pos); }
 
   bool loadFromFile(std::string t_filepath) {
     if (!m_texture->loadFromFile(t_filepath)) {

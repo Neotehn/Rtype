@@ -11,6 +11,10 @@ class MovementSystem : public ISystem {
 
   void update();
   void updateData(SystemData &t_data);
+
+  void updatePlayer(EntityID t_ent);
+  void updateBackground(EntityID t_ent);
+
  private:
   EventQueue m_event_queue;
 };
