@@ -1,34 +1,24 @@
 /*
 ** EPITECH PROJECT, 2023
-** Rtype
+** StateMachine
 ** File description:
 ** Core
 */
 
 #include "../inc/Core.hpp"
+#include "../inc/MainState.hpp"
 
-Core::Core(sf::VideoMode mode)
-    : m_window(mode, "R-Type"),
-      m_x_res(1280),
-      m_y_res(720),
-      m_main_menu(Menu(m_window)),
-      m_settings(m_window),
-      m_screen(0) {}
+void Core::run()
+{
+    m_window.create({1280, 720}, "R-Type", sf::Style::Titlebar | sf::Style::Close);
+    m_window.setFramerateLimit(30);
 
-Core::~Core() {}
+    m_state_machine.run(StateMachine::build<MainState>(m_state_machine, m_window, true));
 
-void Core::loop() {
-  while (m_window.isOpen()) {
-    switch (m_screen) {
-      case (0):
-        m_screen = m_main_menu.runMenu();
-        break;
-      case (1):
-        m_screen = m_settings.runSettings();
-        m_main_menu.setSettings(false);
-        break;
-      default:
-        break;
+    while (m_state_machine.running())
+    {
+        m_state_machine.nextState();
+        m_state_machine.update();
+        m_state_machine.draw();
     }
-  }
 }

@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2023
-** Rtype
+** StateMachine
 ** File description:
 ** Core
 */
@@ -8,28 +8,17 @@
 #ifndef CORE_HPP_
 #define CORE_HPP_
 
-#include <SFML/Audio.hpp>
-#include <SFML/Graphics.hpp>
-#include <SFML/Network.hpp>
-#include <string>
+#include <SFML/Graphics/RenderWindow.hpp>
+#include "StateMachine.hpp"
 
-#include "Menu.hpp"
-#include "Settings.hpp"
+class Core
+{
+public:
+    void run();
 
-class Core {
- public:
-  Core(sf::VideoMode mode = sf::VideoMode(1280, 720));
-  ~Core();
-
-  void loop();
-
- private:
-  sf::RenderWindow m_window;
-  Menu m_main_menu;
-  Settings m_settings;
-  int m_x_res;
-  int m_y_res;
-  int m_screen;
+private:
+    sf::RenderWindow m_window;
+    StateMachine m_state_machine;
 };
 
 #endif /* !CORE_HPP_ */
