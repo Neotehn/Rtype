@@ -14,8 +14,7 @@ using boost::asio::ip::udp;
 
 class UdpClient : public IProtocol {
  public:
-  UdpClient(boost::asio::io_service &t_io_service,
-            const std::string &t_host,
+  UdpClient(boost::asio::io_service &t_io_service, const std::string &t_host,
             const std::string &t_port);
   ~UdpClient();
   void sendMessage(const std::string &);
