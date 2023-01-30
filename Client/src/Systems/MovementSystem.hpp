@@ -1,8 +1,10 @@
 #ifndef CLIENT_SRC_SYSTEMS_MOVEMENTSYSTEM_HPP_
 #define CLIENT_SRC_SYSTEMS_MOVEMENTSYSTEM_HPP_
 
-#include "../../../ECS/ISystem.hpp"
+#include <string>
+
 #include "../../../ECS/DataTypesECS.hpp"
+#include "../../../ECS/ISystem.hpp"
 
 class MovementSystem : public ISystem {
  public:

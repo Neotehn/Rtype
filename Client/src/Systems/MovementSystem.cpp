@@ -44,6 +44,14 @@ void MovementSystem::update() {
        EntityViewer<float, sf::Vector2f, sf::RectangleShape>(*m_em.get())) {
     updateBullets(ent);
   }
+  // update enemy
+  for (EntityID ent :
+       EntityViewer<std::string, Pos, sf::RectangleShape>(*m_em.get())) {
+    sf::RectangleShape* body = (*m_em.get()).Get<sf::RectangleShape>(ent);
+    Pos* pos = (*m_em.get()).Get<Pos>(ent);
+    pos->position += pos->velocity;
+    body->setPosition(pos->position);
+  }
 }
 
 void MovementSystem::updatePlayer(EntityID t_ent) {

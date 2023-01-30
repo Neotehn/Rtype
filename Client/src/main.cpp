@@ -1,8 +1,10 @@
 #include "../../ECS/EntityManager.hpp"
 #include "../../ECS/ISystem.hpp"
 #include "InputManager/InputManager.hpp"
+#include "Systems/CollisionSystem.hpp"
 #include "Systems/DisplaySystem.hpp"
 #include "Systems/MovementSystem.hpp"
+#include "Systems/RandomEnemyGeneratorSystem.hpp"
 #include "Systems/ShootingSystem.hpp"
 
 int counter;
@@ -69,6 +71,9 @@ int main() {
       std::make_shared<DisplaySystem>(entity_manager_ptr, window));
   systems.push_back(std::make_shared<MovementSystem>(entity_manager_ptr));
   systems.push_back(std::make_shared<ShootingSystem>(entity_manager_ptr));
+  systems.push_back(
+      std::make_shared<RandomEnemyGeneratorSystem>(entity_manager_ptr));
+  systems.push_back(std::make_shared<CollisionSystem>(entity_manager_ptr));
 
   while (window.isOpen()) {
     sf::Event event;

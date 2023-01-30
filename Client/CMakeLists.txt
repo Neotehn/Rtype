@@ -18,7 +18,8 @@ add_executable(r-type_client src/main.cpp src/Player.cpp src/Player.hpp
         src/Systems/DisplaySystem.cpp src/Systems/DisplaySystem.hpp
         src/EventQueue.cpp src/EventQueue.hpp src/Systems/MovementSystem.cpp
         src/Systems/MovementSystem.hpp src/Systems/ShootingSystem.cpp
-        src/Systems/ShootingSystem.hpp)
+        src/Systems/ShootingSystem.hpp src/Systems/CollisionSystem.cpp
+        src/Systems/CollisionSystem.hpp src/Systems/RandomEnemyGeneratorSystem.cpp src/Systems/RandomEnemyGeneratorSystem.hpp)
 
 target_link_libraries(r-type_client PRIVATE ${OPENGL_LIBRARIES} sfml-graphics)
 
