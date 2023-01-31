@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "../../../ECS/ISystem.hpp"
+#include "../ECS/ISystem.hpp"
 
 class CollisionSystem : public ISystem {
  public:

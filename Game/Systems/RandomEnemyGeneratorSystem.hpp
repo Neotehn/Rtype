@@ -1,7 +1,7 @@
 #ifndef CLIENT_SRC_SYSTEMS_RANDOMENEMYGENERATORSYSTEM_HPP_
 #define CLIENT_SRC_SYSTEMS_RANDOMENEMYGENERATORSYSTEM_HPP_
 
-#include "../../../ECS/ISystem.hpp"
+#include "../ECS/ISystem.hpp"
 
 class RandomEnemyGeneratorSystem : public ISystem {
  public:

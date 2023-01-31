@@ -19,7 +19,6 @@ void AnimationSystem::update() {
     } else {
       rect.left += 34;
     }
-    std::cout << rect.left << std::endl;
     shape->setTextureRect(rect);
   }
   m_clock.restart();

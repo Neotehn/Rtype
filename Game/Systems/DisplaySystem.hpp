@@ -1,7 +1,7 @@
 #ifndef CLIENT_SRC_SYSTEMS_IDISPLAY_HPP_
 #define CLIENT_SRC_SYSTEMS_IDISPLAY_HPP_
 
-#include "../../../ECS/ISystem.hpp"
+#include "../ECS/ISystem.hpp"
 
 class DisplaySystem : public ISystem {
  public:

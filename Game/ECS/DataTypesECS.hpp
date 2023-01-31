@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
-#include "../Client/src/EventQueue.hpp"
+#include "../EventQueue.hpp"
 
 struct SystemData {
   EventQueue event_queue;

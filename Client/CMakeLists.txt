@@ -11,15 +11,15 @@ FetchContent_MakeAvailable(SFML)
 
 find_package(OpenGL REQUIRED OPTIONAL_COMPONENTS OpenGL)
 include_directories(${OPENGL_INCLUDE_DIR})
-add_executable(r-type_client src/main.cpp src/Player.cpp src/Player.hpp
-        ../ECS/ComponentPool.hpp ../ECS/ECS.hpp ../ECS/EntityManager.hpp
-        ../ECS/EntityViewer.hpp ../ECS/DataTypesECS.hpp ../ECS/ISystem.hpp
+add_executable(r-type_client src/main.cpp
+        ../Game/ECS/ComponentPool.hpp ../Game/ECS/ECS.hpp ../Game/ECS/EntityManager.hpp
+        ../Game/ECS/EntityViewer.hpp ../Game/ECS/DataTypesECS.hpp ../Game/ECS/ISystem.hpp
         src/InputManager/InputManager.cpp src/InputManager/InputManager.hpp
-        src/Systems/DisplaySystem.cpp src/Systems/DisplaySystem.hpp
-        src/EventQueue.cpp src/EventQueue.hpp src/Systems/MovementSystem.cpp
-        src/Systems/MovementSystem.hpp src/Systems/ShootingSystem.cpp
-        src/Systems/ShootingSystem.hpp src/Systems/CollisionSystem.cpp
-        src/Systems/CollisionSystem.hpp src/Systems/RandomEnemyGeneratorSystem.cpp src/Systems/RandomEnemyGeneratorSystem.hpp src/Systems/AnimationSystem.cpp src/Systems/AnimationSystem.hpp)
+        ../Game/Systems/DisplaySystem.cpp ../Game/Systems/DisplaySystem.hpp
+        ../Game/EventQueue.cpp ../Game/EventQueue.hpp ../Game/Systems/MovementSystem.cpp
+        ../Game/Systems/MovementSystem.hpp ../Game/Systems/ShootingSystem.cpp
+        ../Game/Systems/ShootingSystem.hpp ../Game/Systems/CollisionSystem.cpp
+        ../Game/Systems/CollisionSystem.hpp ../Game/Systems/RandomEnemyGeneratorSystem.cpp ../Game/Systems/RandomEnemyGeneratorSystem.hpp ../Game/Systems/AnimationSystem.cpp ../Game/Systems/AnimationSystem.hpp)
 
 target_link_libraries(r-type_client PRIVATE ${OPENGL_LIBRARIES} sfml-graphics)
 

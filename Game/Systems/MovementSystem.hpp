@@ -3,8 +3,8 @@
 
 #include <string>
 
-#include "../../../ECS/DataTypesECS.hpp"
-#include "../../../ECS/ISystem.hpp"
+#include "../ECS/DataTypesECS.hpp"
+#include "../ECS/ISystem.hpp"
 
 class MovementSystem : public ISystem {
  public:

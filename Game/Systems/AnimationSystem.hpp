@@ -1,7 +1,7 @@
 #ifndef CLIENT_SRC_SYSTEMS_ANIMATIONSYSTEM_HPP_
 #define CLIENT_SRC_SYSTEMS_ANIMATIONSYSTEM_HPP_
 
-#include "../../../ECS/ISystem.hpp"
+#include "../ECS/ISystem.hpp"
 
 class AnimationSystem : public ISystem {
  public:

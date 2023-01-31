@@ -8,7 +8,7 @@
 #define CLIENT_SRC_INPUTMANAGER_INPUTMANAGER_HPP_
 
 #include <SFML/Graphics.hpp>
-#include "../EventQueue.hpp"
+#include "../../../Game/EventQueue.hpp"
 
 class InputManager {
  public:
