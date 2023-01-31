@@ -53,12 +53,11 @@ EntityManager Game::initEntityManager() {
   return entity_manager;
 }
 
-std::vector<std::shared_ptr<ISystem>> Game::initSystems(
-  std::shared_ptr<EntityManager> entity_manager) {
+std::vector<std::shared_ptr<ISystem>>
+Game::initSystems(std::shared_ptr<EntityManager> entity_manager) {
   std::vector<std::shared_ptr<ISystem>> systems;
 
-  systems.push_back(
-    std::make_shared<DisplaySystem>(entity_manager, m_window));
+  systems.push_back(std::make_shared<DisplaySystem>(entity_manager, m_window));
   systems.push_back(std::make_shared<MovementSystem>(entity_manager));
   systems.push_back(std::make_shared<ShootingSystem>(entity_manager));
   systems.push_back(
