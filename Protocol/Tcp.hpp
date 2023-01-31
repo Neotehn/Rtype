@@ -7,9 +7,8 @@
 
 class Tcp : public IProtocol {
  public:
-    Tcp();
-    ~Tcp();
-    
+  Tcp();
+  ~Tcp();
 };
 
 #endif /* !PROTOCOL_TCP_HPP_ */
