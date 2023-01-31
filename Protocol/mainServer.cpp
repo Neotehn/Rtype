@@ -14,12 +14,9 @@ int main() {
     boost::thread_group group;
     for (unsigned i = 0; i < boost::thread::hardware_concurrency(); ++i) {
       group.create_thread(
-        bind(&boost::asio::io_service::run, boost::ref(io_service))
-        );
+        bind(&boost::asio::io_service::run, boost::ref(io_service)));
     }
     group.join_all();
-  } catch (const std::exception &er) {
-    std::cerr << er.what() << std::endl;
-  }
+  } catch (const std::exception &er) { std::cerr << er.what() << std::endl; }
   return 0;
 }

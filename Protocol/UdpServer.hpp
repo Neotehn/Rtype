@@ -24,23 +24,21 @@ using boost::system::error_code;
 
 class UdpServer : public IProtocol {
   typedef boost::shared_ptr<UdpSession> shared_session;
+
  public:
   UdpServer(boost::asio::io_service &);
   ~UdpServer();
 
  private:
   void startListening();
-  void handleListening(shared_session t_session,
-                       const error_code& t_ec,
+  void handleListening(shared_session t_session, const error_code &t_ec,
                        std::size_t);
   void handleSend(std::shared_ptr<std::string> t_msg,
                   const boost::system::error_code &t_ec,
                   std::size_t t_bytes_transferred);
-  void handle(shared_session t_session,
-                      const error_code &t_ec,
-                      std::size_t);
-  void enqueueResponse(shared_session const& t_session);
-  void enqueueResponseStrand(shared_session const& t_session);
+  void handle(shared_session t_session, const error_code &t_ec, std::size_t);
+  void enqueueResponse(shared_session const &t_session);
+  void enqueueResponseStrand(shared_session const &t_session);
 
   udp::socket m_socket;
   boost::asio::io_context::strand m_strand;

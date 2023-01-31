@@ -23,14 +23,14 @@ class UdpServer;
 
 class UdpSession : public boost::enable_shared_from_this<UdpSession> {
  public:
-    UdpSession(UdpServer *t_server);
-    void handleRequest(const error_code& t_error, std::size_t);
-    void handleSent(const error_code& t_ec, std::size_t);
+  UdpSession(UdpServer *t_server);
+  void handleRequest(const error_code &t_error, std::size_t);
+  void handleSent(const error_code &t_ec, std::size_t);
 
-    udp::endpoint m_remoteEndpoint;
-    boost::array<char, 100> m_recvBuffer;
-    std::string m_message;
-    UdpServer* m_server;
+  udp::endpoint m_remoteEndpoint;
+  boost::array<char, 100> m_recvBuffer;
+  std::string m_message;
+  UdpServer *m_server;
 };
 
 #endif /* !PROTOCOL_UDPSESSION_HPP_ */
