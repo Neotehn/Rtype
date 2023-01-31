@@ -1,25 +1,34 @@
+#include <thread>
+
 #include "../../Game/ECS/EntityManager.hpp"
 #include "../../Game/ECS/ISystem.hpp"
-#include "InputManager/InputManager.hpp"&
+#include "InputManager/InputManager.hpp"
 #include "../../Game/Game.hpp"
 
 int counter;
 
+void runGame(Game *t_game) { t_game->run(); }
+
+void recordInputs(Game *t_game) {
+  sf::RenderWindow &window = t_game->getWindow();
+  InputManager &input_manager = t_game->getInputManager();
+
+  while (window.isOpen()) {
+    sf::Event event;
+    while (window.pollEvent(event)) {
+      if (event.type == sf::Event::Closed) window.close();
+      input_manager.recordInputs(event);
+    }
+  }
+}
+
 int main() {
-  InputManager input_manager;
   Game game = Game();
-  sf::RenderWindow &window = game.getWindow();
 
-  game.run();
+  std::thread game_thread(runGame, &game);
+  std::thread input_thread(recordInputs, &game);
 
-//  while (window.isOpen()) {
-//    sf::Event event;
-//    while (window.pollEvent(event)) {
-//      if (event.type == sf::Event::Closed) window.close();
-//      input_manager.recordInputs(event);
-//    }
-//    // TODO: send inputs to the game
-//  }
-
+  game_thread.join();
+  input_thread.join();
   return 0;
 }

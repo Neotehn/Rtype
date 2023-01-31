@@ -10,6 +10,7 @@
 #include "./Systems/MovementSystem.hpp"
 #include "./Systems/RandomEnemyGeneratorSystem.hpp"
 #include "./Systems/ShootingSystem.hpp"
+#include "../Client/src/InputManager/InputManager.hpp"
 
 class Game {
  public:
@@ -17,13 +18,16 @@ class Game {
   ~Game();
 
   sf::RenderWindow &getWindow();
+  InputManager &getInputManager();
   void run();
 
  private:
   sf::RenderWindow m_window;
+  InputManager m_input_manager;
+
   EntityManager initEntityManager();
-  std::vector<std::shared_ptr<ISystem>> initSystems
-    (std::shared_ptr<EntityManager>);
+  std::vector<std::shared_ptr<ISystem>>
+    initSystems(std::shared_ptr<EntityManager>);
 };
 
 #endif  //GAME_GAME_HPP

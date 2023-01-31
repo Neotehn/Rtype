@@ -69,9 +69,9 @@ std::vector<std::shared_ptr<ISystem>> Game::initSystems(
   return systems;
 }
 
-sf::RenderWindow &Game::getWindow() {
-  return m_window;
-}
+sf::RenderWindow &Game::getWindow() { return m_window; }
+
+InputManager &Game::getInputManager() { return m_input_manager; }
 
 void Game::run() {
   std::shared_ptr<EntityManager> entity_manager =
@@ -79,9 +79,7 @@ void Game::run() {
   std::vector<std::shared_ptr<ISystem>> systems = initSystems(entity_manager);
 
   while (m_window.isOpen()) {
-    // TODO: get inputs from threads from client or server
-//    SystemData data = {.event_queue = input_manager.getInputs()};
-    SystemData data = {.event_queue = std::vector<int>()};
+    SystemData data = {.event_queue = m_input_manager.getInputs()};
 
     for (std::shared_ptr<ISystem> system : systems) {
       system->updateData(data);
