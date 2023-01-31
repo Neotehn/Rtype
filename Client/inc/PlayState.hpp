@@ -16,7 +16,18 @@
 #include <memory>
 #include <stdexcept>
 
+#include "../../Game/ECS/EntityManager.hpp"
+#include "../../Game/ECS/ISystem.hpp"
+#include "../../Game/Systems/AnimationSystem.hpp"
+#include "../../Game/Systems/CollisionSystem.hpp"
+#include "../../Game/Systems/DisplaySystem.hpp"
+#include "../../Game/Systems/MovementSystem.hpp"
+#include "../../Game/Systems/RandomEnemyGeneratorSystem.hpp"
+#include "../../Game/Systems/ShootingSystem.hpp"
 #include "../../GameEngine/inc/State.hpp"
+#include "../../GameEngine/inc/StateMachine.hpp"
+#include "../inc/MainState.hpp"
+#include "../src/InputManager/InputManager.hpp"
 
 class StateMachine;
 
@@ -38,6 +49,10 @@ class PlayState final : public State {
  private:
   sf::Texture m_backgroundTexture;
   sf::Sprite m_background;
+  EntityManager m_entity_manager;
+  std::shared_ptr<EntityManager> m_entity_manager_ptr;
+  std::vector<std::shared_ptr<ISystem>> m_systems;
+  InputManager m_input_manager;
 };
 
 #endif /* !PLAYSTATE_HPP_ */

@@ -13,15 +13,21 @@
 MainState::MainState(StateMachine &machine, sf::RenderWindow &window,
                      const bool replace)
     : State(machine, window, replace),
-      m_start_btn(Button("./assets/startBtn.png", sf::Vector2f(600, 350),
+      m_start_btn(Button("./assets/startBtn.png",
+                         sf::Vector2f(m_window.getSize().x / 2 - 135,
+                                      m_window.getSize().y / 2 - 65),
                          sf::Vector2f(270, 130))),
-      m_settings_btn(Button("./assets/gear.png", sf::Vector2f(1000, 600),
-                            sf::Vector2f(64, 64))) {
+      m_settings_btn(Button(
+          "./assets/gear.png",
+          sf::Vector2f(m_window.getSize().x - 100, m_window.getSize().y - 100),
+          sf::Vector2f(64, 64))) {
   if (!m_bg_t.loadFromFile("./assets/menubg.jpg")) {
     throw std::runtime_error("Unable to load image.");
   }
-  float scale_x = 1280.0 / m_bg_t.getSize().x;
-  float scale_y = 720.0 / m_bg_t.getSize().y;
+  float size_x = m_window.getSize().x;
+  float size_y = m_window.getSize().y;
+  float scale_x = size_x / m_bg_t.getSize().x;
+  float scale_y = size_y / m_bg_t.getSize().y;
   m_bg_s.setTexture(m_bg_t, true);
   m_bg_s.setScale(scale_x, scale_y);
 }

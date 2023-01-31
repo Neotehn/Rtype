@@ -8,7 +8,21 @@ set(CLIENT_HPP ../GameEngine/inc/Button.hpp
                 inc/SettingsState.hpp
                 ../GameEngine/inc/Sprite.hpp
                 ../GameEngine/inc/State.hpp
-                ../GameEngine/inc/StateMachine.hpp)
+                ../GameEngine/inc/StateMachine.hpp
+                ../Game/ECS/ComponentPool.hpp
+                ../Game/ECS/ECS.hpp 
+                ../Game/ECS/EntityManager.hpp
+                ../Game/ECS/EntityViewer.hpp 
+                ../Game/ECS/DataTypesECS.hpp 
+                ../Game/ECS/ISystem.hpp
+                src/InputManager/InputManager.hpp
+                ../Game/Systems/DisplaySystem.hpp
+                ../Game/EventQueue.hpp 
+                ../Game/Systems/MovementSystem.hpp 
+                ../Game/Systems/ShootingSystem.hpp 
+                ../Game/Systems/CollisionSystem.hpp 
+                ../Game/Systems/RandomEnemyGeneratorSystem.hpp 
+                ../Game/Systems/AnimationSystem.hpp)
 
 set(CLIENT_SRC ../GameEngine/src/Button.cpp
                 ../GameEngine/src/Core.cpp
@@ -18,6 +32,14 @@ set(CLIENT_SRC ../GameEngine/src/Button.cpp
                 ../GameEngine/src/Sprite.cpp
                 ../GameEngine/src/State.cpp
                 ../GameEngine/src/StateMachine.cpp
+                ../Game/Systems/DisplaySystem.cpp
+                src/InputManager/InputManager.cpp
+                ../Game/EventQueue.cpp 
+                ../Game/Systems/MovementSystem.cpp
+                ../Game/Systems/ShootingSystem.cpp
+                ../Game/Systems/CollisionSystem.cpp
+                ../Game/Systems/RandomEnemyGeneratorSystem.cpp 
+                ../Game/Systems/AnimationSystem.cpp 
                 src/main.cpp)
 
 include(FetchContent)
@@ -30,7 +52,7 @@ find_package(OpenGL REQUIRED OPTIONAL_COMPONENTS OpenGL)
 include_directories(${OPENGL_INCLUDE_DIR})
 add_executable(r-type_client ${CLIENT_SRC} ${CLIENT_HPP})
 
-target_link_libraries(r-type_client PRIVATE ${OPENGL_LIBRARIES} sfml-graphics)
+target_link_libraries(r-type_client PRIVATE ${OPENGL_LIBRARIES} sfml-graphics sfml-audio)
 
 
 target_compile_features(r-type_client PRIVATE cxx_std_17)
