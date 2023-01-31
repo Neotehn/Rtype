@@ -1,4 +1,4 @@
-#include "./gameEngine/inc/Core.hpp"
+#include "../../GameEngine/inc/Core.hpp"
 
 int main() {
   auto app = Core{};

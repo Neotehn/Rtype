@@ -1,18 +1,12 @@
 #include "../inc/PlayState.hpp"
 
-#include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/Window/Event.hpp>
-#include <iostream>
-#include <memory>
-#include <stdexcept>
-
+#include "../../GameEngine/inc/StateMachine.hpp"
 #include "../inc/MainState.hpp"
-#include "../inc/StateMachine.hpp"
 
 PlayState::PlayState(StateMachine &machine, sf::RenderWindow &window,
                      const bool replace)
     : State{machine, window, replace} {
-  if (!m_backgroundTexture.loadFromFile("./src/gameEngine/assets/play.jpg")) {
+  if (!m_backgroundTexture.loadFromFile("./assets/play.jpg")) {
     throw std::runtime_error{"Was unable to load image 'img/play.png'"};
   }
   float scale_x = 1280.0 / m_backgroundTexture.getSize().x;

@@ -1,21 +1,21 @@
 cmake_minimum_required(VERSION 3.24)
 project(r-type_client)
 
-set(CLIENT_HPP src/gameEngine/inc/Core.hpp
-                src/gameEngine/inc/MainState.hpp
-                src/gameEngine/inc/PlayState.hpp
-                src/gameEngine/inc/StateMachine.hpp
-                src/gameEngine/inc/State.hpp
-                src/gameEngine/inc/Sprite.hpp
-                src/gameEngine/inc/Button.hpp)
+set(CLIENT_HPP ../GameEngine/inc/Button.hpp
+                ../GameEngine/inc/Core.hpp
+                inc/MainState.hpp
+                inc/PlayState.hpp
+                ../GameEngine/inc/Sprite.hpp
+                ../GameEngine/inc/State.hpp
+                ../GameEngine/inc/StateMachine.hpp)
 
-set(CLIENT_SRC src/gameEngine/src/Core.cpp
-                src/gameEngine/src/MainState.cpp
-                src/gameEngine/src/PlayState.cpp
-                src/gameEngine/src/StateMachine.cpp
-                src/gameEngine/src/State.cpp
-                src/gameEngine/src/Button.cpp
-                src/gameEngine/src/Sprite.cpp
+set(CLIENT_SRC ../GameEngine/src/Button.cpp
+                ../GameEngine/src/Core.cpp
+                src/MainState.cpp
+                src/PlayState.cpp
+                ../GameEngine/src/Sprite.cpp
+                ../GameEngine/src/State.cpp
+                ../GameEngine/src/StateMachine.cpp
                 src/main.cpp)
 
 include(FetchContent)

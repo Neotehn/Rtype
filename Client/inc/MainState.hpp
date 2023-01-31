@@ -14,9 +14,9 @@
 #include <SFML/Window/Event.hpp>
 #include <iostream>
 
-#include "Button.hpp"
-#include "State.hpp"
-#include "StateMachine.hpp"
+#include "../../GameEngine/inc/Button.hpp"
+#include "../../GameEngine/inc/State.hpp"
+#include "../../GameEngine/inc/StateMachine.hpp"
 
 class MainState final : public State {
  public:

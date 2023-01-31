@@ -12,11 +12,11 @@
 MainState::MainState(StateMachine &machine, sf::RenderWindow &window,
                      const bool replace)
     : State(machine, window, replace),
-      m_start_btn(Button("./src/gameEngine/assets/startBtn.png",
-                         sf::Vector2f(600, 350), sf::Vector2f(270, 130))),
-      m_settings_btn(Button("./src/gameEngine/assets/gear.png",
-                            sf::Vector2f(1000, 600), sf::Vector2f(64, 64))) {
-  if (!m_bg_t.loadFromFile("./src/gameEngine/assets/menubg.jpg")) {
+      m_start_btn(Button("./assets/startBtn.png", sf::Vector2f(600, 350),
+                         sf::Vector2f(270, 130))),
+      m_settings_btn(Button("./assets/gear.png", sf::Vector2f(1000, 600),
+                            sf::Vector2f(64, 64))) {
+  if (!m_bg_t.loadFromFile("./assets/menubg.jpg")) {
     throw std::runtime_error("Unable to load image.");
   }
   float scale_x = 1280.0 / m_bg_t.getSize().x;
