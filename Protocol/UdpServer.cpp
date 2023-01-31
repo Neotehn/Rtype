@@ -40,6 +40,7 @@ void UdpServer::enqueueResponse(shared_session const &t_session) {
 }
 
 void UdpServer::enqueueResponseStrand(shared_session const &t_session) {
+  t_session->m_message = "yes";
   m_socket.async_send_to(
     boost::asio::buffer(t_session->m_message), t_session->m_remoteEndpoint,
     m_strand.wrap(boost::bind(&UdpSession::handleSent, t_session,
@@ -50,13 +51,13 @@ void UdpServer::enqueueResponseStrand(shared_session const &t_session) {
 void UdpSession::handleRequest(const error_code &t_error,
                                std::size_t t_bytes_transferred) {
   if (!t_error || t_error == boost::asio::error::message_size) {
-    auto message = "Hello Client\n";
     std::cout << "Received: '"
               << std::string(m_recvBuffer.begin(),
                              m_recvBuffer.begin() + t_bytes_transferred)
               << "' (" << t_error.message() << ")\n";
 
     // let the server coordinate actual IO
+    // give the message
     m_server->enqueueResponse(shared_from_this());
   }
 }
