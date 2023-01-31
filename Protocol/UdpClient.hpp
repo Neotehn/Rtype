@@ -5,6 +5,8 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <chrono>
+#include <thread>
 
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
@@ -18,6 +20,8 @@ class UdpClient : public IProtocol {
             const std::string &t_port);
   ~UdpClient();
   void sendMessage(const std::string &);
+  void receiveClient();
+  void handleReceive(const boost::system::error_code &error, std::size_t size);
 
  private:
   udp::socket m_socket;
