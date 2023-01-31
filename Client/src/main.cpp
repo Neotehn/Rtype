@@ -19,7 +19,7 @@ EntityManager init() {
   entity_manager.Assign<float>(background1, 1);
   entity_manager.Assign<sf::Vector2f>(background1, sf::Vector2f(0, 0));
   entity_manager.Assign<SpriteECS>(
-      background1, SpriteECS("./sprites/background/bg1.png", {5, 5}));
+    background1, SpriteECS("./sprites/background/bg1.png", {5, 5}));
 
   // background layer 2
   EntityID background2 = entity_manager.createNewEntity();
@@ -27,7 +27,7 @@ EntityManager init() {
   entity_manager.Assign<float>(background2, 2);
   entity_manager.Assign<sf::Vector2f>(background2, sf::Vector2f(0, 160));
   entity_manager.Assign<SpriteECS>(
-      background2, SpriteECS("./sprites/background/bg2.png", {4, 4}));
+    background2, SpriteECS("./sprites/background/bg2.png", {4, 4}));
 
   // background layer 3
   EntityID background3 = entity_manager.createNewEntity();
@@ -35,7 +35,7 @@ EntityManager init() {
   entity_manager.Assign<float>(background3, 3);
   entity_manager.Assign<sf::Vector2f>(background3, sf::Vector2f(0, 0));
   entity_manager.Assign<SpriteECS>(
-      background3, SpriteECS("./sprites/background/bg3.png", {5, 5}));
+    background3, SpriteECS("./sprites/background/bg3.png", {5, 5}));
 
   // player
   EntityID player = entity_manager.createNewEntity();
@@ -43,7 +43,7 @@ EntityManager init() {
 
   float *player_speed = entity_manager.Assign<float>(player, float(10));
   Pos *player_pos = entity_manager.Assign<Pos>(
-      player, Pos{sf::Vector2f(0, 0), sf::Vector2f(300, 300)});
+    player, Pos{sf::Vector2f(0, 0), sf::Vector2f(300, 300)});
 
   sf::RectangleShape body;
   body.setSize({200, 200});
@@ -52,15 +52,15 @@ EntityManager init() {
   body.setRotation(90.0);
   body.setOutlineColor(sf::Color::Red);
   //body.setOutlineThickness(5);
-  sf::RectangleShape *player_body = entity_manager.Assign<sf::RectangleShape>(player, body);
+  sf::RectangleShape *player_body =
+    entity_manager.Assign<sf::RectangleShape>(player, body);
   return entity_manager;
 }
-
 
 int main() {
   EntityManager entity_manager = init();
   std::shared_ptr<EntityManager> entity_manager_ptr =
-      std::make_shared<EntityManager>(entity_manager);
+    std::make_shared<EntityManager>(entity_manager);
   std::vector<std::shared_ptr<ISystem>> systems;
 
   InputManager input_manager;
@@ -69,11 +69,11 @@ int main() {
   window.setFramerateLimit(60);
 
   systems.push_back(
-      std::make_shared<DisplaySystem>(entity_manager_ptr, window));
+    std::make_shared<DisplaySystem>(entity_manager_ptr, window));
   systems.push_back(std::make_shared<MovementSystem>(entity_manager_ptr));
   systems.push_back(std::make_shared<ShootingSystem>(entity_manager_ptr));
   systems.push_back(
-      std::make_shared<RandomEnemyGeneratorSystem>(entity_manager_ptr));
+    std::make_shared<RandomEnemyGeneratorSystem>(entity_manager_ptr));
   systems.push_back(std::make_shared<CollisionSystem>(entity_manager_ptr));
   systems.push_back(std::make_shared<AnimationSystem>(entity_manager_ptr));
 
@@ -89,7 +89,6 @@ int main() {
       system->updateData(data);
       system->update();
     }
-
   }
   return 0;
 }

@@ -16,7 +16,7 @@ class EventQueue {
   std::vector<int> m_eventQueue;
 
  public:
-  const std::vector<int>& getMEventQueue() const;
+  const std::vector<int> &getMEventQueue() const;
 };
 
 #endif  // CLIENT_SRC_EVENTQUEUE_HPP_

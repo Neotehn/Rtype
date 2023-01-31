@@ -1,7 +1,7 @@
 #include "RandomEnemyGeneratorSystem.hpp"
 
 RandomEnemyGeneratorSystem::RandomEnemyGeneratorSystem(
-    std::shared_ptr<EntityManager> t_em) {
+  std::shared_ptr<EntityManager> t_em) {
   m_em = t_em;
 }
 

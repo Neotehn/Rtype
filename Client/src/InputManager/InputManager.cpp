@@ -2,11 +2,9 @@
 
 #include <iostream>
 
-InputManager::InputManager()
-{
+InputManager::InputManager() {
   //SetExitKey(KEY_CAPS_LOCK);
 }
-
 
 // -4 = UP ; -3 = LEFT ; -2 = DOWN ; -1 = RIGHT
 void InputManager::recordInputs(const sf::Event &t_event) {
@@ -37,36 +35,27 @@ void InputManager::recordInputs(const sf::Event &t_event) {
   //std::this_thread::sleep_for(std::chrono::milliseconds(100)); // This should change
 }
 
-
-void InputManager::popInputs()
-{
-  if (!this->m_input_queue.empty())
-    this->m_input_queue.clear();
+void InputManager::popInputs() {
+  if (!this->m_input_queue.empty()) this->m_input_queue.clear();
 }
 
-
-EventQueue InputManager::getInputs()
-{
+EventQueue InputManager::getInputs() {
   std::vector<int> inputs = this->m_input_queue;
   EventQueue eventQueue(inputs);
   this->popInputs();
   return eventQueue;
 }
 
-
-sf::Vector2i InputManager::getMousePosition()
-{
+sf::Vector2i InputManager::getMousePosition() {
   return sf::Mouse::getPosition();
 }
 
-bool InputManager::isMouseLeftClicked()
-{
+bool InputManager::isMouseLeftClicked() {
   return sf::Mouse::isButtonPressed(sf::Mouse::Left);
   // Needs click position
 }
 
-bool InputManager::isMouseRightClicked()
-{
+bool InputManager::isMouseRightClicked() {
   return sf::Mouse::isButtonPressed(sf::Mouse::Right);
   // Needs click position
 }

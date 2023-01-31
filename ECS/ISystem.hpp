@@ -1,7 +1,6 @@
 #ifndef ECS_ISYSTEM_HPP_
 #define ECS_ISYSTEM_HPP_
 
-
 #include <memory>
 #include "../ECS/EntityViewer.hpp"
 #include "../ECS/DataTypesECS.hpp"

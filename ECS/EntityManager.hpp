@@ -22,25 +22,23 @@ class EntityManager {
       EntityIndex newIndex = m_free_entities.back();
       m_free_entities.pop_back();
       EntityID newID =
-          createEntityId(newIndex,
-                         getEntityVersion(m_entities[newIndex].id));
+        createEntityId(newIndex, getEntityVersion(m_entities[newIndex].id));
       m_entities[newIndex].id = newID;
       return m_entities[newIndex].id;
     }
     m_entities.push_back(
-        {createEntityId(EntityIndex(m_entities.size()),
-                        0), ComponentMask()});
+      {createEntityId(EntityIndex(m_entities.size()), 0), ComponentMask()});
     return m_entities.back().id;
   }
   void destroyEntity(EntityID t_id) {
-    EntityID newID = createEntityId(EntityIndex(-1),
-                                    getEntityVersion(t_id) + 1);
+    EntityID newID =
+      createEntityId(EntityIndex(-1), getEntityVersion(t_id) + 1);
     m_entities[getEntityIndex(t_id)].id = newID;
     m_entities[getEntityIndex(t_id)].mask.reset();
     m_free_entities.push_back(getEntityIndex(t_id));
   }
 
-  template <typename T>
+  template<typename T>
   T *Assign(EntityID t_id, T t_value) {
     int componentId = getId<T>();
 
@@ -52,26 +50,25 @@ class EntityManager {
 
     // Looks up the component in the pool, and initializes it with placement new
     T *pComponent =
-        new (m_component_pools[componentId]->get(
-            getEntityIndex(t_id))) T(t_value);
+      new (m_component_pools[componentId]->get(getEntityIndex(t_id)))
+        T(t_value);
 
     // Set the bit for this component to true and return the created component
     m_entities[getEntityIndex(t_id)].mask.set(componentId);
     return pComponent;
   }
 
-  template <typename T>
+  template<typename T>
   T *Get(EntityID t_id) {
     int componentId = getId<T>();
-    if (!m_entities[getEntityIndex(t_id)].mask.test(
-            componentId)) return nullptr;
+    if (!m_entities[getEntityIndex(t_id)].mask.test(componentId))
+      return nullptr;
 
-    T *pComponent =
-        static_cast<T *>(
-        m_component_pools[componentId]->get(getEntityIndex(t_id)));
+    T *pComponent = static_cast<T *>(
+      m_component_pools[componentId]->get(getEntityIndex(t_id)));
     return pComponent;
   }
-  template <typename T>
+  template<typename T>
   void remove(EntityID t_id) {
     // ensures you're not accessing an entity that has been deleted
     if (m_entities[getEntityIndex(t_id)].id != t_id) return;

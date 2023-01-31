@@ -22,9 +22,9 @@ class SpriteECS {
     m_sprite.setScale(t_scale);
   }
 
-  const sf::Sprite* getSprite() const { return &m_sprite; }
+  const sf::Sprite *getSprite() const { return &m_sprite; }
 
-  const sf::Texture* getTexture() const { return m_texture; }
+  const sf::Texture *getTexture() const { return m_texture; }
 
   void setPosition(sf::Vector2f pos) { m_sprite.setPosition(pos); }
 
@@ -39,8 +39,7 @@ class SpriteECS {
 
  private:
   sf::Sprite m_sprite;
-  sf::Texture* m_texture = new sf::Texture();
-
+  sf::Texture *m_texture = new sf::Texture();
 };
 
 #endif  // ECS_DATATYPESECS_HPP_

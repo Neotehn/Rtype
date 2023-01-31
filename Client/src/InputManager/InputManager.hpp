@@ -10,11 +10,10 @@
 #include <SFML/Graphics.hpp>
 #include "../EventQueue.hpp"
 
-
 class InputManager {
  public:
   InputManager();
-  ~InputManager() {};
+  ~InputManager(){};
 
   // Get input
   int recordInput();
