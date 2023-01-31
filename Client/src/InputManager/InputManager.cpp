@@ -3,7 +3,7 @@
 #include <iostream>
 
 InputManager::InputManager() {
-  // SetExitKey(KEY_CAPS_LOCK);
+  //SetExitKey(KEY_CAPS_LOCK);
 }
 
 // -4 = UP ; -3 = LEFT ; -2 = DOWN ; -1 = RIGHT
@@ -32,8 +32,7 @@ void InputManager::recordInputs(const sf::Event &t_event) {
       break;
   }
 
-  // std::this_thread::sleep_for(std::chrono::milliseconds(100)); // This should
-  // change
+  //std::this_thread::sleep_for(std::chrono::milliseconds(100)); // This should change
 }
 
 void InputManager::popInputs() {

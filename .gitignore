@@ -1,6 +1,7 @@
 cmake-build-debug/
 .idea/
 CMakeFiles/
+.vscode/
 cmake_install.cmake
 CMakeCache.txt
 CPackConfig.cmake
@@ -8,3 +9,5 @@ CPackSourceConfig.cmake
 Makefile
 _deps
 r-type_client
+Client/cmake-build-debug/
+Client/.idea
