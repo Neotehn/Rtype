@@ -1,10 +1,3 @@
-/*
-** EPITECH PROJECT, 2023
-** statemachine
-** File description:
-** State
-*/
-
 #include "../inc/State.hpp"
 
 State::State(StateMachine &machine, sf::RenderWindow &window,

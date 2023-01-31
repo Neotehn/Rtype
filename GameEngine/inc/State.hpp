@@ -1,10 +1,3 @@
-/*
-** EPITECH PROJECT, 2023
-** StateMachine
-** File description:
-** State
-*/
-
 #ifndef STATE_HPP_
 #define STATE_HPP_
 
@@ -38,4 +31,4 @@ class State {
   std::unique_ptr<State> m_next;
 };
 
-#endif /* !STATE_HPP_ */
+#endif  // !STATE_HPP_

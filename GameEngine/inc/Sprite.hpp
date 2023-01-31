@@ -1,10 +1,3 @@
-/*
-** EPITECH PROJECT, 2023
-** Rtype
-** File description:
-** Sprite
-*/
-
 #ifndef SPRITE_HPP_
 #define SPRITE_HPP_
 
@@ -30,4 +23,4 @@ class Sprite {
   sf::Sprite m_sprite;
 };
 
-#endif /* !SPRITE_HPP_ */
+#endif  // !SPRITE_HPP_

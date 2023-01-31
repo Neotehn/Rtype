@@ -21,4 +21,4 @@ class Button : public Sprite {
   bool is_hovered(sf::Vector2f mouse_pos);
 };
 
-#endif /* !BUTTON_HPP_ */
+#endif  // !BUTTON_HPP_

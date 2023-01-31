@@ -1,10 +1,3 @@
-/*
-** EPITECH PROJECT, 2023
-** Rtype
-** File description:
-** Sprite
-*/
-
 #include "../inc/Sprite.hpp"
 
 Sprite::Sprite(std::string path, sf::Vector2f pos) : m_path(path) {

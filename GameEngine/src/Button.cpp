@@ -1,10 +1,3 @@
-/*
-** EPITECH PROJECT, 2023
-** Rtype
-** File description:
-** Button
-*/
-
 #include "../inc/Button.hpp"
 
 Button::Button(std::string path, sf::Vector2f pos, sf::Vector2f target_size)

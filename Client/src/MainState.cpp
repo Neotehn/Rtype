@@ -1,12 +1,4 @@
-/*
-** EPITECH PROJECT, 2023
-** statemachine
-** File description:
-** MainState
-*/
-
 #include "../inc/MainState.hpp"
-
 #include "../inc/PlayState.hpp"
 #include "../inc/SettingsState.hpp"
 
@@ -18,9 +10,9 @@ MainState::MainState(StateMachine &machine, sf::RenderWindow &window,
                                       m_window.getSize().y / 2 - 65),
                          sf::Vector2f(270, 130))),
       m_settings_btn(Button(
-          "./assets/gear.png",
-          sf::Vector2f(m_window.getSize().x - 100, m_window.getSize().y - 100),
-          sf::Vector2f(64, 64))) {
+        "./assets/gear.png",
+        sf::Vector2f(m_window.getSize().x - 100, m_window.getSize().y - 100),
+        sf::Vector2f(64, 64))) {
   if (!m_bg_t.loadFromFile("./assets/menubg.jpg")) {
     throw std::runtime_error("Unable to load image.");
   }
@@ -49,12 +41,12 @@ void MainState::update() {
       if (m_start_btn.is_pressed(mouse_pos_f)) {
         std::cout << "startbtn pressed" << std::endl;
         m_next =
-            StateMachine::build<PlayState>(m_state_machine, m_window, true);
+          StateMachine::build<PlayState>(m_state_machine, m_window, true);
       }
       if (m_settings_btn.is_pressed(mouse_pos_f)) {
         std::cout << "settingsbtn pressed" << std::endl;
         m_next =
-            StateMachine::build<SettingsState>(m_state_machine, m_window, true);
+          StateMachine::build<SettingsState>(m_state_machine, m_window, true);
       }
     }
     switch (event.type) {
@@ -65,7 +57,7 @@ void MainState::update() {
         switch (event.key.code) {
           case sf::Keyboard::Space:
             m_next =
-                StateMachine::build<PlayState>(m_state_machine, m_window, true);
+              StateMachine::build<PlayState>(m_state_machine, m_window, true);
             break;
           case sf::Keyboard::Escape:
             m_state_machine.quit();

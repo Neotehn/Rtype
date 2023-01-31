@@ -1,10 +1,3 @@
-/*
-** EPITECH PROJECT, 2023
-** StateMachine
-** File description:
-** Core
-*/
-
 #ifndef CORE_HPP_
 #define CORE_HPP_
 
@@ -22,4 +15,4 @@ class Core {
   StateMachine m_state_machine;
 };
 
-#endif /* !CORE_HPP_ */
+#endif  // !CORE_HPP_

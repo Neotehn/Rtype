@@ -1,10 +1,3 @@
-/*
-** EPITECH PROJECT, 2023
-** StateMachine
-** File description:
-** StateMachine
-*/
-
 #include "../inc/StateMachine.hpp"
 
 StateMachine::StateMachine() : m_resume(false), m_running(false) {}
@@ -18,12 +11,8 @@ void StateMachine::draw() { m_states.top()->draw(); }
 
 void StateMachine::nextState() {
   if (m_resume) {
-    if (!m_states.empty()) {
-      m_states.pop();
-    }
-    if (!m_states.empty()) {
-      m_states.top()->resume();
-    }
+    if (!m_states.empty()) { m_states.pop(); }
+    if (!m_states.empty()) { m_states.top()->resume(); }
     m_resume = false;
   }
   if (!m_states.empty()) {

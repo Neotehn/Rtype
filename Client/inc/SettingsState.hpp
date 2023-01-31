@@ -1,18 +1,11 @@
-/*
-** EPITECH PROJECT, 2023
-** Rtype
-** File description:
-** SettingsState
-*/
-
 #ifndef SETTINGSSTATE_HPP_
 #define SETTINGSSTATE_HPP_
 
+#include <iostream>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Window/Event.hpp>
-#include <iostream>
 
 #include "../../GameEngine/inc/Button.hpp"
 #include "../../GameEngine/inc/State.hpp"
@@ -33,4 +26,4 @@ class SettingsState final : public State {
   Button m_start_btn;
 };
 
-#endif /* !SETTINGSSTATE_HPP_ */
+#endif  // !SETTINGSSTATE_HPP_

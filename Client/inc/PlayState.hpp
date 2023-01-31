@@ -1,19 +1,12 @@
-/*
-** EPITECH PROJECT, 2023
-** Rtype
-** File description:
-** PlayState
-*/
-
 #ifndef PLAYSTATE_HPP_
 #define PLAYSTATE_HPP_
 
+#include <iostream>
+#include <memory>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Window/Event.hpp>
-#include <iostream>
-#include <memory>
 #include <stdexcept>
 
 #include "../../Game/ECS/EntityManager.hpp"
@@ -32,7 +25,7 @@
 class StateMachine;
 
 namespace sf {
-class RenderWindow;
+  class RenderWindow;
 }
 
 class PlayState final : public State {
@@ -55,4 +48,4 @@ class PlayState final : public State {
   InputManager m_input_manager;
 };
 
-#endif /* !PLAYSTATE_HPP_ */
+#endif  // !PLAYSTATE_HPP_

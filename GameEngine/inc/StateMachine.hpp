@@ -1,10 +1,3 @@
-/*
-** EPITECH PROJECT, 2023
-** StateMachine
-** File description:
-** StateMachine
-*/
-
 #ifndef STATEMACHINE_HPP_
 #define STATEMACHINE_HPP_
 
@@ -25,10 +18,9 @@ class StateMachine {
   void draw();
   void quit();
   void lastState();
-  template <typename T>
-  static std::unique_ptr<T> build(StateMachine &machine,
-                                  sf::RenderWindow &window,
-                                  bool replace = true);
+  template<typename T>
+  static std::unique_ptr<T>
+  build(StateMachine &machine, sf::RenderWindow &window, bool replace = true);
 
  private:
   bool m_running;
@@ -36,7 +28,7 @@ class StateMachine {
   std::stack<std::unique_ptr<State>> m_states;
 };
 
-template <typename T>
+template<typename T>
 std::unique_ptr<T> StateMachine::build(StateMachine &machine,
                                        sf::RenderWindow &window, bool replace) {
   auto new_state = std::unique_ptr<T>{nullptr};
@@ -51,4 +43,4 @@ std::unique_ptr<T> StateMachine::build(StateMachine &machine,
   return new_state;
 }
 
-#endif /* !STATEMACHINE_HPP_ */
+#endif  // !STATEMACHINE_HPP_

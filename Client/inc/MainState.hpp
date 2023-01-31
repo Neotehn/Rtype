@@ -1,10 +1,3 @@
-/*
-** EPITECH PROJECT, 2023
-** StateMachine
-** File description:
-** MainState
-*/
-
 #ifndef MAINSTATE_HPP_
 #define MAINSTATE_HPP_
 
@@ -34,4 +27,4 @@ class MainState final : public State {
   Button m_settings_btn;
 };
 
-#endif /* !MAINSTATE_HPP_ */
+#endif  //!MAINSTATE_HPP_
