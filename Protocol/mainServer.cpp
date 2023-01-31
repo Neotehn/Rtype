@@ -8,19 +8,15 @@
 
 int main() {
   try {
-    std::vector<std::thread> threads;
-    auto count = std::thread::hardware_concurrency() * 2;
     boost::asio::io_service io_service;
 
     UdpServer server(io_service);
-    for (int n = 0; n < count; ++n) {
-      std::cout << "yes" << std::endl;
-      threads.emplace_back([&] { io_service.run(); });
+    boost::thread_group group;
+    for (unsigned i = 0; i < boost::thread::hardware_concurrency(); ++i) {
+      group.create_thread(
+        bind(&boost::asio::io_service::run, boost::ref(io_service)));
     }
-
-    for (auto &thread : threads) {
-      if (thread.joinable()) { thread.join(); }
-    }
+    group.join_all();
   } catch (const std::exception &er) { std::cerr << er.what() << std::endl; }
   return 0;
 }
