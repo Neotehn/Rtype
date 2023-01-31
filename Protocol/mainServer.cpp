@@ -15,16 +15,12 @@ int main() {
     UdpServer server(io_service);
     for (int n = 0; n < count; ++n) {
       std::cout << "yes" << std::endl;
-      threads.emplace_back([&]{io_service.run();});
+      threads.emplace_back([&] { io_service.run(); });
     }
 
     for (auto &thread : threads) {
-      if (thread.joinable()) {
-        thread.join();
-      }
+      if (thread.joinable()) { thread.join(); }
     }
-  } catch (const std::exception &er) {
-    std::cerr << er.what() << std::endl;
-  }
+  } catch (const std::exception &er) { std::cerr << er.what() << std::endl; }
   return 0;
 }
