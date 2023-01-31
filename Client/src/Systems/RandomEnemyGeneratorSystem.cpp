@@ -14,9 +14,9 @@ void RandomEnemyGeneratorSystem::update() {
   if (random < 1) {
     EntityID enemy = m_em->createNewEntity();
     SpriteECS sprite = SpriteECS("./sprites/r-typesheet30a.gif");
-    sf::Vector2f enemy_pos = {800, rand() % 600 + 100};
+    sf::Vector2f enemy_pos = {800, float(rand() % 600 + 100)};
     m_em->Assign<std::string>(enemy, "enemy");
-    m_em->Assign<Pos>(enemy, {{-7, rand() % 3 - 1}, enemy_pos});
+    m_em->Assign<Pos>(enemy, {{-7, float(rand() % 3 - 1)}, enemy_pos});
 
     sf::RectangleShape body;
     body.setSize({30, 30});
