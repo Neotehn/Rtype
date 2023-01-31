@@ -13,4 +13,4 @@ State::State(StateMachine &machine, sf::RenderWindow &window,
 
 std::unique_ptr<State> State::next() { return std::move(m_next); }
 
-bool State::isReplacing() const { return m_replace; }
+const bool State::isReplacing() { return m_replace; }
