@@ -12,7 +12,8 @@ void ShootingSystem::updateData(SystemData& t_data) {
 
 void ShootingSystem::update() {
   if (m_event_queue.checkIfKeyPressed(sf::Keyboard::Space)) {
-    for (EntityID ent : EntityViewer<Pos, sf::RectangleShape>(*m_em.get())) {
+    for (EntityID ent :
+         EntityViewer<float, Pos, sf::RectangleShape>(*m_em.get())) {
       Pos* player = (*m_em.get()).Get<Pos>(ent);
       sf::RectangleShape* body = (*m_em.get()).Get<sf::RectangleShape>(ent);
       EntityID bullet = m_em->createNewEntity();

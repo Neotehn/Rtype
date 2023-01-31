@@ -22,6 +22,7 @@ void RandomEnemyGeneratorSystem::update() {
     body.setSize({30, 30});
     body.setPosition(enemy_pos);
     body.setTexture(sprite.getTexture());
+    body.setTextureRect(sf::IntRect(0, 0, 34, 34));
     m_em->Assign<sf::RectangleShape>(enemy, body);
   }
 }
