@@ -13,8 +13,8 @@
 
 class SettingsState final : public State {
  public:
-  SettingsState(StateMachine &machine, sf::RenderWindow &window,
-                bool replace = true);
+  SettingsState(StateMachine &t_machine, sf::RenderWindow &t_window,
+                bool t_replace = true);
   void pause() override;
   void resume() override;
   void update() override;

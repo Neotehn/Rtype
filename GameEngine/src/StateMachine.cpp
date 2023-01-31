@@ -2,9 +2,9 @@
 
 StateMachine::StateMachine() : m_resume(false), m_running(false) {}
 
-void StateMachine::run(std::unique_ptr<State> state) {
+void StateMachine::run(std::unique_ptr<State> t_state) {
   m_running = true;
-  m_states.push(std::move(state));
+  m_states.push(std::move(t_state));
 }
 
 void StateMachine::draw() { m_states.top()->draw(); }
@@ -16,7 +16,7 @@ void StateMachine::nextState() {
     m_resume = false;
   }
   if (!m_states.empty()) {
-    auto temp = m_states.top()->next();
+    std::unique_ptr<State> temp = m_states.top()->next();
     if (temp != nullptr) {
       if (temp->isReplacing()) {
         m_states.pop();

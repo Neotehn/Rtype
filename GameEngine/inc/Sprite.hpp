@@ -1,20 +1,20 @@
 #ifndef SPRITE_HPP_
 #define SPRITE_HPP_
 
-#include <SFML/Graphics.hpp>
 #include <iostream>
+#include <SFML/Graphics.hpp>
 #include <string>
 
 class Sprite {
  public:
-  Sprite(std::string path, sf::Vector2f pos);
+  Sprite(std::string t_path, sf::Vector2f t_pos);
   ~Sprite();
   sf::Sprite &getSprite() { return m_sprite; }
-  void setPos(float pos_x = 0, float pos_y = 0) {
-    m_sprite.setPosition(pos_x, pos_y);
+  void setPos(float t_pos_x = 0, float t_pos_y = 0) {
+    m_sprite.setPosition(t_pos_x, t_pos_y);
   }
   sf::Texture &getTexture() { return m_texture; }
-  void setPath(std::string path) { m_path = path; }
+  void setPath(std::string t_path) { m_path = t_path; }
   std::string &getPath() { return m_path; }
 
  private:

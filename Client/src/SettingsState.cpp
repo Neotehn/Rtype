@@ -2,9 +2,9 @@
 #include "../inc/MainState.hpp"
 #include "../inc/PlayState.hpp"
 
-SettingsState::SettingsState(StateMachine &machine, sf::RenderWindow &window,
-                             const bool replace)
-    : State(machine, window, replace),
+SettingsState::SettingsState(StateMachine &t_machine,
+                             sf::RenderWindow &t_window, const bool t_replace)
+    : State(t_machine, t_window, t_replace),
       m_start_btn(Button(
         "./assets/startBtn.png",
         sf::Vector2f(m_window.getSize().x - 320, m_window.getSize().y - 180),

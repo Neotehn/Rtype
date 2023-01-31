@@ -10,6 +10,8 @@ Core::Core() {
     StateMachine::build<MainState>(m_state_machine, m_window, true));
 }
 
+Core::~Core() {}
+
 void Core::run() {
   while (m_state_machine.running()) {
     m_state_machine.nextState();

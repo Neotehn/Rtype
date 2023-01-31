@@ -1,11 +1,11 @@
 #ifndef MAINSTATE_HPP_
 #define MAINSTATE_HPP_
 
+#include <iostream>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Window/Event.hpp>
-#include <iostream>
 
 #include "../../GameEngine/inc/Button.hpp"
 #include "../../GameEngine/inc/State.hpp"
@@ -13,8 +13,8 @@
 
 class MainState final : public State {
  public:
-  MainState(StateMachine &machine, sf::RenderWindow &window,
-            bool replace = true);
+  MainState(StateMachine &t_machine, sf::RenderWindow &t_window,
+            bool t_replace = true);
   void pause() override;
   void resume() override;
   void update() override;

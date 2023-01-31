@@ -1,14 +1,15 @@
 #ifndef STATE_HPP_
 #define STATE_HPP_
 
-#include <SFML/Graphics/RenderWindow.hpp>
 #include <memory>
+#include <SFML/Graphics/RenderWindow.hpp>
 
 class StateMachine;
 
 class State {
  public:
-  State(StateMachine &machine, sf::RenderWindow &window, bool replace = true);
+  State(StateMachine &t_machine, sf::RenderWindow &t_window,
+        bool t_replace = true);
 
   virtual ~State() = default;
 

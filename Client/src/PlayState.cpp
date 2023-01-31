@@ -49,21 +49,13 @@ EntityManager init() {
   return entity_manager;
 }
 
-PlayState::PlayState(StateMachine &machine, sf::RenderWindow &window,
-                     const bool replace)
-    : State{machine, window, replace}, m_input_manager{} {
-  if (!m_backgroundTexture.loadFromFile("./assets/play.jpg")) {
-    throw std::runtime_error{"Was unable to load image 'img/play.png'"};
-  }
-  float scale_x = 1280.0 / m_backgroundTexture.getSize().x;
-  float scale_y = 720.0 / m_backgroundTexture.getSize().y;
-  m_background.setTexture(m_backgroundTexture, true);
-  m_background.setScale(scale_x, scale_y);
-
+PlayState::PlayState(StateMachine &t_machine, sf::RenderWindow &t_window,
+                     const bool t_replace)
+    : State{t_machine, t_window, t_replace}, m_input_manager{} {
   m_entity_manager = init();
   m_entity_manager_ptr = std::make_shared<EntityManager>(m_entity_manager);
   m_systems.push_back(
-    std::make_shared<DisplaySystem>(m_entity_manager_ptr, window));
+    std::make_shared<DisplaySystem>(m_entity_manager_ptr, t_window));
   m_systems.push_back(std::make_shared<MovementSystem>(m_entity_manager_ptr));
   m_systems.push_back(std::make_shared<ShootingSystem>(m_entity_manager_ptr));
   m_systems.push_back(
