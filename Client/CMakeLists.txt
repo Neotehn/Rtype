@@ -19,7 +19,7 @@ add_executable(r-type_client src/main.cpp
         ../Game/EventQueue.cpp ../Game/EventQueue.hpp ../Game/Systems/MovementSystem.cpp
         ../Game/Systems/MovementSystem.hpp ../Game/Systems/ShootingSystem.cpp
         ../Game/Systems/ShootingSystem.hpp ../Game/Systems/CollisionSystem.cpp
-        ../Game/Systems/CollisionSystem.hpp ../Game/Systems/RandomEnemyGeneratorSystem.cpp ../Game/Systems/RandomEnemyGeneratorSystem.hpp ../Game/Systems/AnimationSystem.cpp ../Game/Systems/AnimationSystem.hpp)
+        ../Game/Systems/CollisionSystem.hpp ../Game/Systems/RandomEnemyGeneratorSystem.cpp ../Game/Systems/RandomEnemyGeneratorSystem.hpp ../Game/Systems/AnimationSystem.cpp ../Game/Systems/AnimationSystem.hpp ../Game/Game.cpp ../Game/Game.hpp)
 
 target_link_libraries(r-type_client PRIVATE ${OPENGL_LIBRARIES} sfml-graphics)
 
