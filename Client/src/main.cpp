@@ -1,12 +1,12 @@
-#include "../../ECS/EntityManager.hpp"
-#include "../../ECS/ISystem.hpp"
+#include "../../Game/ECS/EntityManager.hpp"
+#include "../../Game/ECS/ISystem.hpp"
 #include "InputManager/InputManager.hpp"
-#include "Systems/AnimationSystem.hpp"
-#include "Systems/CollisionSystem.hpp"
-#include "Systems/DisplaySystem.hpp"
-#include "Systems/MovementSystem.hpp"
-#include "Systems/RandomEnemyGeneratorSystem.hpp"
-#include "Systems/ShootingSystem.hpp"
+#include "../../Game/Systems/AnimationSystem.hpp"
+#include "../../Game/Systems/CollisionSystem.hpp"
+#include "../../Game/Systems/DisplaySystem.hpp"
+#include "../../Game/Systems/MovementSystem.hpp"
+#include "../../Game/Systems/RandomEnemyGeneratorSystem.hpp"
+#include "../../Game/Systems/ShootingSystem.hpp"
 
 int counter;
 

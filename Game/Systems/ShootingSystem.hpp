@@ -1,7 +1,7 @@
 #ifndef CLIENT_SRC_SYSTEMS_SHOOTINGSYSTEM_HPP_
 #define CLIENT_SRC_SYSTEMS_SHOOTINGSYSTEM_HPP_
 
-#include "../../../ECS/ISystem.hpp"
+#include "../ECS/ISystem.hpp"
 
 class ShootingSystem : public ISystem {
  public:

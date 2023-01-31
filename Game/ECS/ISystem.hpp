@@ -2,8 +2,8 @@
 #define ECS_ISYSTEM_HPP_
 
 #include <memory>
-#include "../ECS/EntityViewer.hpp"
-#include "../ECS/DataTypesECS.hpp"
+#include "EntityViewer.hpp"
+#include "DataTypesECS.hpp"
 
 class ISystem {
  public:
