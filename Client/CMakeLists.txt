@@ -11,7 +11,15 @@ FetchContent_MakeAvailable(SFML)
 
 find_package(OpenGL REQUIRED OPTIONAL_COMPONENTS OpenGL)
 include_directories(${OPENGL_INCLUDE_DIR})
-add_executable(r-type_client src/main.cpp src/Player.cpp src/Player.hpp)
+add_executable(r-type_client src/main.cpp src/Player.cpp src/Player.hpp
+        ../ECS/ComponentPool.hpp ../ECS/ECS.hpp ../ECS/EntityManager.hpp
+        ../ECS/EntityViewer.hpp ../ECS/DataTypesECS.hpp ../ECS/ISystem.hpp
+        src/InputManager/InputManager.cpp src/InputManager/InputManager.hpp
+        src/Systems/DisplaySystem.cpp src/Systems/DisplaySystem.hpp
+        src/EventQueue.cpp src/EventQueue.hpp src/Systems/MovementSystem.cpp
+        src/Systems/MovementSystem.hpp src/Systems/ShootingSystem.cpp
+        src/Systems/ShootingSystem.hpp src/Systems/CollisionSystem.cpp
+        src/Systems/CollisionSystem.hpp src/Systems/RandomEnemyGeneratorSystem.cpp src/Systems/RandomEnemyGeneratorSystem.hpp src/Systems/AnimationSystem.cpp src/Systems/AnimationSystem.hpp)
 
 target_link_libraries(r-type_client PRIVATE ${OPENGL_LIBRARIES} sfml-graphics)
 
