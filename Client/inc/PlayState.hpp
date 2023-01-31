@@ -1,4 +1,12 @@
-#pragma once
+/*
+** EPITECH PROJECT, 2023
+** Rtype
+** File description:
+** PlayState
+*/
+
+#ifndef PLAYSTATE_HPP_
+#define PLAYSTATE_HPP_
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Sprite.hpp>
@@ -31,3 +39,5 @@ class PlayState final : public State {
   sf::Texture m_backgroundTexture;
   sf::Sprite m_background;
 };
+
+#endif /* !PLAYSTATE_HPP_ */

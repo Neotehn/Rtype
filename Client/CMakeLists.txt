@@ -5,6 +5,7 @@ set(CLIENT_HPP ../GameEngine/inc/Button.hpp
                 ../GameEngine/inc/Core.hpp
                 inc/MainState.hpp
                 inc/PlayState.hpp
+                inc/SettingsState.hpp
                 ../GameEngine/inc/Sprite.hpp
                 ../GameEngine/inc/State.hpp
                 ../GameEngine/inc/StateMachine.hpp)
@@ -13,6 +14,7 @@ set(CLIENT_SRC ../GameEngine/src/Button.cpp
                 ../GameEngine/src/Core.cpp
                 src/MainState.cpp
                 src/PlayState.cpp
+                src/SettingsState.cpp
                 ../GameEngine/src/Sprite.cpp
                 ../GameEngine/src/State.cpp
                 ../GameEngine/src/StateMachine.cpp

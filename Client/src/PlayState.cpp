@@ -26,18 +26,15 @@ void PlayState::update() {
       case sf::Event::Closed:
         m_state_machine.quit();
         break;
-
       case sf::Event::KeyPressed:
         switch (event.key.code) {
           case sf::Keyboard::Escape:
             m_state_machine.quit();
             break;
-
           case sf::Keyboard::M:
             m_next = StateMachine::build<MainState>(m_state_machine, m_window,
                                                     false);
             break;
-
           default:
             break;
         }

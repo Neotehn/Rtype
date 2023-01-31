@@ -29,7 +29,7 @@ class State {
 
   std::unique_ptr<State> next();
 
-  [[nodiscard]] bool isReplacing() const;
+  bool isReplacing() const;
 
  protected:
   StateMachine &m_state_machine;
