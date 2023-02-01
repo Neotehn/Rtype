@@ -5,6 +5,7 @@
 
 #include "../ECS/DataTypesECS.hpp"
 #include "../ECS/ISystem.hpp"
+#include "../../Client/src/Action/IAction.hpp"
 
 class MovementSystem : public ISystem {
  public:

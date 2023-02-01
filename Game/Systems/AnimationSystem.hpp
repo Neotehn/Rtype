@@ -2,6 +2,13 @@
 #define CLIENT_SRC_SYSTEMS_ANIMATIONSYSTEM_HPP_
 
 #include "../ECS/ISystem.hpp"
+#include "../Timer.hpp"
+
+struct AnimationTime {
+  float current_animation_time;
+  float display_time;
+  float last_timer;
+};
 
 class AnimationSystem : public ISystem {
  public:
@@ -12,7 +19,7 @@ class AnimationSystem : public ISystem {
   void updateData(SystemData &t_data);
 
  private:
-  sf::Clock m_clock;
+  Timer m_timer;
 };
 
 #endif  // CLIENT_SRC_SYSTEMS_ANIMATIONSYSTEM_HPP_

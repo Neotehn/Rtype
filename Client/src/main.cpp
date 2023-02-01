@@ -2,6 +2,8 @@
 
 int counter;
 
+int action_counter;
+
 int main() {
   Game game = Game();
   game.run();

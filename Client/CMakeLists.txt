@@ -8,6 +8,18 @@ FetchContent_Declare(SFML
         GIT_TAG 2.6.x)
 FetchContent_MakeAvailable(SFML)
 
+if (NOT Boost_FOUND)
+    message("Boost not found--> downloading and building")
+    include(FetchContent)
+    FetchContent_Declare(Boost
+            GIT_REPOSITORY https://github.com/boostorg/boost.git
+            GIT_TAG boost-1.81.0
+            )
+    FetchContent_MakeAvailable(Boost)
+endif()
+
+find_package(Boost 1.81.0 COMPONENTS system thread REQUIRED)
+
 find_package(OpenGL REQUIRED OPTIONAL_COMPONENTS OpenGL)
 include_directories(${OPENGL_INCLUDE_DIR})
 add_executable(r-type_client src/main.cpp
@@ -20,9 +32,9 @@ add_executable(r-type_client src/main.cpp
         ../Game/Systems/ShootingSystem.hpp ../Game/Systems/CollisionSystem.cpp
         ../Game/Systems/CollisionSystem.hpp ../Game/Systems/RandomEnemyGeneratorSystem.cpp
         ../Game/Systems/RandomEnemyGeneratorSystem.hpp ../Game/Systems/AnimationSystem.cpp
-        ../Game/Systems/AnimationSystem.hpp ../Game/Game.cpp ../Game/Game.hpp)
+        ../Game/Systems/AnimationSystem.hpp ../Game/Game.cpp ../Game/Game.hpp src/Action/IAction.cpp src/Action/IAction.hpp ../Game/Timer.hpp src/Action/ShootAction.cpp src/Action/ShootAction.hpp src/Action/MovementAction.cpp src/Action/MovementAction.hpp src/Action/StateAction.cpp src/Action/StateAction.hpp src/Action/CreateAction.cpp src/Action/CreateAction.hpp src/Action/IncreaseAction.cpp src/Action/IncreaseAction.hpp src/Action/CollisionAction.cpp src/Action/CollisionAction.hpp ../Game/Timer.cpp ../Game/Timer.hpp)
 
-target_link_libraries(r-type_client PRIVATE ${OPENGL_LIBRARIES} sfml-graphics)
+target_link_libraries(r-type_client sfml-graphics ${OPENGL_LIBRARIES} ${Boost_SYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY})
 
 
 target_compile_features(r-type_client PRIVATE cxx_std_17)

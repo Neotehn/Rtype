@@ -2,6 +2,7 @@
 #define CLIENT_SRC_SYSTEMS_RANDOMENEMYGENERATORSYSTEM_HPP_
 
 #include "../ECS/ISystem.hpp"
+#include "AnimationSystem.hpp"
 
 class RandomEnemyGeneratorSystem : public ISystem {
  public:
