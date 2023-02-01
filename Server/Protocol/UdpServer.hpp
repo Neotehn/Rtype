@@ -16,7 +16,7 @@
 #include <boost/asio.hpp>
 #include <boost/thread.hpp>
 
-#include "./IProtocol.hpp"
+#include "../../Protocol/IProtocol.hpp"
 #include "./UdpSession.hpp"
 
 using boost::asio::ip::udp;

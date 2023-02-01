@@ -10,7 +10,7 @@
 
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
-#include "./IProtocol.hpp"
+#include "../../Protocol/IProtocol.hpp"
 
 using boost::asio::ip::udp;
 
