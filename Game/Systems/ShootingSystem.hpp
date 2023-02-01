@@ -2,6 +2,7 @@
 #define CLIENT_SRC_SYSTEMS_SHOOTINGSYSTEM_HPP_
 
 #include "../ECS/ISystem.hpp"
+#include "../../Client/src/Action/IAction.hpp"
 
 class ShootingSystem : public ISystem {
  public:

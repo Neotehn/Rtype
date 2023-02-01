@@ -17,12 +17,25 @@ class EntityManager {
   EntityManager() {}
   ~EntityManager() {}
 
-  EntityID createNewEntity() {
+  EntityID getNewID() {
+    EntityIndex newIndex = m_free_entities.back();
+    m_free_entities.pop_back();
+    EntityID newID =
+      createEntityId(newIndex, getEntityVersion(m_entities[newIndex].id));
+    return newID;
+  }
+
+  EntityID createNewEntity(EntityID t_id = 0) {
     if (!m_free_entities.empty()) {
-      EntityIndex newIndex = m_free_entities.back();
-      m_free_entities.pop_back();
-      EntityID newID =
-        createEntityId(newIndex, getEntityVersion(m_entities[newIndex].id));
+      EntityID newID;
+      if (t_id == 0) {
+        newID = getNewID();
+      } else {
+        m_free_entities.back();
+        m_free_entities.pop_back();
+        newID = t_id;
+      }
+      EntityIndex newIndex = getEntityIndex(newID);
       m_entities[newIndex].id = newID;
       return m_entities[newIndex].id;
     }

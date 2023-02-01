@@ -11,14 +11,14 @@ void ShootingSystem::updateData(SystemData &t_data) {
 }
 
 void ShootingSystem::update() {
-  if (m_event_queue.checkIfKeyPressed(sf::Keyboard::Space)) {
+  if (m_event_queue.checkIfKeyPressed(IAction::ActionType::SHOOT)) {
     for (EntityID ent :
          EntityViewer<float, Pos, sf::RectangleShape>(*m_em.get())) {
       Pos *player = (*m_em.get()).Get<Pos>(ent);
       sf::RectangleShape *body = (*m_em.get()).Get<sf::RectangleShape>(ent);
       EntityID bullet = m_em->createNewEntity();
-      SpriteECS sprite = SpriteECS("../../Client/sprites/shoot2.png");
-      m_em->Assign<float>(bullet, 10);
+      SpriteECS sprite = SpriteECS("./../Client/sprites/shoot2.png");
+      m_em->Assign<float>(bullet, 10.0);
       sf::Vector2f bullet_pos = {player->position.x - 20,
                                  player->position.y + body->getSize().y / 2 -
                                    10};
