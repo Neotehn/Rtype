@@ -9,8 +9,8 @@
 #define BUTTON_HPP_
 
 #include <iostream>
-#include <SFML/Graphics.hpp>
 #include <string>
+#include <SFML/Graphics.hpp>
 
 #include "Sprite.hpp"
 

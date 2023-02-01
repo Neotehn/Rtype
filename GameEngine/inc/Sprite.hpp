@@ -2,8 +2,8 @@
 #define SPRITE_HPP_
 
 #include <iostream>
-#include <SFML/Graphics.hpp>
 #include <string>
+#include <SFML/Graphics.hpp>
 
 class Sprite {
  public:
