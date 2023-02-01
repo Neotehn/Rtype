@@ -5,15 +5,22 @@ UdpClient::UdpClient(boost::asio::io_service &t_io_service,
     : m_io_service(t_io_service), m_remoteEndpoint(udp::v4(), stoi(t_port)),
       m_socket(t_io_service, udp::endpoint(udp::v4(), 28000)) {
   sendMessage("First Message");
+  m_io_service.poll();
+  m_io_service.reset();
   receiveClient();
-  t_io_service.run();
 }
 
 UdpClient::~UdpClient() { m_socket.close(); }
 
 void UdpClient::sendMessage(const std::string &t_msg) {
   m_socket.send_to(boost::asio::buffer(t_msg, t_msg.size()), m_remoteEndpoint);
+  m_io_service.poll();
+  m_io_service.reset();
 }
+
+void UdpClient::handleSend(std::string t_msg,
+                           const boost::system::error_code &t_error,
+                           std::size_t t_size) {}
 
 void UdpClient::receiveClient() {
   std::cout << "listening" << std::endl;
@@ -33,8 +40,6 @@ void UdpClient::handleReceive(const boost::system::error_code &t_error,
               << "' (" << t_error.message() << ")\n";
     if (std::string(m_recvBuffer.begin(), m_recvBuffer.begin() + t_size) !=
         "END\n") {
-      sendMessage("One More Time");
-      std::this_thread::sleep_for(std::chrono::milliseconds(1000));
       receiveClient();
     }
   } else {

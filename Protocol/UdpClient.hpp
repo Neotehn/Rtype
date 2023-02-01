@@ -22,6 +22,8 @@ class UdpClient : public IProtocol {
   void sendMessage(const std::string &);
   void receiveClient();
   void handleReceive(const boost::system::error_code &error, std::size_t size);
+  void handleSend(std::string t_msg, const boost::system::error_code &t_error,
+                  std::size_t t_size);
 
  private:
   udp::socket m_socket;
