@@ -84,16 +84,17 @@ Game::initSystems(std::shared_ptr<EntityManager> entity_manager) {
   return systems;
 }
 
-sf::RenderWindow &Game::getWindow() { return m_window; }
-
-InputManager &Game::getInputManager() { return m_input_manager; }
-
 void Game::run() {
   std::shared_ptr<EntityManager> entity_manager =
     std::make_shared<EntityManager>(initEntityManager());
   std::vector<std::shared_ptr<ISystem>> systems = initSystems(entity_manager);
 
   while (m_window.isOpen()) {
+    sf::Event event;
+    while (m_window.pollEvent(event)) {
+      if (event.type == sf::Event::Closed) m_window.close();
+      m_input_manager.recordInputs(event);
+    }
     SystemData data = {.event_queue = m_input_manager.getInputs()};
 
     for (std::shared_ptr<ISystem> system : systems) {

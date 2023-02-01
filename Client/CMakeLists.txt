@@ -8,10 +8,6 @@ FetchContent_Declare(SFML
         GIT_TAG 2.6.x)
 FetchContent_MakeAvailable(SFML)
 
-set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
-set(THREADS_PREFER_PTHREAD_FLAG ON)
-find_package(Threads REQUIRED)
-
 find_package(OpenGL REQUIRED OPTIONAL_COMPONENTS OpenGL)
 include_directories(${OPENGL_INCLUDE_DIR})
 add_executable(r-type_client src/main.cpp
@@ -26,7 +22,7 @@ add_executable(r-type_client src/main.cpp
         ../Game/Systems/RandomEnemyGeneratorSystem.hpp ../Game/Systems/AnimationSystem.cpp
         ../Game/Systems/AnimationSystem.hpp ../Game/Game.cpp ../Game/Game.hpp)
 
-target_link_libraries(r-type_client PRIVATE ${OPENGL_LIBRARIES} sfml-graphics Threads::Threads)
+target_link_libraries(r-type_client PRIVATE ${OPENGL_LIBRARIES} sfml-graphics)
 
 
 target_compile_features(r-type_client PRIVATE cxx_std_17)
