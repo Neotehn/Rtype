@@ -15,7 +15,7 @@ EntityManager Game::initEntityManager() {
   entity_manager.Assign<float>(background1, 1);
   entity_manager.Assign<sf::Vector2f>(background1, sf::Vector2f(0, 0));
   entity_manager.Assign<SpriteECS>(
-    background1, SpriteECS("./sprites/background/bg1.png", {5, 5}));
+    background1, SpriteECS("../sprites/background/bg1.png", {5, 5}));
 
   // background layer 2
   EntityID background2 = entity_manager.createNewEntity();
@@ -23,7 +23,7 @@ EntityManager Game::initEntityManager() {
   entity_manager.Assign<float>(background2, 2);
   entity_manager.Assign<sf::Vector2f>(background2, sf::Vector2f(0, 160));
   entity_manager.Assign<SpriteECS>(
-    background2, SpriteECS("./sprites/background/bg2.png", {4, 4}));
+    background2, SpriteECS("../sprites/background/bg2.png", {4, 4}));
 
   // background layer 3
   EntityID background3 = entity_manager.createNewEntity();
@@ -31,11 +31,11 @@ EntityManager Game::initEntityManager() {
   entity_manager.Assign<float>(background3, 3);
   entity_manager.Assign<sf::Vector2f>(background3, sf::Vector2f(0, 0));
   entity_manager.Assign<SpriteECS>(
-    background3, SpriteECS("./sprites/background/bg3.png", {5, 5}));
+    background3, SpriteECS("../sprites/background/bg3.png", {5, 5}));
 
   // player
   EntityID player = entity_manager.createNewEntity();
-  SpriteECS player_sprite = SpriteECS("./sprites/starship.png");
+  SpriteECS player_sprite = SpriteECS("../sprites/starship.png");
 
   float *player_speed = entity_manager.Assign<float>(player, float(10));
   Pos *player_pos = entity_manager.Assign<Pos>(

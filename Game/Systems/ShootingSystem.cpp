@@ -17,7 +17,7 @@ void ShootingSystem::update() {
       Pos *player = (*m_em.get()).Get<Pos>(ent);
       sf::RectangleShape *body = (*m_em.get()).Get<sf::RectangleShape>(ent);
       EntityID bullet = m_em->createNewEntity();
-      SpriteECS sprite = SpriteECS("./sprites/shoot2.png");
+      SpriteECS sprite = SpriteECS("../../Client/sprites/shoot2.png");
       m_em->Assign<float>(bullet, 10);
       sf::Vector2f bullet_pos = {player->position.x - 20,
                                  player->position.y + body->getSize().y / 2 -

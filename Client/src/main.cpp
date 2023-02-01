@@ -26,6 +26,7 @@ int main() {
   Game game = Game();
 
   std::thread game_thread(runGame, &game);
+  // TODO: set locks for input manager and window (in game?)
   std::thread input_thread(recordInputs, &game);
 
   game_thread.join();
