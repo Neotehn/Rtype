@@ -9,6 +9,7 @@ class Core {
  public:
   Core();
   ~Core();
+  Core(const Core &);
   void run();
 
  private:
