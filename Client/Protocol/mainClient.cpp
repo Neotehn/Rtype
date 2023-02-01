@@ -10,7 +10,7 @@
 
 int main() {
   boost::asio::io_service io_service;
-  UdpClient client(io_service, "localhost", "27000");
+  UdpClient client(io_service, "localhost", "50000", 51000);
 
   while (1) {
     client.sendMessage("hola hombre");

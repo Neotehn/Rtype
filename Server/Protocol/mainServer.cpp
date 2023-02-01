@@ -9,14 +9,13 @@
 int main() {
   try {
     boost::asio::io_service io_service;
-
     UdpServer server(io_service);
-    boost::thread_group group;
-    for (unsigned i = 0; i < boost::thread::hardware_concurrency(); ++i) {
-      group.create_thread(
-        bind(&boost::asio::io_service::run, boost::ref(io_service)));
+    boost::thread thread([&io_service]() { io_service.run(); });
+    std::cout << "yes" << std::endl;
+    while (1) {
+      if (server.m_flag) { server.sendMessage("hola chica"); }
+      std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
-    group.join_all();
   } catch (const std::exception &er) { std::cerr << er.what() << std::endl; }
   return 0;
 }

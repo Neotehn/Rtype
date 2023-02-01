@@ -1,10 +1,10 @@
 #include "./UdpClient.hpp"
 
 UdpClient::UdpClient(boost::asio::io_service &t_io_service,
-                     const std::string &t_host, const std::string &t_port)
+                     const std::string &t_host, const std::string &t_port,
+                     const std::size_t &t_ownPort)
     : m_io_service(t_io_service), m_remoteEndpoint(udp::v4(), stoi(t_port)),
-      m_socket(t_io_service, udp::endpoint(udp::v4(), 28000)) {
-  sendMessage("First Message");
+      m_socket(t_io_service, udp::endpoint(udp::v4(), t_ownPort)) {
   m_io_service.poll();
   m_io_service.reset();
   receiveClient();

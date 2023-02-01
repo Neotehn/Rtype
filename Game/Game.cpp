@@ -1,7 +1,23 @@
 #include "Game.hpp"
 
-Game::Game() : m_window(sf::VideoMode(800, 800), "R-Type Epitech") {
+Game::Game(std::size_t t_flag)
+    : m_window(sf::VideoMode(800, 800), "R-Type Epitech") {
   m_window.setFramerateLimit(60);
+  boost::asio::io_service io_service;
+
+  if (t_flag == 0) {
+    m_flag = CommunicationFlag::client;
+    std::size_t portNumber = rand() % 15000 + 40001;
+
+    m_clientCom(io_service, "localhost", "50000", portNumber);
+  } else {
+    m_flag = CommunicationFlag::server;
+
+    m_serverCom(io_service);
+    try {
+      m_thread([&io_service]() { io_service.run(); });
+    } catch (const std::exception &er) { std::cerr << er.what() << std::endl; }
+  }
 }
 
 Game::~Game() {}
