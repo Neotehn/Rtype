@@ -1,6 +1,9 @@
 #ifndef GAME_GAME_HPP
 #define GAME_GAME_HPP
 
+#include <memory>
+#include <vector>
+
 #include "./ECS/EntityManager.hpp"
 #include "./ECS/DataTypesECS.hpp"
 #include "./ECS/ISystem.hpp"
@@ -17,8 +20,6 @@ class Game {
   Game();
   ~Game();
 
-  sf::RenderWindow &getWindow();
-  InputManager &getInputManager();
   void run();
 
  private:
