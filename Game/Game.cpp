@@ -96,7 +96,8 @@ void Game::run() {
       m_input_manager.recordInputs(event);
     }
     SystemData data = {.event_queue = m_input_manager.getInputs()};
-
+    if (m_flag == CommunicationFlag::client) { m_clientCom.sendMessage("yes"); }
+    if (m_flag == CommunicationFlag::server) { m_serverCom.sendMessage("yes"); }
     for (std::shared_ptr<ISystem> system : systems) {
       system->updateData(data);
       system->update();

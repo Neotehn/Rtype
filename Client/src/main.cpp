@@ -2,8 +2,8 @@
 
 int counter;
 
-int main() {
-  Game game = Game();
+int main(int ac, char *av[]) {
+  Game game(std::stoi(av[0]));
   game.run();
   return 0;
 }
