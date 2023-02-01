@@ -23,27 +23,22 @@ using boost::asio::ip::udp;
 using boost::system::error_code;
 
 class UdpServer : public IProtocol {
-  typedef boost::shared_ptr<UdpSession> shared_session;
-
  public:
-  UdpServer(boost::asio::io_service &);
+  UdpServer(boost::asio::io_service &t_io_service);
   ~UdpServer();
+  void sendMessage(const std::string &);
+  void receiveClient();
+  void handleReceive(const boost::system::error_code &error, std::size_t size);
+  void handleSend(std::string t_msg, const boost::system::error_code &t_error,
+                  std::size_t t_size);
+
+  std::size_t m_flag;
 
  private:
-  void startListening();
-  void handleListening(shared_session t_session, const error_code &t_ec,
-                       std::size_t);
-  void handleSend(std::shared_ptr<std::string> t_msg,
-                  const boost::system::error_code &t_ec,
-                  std::size_t t_bytes_transferred);
-  void handle(shared_session t_session, const error_code &t_ec, std::size_t);
-  void enqueueResponse(shared_session const &t_session);
-  void enqueueResponseStrand(shared_session const &t_session);
-
   udp::socket m_socket;
-  boost::asio::io_context::strand m_strand;
-
-  friend struct UdpSession;
+  udp::endpoint m_remoteEndpoint;
+  std::array<char, 1024> m_recvBuffer;
+  boost::asio::io_service &m_io_service;
 };
 
 #endif /* !PROTOCOL_UDPSERVER_HPP_ */
