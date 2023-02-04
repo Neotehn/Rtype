@@ -7,6 +7,7 @@ UdpClient::UdpClient(boost::asio::io_service &t_io_service,
       m_socket(t_io_service, udp::endpoint(udp::v4(), t_ownPort)) {
   m_io_service.poll();
   m_io_service.reset();
+  m_flag = ConnectState::none;
   receiveClient();
 }
 
@@ -41,6 +42,7 @@ void UdpClient::handleReceive(const boost::system::error_code &t_error,
               << std::string(m_recvBuffer.begin(),
                              m_recvBuffer.begin() + t_size)
               << "' (" << t_error.message() << ")\n";
+    m_flag = ConnectState::connected;
     if (std::string(m_recvBuffer.begin(), m_recvBuffer.begin() + t_size) !=
         "END\n") {
       receiveClient();

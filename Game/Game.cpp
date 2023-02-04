@@ -53,17 +53,29 @@ void Game::run() {
 
   std::cout << "running " << m_flag << std::endl;
   while (m_window.isOpen()) {
+    while (m_flag == CommunicationFlag::server &&
+           m_serverCom->m_flag != m_serverCom->single) {
+      std::cout << "waiting on Client Connection" << std::endl;
+      boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
+    }
+    while (m_flag == CommunicationFlag::client &&
+           m_clientCom->m_flag != m_clientCom->connected) {
+      std::cout << "Connecting to Server ..." << std::endl;
+      boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
+      m_clientCom->sendMessage("Connect Attempt");
+      std::cout << "waiting on Server Connection" << std::endl;
+    }
     sf::Event event;
     while (m_window.pollEvent(event)) {
       if (event.type == sf::Event::Closed) m_window.close();
       m_input_manager.recordInputs(event);
     }
     SystemData data = {.event_queue = m_input_manager.getInputs()};
-    if (m_flag == CommunicationFlag::client) {
-      m_clientCom->sendMessage("yes");
+    if (m_flag == CommunicationFlag::client && m_clientCom->m_flag) {
+      m_clientCom->sendMessage("Connected rdy to play");
     }
     if (m_flag == CommunicationFlag::server && m_serverCom->m_flag) {
-      m_serverCom->sendMessage("yes");
+      m_serverCom->sendMessage("Connected rdy to play");
     }
     for (std::shared_ptr<ISystem> system : systems) {
       system->updateData(data);

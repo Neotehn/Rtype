@@ -32,7 +32,8 @@ class UdpServer : public IProtocol {
   void handleSend(std::string t_msg, const boost::system::error_code &t_error,
                   std::size_t t_size);
 
-  std::size_t m_flag;
+  enum GameMode { none, single, coop };
+  GameMode m_flag;
 
  private:
   boost::thread m_thread;

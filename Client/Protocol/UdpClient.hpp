@@ -24,6 +24,8 @@ class UdpClient : public IProtocol {
   void handleReceive(const boost::system::error_code &error, std::size_t size);
   void handleSend(std::string t_msg, const boost::system::error_code &t_error,
                   std::size_t t_size);
+  enum ConnectState { none, connected };
+  ConnectState m_flag;
 
  private:
   udp::socket m_socket;

@@ -3,7 +3,7 @@
 UdpServer::UdpServer(boost::asio::io_service &t_io_service)
     : m_io_service(t_io_service),
       m_socket(t_io_service, udp::endpoint(udp::v4(), 50000)) {
-  m_flag = 0;
+  m_flag = GameMode::none;
   receiveClient();
 
   m_thread = boost::thread([&t_io_service]() { t_io_service.run(); });
@@ -37,7 +37,7 @@ void UdpServer::handleReceive(const boost::system::error_code &t_error,
               << "' (" << t_error.message() << ")\n";
     if (std::string(m_recvBuffer.begin(), m_recvBuffer.begin() + t_size) !=
         "END\n") {
-      m_flag = 1;
+      m_flag = GameMode::single;
       receiveClient();
     }
   } else {
