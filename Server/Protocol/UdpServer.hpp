@@ -35,6 +35,7 @@ class UdpServer : public IProtocol {
   std::size_t m_flag;
 
  private:
+  boost::thread m_thread;
   udp::socket m_socket;
   udp::endpoint m_remoteEndpoint;
   std::array<char, 1024> m_recvBuffer;

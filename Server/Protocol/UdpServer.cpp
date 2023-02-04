@@ -2,7 +2,9 @@
 
 UdpServer::UdpServer(boost::asio::io_service &t_io_service)
     : m_io_service(t_io_service),
-      m_socket(t_io_service, udp::endpoint(udp::v4(), 50000)) {
+      m_socket(t_io_service, udp::endpoint(udp::v4(), 50000)),
+      m_thread(
+        boost::bind(&boost::asio::io_service::run, boost::ref(t_io_service))) {
   m_flag = 0;
   receiveClient();
 }

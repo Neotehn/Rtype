@@ -17,6 +17,7 @@
 #include "../Client/Protocol/UdpClient.hpp"
 #include "../Server/Protocol/UdpServer.hpp"
 #include "../Server/Protocol/UdpSession.hpp"
+#include "./CreateEntities/Init.hpp"
 
 class Game {
  public:
@@ -30,9 +31,8 @@ class Game {
   sf::RenderWindow m_window;
   InputManager m_input_manager;
   CommunicationFlag m_flag;
-  UdpClient m_clientCom;
-  UdpServer m_serverCom;
-  boost::thread m_thread;
+  UdpClient *m_clientCom = nullptr;
+  UdpServer *m_serverCom = nullptr;
 
   EntityManager initEntityManager();
   std::vector<std::shared_ptr<ISystem>>

@@ -10,7 +10,10 @@ UdpClient::UdpClient(boost::asio::io_service &t_io_service,
   receiveClient();
 }
 
-UdpClient::~UdpClient() { m_socket.close(); }
+UdpClient::~UdpClient() {
+  m_io_service.stop();
+  m_socket.close();
+}
 
 void UdpClient::sendMessage(const std::string &t_msg) {
   m_socket.send_to(boost::asio::buffer(t_msg, t_msg.size()), m_remoteEndpoint);
