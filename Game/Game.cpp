@@ -76,14 +76,50 @@ void Game::run() {
       }
       m_input_manager.recordInputs(event);
     }
-    SystemData data = {.event_queue = m_input_manager.getInputs()};
+    EventQueue eq = m_input_manager.getInputs();
+    SystemData data = {.event_queue = eq};
     if (m_flag == CommunicationFlag::client && m_clientCom->m_flag) {
-      for (IAction action : m_input_manager.getInputs().getEventQueue())
-        m_clientCom->sendMessage(action.getCommand());
+      if (!eq.getEventQueue().empty()) {
+        std::cout << "length queue: "
+                  << std::to_string(eq.getEventQueue().size()) << std::endl;
+      }
+      for (std::shared_ptr<IAction> action : eq.getEventQueue()) {
+        IAction::ActionType type = action.get()->getType();
+        std::string command;
+        std::cout << "action type " << type << std::endl;
+        switch (type) {
+          case IAction::ActionType::START:
+          case IAction::ActionType::DEAD:
+          case IAction::ActionType::END:
+            command = (dynamic_cast<StateAction *>(action.get()))->getCommand();
+            break;
+          case IAction::ActionType::UP:
+          case IAction::ActionType::DOWN:
+          case IAction::ActionType::LEFT:
+          case IAction::ActionType::RIGHT:
+            command =
+              (dynamic_cast<MovementAction *>(action.get()))->getCommand();
+            break;
+          case IAction::ActionType::SHOOT:
+            command = (dynamic_cast<ShootAction *>(action.get()))->getCommand();
+            break;
+          case IAction::ActionType::CREATE:
+            command =
+              (dynamic_cast<CreateAction *>(action.get()))->getCommand();
+            break;
+          case IAction::ActionType::INCREASE:
+            command =
+              (dynamic_cast<IncreaseAction *>(action.get()))->getCommand();
+            break;
+          case IAction::ActionType::COLLISION:
+            command =
+              (dynamic_cast<CollisionAction *>(action.get()))->getCommand();
+            break;
+        }
+        m_clientCom->sendMessage(command);
+      }
     }
-    if (m_flag == CommunicationFlag::server && m_serverCom->m_flag) {
-      //m_serverCom->sendMessage("Connected rdy to play");
-    }
+    if (m_flag == CommunicationFlag::server && m_serverCom->m_flag) {}
     for (std::shared_ptr<ISystem> system : systems) {
       system->updateData(data);
       system->update();

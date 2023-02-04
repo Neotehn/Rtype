@@ -1,88 +1,97 @@
 #include "./IProtocol.hpp"
 
-IAction IProtocol::getCreateAction(std::string command, int action_id,
-                                   EntityID id) {
-  std::string type =
-    command.substr(command.find(';') + 3, command.find(';') + 4);
-  float x =
-    std::stof(command.substr(command.find(';') + 4, command.find(';') + 5));
-  float y =
-    std::stof(command.substr(command.find(';') + 5, command.find(';') + 6));
+std::shared_ptr<IAction>
+IProtocol::getCreateAction(std::vector<std::string> commands, int action_id,
+                           EntityID id) {
+  std::string type = commands[3];
+  float x = std::stof(commands[4]);
+  float y = std::stof(commands[5]);
   std::string sprite_path;
   if (type == "PLAYER") {
-    sprite_path = command.substr(command.find(';') + 6, command.find(';') + 7);
-    return CreateAction(id, CreateAction::PLAYER, sf::Vector2f{x, y},
-                        sprite_path, action_id);
+    sprite_path = commands[6];
+    return std::make_shared<IAction>(CreateAction(
+      id, CreateAction::PLAYER, sf::Vector2f{x, y}, sprite_path, action_id));
   } else if (type == "ENEMY") {
-    return CreateAction(id, CreateAction::ENEMY, sf::Vector2f{x, y}, "",
-                        action_id);
+    return std::make_shared<IAction>(
+      CreateAction(id, CreateAction::ENEMY, sf::Vector2f{x, y}, "", action_id));
   } else if (type == "BULLET") {
-    return CreateAction(id, CreateAction::BULLET, sf::Vector2f{x, y}, "",
-                        action_id);
+    return std::make_shared<IAction>(CreateAction(
+      id, CreateAction::BULLET, sf::Vector2f{x, y}, "", action_id));
   } else {
-    return VoidAction(id, 0);
+    return std::make_shared<IAction>(VoidAction(id, 0));
   }
 }
 
-IAction IProtocol::getIncreaseAction(std::string command, int action_id,
-                                     EntityID id) {
-  std::string type =
-    command.substr(command.find(';') + 3, command.find(';') + 4);
-  int value =
-    std::stoi(command.substr(command.find(';') + 4, command.find(';') + 5));
+std::shared_ptr<IAction>
+IProtocol::getIncreaseAction(std::vector<std::string> commands, int action_id,
+                             EntityID id) {
+  std::string type = commands[3];
+  int value = std::stoi(commands[4]);
   if (type == "SPEED") {
-    return IncreaseAction(id, IncreaseAction::SPEED, value, action_id);
+    return std::make_shared<IAction>(
+      IncreaseAction(id, IncreaseAction::SPEED, value, action_id));
   } else if (type == "FIRE_RATE") {
-    return IncreaseAction(id, IncreaseAction::FIRE_RATE, value, action_id);
+    return std::make_shared<IAction>(
+      IncreaseAction(id, IncreaseAction::FIRE_RATE, value, action_id));
   } else if (type == "DAMAGE") {
-    return IncreaseAction(id, IncreaseAction::DAMAGE, value, action_id);
+    return std::make_shared<IAction>(
+      IncreaseAction(id, IncreaseAction::DAMAGE, value, action_id));
   } else if (type == "LIFE") {
-    return IncreaseAction(id, IncreaseAction::LIFE, value, action_id);
+    return std::make_shared<IAction>(
+      IncreaseAction(id, IncreaseAction::LIFE, value, action_id));
   } else if (type == "SHIELD") {
-    return IncreaseAction(id, IncreaseAction::SHIELD, value, action_id);
+    return std::make_shared<IAction>(
+      IncreaseAction(id, IncreaseAction::SHIELD, value, action_id));
   } else if (type == "BOMB") {
-    return IncreaseAction(id, IncreaseAction::BOMB, value, action_id);
+    return std::make_shared<IAction>(
+      IncreaseAction(id, IncreaseAction::BOMB, value, action_id));
   } else {
-    return VoidAction(id, 0);
+    return std::make_shared<IAction>(VoidAction(id, 0));
   }
 }
 
-IAction IProtocol::getAction(std::string command) {
-  int action_id = std::stoi(command.substr(0, command.find(';')));
-  std::string action_type =
-    command.substr(command.find(';') + 1, command.find(';') + 2);
-  EntityID id =
-    std::stoi(command.substr(command.find(';') + 2, command.find(';') + 3));
+std::shared_ptr<IAction> IProtocol::getAction(std::string command) {
+  std::vector<std::string> commands;
+
+  boost::split(commands, command, boost::is_any_of(";"));
+
+  int action_id = std::stoi(commands[0]);
+  std::string action_type = commands[1];
+  EntityID id = std::stoi(commands[2]);
 
   if (action_type == "START") {
-    return StateAction(IAction::ActionType::START, id, action_id);
+    return std::make_shared<IAction>(
+      StateAction(IAction::ActionType::START, id, action_id));
   } else if (action_type == "UP") {
-    return MovementAction(IAction::ActionType::UP, id, action_id);
+    return std::make_shared<IAction>(
+      MovementAction(IAction::ActionType::UP, id, action_id));
   } else if (action_type == "DOWN") {
-    return MovementAction(IAction::ActionType::DOWN, id, action_id);
+    return std::make_shared<IAction>(
+      MovementAction(IAction::ActionType::DOWN, id, action_id));
   } else if (action_type == "LEFT") {
-    return MovementAction(IAction::ActionType::LEFT, id, action_id);
+    return std::make_shared<IAction>(
+      MovementAction(IAction::ActionType::LEFT, id, action_id));
   } else if (action_type == "RIGHT") {
-    return MovementAction(IAction::ActionType::RIGHT, id, action_id);
+    return std::make_shared<IAction>(
+      MovementAction(IAction::ActionType::RIGHT, id, action_id));
   } else if (action_type == "SHOOT") {
-    int damage =
-      std::stoi(command.substr(command.find(';') + 3, command.find(';') + 4));
-    int type =
-      std::stoi(command.substr(command.find(';') + 4, command.find(';') + 5));
-    return ShootAction(id, damage, type, action_id);
+    int damage = std::stoi(commands[3]);
+    int type = std::stoi(commands[4]);
+    return std::make_shared<IAction>(ShootAction(id, damage, type, action_id));
   } else if (action_type == "CREATE") {
-    return getCreateAction(command, action_id, id);
+    return getCreateAction(commands, action_id, id);
   } else if (action_type == "INCREASE") {
-    return getIncreaseAction(command, action_id, id);
+    return getIncreaseAction(commands, action_id, id);
   } else if (action_type == "COLLISION") {
-    EntityID id_other =
-      std::stoi(command.substr(command.find(';') + 3, command.find(';') + 4));
-    return CollisionAction(id, id_other, action_id);
+    EntityID id_other = std::stoi(commands[3]);
+    return std::make_shared<IAction>(CollisionAction(id, id_other, action_id));
   } else if (action_type == "DEAD") {
-    return StateAction(IAction::ActionType::DEAD, id, action_id);
+    return std::make_shared<IAction>(
+      StateAction(IAction::ActionType::DEAD, id, action_id));
   } else if (action_type == "END") {
-    return StateAction(IAction::ActionType::END, id, action_id);
+    return std::make_shared<IAction>(
+      StateAction(IAction::ActionType::END, id, action_id));
   } else {
-    return VoidAction(id, 0);
+    return std::make_shared<IAction>(VoidAction(id, 0));
   }
 }

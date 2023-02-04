@@ -40,7 +40,7 @@ class IAction {
   }
   virtual ~IAction() = default;
 
-  virtual std::string getCommand() const { return ";;;"; };
+  virtual std::string getCommand() const { return "hallo"; }
 
   virtual ActionType getType() const { return m_type; }
   virtual EntityID getId() const { return m_id; }

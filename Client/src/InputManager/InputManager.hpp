@@ -1,6 +1,7 @@
 #ifndef CLIENT_SRC_INPUTMANAGER_INPUTMANAGER_HPP_
 #define CLIENT_SRC_INPUTMANAGER_INPUTMANAGER_HPP_
 
+#include <memory>
 #include <vector>
 #include <SFML/Graphics.hpp>
 
@@ -15,7 +16,7 @@ class InputManager {
   ~InputManager(){};
 
   void recordInputs(const sf::Event &t_event);
-  void addActionsToQueue(IAction t_action);
+  void addActionsToQueue(std::shared_ptr<IAction> t_action);
   void popInputs();
 
   EventQueue getInputs();
@@ -25,7 +26,7 @@ class InputManager {
 
  private:
   EntityID m_player_id;
-  std::vector<IAction> m_input_queue;
+  std::vector<std::shared_ptr<IAction>> m_input_queue;
 };
 
 #endif  // CLIENT_SRC_INPUTMANAGER_INPUTMANAGER_HPP_

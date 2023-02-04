@@ -3,6 +3,10 @@
 
 #include <memory>
 #include <string>
+#include <iostream>
+#include <vector>
+#include <boost/algorithm/string/find.hpp>
+#include <boost/algorithm/string.hpp>
 
 #include "../Client/src/Action/IAction.hpp"
 #include "../Client/src/Action/CollisionAction.hpp"
@@ -17,11 +21,13 @@ class IProtocol {
  public:
   IProtocol() = default;
   virtual ~IProtocol() = default;
-  IAction getAction(std::string command);
+  std::shared_ptr<IAction> getAction(std::string command);
 
  private:
-  IAction getCreateAction(std::string command, int action_id, EntityID id);
-  IAction getIncreaseAction(std::string command, int action_id, EntityID id);
+  std::shared_ptr<IAction> getCreateAction(std::vector<std::string> commands,
+                                           int action_id, EntityID id);
+  std::shared_ptr<IAction> getIncreaseAction(std::vector<std::string> commands,
+                                             int action_id, EntityID id);
 };
 
 #endif /* !PROTOCOL_IPROTOCOL_HPP_ */

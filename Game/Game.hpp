@@ -2,6 +2,7 @@
 #define GAME_GAME_HPP
 
 #include <memory>
+#include <string>
 #include <vector>
 
 #include "./ECS/EntityManager.hpp"
