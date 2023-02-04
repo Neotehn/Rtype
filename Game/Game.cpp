@@ -3,17 +3,16 @@
 Game::Game(std::size_t t_flag)
     : m_window(sf::VideoMode(800, 800), "R-Type Epitech") {
   m_window.setFramerateLimit(60);
-  boost::asio::io_service io_service;
 
   if (t_flag == client) {
     m_flag = CommunicationFlag::client;
     std::size_t portNumber = 12345;  // rand() % 15000 + 40001;
 
-    m_clientCom = new UdpClient(io_service, "localhost", "50000", portNumber);
+    m_clientCom = new UdpClient(m_io_service, "localhost", "50000", portNumber);
   } else {
     m_flag = CommunicationFlag::server;
 
-    m_serverCom = new UdpServer(io_service);
+    m_serverCom = new UdpServer(m_io_service);
   }
 }
 

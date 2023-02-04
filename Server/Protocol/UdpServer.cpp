@@ -13,8 +13,8 @@ UdpServer::~UdpServer() { m_socket.close(); }
 
 void UdpServer::sendMessage(const std::string &t_msg) {
   m_socket.send_to(boost::asio::buffer(t_msg, t_msg.size()), m_remoteEndpoint);
-  m_io_service.poll();
-  m_io_service.reset();
+  //  m_io_service.poll();
+  //  m_io_service.reset();
 }
 
 void UdpServer::handleSend(std::string t_msg,
