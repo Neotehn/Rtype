@@ -6,7 +6,7 @@ Game::Game(std::size_t t_flag)
 
   if (t_flag == client) {
     m_flag = CommunicationFlag::client;
-    std::size_t portNumber = 12345;  // rand() % 15000 + 40001;
+    std::size_t portNumber = rand() % 15000 + 40001;
 
     m_clientCom = new UdpClient(m_io_service, "localhost", "50000", portNumber);
   } else {
@@ -60,11 +60,9 @@ void Game::run() {
     }
     SystemData data = {.event_queue = m_input_manager.getInputs()};
     if (m_flag == CommunicationFlag::client) {
-      //      std::cout << "client" << std::endl;
       m_clientCom->sendMessage("yes");
     }
-    if (m_flag == CommunicationFlag::server) {
-      std::cout << "server" << std::endl;
+    if (m_flag == CommunicationFlag::server && m_serverCom->m_flag) {
       m_serverCom->sendMessage("yes");
     }
     for (std::shared_ptr<ISystem> system : systems) {

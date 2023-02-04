@@ -17,8 +17,8 @@ UdpClient::~UdpClient() {
 
 void UdpClient::sendMessage(const std::string &t_msg) {
   m_socket.send_to(boost::asio::buffer(t_msg, t_msg.size()), m_remoteEndpoint);
-  //  m_io_service.poll();
-  //  m_io_service.reset();
+  m_io_service.poll();
+  m_io_service.reset();
 }
 
 void UdpClient::handleSend(std::string t_msg,

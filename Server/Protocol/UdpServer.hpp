@@ -40,6 +40,7 @@ class UdpServer : public IProtocol {
   udp::endpoint m_remoteEndpoint;
   std::array<char, 1024> m_recvBuffer;
   boost::asio::io_service &m_io_service;
+  std::array<int, 2> remotePortArray;
 };
 
 #endif /* !PROTOCOL_UDPSERVER_HPP_ */

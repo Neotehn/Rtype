@@ -2,19 +2,17 @@
 
 UdpServer::UdpServer(boost::asio::io_service &t_io_service)
     : m_io_service(t_io_service),
-      m_socket(t_io_service, udp::endpoint(udp::v4(), 50000)),
-      m_thread(
-        boost::bind(&boost::asio::io_service::run, boost::ref(t_io_service))) {
+      m_socket(t_io_service, udp::endpoint(udp::v4(), 50000)) {
   m_flag = 0;
   receiveClient();
+
+  m_thread = boost::thread([&t_io_service]() { t_io_service.run(); });
 }
 
 UdpServer::~UdpServer() { m_socket.close(); }
 
 void UdpServer::sendMessage(const std::string &t_msg) {
   m_socket.send_to(boost::asio::buffer(t_msg, t_msg.size()), m_remoteEndpoint);
-  //  m_io_service.poll();
-  //  m_io_service.reset();
 }
 
 void UdpServer::handleSend(std::string t_msg,
