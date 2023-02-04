@@ -58,17 +58,17 @@ set(CLIENT_SRC ../GameEngine/src/Button.cpp
                 ../Game/Systems/AnimationSystem.cpp 
                 ../Game/Game.cpp
                 src/Action/IAction.cpp
-                src/Action/ShootAction.cpp
-                src/Action/MovementAction.cpp 
-         src/Action/StateAction.cpp 
-         src/Action/CreateAction.cpp
-         src/Action/IncreaseAction.cpp 
-         src/Action/CollisionAction.cpp 
-         ../Game/Timer.cpp
-         ../Server/Protocol/UdpServer.cpp 
-         ../Client/Protocol/UdpClient.cpp 
-         ../Game/CreateEntities/Init.cpp
-                src/main.cpp)
+        src/Action/ShootAction.cpp
+        src/Action/MovementAction.cpp
+        src/Action/StateAction.cpp
+        src/Action/CreateAction.cpp
+        src/Action/IncreaseAction.cpp
+        src/Action/CollisionAction.cpp
+        ../Game/Timer.cpp
+        ../Server/Protocol/UdpServer.cpp
+        ../Client/Protocol/UdpClient.cpp
+        ../Game/CreateEntities/Init.cpp
+        src/main.cpp ../Protocol/GetAction.cpp)
 
 include(FetchContent)
 FetchContent_Declare(SFML

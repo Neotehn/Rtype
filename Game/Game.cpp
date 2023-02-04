@@ -6,9 +6,10 @@ Game::Game(std::size_t t_flag)
 
   if (t_flag == client) {
     m_flag = CommunicationFlag::client;
-    std::size_t portNumber = rand() % 15000 + 40001;
+    m_port_number = rand() % 15000 + 40001;
 
-    m_clientCom = new UdpClient(m_io_service, "localhost", "50000", portNumber);
+    m_clientCom =
+      new UdpClient(m_io_service, "localhost", "50000", m_port_number);
   } else {
     m_flag = CommunicationFlag::server;
 
@@ -62,7 +63,7 @@ void Game::run() {
            m_clientCom->m_flag != m_clientCom->connected) {
       std::cout << "Connecting to Server ..." << std::endl;
       boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
-      m_clientCom->sendMessage("Connect Attempt");
+      m_clientCom->sendMessage("START;" + std::to_string(m_port_number) + ";");
       std::cout << "waiting on Server Connection" << std::endl;
     }
     sf::Event event;

@@ -35,6 +35,10 @@ void InputManager::recordInputs(const sf::Event &t_event) {
   //std::this_thread::sleep_for(std::chrono::milliseconds(100)); // This should change
 }
 
+void InputManager::addActionsToQueue(IAction t_action) {
+  this->m_input_queue.push_back(t_action);
+}
+
 void InputManager::popInputs() {
   if (!this->m_input_queue.empty()) this->m_input_queue.clear();
 }

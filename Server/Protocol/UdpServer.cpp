@@ -1,7 +1,8 @@
 #include "./UdpServer.hpp"
 
-UdpServer::UdpServer(boost::asio::io_service &t_io_service)
-    : m_io_service(t_io_service),
+UdpServer::UdpServer(boost::asio::io_service &t_io_service,
+                     InputManager &t_input_manager)
+    : m_io_service(t_io_service), m_input_manager(t_input_manager),
       m_socket(t_io_service, udp::endpoint(udp::v4(), 50000)) {
   m_flag = GameMode::none;
   receiveClient();
@@ -31,10 +32,12 @@ void UdpServer::receiveClient() {
 void UdpServer::handleReceive(const boost::system::error_code &t_error,
                               std::size_t t_size) {
   if (!t_error) {
-    std::cout << "Received: '"
-              << std::string(m_recvBuffer.begin(),
-                             m_recvBuffer.begin() + t_size)
-              << "' (" << t_error.message() << ")\n";
+    std::string msg =
+      std::string(m_recvBuffer.begin(), m_recvBuffer.begin() + t_size);
+    IAction action = getAction(msg);
+    m_input_manager.addActionsToQueue(action);
+
+    std::cout << "Received: '" << msg << "' (" << t_error.message() << ")\n";
     if (std::string(m_recvBuffer.begin(), m_recvBuffer.begin() + t_size) !=
         "END\n") {
       m_flag = GameMode::single;

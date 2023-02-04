@@ -8,6 +8,15 @@ CreateAction::CreateAction(EntityID t_id, ObjectType t_object_type,
   m_sprite_path = t_sprite_path;
 }
 
+CreateAction::CreateAction(EntityID t_id, ObjectType t_object_type,
+                           sf::Vector2f t_position, std::string t_sprite_path,
+                           int t_action_id)
+    : IAction(ActionType::CREATE, t_id, t_action_id) {
+  m_object_type = t_object_type;
+  m_position = t_position;
+  m_sprite_path = t_sprite_path;
+}
+
 std::string CreateAction::getCommand() const {
   std::string data =
     std::to_string(m_position.x) + ";" + std::to_string(m_position.y) + ";";

@@ -11,13 +11,16 @@
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 #include "../../Protocol/IProtocol.hpp"
+#include "../src/InputManager/InputManager.hpp"
+#include "../../Protocol/GetAction.cpp"
 
 using boost::asio::ip::udp;
 
 class UdpClient : public IProtocol {
  public:
   UdpClient(boost::asio::io_service &t_io_service, const std::string &t_host,
-            const std::string &t_port, const std::size_t &t_ownPort);
+            const std::string &t_port, const std::size_t &t_ownPort,
+            InputManager &t_input_manager);
   ~UdpClient();
   void sendMessage(const std::string &);
   void receiveClient();
@@ -32,6 +35,7 @@ class UdpClient : public IProtocol {
   udp::endpoint m_remoteEndpoint;
   std::array<char, 1024> m_recvBuffer;
   boost::asio::io_service &m_io_service;
+  InputManager &m_input_manager;
 };
 
 #endif /* !PROTOCOL_UDPCLIENT_HPP_ */

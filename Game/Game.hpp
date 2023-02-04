@@ -27,8 +27,9 @@ class Game {
   void run();
 
  private:
-  boost::asio::io_service m_io_service;
   enum CommunicationFlag { server, client };
+  std::size_t m_port_number;
+  boost::asio::io_service m_io_service;
   sf::RenderWindow m_window;
   InputManager m_input_manager;
   CommunicationFlag m_flag;

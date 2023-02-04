@@ -15,6 +15,7 @@ class InputManager {
   ~InputManager(){};
 
   void recordInputs(const sf::Event &t_event);
+  void addActionsToQueue(IAction t_action);
   void popInputs();
 
   EventQueue getInputs();

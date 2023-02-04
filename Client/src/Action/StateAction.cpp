@@ -3,6 +3,9 @@
 StateAction::StateAction(ActionType t_type, EntityID t_id = 0)
     : IAction(t_type, t_id) {}
 
+StateAction::StateAction(ActionType t_type, EntityID t_id, int t_action_id)
+    : IAction(t_type, t_id, t_action_id) {}
+
 std::string StateAction::getCommand() const {
   std::string command;
 

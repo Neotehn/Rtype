@@ -17,6 +17,7 @@
 #include <boost/thread.hpp>
 
 #include "../../Protocol/IProtocol.hpp"
+#include "../../Client/src/InputManager/InputManager.hpp"
 #include "./UdpSession.hpp"
 
 using boost::asio::ip::udp;
@@ -24,7 +25,8 @@ using boost::system::error_code;
 
 class UdpServer : public IProtocol {
  public:
-  UdpServer(boost::asio::io_service &t_io_service);
+  UdpServer(boost::asio::io_service &t_io_service,
+            InputManager &t_input_manager);
   ~UdpServer();
   void sendMessage(const std::string &);
   void receiveClient();
@@ -42,6 +44,7 @@ class UdpServer : public IProtocol {
   std::array<char, 1024> m_recvBuffer;
   boost::asio::io_service &m_io_service;
   std::array<int, 2> remotePortArray;
+  InputManager &m_input_manager;
 };
 
 #endif /* !PROTOCOL_UDPSERVER_HPP_ */

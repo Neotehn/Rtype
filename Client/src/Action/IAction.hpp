@@ -10,7 +10,7 @@ extern int action_counter;
 class IAction {
  public:
   enum ActionType {
-    START,  // START; OR START;OWN_PLAYER_ID
+    START,  // START;PORT_NB OR START;OWN_PLAYER_ID
     UP,     // UP;ID
     DOWN,   // DOWN;ID
     LEFT,   // LEFT;ID
@@ -27,11 +27,15 @@ class IAction {
     // TYPE = LIFE, SPEED, SHOOTING_SPEED
     COLLISION,  // COLLISION;ID1;ID2
     DEAD,       // DEAD;ID
-    END,
+    END,        // END; OR END;PORT_NB // TODO
   };
 
   IAction(ActionType type, EntityID id) : m_type(type), m_id(id) {
     m_action_id = action_counter++;
+  }
+  IAction(ActionType type, EntityID id, int t_action_id)
+      : m_type(type), m_id(id) {
+    m_action_id = t_action_id;
   }
   virtual ~IAction() = default;
 

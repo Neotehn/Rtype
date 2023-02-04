@@ -1,11 +1,14 @@
 #ifndef R_TYPE_CLIENT_SHOOTACTION_HPP
 #define R_TYPE_CLIENT_SHOOTACTION_HPP
 
+#include <string>
+
 #include "IAction.hpp"
 
 class ShootAction : public IAction {
  public:
   ShootAction(EntityID t_id, int t_damage, int t_type);
+  ShootAction(EntityID t_id, int t_damage, int t_type, int t_action_id);
   ~ShootAction() override = default;
 
   std::string getCommand() const override;

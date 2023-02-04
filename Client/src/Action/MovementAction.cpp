@@ -3,6 +3,10 @@
 MovementAction::MovementAction(ActionType t_type, EntityID t_id)
     : IAction(t_type, t_id) {}
 
+MovementAction::MovementAction(ActionType t_type, EntityID t_id,
+                               int t_action_id)
+    : IAction(t_type, t_id, t_action_id) {}
+
 std::string MovementAction::getCommand() const {
   std::string command;
 
