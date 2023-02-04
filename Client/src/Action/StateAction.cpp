@@ -22,5 +22,5 @@ std::string StateAction::getCommand() const {
   }
 
   return std::to_string(m_action_id) + ";" + command + ";" +
-         std::to_string(m_id);
+         std::to_string(m_id) + ";";
 }

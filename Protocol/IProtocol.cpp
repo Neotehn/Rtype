@@ -1,7 +1,7 @@
 #include "./IProtocol.hpp"
 
-CreateAction IProtocol::getCreateAction(std::string command, int action_id,
-                                        EntityID id) {
+IAction IProtocol::getCreateAction(std::string command, int action_id,
+                                   EntityID id) {
   std::string type =
     command.substr(command.find(';') + 3, command.find(';') + 4);
   float x =
@@ -19,11 +19,13 @@ CreateAction IProtocol::getCreateAction(std::string command, int action_id,
   } else if (type == "BULLET") {
     return CreateAction(id, CreateAction::BULLET, sf::Vector2f{x, y}, "",
                         action_id);
+  } else {
+    return VoidAction(id, 0);
   }
 }
 
-IncreaseAction IProtocol::getIncreaseAction(std::string command, int action_id,
-                                            EntityID id) {
+IAction IProtocol::getIncreaseAction(std::string command, int action_id,
+                                     EntityID id) {
   std::string type =
     command.substr(command.find(';') + 3, command.find(';') + 4);
   int value =
@@ -40,6 +42,8 @@ IncreaseAction IProtocol::getIncreaseAction(std::string command, int action_id,
     return IncreaseAction(id, IncreaseAction::SHIELD, value, action_id);
   } else if (type == "BOMB") {
     return IncreaseAction(id, IncreaseAction::BOMB, value, action_id);
+  } else {
+    return VoidAction(id, 0);
   }
 }
 
@@ -78,5 +82,7 @@ IAction IProtocol::getAction(std::string command) {
     return StateAction(IAction::ActionType::DEAD, id, action_id);
   } else if (action_type == "END") {
     return StateAction(IAction::ActionType::END, id, action_id);
+  } else {
+    return VoidAction(id, 0);
   }
 }

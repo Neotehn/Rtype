@@ -34,10 +34,10 @@ void UdpServer::handleReceive(const boost::system::error_code &t_error,
   if (!t_error) {
     std::string msg =
       std::string(m_recvBuffer.begin(), m_recvBuffer.begin() + t_size);
+    std::cout << "Received: '" << msg << "' (" << t_error.message() << ")\n";
     IAction action = getAction(msg);
     m_input_manager.addActionsToQueue(action);
 
-    std::cout << "Received: '" << msg << "' (" << t_error.message() << ")\n";
     if (std::string(m_recvBuffer.begin(), m_recvBuffer.begin() + t_size) !=
         "END\n") {
       m_flag = GameMode::single;

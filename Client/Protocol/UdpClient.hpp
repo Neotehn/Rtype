@@ -12,7 +12,6 @@
 #include <boost/bind.hpp>
 #include "../../Protocol/IProtocol.hpp"
 #include "../src/InputManager/InputManager.hpp"
-#include "../../Protocol/GetAction.cpp"
 
 using boost::asio::ip::udp;
 

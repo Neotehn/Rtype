@@ -28,6 +28,7 @@ class IAction {
     COLLISION,  // COLLISION;ID1;ID2
     DEAD,       // DEAD;ID
     END,        // END; OR END;PORT_NB // TODO
+    ERROR,
   };
 
   IAction(ActionType type, EntityID id) : m_type(type), m_id(id) {
@@ -39,7 +40,7 @@ class IAction {
   }
   virtual ~IAction() = default;
 
-  virtual std::string getCommand() const { return ""; };
+  virtual std::string getCommand() const { return ";;;"; };
 
   virtual ActionType getType() const { return m_type; }
   virtual EntityID getId() const { return m_id; }

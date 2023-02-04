@@ -9,7 +9,7 @@
 
 class CreateAction : public IAction {
  public:
-  enum ObjectType { PLAYER, ENEMY, BULLET };
+  enum ObjectType { PLAYER, ENEMY, BULLET, ERROR };
   CreateAction(EntityID t_id, ObjectType t_object_type, sf::Vector2f t_position,
                std::string t_sprite_path);
   CreateAction(EntityID t_id, ObjectType t_object_type, sf::Vector2f t_position,

@@ -8,12 +8,12 @@ Game::Game(std::size_t t_flag)
     m_flag = CommunicationFlag::client;
     m_port_number = rand() % 15000 + 40001;
 
-    m_clientCom =
-      new UdpClient(m_io_service, "localhost", "50000", m_port_number);
+    m_clientCom = new UdpClient(m_io_service, "localhost", "50000",
+                                m_port_number, m_input_manager);
   } else {
     m_flag = CommunicationFlag::server;
 
-    m_serverCom = new UdpServer(m_io_service);
+    m_serverCom = new UdpServer(m_io_service, m_input_manager);
   }
 }
 
@@ -63,20 +63,26 @@ void Game::run() {
            m_clientCom->m_flag != m_clientCom->connected) {
       std::cout << "Connecting to Server ..." << std::endl;
       boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
-      m_clientCom->sendMessage("START;" + std::to_string(m_port_number) + ";");
+      StateAction start_action =
+        StateAction(IAction::ActionType::START, m_port_number);
+      m_clientCom->sendMessage(start_action.getCommand());
       std::cout << "waiting on Server Connection" << std::endl;
     }
     sf::Event event;
     while (m_window.pollEvent(event)) {
-      if (event.type == sf::Event::Closed) m_window.close();
+      if (event.type == sf::Event::Closed) {
+        m_window.close();
+        std::cout << "yes close pls" << std::endl;
+      }
       m_input_manager.recordInputs(event);
     }
     SystemData data = {.event_queue = m_input_manager.getInputs()};
     if (m_flag == CommunicationFlag::client && m_clientCom->m_flag) {
-      m_clientCom->sendMessage("Connected rdy to play");
+      for (IAction action : m_input_manager.getInputs().getEventQueue())
+        m_clientCom->sendMessage(action.getCommand());
     }
     if (m_flag == CommunicationFlag::server && m_serverCom->m_flag) {
-      m_serverCom->sendMessage("Connected rdy to play");
+      //m_serverCom->sendMessage("Connected rdy to play");
     }
     for (std::shared_ptr<ISystem> system : systems) {
       system->updateData(data);

@@ -11,6 +11,7 @@
 #include "../Client/src/Action/MovementAction.hpp"
 #include "../Client/src/Action/ShootAction.hpp"
 #include "../Client/src/Action/StateAction.hpp"
+#include "../Client/src/Action/VoidAction.hpp"
 
 class IProtocol {
  public:
@@ -19,9 +20,8 @@ class IProtocol {
   IAction getAction(std::string command);
 
  private:
-  CreateAction getCreateAction(std::string command, int action_id, EntityID id);
-  IncreaseAction getIncreaseAction(std::string command, int action_id,
-                                   EntityID id);
+  IAction getCreateAction(std::string command, int action_id, EntityID id);
+  IAction getIncreaseAction(std::string command, int action_id, EntityID id);
 };
 
 #endif /* !PROTOCOL_IPROTOCOL_HPP_ */

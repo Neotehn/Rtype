@@ -7,7 +7,7 @@
 
 class IncreaseAction : public IAction {
  public:
-  enum IncreaseType { SPEED, FIRE_RATE, DAMAGE, LIFE, SHIELD, BOMB };
+  enum IncreaseType { SPEED, FIRE_RATE, DAMAGE, LIFE, SHIELD, BOMB, ERROR };
   IncreaseAction(EntityID t_id, IncreaseType t_type, int t_value);
   IncreaseAction(EntityID t_id, IncreaseType t_type, int t_value,
                  int t_action_id);
