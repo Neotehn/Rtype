@@ -37,6 +37,7 @@ void UdpServer::handleReceive(const boost::system::error_code &t_error,
     std::cout << "Received: '" << msg << "' (" << t_error.message() << ")\n";
     std::shared_ptr<Action> action = getAction(msg);
     m_input_manager.addActionsToQueue(action);
+    m_send_event_manager.addActionsToQueue(action);
 
     if (std::string(m_recvBuffer.begin(), m_recvBuffer.begin() + t_size) !=
         "END\n") {
@@ -46,5 +47,18 @@ void UdpServer::handleReceive(const boost::system::error_code &t_error,
     }
   } else {
     m_socket.close();
+  }
+}
+
+void UdpServer::addEvent(std::shared_ptr<Action> event) {
+  m_send_event_manager.addActionsToQueue(event);
+}
+
+void UdpServer::sendEvents() {
+  EventQueue eq = m_send_event_manager.getInputs();
+  for (std::shared_ptr<Action> event : eq.getEventQueue()) {
+    std::cout << "NO" << std::endl;
+    sendMessage(event->getCommand());
+    std::cout << "Yes" << std::endl;
   }
 }

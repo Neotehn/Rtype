@@ -56,8 +56,8 @@ PlayState::PlayState(StateMachine &t_machine, sf::RenderWindow &t_window,
     std::make_shared<DisplaySystem>(m_entity_manager_ptr, t_window));
   m_systems.push_back(std::make_shared<MovementSystem>(m_entity_manager_ptr));
   m_systems.push_back(std::make_shared<ShootingSystem>(m_entity_manager_ptr));
-  m_systems.push_back(
-    std::make_shared<RandomEnemyGeneratorSystem>(m_entity_manager_ptr));
+  // m_systems.push_back(
+  //   std::make_shared<RandomEnemyGeneratorSystem>(m_entity_manager_ptr));
   m_systems.push_back(std::make_shared<CollisionSystem>(m_entity_manager_ptr));
   m_systems.push_back(std::make_shared<AnimationSystem>(m_entity_manager_ptr));
   m_music_player.play(MusicID::MISSIONTHEME);

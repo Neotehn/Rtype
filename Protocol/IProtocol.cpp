@@ -57,7 +57,7 @@ std::shared_ptr<Action> IProtocol::getAction(std::string command) {
 
   int action_id = std::stoi(commands[0]);
   std::string action_type = commands[1];
-  EntityID id = std::stoi(commands[2]);
+  EntityID id = std::stoull(commands[2]);
 
   if (action_type == "START") {
     return std::make_shared<Action>(

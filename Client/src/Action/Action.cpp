@@ -1,5 +1,7 @@
 #include "./Action.hpp"
 
+#include <iostream>
+
 Action::Action(ActionType type, EntityID id) : m_type(type), m_id(id) {
   m_action_id = action_counter++;
 }
@@ -44,7 +46,6 @@ std::string Action::getTypeAsString() const {
 std::string Action::getCommand() const {
   std::string type_string = getTypeAsString();
   std::string data = "";
-
   switch (m_type) {
     case ActionType::START:
     case ActionType::UP:

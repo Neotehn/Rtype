@@ -21,6 +21,7 @@ void CollisionSystem::update() {
         enemy_body->getGlobalBounds());
       // TODO: do some shit
       //       if (collision) { std::cout << "Collision" << std::endl; }
+      // TODO: handle im Server
     }
   }
 }

@@ -1,8 +1,9 @@
 #include "RandomEnemyGeneratorSystem.hpp"
 
 RandomEnemyGeneratorSystem::RandomEnemyGeneratorSystem(
-  std::shared_ptr<EntityManager> t_em) {
+  std::shared_ptr<EntityManager> t_em, UdpServer *t_serverCom) {
   m_em = t_em;
+  m_serverCom = t_serverCom;
 }
 
 RandomEnemyGeneratorSystem::~RandomEnemyGeneratorSystem() {}
@@ -10,6 +11,7 @@ RandomEnemyGeneratorSystem::~RandomEnemyGeneratorSystem() {}
 void RandomEnemyGeneratorSystem::updateData(SystemData &t_data) {}
 
 void RandomEnemyGeneratorSystem::update() {
+  // TODO: handle im server
   int random = rand() % 100;
   if (random < 1) {
     EntityID enemy = m_em->createNewEntity();
@@ -25,5 +27,7 @@ void RandomEnemyGeneratorSystem::update() {
     body.setTexture(sprite.getTexture());
     body.setTextureRect(sf::IntRect(0, 0, 34, 34));
     m_em->Assign<sf::RectangleShape>(enemy, body);
+    m_serverCom->addEvent(std::make_shared<Action>(
+      CreateAction(enemy, Action::ObjectType::ENEMY, enemy_pos, "")));
   }
 }

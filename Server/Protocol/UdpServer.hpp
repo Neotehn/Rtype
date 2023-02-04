@@ -34,6 +34,9 @@ class UdpServer : public IProtocol {
   void handleSend(std::string t_msg, const boost::system::error_code &t_error,
                   std::size_t t_size);
 
+  void addEvent(std::shared_ptr<Action> event);
+  void sendEvents();
+
   enum GameMode { none, single, coop };
   GameMode m_flag;
 
@@ -45,6 +48,7 @@ class UdpServer : public IProtocol {
   boost::asio::io_service &m_io_service;
   std::array<int, 2> remotePortArray;
   InputManager &m_input_manager;
+  InputManager m_send_event_manager;
 };
 
 #endif /* !PROTOCOL_UDPSERVER_HPP_ */

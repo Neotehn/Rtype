@@ -36,14 +36,16 @@ std::vector<std::shared_ptr<ISystem>>
 Game::initSystems(std::shared_ptr<EntityManager> entity_manager) {
   std::vector<std::shared_ptr<ISystem>> systems;
 
-  systems.push_back(std::make_shared<DisplaySystem>(entity_manager, m_window));
+  if (m_flag == CommunicationFlag::server) {
+    systems.push_back(std::make_shared<RandomEnemyGeneratorSystem>(
+      entity_manager, m_serverCom));
+    systems.push_back(std::make_shared<CollisionSystem>(entity_manager));
+    systems.push_back(std::make_shared<ShootingSystem>(entity_manager));
+  } else if (m_flag == CommunicationFlag::client) {
+    systems.push_back(std::make_shared<AnimationSystem>(entity_manager));
+  }
   systems.push_back(std::make_shared<MovementSystem>(entity_manager));
-  systems.push_back(std::make_shared<ShootingSystem>(entity_manager));
-  systems.push_back(
-    std::make_shared<RandomEnemyGeneratorSystem>(entity_manager));
-  systems.push_back(std::make_shared<CollisionSystem>(entity_manager));
-  systems.push_back(std::make_shared<AnimationSystem>(entity_manager));
-
+  systems.push_back(std::make_shared<DisplaySystem>(entity_manager, m_window));
   return systems;
 }
 
@@ -79,47 +81,13 @@ void Game::run() {
     EventQueue eq = m_input_manager.getInputs();
     SystemData data = {.event_queue = eq};
     if (m_flag == CommunicationFlag::client && m_clientCom->m_flag) {
-      if (!eq.getEventQueue().empty()) {
-        std::cout << "length queue: "
-                  << std::to_string(eq.getEventQueue().size()) << std::endl;
-      }
       for (std::shared_ptr<Action> action : eq.getEventQueue()) {
-        /* IAction::ActionType type = action.get()->getType();
-        std::string command;
-        std::cout << "action type " << type << std::endl;
-        switch (type) {
-          case IAction::ActionType::START:
-          case IAction::ActionType::DEAD:
-          case IAction::ActionType::END:
-            command = (dynamic_cast<StateAction *>(action.get()))->getCommand();
-            break;
-          case IAction::ActionType::UP:
-          case IAction::ActionType::DOWN:
-          case IAction::ActionType::LEFT:
-          case IAction::ActionType::RIGHT:
-            command =
-              (dynamic_cast<MovementAction *>(action.get()))->getCommand();
-            break;
-          case IAction::ActionType::SHOOT:
-            command = (dynamic_cast<ShootAction *>(action.get()))->getCommand();
-            break;
-          case IAction::ActionType::CREATE:
-            command =
-              (dynamic_cast<CreateAction *>(action.get()))->getCommand();
-            break;
-          case IAction::ActionType::INCREASE:
-            command =
-              (dynamic_cast<IncreaseAction *>(action.get()))->getCommand();
-            break;
-          case IAction::ActionType::COLLISION:
-            command =
-              (dynamic_cast<CollisionAction *>(action.get()))->getCommand();
-            break;
-        }*/
         m_clientCom->sendMessage(action->getCommand());
       }
     }
-    if (m_flag == CommunicationFlag::server && m_serverCom->m_flag) {}
+    if (m_flag == CommunicationFlag::server && m_serverCom->m_flag) {
+      m_serverCom->sendEvents();
+    }
     for (std::shared_ptr<ISystem> system : systems) {
       system->updateData(data);
       system->update();

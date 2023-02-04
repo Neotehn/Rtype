@@ -42,8 +42,16 @@ void UdpClient::handleReceive(const boost::system::error_code &t_error,
   if (!t_error) {
     std::string msg =
       std::string(m_recvBuffer.begin(), m_recvBuffer.begin() + t_size);
-    //std::shared_ptr<Action> action = getAction(msg);
-    //m_input_manager.addActionsToQueue(action);
+    /*std::size_t check = 0;
+    std::shared_ptr<Action> action = getAction(msg);
+    for (std::shared_ptr<Action> actionSearch :
+         m_input_manager.getInputs().getEventQueue()) {
+      if (actionSearch->getType() == action->getType()) {
+        check = 1;
+        break;
+      }
+    }
+    if (check == 0) m_input_manager.addActionsToQueue(action);*/
 
     std::cout << "Received: '" << msg << "' (" << t_error.message() << ")\n";
     m_flag = ConnectState::connected;
