@@ -12,20 +12,20 @@ void InputManager::recordInputs(const sf::Event &t_event) {
   //  player
   switch (t_event.key.code) {
     case sf::Keyboard::W:
-      this->m_input_queue.push_back(MovementAction(IAction::ActionType::UP, 
-      m_player_id));
+      this->m_input_queue.push_back(
+        MovementAction(IAction::ActionType::UP, m_player_id));
       break;
     case sf::Keyboard::S:
-      this->m_input_queue.push_back(MovementAction(IAction::ActionType::DOWN,
-       m_player_id));
+      this->m_input_queue.push_back(
+        MovementAction(IAction::ActionType::DOWN, m_player_id));
       break;
     case sf::Keyboard::D:
-      this->m_input_queue.push_back(MovementAction(IAction::ActionType::RIGHT,
-      m_player_id));
+      this->m_input_queue.push_back(
+        MovementAction(IAction::ActionType::RIGHT, m_player_id));
       break;
     case sf::Keyboard::A:
-      this->m_input_queue.push_back(MovementAction(IAction::ActionType::LEFT,
-       m_player_id));
+      this->m_input_queue.push_back(
+        MovementAction(IAction::ActionType::LEFT, m_player_id));
       break;
     case sf::Keyboard::Space:
       this->m_input_queue.push_back(ShootAction(m_player_id, 1, 1));

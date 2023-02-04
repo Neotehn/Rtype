@@ -60,10 +60,18 @@ void MovementSystem::updatePlayer(EntityID t_ent) {
   float *speed = (*m_em.get()).Get<float>(t_ent);
   sf::RectangleShape *body = (*m_em.get()).Get<sf::RectangleShape>(t_ent);
   sf::Vector2f direction = {0, 0};
-  if (m_event_queue.checkIfKeyPressed(IAction::ActionType::LEFT)) { direction.x = -1; }
-  if (m_event_queue.checkIfKeyPressed(IAction::ActionType::RIGHT)) { direction.x = 1; }
-  if (m_event_queue.checkIfKeyPressed(IAction::ActionType::UP)) { direction.y = -1; }
-  if (m_event_queue.checkIfKeyPressed(IAction::ActionType::DOWN)) { direction.y = 1; }
+  if (m_event_queue.checkIfKeyPressed(IAction::ActionType::LEFT)) {
+    direction.x = -1;
+  }
+  if (m_event_queue.checkIfKeyPressed(IAction::ActionType::RIGHT)) {
+    direction.x = 1;
+  }
+  if (m_event_queue.checkIfKeyPressed(IAction::ActionType::UP)) {
+    direction.y = -1;
+  }
+  if (m_event_queue.checkIfKeyPressed(IAction::ActionType::DOWN)) {
+    direction.y = 1;
+  }
   if (direction.x != 0 || direction.y != 0) {
     player->velocity = direction * *speed;
   }

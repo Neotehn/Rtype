@@ -27,5 +27,4 @@ class Timer {
   float m_pause_time;
 };
 
-
 #endif  //R_TYPE_CLIENT_TIMER_HPP

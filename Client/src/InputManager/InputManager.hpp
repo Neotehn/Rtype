@@ -9,7 +9,6 @@
 #include "../Action/ShootAction.hpp"
 #include "../../../Game/EventQueue.hpp"
 
-
 class InputManager {
  public:
   InputManager();
