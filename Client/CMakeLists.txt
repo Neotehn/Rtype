@@ -3,6 +3,73 @@ project(r-type_client)
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 
+set(CLIENT_HPP ../GameEngine/inc/Button.hpp
+                ../GameEngine/inc/Core.hpp
+                inc/MainState.hpp
+                inc/PlayState.hpp
+                inc/SettingsState.hpp
+                ../GameEngine/inc/Sprite.hpp
+                ../GameEngine/inc/State.hpp
+                ../GameEngine/inc/StateMachine.hpp
+                ../GameEngine/inc/MusicPlayer.hpp
+                ../Game/ECS/ComponentPool.hpp
+                ../Game/ECS/ECS.hpp 
+                ../Game/ECS/EntityManager.hpp
+                ../Game/ECS/EntityViewer.hpp 
+                ../Game/ECS/DataTypesECS.hpp 
+                ../Game/ECS/ISystem.hpp
+                src/InputManager/InputManager.hpp
+                ../Game/Systems/DisplaySystem.hpp
+                ../Game/EventQueue.hpp 
+                ../Game/Systems/MovementSystem.hpp 
+                ../Game/Systems/ShootingSystem.hpp 
+                ../Game/Systems/CollisionSystem.hpp 
+                ../Game/Systems/RandomEnemyGeneratorSystem.hpp 
+                ../Game/Game.hpp
+                src/Action/IAction.hpp
+                ../Game/Timer.hpp
+                src/Action/ShootAction.hpp
+                src/Action/MovementAction.hpp
+        src/Action/StateAction.hpp 
+        src/Action/CreateAction.hpp 
+        src/Action/IncreaseAction.hpp
+        src/Action/CollisionAction.hpp 
+        ../Server/Protocol/UdpServer.hpp
+        ../Client/Protocol/UdpClient.hpp
+        ../Game/CreateEntities/Init.hpp
+                ../Game/Systems/AnimationSystem.hpp)
+
+set(CLIENT_SRC ../GameEngine/src/Button.cpp
+                ../GameEngine/src/Core.cpp
+                src/MainState.cpp
+                src/PlayState.cpp
+                src/SettingsState.cpp
+                ../GameEngine/src/Sprite.cpp
+                ../GameEngine/src/State.cpp
+                ../GameEngine/src/StateMachine.cpp
+                ../GameEngine/src/MusicPlayer.cpp
+                ../Game/Systems/DisplaySystem.cpp
+                src/InputManager/InputManager.cpp
+                ../Game/EventQueue.cpp 
+                ../Game/Systems/MovementSystem.cpp
+                ../Game/Systems/ShootingSystem.cpp
+                ../Game/Systems/CollisionSystem.cpp
+                ../Game/Systems/RandomEnemyGeneratorSystem.cpp 
+                ../Game/Systems/AnimationSystem.cpp 
+                ../Game/Game.cpp
+                src/Action/IAction.cpp
+                src/Action/ShootAction.cpp
+                src/Action/MovementAction.cpp 
+         src/Action/StateAction.cpp 
+         src/Action/CreateAction.cpp
+         src/Action/IncreaseAction.cpp 
+         src/Action/CollisionAction.cpp 
+         ../Game/Timer.cpp
+         ../Server/Protocol/UdpServer.cpp 
+         ../Client/Protocol/UdpClient.cpp 
+         ../Game/CreateEntities/Init.cpp
+                src/main.cpp)
+
 include(FetchContent)
 FetchContent_Declare(SFML
         GIT_REPOSITORY https://github.com/SFML/SFML.git
@@ -23,27 +90,9 @@ find_package(Boost 1.81.0 COMPONENTS system thread REQUIRED)
 
 find_package(OpenGL REQUIRED OPTIONAL_COMPONENTS OpenGL)
 include_directories(${OPENGL_INCLUDE_DIR})
-add_executable(r-type_client src/main.cpp
-        ../Game/ECS/ComponentPool.hpp ../Game/ECS/ECS.hpp ../Game/ECS/EntityManager.hpp
-        ../Game/ECS/EntityViewer.hpp ../Game/ECS/DataTypesECS.hpp ../Game/ECS/ISystem.hpp
-        src/InputManager/InputManager.cpp src/InputManager/InputManager.hpp
-        ../Game/Systems/DisplaySystem.cpp ../Game/Systems/DisplaySystem.hpp
-        ../Game/EventQueue.cpp ../Game/EventQueue.hpp ../Game/Systems/MovementSystem.cpp
-        ../Game/Systems/MovementSystem.hpp ../Game/Systems/ShootingSystem.cpp
-        ../Game/Systems/ShootingSystem.hpp ../Game/Systems/CollisionSystem.cpp
-        ../Game/Systems/CollisionSystem.hpp ../Game/Systems/RandomEnemyGeneratorSystem.cpp
-        ../Game/Systems/RandomEnemyGeneratorSystem.hpp ../Game/Systems/AnimationSystem.cpp
-        ../Game/Systems/AnimationSystem.hpp ../Game/Game.cpp ../Game/Game.hpp
-        src/Action/IAction.cpp src/Action/IAction.hpp ../Game/Timer.hpp src/Action/ShootAction.cpp
-        src/Action/ShootAction.hpp src/Action/MovementAction.cpp src/Action/MovementAction.hpp
-        src/Action/StateAction.cpp src/Action/StateAction.hpp src/Action/CreateAction.cpp
-        src/Action/CreateAction.hpp src/Action/IncreaseAction.cpp src/Action/IncreaseAction.hpp
-        src/Action/CollisionAction.cpp src/Action/CollisionAction.hpp ../Game/Timer.cpp
-        ../Game/Timer.hpp ../Server/Protocol/UdpServer.cpp ../Server/Protocol/UdpServer.hpp
-        ../Client/Protocol/UdpClient.cpp ../Client/Protocol/UdpClient.hpp
-        ../Game/CreateEntities/Init.cpp ../Game/CreateEntities/Init.hpp)
+add_executable(r-type_client ${CLIENT_SRC} ${CLIENT_HPP})
 
-target_link_libraries(r-type_client sfml-graphics ${OPENGL_LIBRARIES} ${Boost_SYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY})
+target_link_libraries(r-type_client sfml-graphics sfml-audio ${OPENGL_LIBRARIES} ${Boost_SYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY})
 target_link_directories(r-type_client PUBLIC ${Boost_LIBRARY_DIRS})
 
 target_compile_features(r-type_client PRIVATE cxx_std_17)
