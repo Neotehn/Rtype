@@ -1,7 +1,7 @@
 #include "MovementAction.hpp"
 
-MovementAction::MovementAction(ActionType t_type, EntityID t_id) : IAction
-(t_type, t_id) {}
+MovementAction::MovementAction(ActionType t_type, EntityID t_id)
+    : IAction(t_type, t_id) {}
 
 std::string MovementAction::getCommand() const {
   std::string command;
@@ -20,5 +20,5 @@ std::string MovementAction::getCommand() const {
       command = "RIGHT";
       break;
   }
-  return std::to_string(m_action_id) + ";" + command + ";" ;
+  return std::to_string(m_action_id) + ";" + command + ";";
 }
