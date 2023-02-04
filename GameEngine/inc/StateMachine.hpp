@@ -6,6 +6,7 @@
 #include <stack>
 #include <stdexcept>
 
+#include "MusicPlayer.hpp"
 #include "State.hpp"
 
 class StateMachine {
@@ -20,9 +21,9 @@ class StateMachine {
   void lastState();
 
   template<typename T>
-  static std::unique_ptr<T> build(StateMachine &t_machine,
-                                  sf::RenderWindow &t_window,
-                                  bool t_replace = true);
+  static std::unique_ptr<T>
+  build(StateMachine &t_machine, sf::RenderWindow &t_window,
+        MusicPlayer &t_music_playerbool, bool t_replace = true);
 
  private:
   bool m_running;
@@ -31,13 +32,14 @@ class StateMachine {
 };
 
 template<typename T>
-std::unique_ptr<T> StateMachine::build(StateMachine &t_machine,
-                                       sf::RenderWindow &t_window,
-                                       bool t_replace) {
+std::unique_ptr<T>
+StateMachine::build(StateMachine &t_machine, sf::RenderWindow &t_window,
+                    MusicPlayer &t_music_player, bool t_replace) {
   auto new_state = std::unique_ptr<T>{nullptr};
 
   try {
-    new_state = std::make_unique<T>(t_machine, t_window, t_replace);
+    new_state =
+      std::make_unique<T>(t_machine, t_window, t_music_player, t_replace);
   } catch (std::runtime_error &exception) {
     std::cout << "Failed to create new State\n";
     std::cout << exception.what() << std::endl;

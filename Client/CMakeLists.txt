@@ -9,6 +9,7 @@ set(CLIENT_HPP ../GameEngine/inc/Button.hpp
                 ../GameEngine/inc/Sprite.hpp
                 ../GameEngine/inc/State.hpp
                 ../GameEngine/inc/StateMachine.hpp
+                ../GameEngine/inc/MusicPlayer.hpp
                 ../Game/ECS/ComponentPool.hpp
                 ../Game/ECS/ECS.hpp 
                 ../Game/ECS/EntityManager.hpp
@@ -32,6 +33,7 @@ set(CLIENT_SRC ../GameEngine/src/Button.cpp
                 ../GameEngine/src/Sprite.cpp
                 ../GameEngine/src/State.cpp
                 ../GameEngine/src/StateMachine.cpp
+                ../GameEngine/src/MusicPlayer.cpp
                 ../Game/Systems/DisplaySystem.cpp
                 src/InputManager/InputManager.cpp
                 ../Game/EventQueue.cpp 

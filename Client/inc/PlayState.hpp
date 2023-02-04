@@ -17,6 +17,7 @@
 #include "../../Game/Systems/MovementSystem.hpp"
 #include "../../Game/Systems/RandomEnemyGeneratorSystem.hpp"
 #include "../../Game/Systems/ShootingSystem.hpp"
+#include "../../GameEngine/inc/MusicPlayer.hpp"
 #include "../../GameEngine/inc/State.hpp"
 #include "../../GameEngine/inc/StateMachine.hpp"
 #include "../inc/MainState.hpp"
@@ -27,7 +28,7 @@ class StateMachine;
 class PlayState final : public State {
  public:
   PlayState(StateMachine &t_machine, sf::RenderWindow &t_window,
-            bool t_replace = true);
+            MusicPlayer &t_music_player, bool t_replace = true);
 
   void pause() override;
   void resume() override;

@@ -14,7 +14,7 @@
 class SettingsState final : public State {
  public:
   SettingsState(StateMachine &t_machine, sf::RenderWindow &t_window,
-                bool t_replace = true);
+                MusicPlayer &t_music_player, bool t_replace = true);
   void pause() override;
   void resume() override;
   void update() override;

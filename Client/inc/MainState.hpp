@@ -8,13 +8,14 @@
 #include <SFML/Window/Event.hpp>
 
 #include "../../GameEngine/inc/Button.hpp"
+#include "../../GameEngine/inc/MusicPlayer.hpp"
 #include "../../GameEngine/inc/State.hpp"
 #include "../../GameEngine/inc/StateMachine.hpp"
 
 class MainState final : public State {
  public:
   MainState(StateMachine &t_machine, sf::RenderWindow &t_window,
-            bool t_replace = true);
+            MusicPlayer &t_music_player, bool t_replace = true);
   void pause() override;
   void resume() override;
   void update() override;

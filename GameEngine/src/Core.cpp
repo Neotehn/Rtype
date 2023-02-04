@@ -6,8 +6,8 @@ Core::Core() {
                   sf::Style::Titlebar | sf::Style::Close);
   m_window.setFramerateLimit(30);
 
-  m_state_machine.run(
-    StateMachine::build<MainState>(m_state_machine, m_window, true));
+  m_state_machine.run(StateMachine::build<MainState>(m_state_machine, m_window,
+                                                     m_music_player, true));
 }
 
 Core::~Core() {}
