@@ -35,7 +35,7 @@ void UdpServer::handleReceive(const boost::system::error_code &t_error,
     std::string msg =
       std::string(m_recvBuffer.begin(), m_recvBuffer.begin() + t_size);
     std::cout << "Received: '" << msg << "' (" << t_error.message() << ")\n";
-    std::shared_ptr<IAction> action = getAction(msg);
+    std::shared_ptr<Action> action = getAction(msg);
     m_input_manager.addActionsToQueue(action);
 
     if (std::string(m_recvBuffer.begin(), m_recvBuffer.begin() + t_size) !=

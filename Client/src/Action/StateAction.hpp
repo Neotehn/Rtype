@@ -3,15 +3,13 @@
 
 #include <string>
 
-#include "IAction.hpp"
+#include "Action.hpp"
 
-class StateAction : public IAction {
+class StateAction : public Action {
  public:
   StateAction(ActionType t_type, EntityID t_id);
   StateAction(ActionType t_type, EntityID t_id, int t_action_id);
   ~StateAction() override = default;
-
-  std::string getCommand() const override;
 };
 
 #endif  //R_TYPE_CLIENT_STATEACTION_HPP

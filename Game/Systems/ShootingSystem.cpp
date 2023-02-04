@@ -11,7 +11,7 @@ void ShootingSystem::updateData(SystemData &t_data) {
 }
 
 void ShootingSystem::update() {
-  if (m_event_queue.checkIfKeyPressed(IAction::ActionType::SHOOT)) {
+  if (m_event_queue.checkIfKeyPressed(Action::ActionType::SHOOT)) {
     for (EntityID ent :
          EntityViewer<float, Pos, sf::RectangleShape>(*m_em.get())) {
       Pos *player = (*m_em.get()).Get<Pos>(ent);

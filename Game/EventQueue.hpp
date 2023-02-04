@@ -4,22 +4,22 @@
 #include <memory>
 #include <vector>
 
-#include "../Client/src/Action/IAction.hpp"
+#include "../Client/src/Action/Action.hpp"
 
 class EventQueue {
  public:
-  EventQueue(std::vector<std::shared_ptr<IAction>> t_eventQueue);
+  EventQueue(std::vector<std::shared_ptr<Action>> t_eventQueue);
   EventQueue();
   ~EventQueue();
 
-  void setEventQueue(std::vector<std::shared_ptr<IAction>> t_eventQueue);
-  bool checkIfKeyPressed(IAction::ActionType t_actionType);
+  void setEventQueue(std::vector<std::shared_ptr<Action>> t_eventQueue);
+  bool checkIfKeyPressed(Action::ActionType t_actionType);
 
  private:
-  std::vector<std::shared_ptr<IAction>> m_eventQueue;
+  std::vector<std::shared_ptr<Action>> m_eventQueue;
 
  public:
-  const std::vector<std::shared_ptr<IAction>> &getEventQueue() const;
+  const std::vector<std::shared_ptr<Action>> &getEventQueue() const;
 };
 
 #endif  // CLIENT_SRC_EVENTQUEUE_HPP_

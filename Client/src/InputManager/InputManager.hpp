@@ -5,7 +5,7 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
-#include "../Action/IAction.hpp"
+#include "../Action/Action.hpp"
 #include "../Action/MovementAction.hpp"
 #include "../Action/ShootAction.hpp"
 #include "../../../Game/EventQueue.hpp"
@@ -16,7 +16,7 @@ class InputManager {
   ~InputManager(){};
 
   void recordInputs(const sf::Event &t_event);
-  void addActionsToQueue(std::shared_ptr<IAction> t_action);
+  void addActionsToQueue(std::shared_ptr<Action> t_action);
   void popInputs();
 
   EventQueue getInputs();
@@ -26,7 +26,7 @@ class InputManager {
 
  private:
   EntityID m_player_id;
-  std::vector<std::shared_ptr<IAction>> m_input_queue;
+  std::vector<std::shared_ptr<Action>> m_input_queue;
 };
 
 #endif  // CLIENT_SRC_INPUTMANAGER_INPUTMANAGER_HPP_

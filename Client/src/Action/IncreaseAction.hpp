@@ -3,24 +3,14 @@
 
 #include <string>
 
-#include "IAction.hpp"
+#include "Action.hpp"
 
-class IncreaseAction : public IAction {
+class IncreaseAction : public Action {
  public:
-  enum IncreaseType { SPEED, FIRE_RATE, DAMAGE, LIFE, SHIELD, BOMB, ERROR };
   IncreaseAction(EntityID t_id, IncreaseType t_type, int t_value);
   IncreaseAction(EntityID t_id, IncreaseType t_type, int t_value,
                  int t_action_id);
   ~IncreaseAction() override = default;
-
-  std::string getCommand() const override;
-
-  IncreaseType getIncreaseType() const;
-  int getValue() const;
-
- private:
-  IncreaseType m_type;
-  int m_value;
 };
 
 #endif  //R_TYPE_CLIENT_INCREASEACTION_HPP

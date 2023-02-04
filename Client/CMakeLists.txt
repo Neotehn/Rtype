@@ -38,7 +38,8 @@ set(CLIENT_HPP ../GameEngine/inc/Button.hpp
         ../Client/Protocol/UdpClient.hpp
         ../Game/CreateEntities/Init.hpp
                 ../Game/Systems/AnimationSystem.hpp
-                src/Action/VoidAction.hpp )
+                src/Action/VoidAction.hpp 
+                src/Action/Action.hpp)
 
 set(CLIENT_SRC ../GameEngine/src/Button.cpp
                 ../GameEngine/src/Core.cpp
@@ -70,7 +71,8 @@ set(CLIENT_SRC ../GameEngine/src/Button.cpp
         ../Client/Protocol/UdpClient.cpp
         ../Game/CreateEntities/Init.cpp
         src/main.cpp ../Protocol/IProtocol.cpp
-        src/Action/VoidAction.cpp)
+        src/Action/VoidAction.cpp
+        src/Action/Action.cpp)
 
 include(FetchContent)
 FetchContent_Declare(SFML

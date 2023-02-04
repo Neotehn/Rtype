@@ -64,7 +64,7 @@ void Game::run() {
       std::cout << "Connecting to Server ..." << std::endl;
       boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
       StateAction start_action =
-        StateAction(IAction::ActionType::START, m_port_number);
+        StateAction(Action::ActionType::START, m_port_number);
       m_clientCom->sendMessage(start_action.getCommand());
       std::cout << "waiting on Server Connection" << std::endl;
     }
@@ -83,8 +83,8 @@ void Game::run() {
         std::cout << "length queue: "
                   << std::to_string(eq.getEventQueue().size()) << std::endl;
       }
-      for (std::shared_ptr<IAction> action : eq.getEventQueue()) {
-        IAction::ActionType type = action.get()->getType();
+      for (std::shared_ptr<Action> action : eq.getEventQueue()) {
+        /* IAction::ActionType type = action.get()->getType();
         std::string command;
         std::cout << "action type " << type << std::endl;
         switch (type) {
@@ -115,8 +115,8 @@ void Game::run() {
             command =
               (dynamic_cast<CollisionAction *>(action.get()))->getCommand();
             break;
-        }
-        m_clientCom->sendMessage(command);
+        }*/
+        m_clientCom->sendMessage(action->getCommand());
       }
     }
     if (m_flag == CommunicationFlag::server && m_serverCom->m_flag) {}

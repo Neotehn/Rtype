@@ -14,6 +14,7 @@
 #include "./Systems/MovementSystem.hpp"
 #include "./Systems/RandomEnemyGeneratorSystem.hpp"
 #include "./Systems/ShootingSystem.hpp"
+#include "../Client/src/Action/Action.hpp"
 #include "../Client/src/InputManager/InputManager.hpp"
 #include "../Client/Protocol/UdpClient.hpp"
 #include "../Server/Protocol/UdpServer.hpp"

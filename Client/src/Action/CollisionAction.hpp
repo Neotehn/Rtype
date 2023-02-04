@@ -3,20 +3,13 @@
 
 #include <string>
 
-#include "IAction.hpp"
+#include "Action.hpp"
 
-class CollisionAction : public IAction {
+class CollisionAction : public Action {
  public:
   CollisionAction(EntityID t_id, EntityID t_other_id);
   CollisionAction(EntityID t_id, EntityID t_other_id, int t_action_id);
-  ~CollisionAction() override = default;
-
-  std::string getCommand() const override;
-
-  EntityID getCollisionPartnerId() const;
-
- private:
-  EntityID m_collision_partner_id;
+  ~CollisionAction() = default;
 };
 
 #endif  //R_TYPE_CLIENT_COLLISIONACTION_HPP

@@ -3,22 +3,13 @@
 
 #include <string>
 
-#include "IAction.hpp"
+#include "Action.hpp"
 
-class ShootAction : public IAction {
+class ShootAction : public Action {
  public:
   ShootAction(EntityID t_id, int t_damage, int t_type);
   ShootAction(EntityID t_id, int t_damage, int t_type, int t_action_id);
   ~ShootAction() override = default;
-
-  std::string getCommand() const override;
-
-  int getDamage() const;
-  int getShootType() const;
-
- private:
-  int m_damage;
-  int m_type;
 };
 
 #endif  //R_TYPE_CLIENT_SHOOTACTION_HPP

@@ -3,15 +3,13 @@
 
 #include <string>
 
-#include "IAction.hpp"
+#include "Action.hpp"
 
-class MovementAction : public IAction {
+class MovementAction : public Action {
  public:
   MovementAction(ActionType t_type, EntityID t_id);
   MovementAction(ActionType t_type, EntityID t_id, int t_action_id);
   ~MovementAction() override = default;
-
-  std::string getCommand() const override;
 };
 
 #endif  //R_TYPE_CLIENT_MOVEMENTACTION_HPP

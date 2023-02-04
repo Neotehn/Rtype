@@ -3,14 +3,12 @@
 
 #include <string>
 
-#include "IAction.hpp"
+#include "Action.hpp"
 
-class VoidAction : public IAction {
+class VoidAction : public Action {
  public:
   VoidAction(EntityID t_id, int t_action_id);
   ~VoidAction() override = default;
-
-  std::string getCommand() const override;
 };
 
 #endif  //R_TYPE_CLIENT_VOIDACTION_HPP

@@ -21,13 +21,13 @@ class IProtocol {
  public:
   IProtocol() = default;
   virtual ~IProtocol() = default;
-  std::shared_ptr<IAction> getAction(std::string command);
+  std::shared_ptr<Action> getAction(std::string command);
 
  private:
-  std::shared_ptr<IAction> getCreateAction(std::vector<std::string> commands,
-                                           int action_id, EntityID id);
-  std::shared_ptr<IAction> getIncreaseAction(std::vector<std::string> commands,
-                                             int action_id, EntityID id);
+  std::shared_ptr<Action> getCreateAction(std::vector<std::string> commands,
+                                          int action_id, EntityID id);
+  std::shared_ptr<Action> getIncreaseAction(std::vector<std::string> commands,
+                                            int action_id, EntityID id);
 };
 
 #endif /* !PROTOCOL_IPROTOCOL_HPP_ */
