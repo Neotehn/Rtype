@@ -20,7 +20,7 @@ void CollisionSystem::update() {
       bool collision = player_body->getGlobalBounds().intersects(
         enemy_body->getGlobalBounds());
       // TODO: do some shit
-//       if (collision) { std::cout << "Collision" << std::endl; }
+      //       if (collision) { std::cout << "Collision" << std::endl; }
     }
   }
 }

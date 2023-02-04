@@ -17,7 +17,8 @@ void RandomEnemyGeneratorSystem::update() {
     sf::Vector2f enemy_pos = {800, float(rand() % 600 + 100)};
     m_em->Assign<std::string>(enemy, "enemy");
     m_em->Assign<Pos>(enemy, {{-7, float(rand() % 3 - 1)}, enemy_pos});
-    m_em->Assign<AnimationTime>(enemy, {.current_animation_time = 0, .display_time = 1, .last_timer = 0});
+    m_em->Assign<AnimationTime>(
+      enemy, {.current_animation_time = 0, .display_time = 1, .last_timer = 0});
     sf::RectangleShape body;
     body.setSize({30, 30});
     body.setPosition(enemy_pos);

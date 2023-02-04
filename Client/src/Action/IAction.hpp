@@ -16,13 +16,13 @@ class IAction {
     LEFT,   // LEFT;ID
     RIGHT,  // RIGHT;ID
     SHOOT,  // SHOOT;ID;DAMAGE;TYPE
-      // DAMAGE = amount of damage based on load time
-      // TYPE = 1, 2, ...
+    // DAMAGE = amount of damage based on load time
+    // TYPE = 1, 2, ...
     CREATE,  // CREATE;ID;TYPE;TYPE_DATA
-      // TYPE = PLAYER, ENEMY, BULLET
-      // PLAYER_DATA: X;Y;SPRITE_PATH
-      // ENEMY_DATA:  X;Y
-      // BULLET_DATA: X;Y
+    // TYPE = PLAYER, ENEMY, BULLET
+    // PLAYER_DATA: X;Y;SPRITE_PATH
+    // ENEMY_DATA:  X;Y
+    // BULLET_DATA: X;Y
     INCREASE,  // INCREASE;ID;TYPE;VALUE
     // TYPE = LIFE, SPEED, SHOOTING_SPEED
     COLLISION,  // COLLISION;ID1;ID2
@@ -39,6 +39,7 @@ class IAction {
 
   virtual ActionType getType() const { return m_type; }
   virtual EntityID getId() const { return m_id; }
+
  protected:
   int m_action_id;
   ActionType m_type;
