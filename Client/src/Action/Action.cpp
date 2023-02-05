@@ -1,7 +1,5 @@
 #include "./Action.hpp"
 
-#include <iostream>
-
 Action::Action(ActionType type, EntityID id) : m_type(type), m_id(id) {
   m_action_id = action_counter++;
 }
@@ -80,5 +78,24 @@ std::string Action::getCommand() const {
          std::to_string(m_id) + ";";
 }
 
+int Action::getActionId() const { return m_action_id; }
 Action::ActionType Action::getType() const { return m_type; }
 EntityID Action::getId() const { return m_id; }
+
+EntityID Action::getCollisionPartnerId() const {
+  return m_collision_partner_id;
+}
+
+Action::ObjectType Action::getCreateType() const { return m_object_type; }
+
+sf::Vector2f Action::getCreatePosition() const { return m_position; }
+
+std::string Action::getCreateSpritePath() const { return m_sprite_path; }
+
+Action::IncreaseType Action::getIncreaseType() const { return m_increase_type; }
+
+int Action::getIncreaseValue() const { return m_value; }
+
+int Action::getShootDamage() const { return m_damage; }
+
+int Action::getShootType() const { return m_shoot_type; }

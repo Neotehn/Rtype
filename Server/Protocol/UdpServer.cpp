@@ -41,7 +41,7 @@ void UdpServer::handleReceive(const boost::system::error_code &t_error,
 
     if (std::string(m_recvBuffer.begin(), m_recvBuffer.begin() + t_size) !=
         "END\n") {
-      if (m_flag != GameMode::single) { sendMessage("Connected rdy to play"); }
+      //      if (m_flag != GameMode::single) { sendMessage("Connected rdy to play"); }
       m_flag = GameMode::single;
       receiveClient();
     }
@@ -57,8 +57,8 @@ void UdpServer::addEvent(std::shared_ptr<Action> event) {
 void UdpServer::sendEvents() {
   EventQueue eq = m_send_event_manager.getInputs();
   for (std::shared_ptr<Action> event : eq.getEventQueue()) {
-    std::cout << "NO" << std::endl;
-    sendMessage(event->getCommand());
-    std::cout << "Yes" << std::endl;
+    if (event->getType() != Action::ActionType::SHOOT) {
+      sendMessage(event->getCommand());
+    }
   }
 }

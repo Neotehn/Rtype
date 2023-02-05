@@ -29,17 +29,17 @@ set(CLIENT_HPP ../GameEngine/inc/Button.hpp
                 src/Action/IAction.hpp
                 ../Game/Timer.hpp
                 src/Action/ShootAction.hpp
-                src/Action/MovementAction.hpp
-        src/Action/StateAction.hpp 
-        src/Action/CreateAction.hpp 
+        src/Action/MovementAction.hpp
+        src/Action/StateAction.hpp
+        src/Action/CreateAction.hpp
         src/Action/IncreaseAction.hpp
-        src/Action/CollisionAction.hpp 
+        src/Action/CollisionAction.hpp
         ../Server/Protocol/UdpServer.hpp
         ../Client/Protocol/UdpClient.hpp
         ../Game/CreateEntities/Init.hpp
-                ../Game/Systems/AnimationSystem.hpp
-                src/Action/VoidAction.hpp 
-                src/Action/Action.hpp)
+        ../Game/Systems/AnimationSystem.hpp
+        src/Action/VoidAction.hpp
+        src/Action/Action.hpp ../Game/Systems/CreateObjectSystem.cpp ../Game/Systems/CreateObjectSystem.hpp)
 
 set(CLIENT_SRC ../GameEngine/src/Button.cpp
                 ../GameEngine/src/Core.cpp
@@ -72,7 +72,7 @@ set(CLIENT_SRC ../GameEngine/src/Button.cpp
         ../Game/CreateEntities/Init.cpp
         src/main.cpp ../Protocol/IProtocol.cpp
         src/Action/VoidAction.cpp
-        src/Action/Action.cpp)
+        src/Action/Action.cpp ../Game/Systems/CreateObjectSystem.cpp ../Game/Systems/CreateObjectSystem.hpp)
 
 include(FetchContent)
 FetchContent_Declare(SFML
@@ -90,13 +90,14 @@ if (NOT Boost_FOUND)
     FetchContent_MakeAvailable(Boost)
 endif()
 
-find_package(Boost 1.81.0 COMPONENTS system thread REQUIRED)
+find_package(Boost 1.69.0 COMPONENTS chrono system thread REQUIRED)
 
 find_package(OpenGL REQUIRED OPTIONAL_COMPONENTS OpenGL)
 include_directories(${OPENGL_INCLUDE_DIR})
 add_executable(r-type_client ${CLIENT_SRC} ${CLIENT_HPP})
 
-target_link_libraries(r-type_client sfml-graphics sfml-audio ${OPENGL_LIBRARIES} ${Boost_SYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY})
+target_link_libraries(r-type_client sfml-graphics sfml-audio
+        ${OPENGL_LIBRARIES} ${Boost_SYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY} ${Boost_CHRONO_LIBRARY})
 target_link_directories(r-type_client PUBLIC ${Boost_LIBRARY_DIRS})
 
 target_compile_features(r-type_client PRIVATE cxx_std_17)

@@ -40,9 +40,11 @@ Game::initSystems(std::shared_ptr<EntityManager> entity_manager) {
     systems.push_back(std::make_shared<RandomEnemyGeneratorSystem>(
       entity_manager, m_serverCom));
     systems.push_back(std::make_shared<CollisionSystem>(entity_manager));
-    systems.push_back(std::make_shared<ShootingSystem>(entity_manager));
+    systems.push_back(
+      std::make_shared<ShootingSystem>(entity_manager, m_serverCom));
   } else if (m_flag == CommunicationFlag::client) {
     systems.push_back(std::make_shared<AnimationSystem>(entity_manager));
+    systems.push_back(std::make_shared<CreateObjectSystem>(entity_manager));
   }
   systems.push_back(std::make_shared<MovementSystem>(entity_manager));
   systems.push_back(std::make_shared<DisplaySystem>(entity_manager, m_window));
@@ -82,7 +84,13 @@ void Game::run() {
     SystemData data = {.event_queue = eq};
     if (m_flag == CommunicationFlag::client && m_clientCom->m_flag) {
       for (std::shared_ptr<Action> action : eq.getEventQueue()) {
-        m_clientCom->sendMessage(action->getCommand());
+        Action::ActionType type = action->getType();
+        if (type == Action::ActionType::UP ||
+            type == Action::ActionType::DOWN ||
+            type == Action::ActionType::LEFT ||
+            type == Action::ActionType::RIGHT ||
+            type == Action::ActionType::SHOOT)
+          m_clientCom->sendMessage(action->getCommand());
       }
     }
     if (m_flag == CommunicationFlag::server && m_serverCom->m_flag) {

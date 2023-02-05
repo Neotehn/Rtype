@@ -10,6 +10,7 @@
 #include "./ECS/ISystem.hpp"
 #include "./Systems/AnimationSystem.hpp"
 #include "./Systems/CollisionSystem.hpp"
+#include "./Systems/CreateObjectSystem.hpp"
 #include "./Systems/DisplaySystem.hpp"
 #include "./Systems/MovementSystem.hpp"
 #include "./Systems/RandomEnemyGeneratorSystem.hpp"

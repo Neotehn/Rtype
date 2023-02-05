@@ -55,6 +55,13 @@ sf::Vector2i InputManager::getMousePosition() {
   return sf::Mouse::getPosition();
 }
 
+bool InputManager::doesActionExist(int t_action_id) {
+  for (std::shared_ptr<Action> action : this->m_input_queue) {
+    if (action->getActionId() == t_action_id) return true;
+  }
+  return false;
+}
+
 bool InputManager::isMouseLeftClicked() {
   return sf::Mouse::isButtonPressed(sf::Mouse::Left);
   // Needs click position

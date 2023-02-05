@@ -40,8 +40,21 @@ class Action : public IAction {
   std::string getCommand() const override;
 
   virtual std::string getTypeAsString() const;
+  int getActionId() const;
   ActionType getType() const;
   EntityID getId() const override;
+
+  EntityID getCollisionPartnerId() const;
+
+  ObjectType getCreateType() const;
+  sf::Vector2f getCreatePosition() const;
+  std::string getCreateSpritePath() const;
+
+  IncreaseType getIncreaseType() const;
+  int getIncreaseValue() const;
+
+  int getShootDamage() const;
+  int getShootType() const;
 
  protected:
   int m_action_id;

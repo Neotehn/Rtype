@@ -21,6 +21,7 @@ class InputManager {
 
   EventQueue getInputs();
   sf::Vector2i getMousePosition();
+  bool doesActionExist(int t_action_id);
   bool isMouseLeftClicked();
   bool isMouseRightClicked();
 

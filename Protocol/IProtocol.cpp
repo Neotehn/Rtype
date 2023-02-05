@@ -3,18 +3,18 @@
 std::shared_ptr<Action>
 IProtocol::getCreateAction(std::vector<std::string> commands, int action_id,
                            EntityID id) {
-  std::string type = commands[3];
+  int type = std::stoi(commands[3]);
   float x = std::stof(commands[4]);
   float y = std::stof(commands[5]);
   std::string sprite_path;
-  if (type == "PLAYER") {
+  if (type == Action::ObjectType::PLAYER) {
     sprite_path = commands[6];
     return std::make_shared<Action>(CreateAction(
       id, CreateAction::PLAYER, sf::Vector2f{x, y}, sprite_path, action_id));
-  } else if (type == "ENEMY") {
+  } else if (type == Action::ObjectType::ENEMY) {
     return std::make_shared<Action>(
       CreateAction(id, CreateAction::ENEMY, sf::Vector2f{x, y}, "", action_id));
-  } else if (type == "BULLET") {
+  } else if (type == Action::ObjectType::BULLET) {
     return std::make_shared<Action>(CreateAction(
       id, CreateAction::BULLET, sf::Vector2f{x, y}, "", action_id));
   } else {
@@ -27,6 +27,7 @@ IProtocol::getIncreaseAction(std::vector<std::string> commands, int action_id,
                              EntityID id) {
   std::string type = commands[3];
   int value = std::stoi(commands[4]);
+  // TODO: adjust: dont compare with string but enum value
   if (type == "SPEED") {
     return std::make_shared<Action>(
       IncreaseAction(id, IncreaseAction::SPEED, value, action_id));

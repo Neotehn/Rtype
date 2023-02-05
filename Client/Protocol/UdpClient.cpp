@@ -52,6 +52,17 @@ void UdpClient::handleReceive(const boost::system::error_code &t_error,
       }
     }
     if (check == 0) m_input_manager.addActionsToQueue(action);*/
+    try {
+      std::shared_ptr<Action> action = getAction(msg);
+      //      TODO: still need proper priority handling, right now it's too fast to
+      //       compare the ids properly -> keeps sending user input back and forth;
+      //       maybe set an id and compare against that?
+      if (!m_input_manager.doesActionExist(action->getActionId())) {
+        m_input_manager.addActionsToQueue(action);
+      }
+    } catch (std::exception &e) {
+      std::cout << "Error: " << e.what() << std::endl;
+    }
 
     std::cout << "Received: '" << msg << "' (" << t_error.message() << ")\n";
     m_flag = ConnectState::connected;

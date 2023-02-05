@@ -10,6 +10,7 @@ int main(int ac, char *av[]) {
     Core app = Core();
     app.run();
   } else {
+    if (std::stoi(av[1]) == 1) { action_counter = 1000; }
     Game game(std::stoi(av[1]));
     game.run();
   }

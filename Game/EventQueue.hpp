@@ -14,6 +14,7 @@ class EventQueue {
 
   void setEventQueue(std::vector<std::shared_ptr<Action>> t_eventQueue);
   bool checkIfKeyPressed(Action::ActionType t_actionType);
+  std::vector<std::shared_ptr<Action>> getAllOfType(Action::ActionType t_type);
 
  private:
   std::vector<std::shared_ptr<Action>> m_eventQueue;

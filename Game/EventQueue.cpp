@@ -17,6 +17,17 @@ bool EventQueue::checkIfKeyPressed(Action::ActionType t_type) {
   return false;
 }
 
+std::vector<std::shared_ptr<Action>>
+EventQueue::getAllOfType(Action::ActionType t_type) {
+  std::vector<std::shared_ptr<Action>> actions;
+  for (int i = 0; i < this->m_eventQueue.size(); i++) {
+    if (this->m_eventQueue[i].get()->getType() == t_type) {
+      actions.push_back(this->m_eventQueue[i]);
+    }
+  }
+  return actions;
+}
+
 void EventQueue::setEventQueue(
   std::vector<std::shared_ptr<Action>> t_eventQueue) {
   m_eventQueue = std::move(t_eventQueue);

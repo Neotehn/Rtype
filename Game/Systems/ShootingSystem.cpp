@@ -1,7 +1,9 @@
 #include "ShootingSystem.hpp"
 
-ShootingSystem::ShootingSystem(std::shared_ptr<EntityManager> t_em) {
+ShootingSystem::ShootingSystem(std::shared_ptr<EntityManager> t_em,
+                               UdpServer *t_serverCom) {
   m_em = t_em;
+  m_serverCom = t_serverCom;
 }
 
 ShootingSystem::~ShootingSystem() {}
@@ -30,6 +32,8 @@ void ShootingSystem::update() {
       bullet_body.setPosition(bullet_pos);
       bullet_body.setTexture(sprite.getTexture());
       m_em->Assign<sf::RectangleShape>(bullet, bullet_body);
+      m_serverCom->addEvent(std::make_shared<Action>(
+        CreateAction(bullet, Action::ObjectType::BULLET, bullet_pos, "")));
     }
   }
 }
