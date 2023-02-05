@@ -13,7 +13,6 @@ void ShootingSystem::updateData(SystemData &t_data) {
 }
 
 void ShootingSystem::update() {
-  // TODO: handle im Server
   if (m_event_queue.checkIfKeyPressed(Action::ActionType::SHOOT)) {
     for (EntityID ent :
          EntityViewer<float, Pos, sf::RectangleShape>(*m_em.get())) {

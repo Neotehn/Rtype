@@ -11,7 +11,6 @@ RandomEnemyGeneratorSystem::~RandomEnemyGeneratorSystem() {}
 void RandomEnemyGeneratorSystem::updateData(SystemData &t_data) {}
 
 void RandomEnemyGeneratorSystem::update() {
-  // TODO: handle im server
   int random = rand() % 100;
   if (random < 1) {
     EntityID enemy = m_em->createNewEntity();

@@ -1,6 +1,7 @@
 #ifndef CLIENT_SRC_EVENTQUEUE_HPP_
 #define CLIENT_SRC_EVENTQUEUE_HPP_
 
+#include <iostream>
 #include <memory>
 #include <vector>
 

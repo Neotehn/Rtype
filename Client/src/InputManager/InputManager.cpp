@@ -8,8 +8,6 @@ InputManager::InputManager() {
 
 // -4 = UP ; -3 = LEFT ; -2 = DOWN ; -1 = RIGHT
 void InputManager::recordInputs(const sf::Event &t_event) {
-  // TODO: we need to link the events with the entity id from corresponding
-  //  player
   switch (t_event.key.code) {
     case sf::Keyboard::W:
       m_input_queue.addToQueueIfNotExist(
@@ -56,6 +54,11 @@ void InputManager::popInputs() {
 EventQueue InputManager::getInputs() {
   EventQueue event_queue = m_input_queue;
   this->popInputs();
+  return event_queue;
+}
+
+EventQueue InputManager::getInputsWithoutPop() {
+  EventQueue event_queue = m_input_queue;
   return event_queue;
 }
 

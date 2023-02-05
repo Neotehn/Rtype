@@ -1,5 +1,4 @@
 #include "EventQueue.hpp"
-#include "iostream"
 
 EventQueue::EventQueue(std::vector<std::shared_ptr<Action>> t_eventQueue)
     : m_eventQueue(t_eventQueue) {}
@@ -20,10 +19,8 @@ bool EventQueue::checkIfKeyPressed(Action::ActionType t_type) {
 std::vector<std::shared_ptr<Action>>
 EventQueue::getAllOfType(Action::ActionType t_type) {
   std::vector<std::shared_ptr<Action>> actions;
-  for (int i = 0; i < this->m_eventQueue.size(); i++) {
-    if (this->m_eventQueue[i].get()->getType() == t_type) {
-      actions.push_back(this->m_eventQueue[i]);
-    }
+  for (std::shared_ptr<Action> event : m_eventQueue) {
+    if (event.get()->getType() == t_type) { actions.push_back(event); }
   }
   return actions;
 }

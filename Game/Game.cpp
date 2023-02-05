@@ -10,8 +10,9 @@ Game::Game(std::size_t t_flag)
     m_flag = CommunicationFlag::client;
     m_port_number = rand() % 15000 + 40001;
 
-    m_clientCom = new UdpClient(m_io_service, "localhost", "50000",
-                                m_port_number, m_input_manager);
+    m_clientCom =
+      new UdpClient(m_io_service, "localhost", "50000", m_port_number,
+                    m_input_manager, m_client_input_manager);
   } else {
     m_flag = CommunicationFlag::server;
 
@@ -86,11 +87,11 @@ void Game::run() {
         std::cout << "yes close pls" << std::endl;
       }
       if (m_flag == CommunicationFlag::client)
-        m_input_manager.recordInputs(event);
+        m_client_input_manager.recordInputs(event);
     }
-    EventQueue eq = m_input_manager.getInputs();
-    SystemData data = {.event_queue = eq};
+    SystemData data = {.event_queue = m_input_manager.getInputs()};
     if (m_flag == CommunicationFlag::client && m_clientCom->m_flag) {
+      EventQueue eq = m_client_input_manager.getInputsWithoutPop();
       for (std::shared_ptr<Action> action : eq.getEventQueue()) {
         Action::ActionType type = action->getType();
         if ((type == Action::ActionType::UP ||

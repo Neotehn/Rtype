@@ -20,7 +20,8 @@ class UdpClient : public IProtocol {
  public:
   UdpClient(boost::asio::io_service &t_io_service, const std::string &t_host,
             const std::string &t_port, const std::size_t &t_ownPort,
-            InputManager &t_input_manager);
+            InputManager &t_input_manager,
+            InputManager &t_client_input_manager);
   ~UdpClient();
   void sendMessage(const std::string &);
   void receiveClient();
@@ -36,6 +37,7 @@ class UdpClient : public IProtocol {
   std::array<char, 1024> m_recvBuffer;
   boost::asio::io_service &m_io_service;
   InputManager &m_input_manager;
+  InputManager &m_client_input_manager;
   boost::thread m_thread;
 };
 

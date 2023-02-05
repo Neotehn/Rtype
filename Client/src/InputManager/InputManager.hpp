@@ -20,6 +20,7 @@ class InputManager {
   void popInputs();
 
   EventQueue getInputs();
+  EventQueue getInputsWithoutPop();
   sf::Vector2i getMousePosition();
   bool doesActionExist(std::shared_ptr<Action> t_action_id);
   bool isMouseLeftClicked();

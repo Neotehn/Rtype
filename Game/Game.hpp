@@ -36,6 +36,7 @@ class Game {
   boost::asio::io_service m_io_service;
   sf::RenderWindow m_window;
   InputManager m_input_manager;
+  InputManager m_client_input_manager;
   CommunicationFlag m_flag;
   UdpClient *m_clientCom = nullptr;
   UdpServer *m_serverCom = nullptr;

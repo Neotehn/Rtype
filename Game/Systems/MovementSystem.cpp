@@ -62,7 +62,6 @@ void MovementSystem::updatePlayer(EntityID t_ent) {
   float *speed = (*m_em.get()).Get<float>(t_ent);
   sf::RectangleShape *body = (*m_em.get()).Get<sf::RectangleShape>(t_ent);
   sf::Vector2f direction = {0, 0};
-  // TODO: add position event after movememnt from server side -> send client new player pos
   if (m_event_queue.checkIfKeyPressed(Action::ActionType::LEFT)) {
     direction.x = -1;
   }

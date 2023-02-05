@@ -3,10 +3,12 @@
 UdpClient::UdpClient(boost::asio::io_service &t_io_service,
                      const std::string &t_host, const std::string &t_port,
                      const std::size_t &t_ownPort,
-                     InputManager &t_input_manager)
+                     InputManager &t_input_manager,
+                     InputManager &t_client_input_manager)
     : m_io_service(t_io_service), m_remoteEndpoint(udp::v4(), stoi(t_port)),
       m_socket(t_io_service, udp::endpoint(udp::v4(), t_ownPort)),
-      m_input_manager(t_input_manager) {
+      m_input_manager(t_input_manager),
+      m_client_input_manager(t_client_input_manager) {
   m_flag = ConnectState::none;
   receiveClient();
   m_thread = boost::thread([&t_io_service]() { t_io_service.run(); });
@@ -41,17 +43,16 @@ void UdpClient::handleReceive(const boost::system::error_code &t_error,
       std::string(m_recvBuffer.begin(), m_recvBuffer.begin() + t_size);
     try {
       std::shared_ptr<Action> action = getAction(msg);
-      //      TODO: still need proper priority handling, right now it's too fast to
-      //       compare the ids properly -> client is one frame ahead;
-      //       maybe save in copy input manager and only compare (and insert
-      //       in real input manager) in the next frame
-      //  TODO: also, action id in client might be the same as in server
-      //   because they rely on two different counters - fix this
-      if (!m_input_manager.doesActionExist(action)) {
-        m_input_manager.addActionsToQueue(action);
-      }
+      //      if (!m_client_input_manager.doesActionExist(action)) {
+      m_client_input_manager.addActionsToQueue(action);
+      //      }
     } catch (std::exception &e) {
       std::cout << "Error: " << e.what() << std::endl;
+    }
+
+    EventQueue eq = m_client_input_manager.getInputs();
+    for (std::shared_ptr<Action> action : eq.getEventQueue()) {
+      m_input_manager.addActionsToQueue(action);
     }
 
     std::cout << "Received: '" << msg << "' (" << t_error.message() << ")\n";
