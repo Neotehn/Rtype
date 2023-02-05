@@ -10,6 +10,7 @@
 
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
+#include <boost/thread.hpp>
 #include "../../Protocol/IProtocol.hpp"
 #include "../src/InputManager/InputManager.hpp"
 
@@ -35,6 +36,7 @@ class UdpClient : public IProtocol {
   std::array<char, 1024> m_recvBuffer;
   boost::asio::io_service &m_io_service;
   InputManager &m_input_manager;
+  boost::thread m_thread;
 };
 
 #endif /* !PROTOCOL_UDPCLIENT_HPP_ */

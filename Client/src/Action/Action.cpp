@@ -23,6 +23,8 @@ std::string Action::getTypeAsString() const {
       return "LEFT";
     case ActionType::RIGHT:
       return "RIGHT";
+    case ActionType::POS:
+      return "POS";
     case ActionType::SHOOT:
       return "SHOOT";
     case ActionType::CREATE:
@@ -44,20 +46,29 @@ std::string Action::getTypeAsString() const {
 std::string Action::getCommand() const {
   std::string type_string = getTypeAsString();
   std::string data = "";
+
   switch (m_type) {
     case ActionType::START:
-    case ActionType::UP:
-    case ActionType::DOWN:
-    case ActionType::LEFT:
-    case ActionType::RIGHT:
     case ActionType::DEAD:
     case ActionType::END:
       return std::to_string(m_action_id) + ";" + type_string + ";" +
              std::to_string(m_id) + ";";
+    case ActionType::UP:
+    case ActionType::DOWN:
+    case ActionType::LEFT:
+    case ActionType::RIGHT:
+      return std::to_string(m_action_id) + ";" + type_string + ";" +
+             std::to_string(m_id) + ";" + std::to_string(m_triggered_by_user) +
+             ";";
+    case ActionType::POS:
+      return std::to_string(m_action_id) + ";" + type_string + ";" +
+             std::to_string(m_id) + ";" + std::to_string(m_position.x) + ";" +
+             std::to_string(m_position.y) + ";";
     case ActionType::SHOOT:
       return std::to_string(m_action_id) + ";SHOOT;" + std::to_string(m_id) +
-             ";" + std::to_string(m_damage) + ";" +
-             std::to_string(m_shoot_type) + ";";
+             ";" + std::to_string(m_triggered_by_user) + ";" +
+             std::to_string(m_damage) + ";" + std::to_string(m_shoot_type) +
+             ";";
     case ActionType::INCREASE:
       return std::to_string(m_action_id) + ";INCREASE;" + std::to_string(m_id) +
              ";" + std::to_string(m_increase_type) + ";" +
@@ -81,6 +92,8 @@ std::string Action::getCommand() const {
 int Action::getActionId() const { return m_action_id; }
 Action::ActionType Action::getType() const { return m_type; }
 EntityID Action::getId() const { return m_id; }
+
+bool Action::isTriggeredByUser() const { return m_triggered_by_user; }
 
 EntityID Action::getCollisionPartnerId() const {
   return m_collision_partner_id;

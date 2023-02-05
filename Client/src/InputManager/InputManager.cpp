@@ -12,24 +12,33 @@ void InputManager::recordInputs(const sf::Event &t_event) {
   //  player
   switch (t_event.key.code) {
     case sf::Keyboard::W:
-      this->m_input_queue.push_back(std::make_shared<Action>(
-        MovementAction(Action::ActionType::UP, m_player_id)));
+      m_input_queue.addToQueueIfNotExist(
+        std::make_shared<Action>(
+          MovementAction(Action::ActionType::UP, m_player_id, true)),
+        Action::ActionType::UP);
       break;
     case sf::Keyboard::S:
-      this->m_input_queue.push_back(std::make_shared<Action>(
-        MovementAction(Action::ActionType::DOWN, m_player_id)));
+      m_input_queue.addToQueueIfNotExist(
+        std::make_shared<Action>(
+          MovementAction(Action::ActionType::DOWN, m_player_id, true)),
+        Action::ActionType::DOWN);
       break;
     case sf::Keyboard::D:
-      this->m_input_queue.push_back(std::make_shared<Action>(
-        MovementAction(Action::ActionType::RIGHT, m_player_id)));
+      m_input_queue.addToQueueIfNotExist(
+        std::make_shared<Action>(
+          MovementAction(Action::ActionType::RIGHT, m_player_id, true)),
+        Action::ActionType::RIGHT);
       break;
     case sf::Keyboard::A:
-      this->m_input_queue.push_back(std::make_shared<Action>(
-        MovementAction(Action::ActionType::LEFT, m_player_id)));
+      m_input_queue.addToQueueIfNotExist(
+        std::make_shared<Action>(
+          MovementAction(Action::ActionType::LEFT, m_player_id, true)),
+        Action::ActionType::LEFT);
       break;
     case sf::Keyboard::Space:
-      this->m_input_queue.push_back(
-        std::make_shared<Action>(ShootAction(m_player_id, 1, 1)));
+      m_input_queue.addToQueueIfNotExist(
+        std::make_shared<Action>(ShootAction(m_player_id, 1, 1, true)),
+        Action::ActionType::SHOOT);
       break;
   }
 
@@ -37,27 +46,27 @@ void InputManager::recordInputs(const sf::Event &t_event) {
 }
 
 void InputManager::addActionsToQueue(std::shared_ptr<Action> t_action) {
-  this->m_input_queue.push_back(t_action);
+  this->m_input_queue.addToQueue(t_action);
 }
 
 void InputManager::popInputs() {
-  if (!this->m_input_queue.empty()) this->m_input_queue.clear();
+  if (!m_input_queue.empty()) this->m_input_queue.clear();
 }
 
 EventQueue InputManager::getInputs() {
-  std::vector<std::shared_ptr<Action>> inputs = this->m_input_queue;
-  EventQueue eventQueue(inputs);
+  EventQueue event_queue = m_input_queue;
   this->popInputs();
-  return eventQueue;
+  return event_queue;
 }
 
 sf::Vector2i InputManager::getMousePosition() {
   return sf::Mouse::getPosition();
 }
 
-bool InputManager::doesActionExist(int t_action_id) {
-  for (std::shared_ptr<Action> action : this->m_input_queue) {
-    if (action->getActionId() == t_action_id) return true;
+bool InputManager::doesActionExist(std::shared_ptr<Action> t_action) {
+  for (std::shared_ptr<Action> action : this->m_input_queue.getEventQueue()) {
+    if (action->getActionId() == t_action->getActionId()) return true;
+    if (action->getType() == t_action->getType()) return true;
   }
   return false;
 }

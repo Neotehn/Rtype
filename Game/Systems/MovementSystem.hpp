@@ -6,10 +6,11 @@
 #include "../ECS/DataTypesECS.hpp"
 #include "../ECS/ISystem.hpp"
 #include "../../Client/src/Action/Action.hpp"
+#include "../../Server/Protocol/UdpServer.hpp"
 
 class MovementSystem : public ISystem {
  public:
-  MovementSystem(std::shared_ptr<EntityManager> t_em);
+  MovementSystem(std::shared_ptr<EntityManager> t_em, UdpServer *t_serverCom);
   ~MovementSystem();
 
   void update();
@@ -21,6 +22,7 @@ class MovementSystem : public ISystem {
 
  private:
   EventQueue m_event_queue;
+  UdpServer *m_serverCom;
 };
 
 #endif  // CLIENT_SRC_SYSTEMS_MOVEMENTSYSTEM_HPP_

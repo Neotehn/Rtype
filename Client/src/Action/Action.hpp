@@ -11,11 +11,12 @@ class Action : public IAction {
  public:
   enum ActionType {
     START,  // START;PORT_NB OR START;OWN_PLAYER_ID
-    UP,     // UP;ID
-    DOWN,   // DOWN;ID
-    LEFT,   // LEFT;ID
-    RIGHT,  // RIGHT;ID
-    SHOOT,  // SHOOT;ID;DAMAGE;TYPE
+    UP,     // UP;ID;USER_TRIGGERED
+    DOWN,   // DOWN;ID;USER_TRIGGERED
+    LEFT,   // LEFT;ID;USER_TRIGGERED
+    RIGHT,  // RIGHT;ID;USER_TRIGGERED
+    POS,    // POS;ID;X;
+    SHOOT,  // SHOOT;ID;;USER_TRIGGERED;DAMAGE;TYPE
     // DAMAGE = amount of damage based on load time
     // TYPE = 1, 2, ...
     CREATE,  // CREATE;ID;TYPE;TYPE_DATA
@@ -44,6 +45,7 @@ class Action : public IAction {
   ActionType getType() const;
   EntityID getId() const override;
 
+  bool isTriggeredByUser() const;
   EntityID getCollisionPartnerId() const;
 
   ObjectType getCreateType() const;
@@ -61,14 +63,15 @@ class Action : public IAction {
   ActionType m_type;
   EntityID m_id;
 
-  EntityID m_collision_partner_id;
+  bool m_triggered_by_user = false;
+  EntityID m_collision_partner_id = 0;
   ObjectType m_object_type = ObjectType::ERROR_O;
   sf::Vector2f m_position = {0, 0};
   std::string m_sprite_path;
   IncreaseType m_increase_type = IncreaseType::ERROR_I;
-  int m_value;
-  int m_damage;
-  int m_shoot_type;
+  int m_value = 0;
+  int m_damage = 0;
+  int m_shoot_type = 0;
 };
 
 #endif  //R_TYPE_CLIENT_ACTION_HPP

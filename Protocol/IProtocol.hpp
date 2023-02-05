@@ -15,6 +15,7 @@
 #include "../Client/src/Action/MovementAction.hpp"
 #include "../Client/src/Action/ShootAction.hpp"
 #include "../Client/src/Action/StateAction.hpp"
+#include "../Client/src/Action/PosAction.hpp"
 #include "../Client/src/Action/VoidAction.hpp"
 
 class IProtocol {

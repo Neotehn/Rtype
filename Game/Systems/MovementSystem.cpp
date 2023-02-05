@@ -22,8 +22,10 @@ void keepPlayerInsideScreen(sf::Vector2f &t_position,
   }
 }
 
-MovementSystem::MovementSystem(std::shared_ptr<EntityManager> t_em) {
+MovementSystem::MovementSystem(std::shared_ptr<EntityManager> t_em,
+                               UdpServer *t_serverCom) {
   m_em = t_em;
+  m_serverCom = t_serverCom;
 }
 
 MovementSystem::~MovementSystem() {}
@@ -60,6 +62,7 @@ void MovementSystem::updatePlayer(EntityID t_ent) {
   float *speed = (*m_em.get()).Get<float>(t_ent);
   sf::RectangleShape *body = (*m_em.get()).Get<sf::RectangleShape>(t_ent);
   sf::Vector2f direction = {0, 0};
+  // TODO: add position event after movememnt from server side -> send client new player pos
   if (m_event_queue.checkIfKeyPressed(Action::ActionType::LEFT)) {
     direction.x = -1;
   }
@@ -77,12 +80,19 @@ void MovementSystem::updatePlayer(EntityID t_ent) {
   }
   player->position += player->velocity;
   keepPlayerInsideScreen(player->position, body->getSize());
+  if (m_event_queue.checkIfKeyPressed(Action::ActionType::POS)) {
+    player->position = m_event_queue.getLatestPos(t_ent);
+  }
   body->setPosition(player->position);
 
   if (player->velocity.x != 0 || player->velocity.y != 0)
     player->velocity *= 0.99f;
   //  std::cout << "Player position: " << player->position.x << " " <<
   //  player->position.y << std::endl;
+  if (m_serverCom != nullptr && direction != sf::Vector2f{0, 0}) {
+    m_serverCom->addEvent(
+      std::make_shared<Action>(PosAction(t_ent, player->position)));
+  }
 }
 
 void MovementSystem::updateBackground(EntityID t_ent) {

@@ -35,3 +35,26 @@ void EventQueue::setEventQueue(
 const std::vector<std::shared_ptr<Action>> &EventQueue::getEventQueue() const {
   return m_eventQueue;
 }
+
+void EventQueue::addToQueue(std::shared_ptr<Action> t_event) {
+  m_eventQueue.push_back(t_event);
+}
+
+void EventQueue::addToQueueIfNotExist(std::shared_ptr<Action> t_event,
+                                      Action::ActionType t_type) {
+  if (!checkIfKeyPressed(t_type)) m_eventQueue.push_back(t_event);
+}
+
+bool EventQueue::empty() { return m_eventQueue.empty(); }
+
+void EventQueue::clear() { m_eventQueue.clear(); }
+
+sf::Vector2f EventQueue::getLatestPos(EntityID t_id) {
+  sf::Vector2f pos = {0, 0};
+  for (std::shared_ptr<Action> event : m_eventQueue) {
+    if (event.get()->getType() == Action::ActionType::POS) {
+      pos = event.get()->getCreatePosition();
+    }
+  }
+  return pos;
+}

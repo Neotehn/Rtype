@@ -21,13 +21,13 @@ class InputManager {
 
   EventQueue getInputs();
   sf::Vector2i getMousePosition();
-  bool doesActionExist(int t_action_id);
+  bool doesActionExist(std::shared_ptr<Action> t_action_id);
   bool isMouseLeftClicked();
   bool isMouseRightClicked();
 
  private:
   EntityID m_player_id;
-  std::vector<std::shared_ptr<Action>> m_input_queue;
+  EventQueue m_input_queue;
 };
 
 #endif  // CLIENT_SRC_INPUTMANAGER_INPUTMANAGER_HPP_

@@ -10,9 +10,13 @@ UdpServer::UdpServer(boost::asio::io_service &t_io_service,
   m_thread = boost::thread([&t_io_service]() { t_io_service.run(); });
 }
 
-UdpServer::~UdpServer() { m_socket.close(); }
+UdpServer::~UdpServer() {
+  m_socket.close();
+  m_io_service.stop();
+}
 
 void UdpServer::sendMessage(const std::string &t_msg) {
+  std::cout << t_msg << std::endl;
   m_socket.send_to(boost::asio::buffer(t_msg, t_msg.size()), m_remoteEndpoint);
 }
 
@@ -41,7 +45,6 @@ void UdpServer::handleReceive(const boost::system::error_code &t_error,
 
     if (std::string(m_recvBuffer.begin(), m_recvBuffer.begin() + t_size) !=
         "END\n") {
-      //      if (m_flag != GameMode::single) { sendMessage("Connected rdy to play"); }
       m_flag = GameMode::single;
       receiveClient();
     }

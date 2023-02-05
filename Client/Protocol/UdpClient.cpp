@@ -7,10 +7,9 @@ UdpClient::UdpClient(boost::asio::io_service &t_io_service,
     : m_io_service(t_io_service), m_remoteEndpoint(udp::v4(), stoi(t_port)),
       m_socket(t_io_service, udp::endpoint(udp::v4(), t_ownPort)),
       m_input_manager(t_input_manager) {
-  m_io_service.poll();
-  m_io_service.reset();
   m_flag = ConnectState::none;
   receiveClient();
+  m_thread = boost::thread([&t_io_service]() { t_io_service.run(); });
 }
 
 UdpClient::~UdpClient() {
@@ -20,8 +19,6 @@ UdpClient::~UdpClient() {
 
 void UdpClient::sendMessage(const std::string &t_msg) {
   m_socket.send_to(boost::asio::buffer(t_msg, t_msg.size()), m_remoteEndpoint);
-  m_io_service.poll();
-  m_io_service.reset();
 }
 
 void UdpClient::handleSend(std::string t_msg,
@@ -42,22 +39,12 @@ void UdpClient::handleReceive(const boost::system::error_code &t_error,
   if (!t_error) {
     std::string msg =
       std::string(m_recvBuffer.begin(), m_recvBuffer.begin() + t_size);
-    /*std::size_t check = 0;
-    std::shared_ptr<Action> action = getAction(msg);
-    for (std::shared_ptr<Action> actionSearch :
-         m_input_manager.getInputs().getEventQueue()) {
-      if (actionSearch->getType() == action->getType()) {
-        check = 1;
-        break;
-      }
-    }
-    if (check == 0) m_input_manager.addActionsToQueue(action);*/
     try {
       std::shared_ptr<Action> action = getAction(msg);
       //      TODO: still need proper priority handling, right now it's too fast to
       //       compare the ids properly -> keeps sending user input back and forth;
       //       maybe set an id and compare against that?
-      if (!m_input_manager.doesActionExist(action->getActionId())) {
+      if (!m_input_manager.doesActionExist(action)) {
         m_input_manager.addActionsToQueue(action);
       }
     } catch (std::exception &e) {

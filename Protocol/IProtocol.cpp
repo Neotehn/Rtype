@@ -65,20 +65,25 @@ std::shared_ptr<Action> IProtocol::getAction(std::string command) {
       StateAction(Action::ActionType::START, id, action_id));
   } else if (action_type == "UP") {
     return std::make_shared<Action>(
-      MovementAction(Action::ActionType::UP, id, action_id));
+      MovementAction(Action::ActionType::UP, id, false, action_id));
   } else if (action_type == "DOWN") {
     return std::make_shared<Action>(
-      MovementAction(Action::ActionType::DOWN, id, action_id));
+      MovementAction(Action::ActionType::DOWN, id, false, action_id));
   } else if (action_type == "LEFT") {
     return std::make_shared<Action>(
-      MovementAction(Action::ActionType::LEFT, id, action_id));
+      MovementAction(Action::ActionType::LEFT, id, false, action_id));
   } else if (action_type == "RIGHT") {
+    // sf::Vector2f pos = {std::stof(commands[3]), std::stof(commands[4])};
     return std::make_shared<Action>(
-      MovementAction(Action::ActionType::RIGHT, id, action_id));
+      MovementAction(Action::ActionType::RIGHT, id, false, action_id));
+  } else if (action_type == "POS") {
+    sf::Vector2f pos = {std::stof(commands[3]), std::stof(commands[4])};
+    return std::make_shared<Action>(PosAction(id, pos, action_id));
   } else if (action_type == "SHOOT") {
     int damage = std::stoi(commands[3]);
     int type = std::stoi(commands[4]);
-    return std::make_shared<Action>(ShootAction(id, damage, type, action_id));
+    return std::make_shared<Action>(
+      ShootAction(id, damage, type, false, action_id));
   } else if (action_type == "CREATE") {
     return getCreateAction(commands, action_id, id);
   } else if (action_type == "INCREASE") {

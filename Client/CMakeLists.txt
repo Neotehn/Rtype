@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.24)
+cmake_minimum_required(VERSION 3.16)
 project(r-type_client)
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
@@ -31,6 +31,7 @@ set(CLIENT_HPP ../GameEngine/inc/Button.hpp
                 src/Action/ShootAction.hpp
         src/Action/MovementAction.hpp
         src/Action/StateAction.hpp
+        src/Action/PosAction.hpp
         src/Action/CreateAction.hpp
         src/Action/IncreaseAction.hpp
         src/Action/CollisionAction.hpp
@@ -39,7 +40,9 @@ set(CLIENT_HPP ../GameEngine/inc/Button.hpp
         ../Game/CreateEntities/Init.hpp
         ../Game/Systems/AnimationSystem.hpp
         src/Action/VoidAction.hpp
-        src/Action/Action.hpp ../Game/Systems/CreateObjectSystem.cpp ../Game/Systems/CreateObjectSystem.hpp)
+        src/Action/Action.hpp
+        ../Game/Systems/CreateObjectSystem.cpp
+        ../Game/Systems/CreateObjectSystem.hpp)
 
 set(CLIENT_SRC ../GameEngine/src/Button.cpp
                 ../GameEngine/src/Core.cpp
@@ -63,6 +66,7 @@ set(CLIENT_SRC ../GameEngine/src/Button.cpp
         src/Action/ShootAction.cpp
         src/Action/MovementAction.cpp
         src/Action/StateAction.cpp
+        src/Action/PosAction.cpp
         src/Action/CreateAction.cpp
         src/Action/IncreaseAction.cpp
         src/Action/CollisionAction.cpp
