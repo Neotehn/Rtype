@@ -79,9 +79,13 @@ void MovementSystem::updatePlayer(EntityID t_ent) {
     player->velocity = direction * *speed;
   }
   player->position += player->velocity;
+  //  std::cout << "last pos: " << player->position.x << " " <<
+  //            player->position.y << std::endl;
   keepPlayerInsideScreen(player->position, body->getSize());
   if (m_event_queue.checkIfKeyPressed(Action::ActionType::POS)) {
     player->position = m_event_queue.getLatestPos(t_ent);
+    //    std::cout << "new pos: " << player->position.x << " " << player->position.y
+    //              << std::endl;
   }
   body->setPosition(player->position);
 

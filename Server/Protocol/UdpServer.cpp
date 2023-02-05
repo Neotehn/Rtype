@@ -60,7 +60,11 @@ void UdpServer::addEvent(std::shared_ptr<Action> event) {
 void UdpServer::sendEvents() {
   EventQueue eq = m_send_event_manager.getInputs();
   for (std::shared_ptr<Action> event : eq.getEventQueue()) {
-    if (event->getType() != Action::ActionType::SHOOT) {
+    if (event->getType() != Action::ActionType::SHOOT &&
+        event->getType() != Action::ActionType::UP &&
+        event->getType() != Action::ActionType::DOWN &&
+        event->getType() != Action::ActionType::LEFT &&
+        event->getType() != Action::ActionType::RIGHT) {
       sendMessage(event->getCommand());
     }
   }

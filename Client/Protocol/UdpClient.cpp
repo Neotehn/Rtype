@@ -42,8 +42,11 @@ void UdpClient::handleReceive(const boost::system::error_code &t_error,
     try {
       std::shared_ptr<Action> action = getAction(msg);
       //      TODO: still need proper priority handling, right now it's too fast to
-      //       compare the ids properly -> keeps sending user input back and forth;
-      //       maybe set an id and compare against that?
+      //       compare the ids properly -> client is one frame ahead;
+      //       maybe save in copy input manager and only compare (and insert
+      //       in real input manager) in the next frame
+      //  TODO: also, action id in client might be the same as in server
+      //   because they rely on two different counters - fix this
       if (!m_input_manager.doesActionExist(action)) {
         m_input_manager.addActionsToQueue(action);
       }
