@@ -16,6 +16,7 @@ class EventQueue {
 
   bool empty();
   void clear();
+  void dump();
   void addToQueue(std::shared_ptr<Action> t_event);
   void addToQueueIfNotExist(std::shared_ptr<Action> t_event,
                             Action::ActionType t_type);

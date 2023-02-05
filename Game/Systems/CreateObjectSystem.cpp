@@ -16,6 +16,7 @@ void CreateObjectSystem::update() {
     Action::ObjectType type = action->getCreateType();
     EntityID id = action->getId();
     sf::Vector2f pos = action->getCreatePosition();
+    float velocity = 0;
     switch (type) {
       // TODO: add player creation somewhere to event queue of udp server
       case Action::ObjectType::PLAYER:
@@ -25,9 +26,10 @@ void CreateObjectSystem::update() {
         createBullet(id, pos);
         break;
       case Action::ObjectType::ENEMY:
-        std::cout << "Create enemy at pos " << pos.x << " " << pos.y
-                  << std::endl;
-        createEnemy(id, pos);
+        velocity = action->getVelocity();
+        std::cout << "Create enemy at pos " << pos.x << " " << pos.y << " "
+                  << velocity << std::endl;
+        createEnemy(id, pos, velocity);
         break;
       default:
         break;
@@ -67,11 +69,12 @@ void CreateObjectSystem::createBullet(EntityID t_id, sf::Vector2f t_pos) {
   m_em->Assign<sf::RectangleShape>(bullet, bullet_body);
 }
 
-void CreateObjectSystem::createEnemy(EntityID t_id, sf::Vector2f t_pos) {
+void CreateObjectSystem::createEnemy(EntityID t_id, sf::Vector2f t_pos,
+                                     float t_velocity) {
   EntityID enemy = m_em->createNewEntity(t_id);
   SpriteECS sprite = SpriteECS("./../Client/sprites/r-typesheet30a.gif");
   m_em->Assign<std::string>(enemy, "enemy");
-  m_em->Assign<Pos>(enemy, {{-7, float(rand() % 3 - 1)}, t_pos});
+  m_em->Assign<Pos>(enemy, {{-7, t_velocity}, t_pos});
   m_em->Assign<AnimationTime>(
     enemy, {.current_animation_time = 0, .display_time = 1, .last_timer = 0});
   sf::RectangleShape body;

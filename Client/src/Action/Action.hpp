@@ -22,11 +22,12 @@ class Action : public IAction {
     CREATE,  // CREATE;ID;TYPE;TYPE_DATA
     // TYPE = PLAYER, ENEMY, BULLET
     // PLAYER_DATA: X;Y;SPRITE_PATH
-    // ENEMY_DATA:  X;Y
+    // ENEMY_DATA:  X;Y;VELOCITY
     // BULLET_DATA: X;Y
     INCREASE,  // INCREASE;ID;TYPE;VALUE
     // TYPE = LIFE, SPEED, SHOOTING_SPEED
     COLLISION,  // COLLISION;ID1;ID2
+    DESTROY,    // DESTROY;ID1
     DEAD,       // DEAD;ID
     END,        // END; OR END;PORT_NB // TODO
     ERROR,
@@ -58,6 +59,8 @@ class Action : public IAction {
   int getShootDamage() const;
   int getShootType() const;
 
+  float getVelocity() const;
+
  protected:
   int m_action_id;
   ActionType m_type;
@@ -72,6 +75,7 @@ class Action : public IAction {
   int m_value = 0;
   int m_damage = 0;
   int m_shoot_type = 0;
+  float m_velocity = -2;
 };
 
 #endif  //R_TYPE_CLIENT_ACTION_HPP

@@ -1,4 +1,5 @@
 #include "./Action.hpp"
+#include <iostream>
 
 Action::Action(ActionType type, EntityID id) : m_type(type), m_id(id) {
   m_action_id = action_counter++;
@@ -37,6 +38,8 @@ std::string Action::getTypeAsString() const {
       return "DEAD";
     case ActionType::END:
       return "END";
+    case ActionType::DESTROY:
+      return "DESTROY";
     case ActionType::ERROR:
       return "ERROR";
   }
@@ -77,6 +80,8 @@ std::string Action::getCommand() const {
       data =
         std::to_string(m_position.x) + ";" + std::to_string(m_position.y) + ";";
       if (m_sprite_path.length() > 0) { data += m_sprite_path + ";"; }
+      if (m_velocity >= -1) { data += std::to_string(m_velocity) + ";"; }
+      std::cout << std::to_string(m_velocity) << std::endl;
 
       return std::to_string(m_action_id) + ";CREATE;" + std::to_string(m_id) +
              ";" + std::to_string(m_object_type) + ";" + data;
@@ -84,6 +89,9 @@ std::string Action::getCommand() const {
       return std::to_string(m_action_id) + ";COLLISION;" +
              std::to_string(m_id) + ";" +
              std::to_string(m_collision_partner_id) + ";";
+    case ActionType::DESTROY:
+      return std::to_string(m_action_id) + ";DESTROY;" + std::to_string(m_id) +
+             ";";
   }
   return std::to_string(m_action_id) + ";" + type_string + ";" +
          std::to_string(m_id) + ";";
@@ -112,3 +120,5 @@ int Action::getIncreaseValue() const { return m_value; }
 int Action::getShootDamage() const { return m_damage; }
 
 int Action::getShootType() const { return m_shoot_type; }
+
+float Action::getVelocity() const { return m_velocity; }

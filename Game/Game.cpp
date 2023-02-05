@@ -41,7 +41,8 @@ Game::initSystems(std::shared_ptr<EntityManager> entity_manager) {
   if (m_flag == CommunicationFlag::server) {
     systems.push_back(std::make_shared<RandomEnemyGeneratorSystem>(
       entity_manager, m_serverCom));
-    systems.push_back(std::make_shared<CollisionSystem>(entity_manager));
+    systems.push_back(
+      std::make_shared<CollisionSystem>(entity_manager, m_serverCom));
     systems.push_back(
       std::make_shared<ShootingSystem>(entity_manager, m_serverCom));
     systems.push_back(
@@ -53,6 +54,7 @@ Game::initSystems(std::shared_ptr<EntityManager> entity_manager) {
       std::make_shared<MovementSystem>(entity_manager, nullptr));
   }
   systems.push_back(std::make_shared<DisplaySystem>(entity_manager, m_window));
+  systems.push_back(std::make_shared<DestroySystem>(entity_manager));
   return systems;
 }
 

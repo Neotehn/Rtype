@@ -7,16 +7,19 @@ IProtocol::getCreateAction(std::vector<std::string> commands, int action_id,
   float x = std::stof(commands[4]);
   float y = std::stof(commands[5]);
   std::string sprite_path;
+  float velocity = 0;
   if (type == Action::ObjectType::PLAYER) {
     sprite_path = commands[6];
-    return std::make_shared<Action>(CreateAction(
-      id, CreateAction::PLAYER, sf::Vector2f{x, y}, sprite_path, action_id));
-  } else if (type == Action::ObjectType::ENEMY) {
     return std::make_shared<Action>(
-      CreateAction(id, CreateAction::ENEMY, sf::Vector2f{x, y}, "", action_id));
+      CreateAction(id, CreateAction::PLAYER, sf::Vector2f{x, y}, sprite_path,
+                   action_id, velocity));
+  } else if (type == Action::ObjectType::ENEMY) {
+    velocity = std::stof(commands[6]);
+    return std::make_shared<Action>(CreateAction(
+      id, CreateAction::ENEMY, sf::Vector2f{x, y}, "", action_id, velocity));
   } else if (type == Action::ObjectType::BULLET) {
     return std::make_shared<Action>(CreateAction(
-      id, CreateAction::BULLET, sf::Vector2f{x, y}, "", action_id));
+      id, CreateAction::BULLET, sf::Vector2f{x, y}, "", action_id, velocity));
   } else {
     return std::make_shared<Action>(VoidAction(id, 0));
   }
@@ -89,11 +92,13 @@ std::shared_ptr<Action> IProtocol::getAction(std::string command) {
   } else if (action_type == "INCREASE") {
     return getIncreaseAction(commands, action_id, id);
   } else if (action_type == "COLLISION") {
-    EntityID id_other = std::stoi(commands[3]);
+    EntityID id_other = std::stoull(commands[3]);
     return std::make_shared<Action>(CollisionAction(id, id_other, action_id));
   } else if (action_type == "DEAD") {
     return std::make_shared<Action>(
       StateAction(Action::ActionType::DEAD, id, action_id));
+  } else if (action_type == "DESTROY") {
+    return std::make_shared<Action>(DestroyAction(id, action_id));
   } else if (action_type == "END") {
     return std::make_shared<Action>(
       StateAction(Action::ActionType::END, id, action_id));

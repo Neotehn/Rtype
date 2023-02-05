@@ -58,3 +58,9 @@ sf::Vector2f EventQueue::getLatestPos(EntityID t_id) {
   }
   return pos;
 }
+
+void EventQueue::dump() {
+  for (std::shared_ptr<Action> event : m_eventQueue) {
+    std::cout << event->getTypeAsString() << std::endl;
+  }
+}

@@ -1,7 +1,10 @@
 #include "CollisionSystem.hpp"
+#include <memory>
 
-CollisionSystem::CollisionSystem(std::shared_ptr<EntityManager> t_em) {
+CollisionSystem::CollisionSystem(std::shared_ptr<EntityManager> t_em,
+                                 UdpServer *t_serverCom) {
   m_em = t_em;
+  m_serverCom = t_serverCom;
 }
 
 CollisionSystem::~CollisionSystem() {}
@@ -19,9 +22,14 @@ void CollisionSystem::update() {
         (*m_em.get()).Get<sf::RectangleShape>(enemy_ent);
       bool collision = player_body->getGlobalBounds().intersects(
         enemy_body->getGlobalBounds());
-      // TODO: do some shit
-      //       if (collision) { std::cout << "Collision" << std::endl; }
-      // TODO: handle im Server
+
+      if (collision) {
+        m_serverCom->addEvent(
+          std::make_shared<Action>(CollisionAction(player_ent, enemy_ent)));
+        m_serverCom->addEvent(
+          std::make_shared<Action>(DestroyAction(enemy_ent)));
+        m_em->destroyEntity(enemy_ent);
+      }
     }
   }
 }

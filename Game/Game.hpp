@@ -12,6 +12,7 @@
 #include "./Systems/CollisionSystem.hpp"
 #include "./Systems/CreateObjectSystem.hpp"
 #include "./Systems/DisplaySystem.hpp"
+#include "./Systems/DestroySystem.hpp"
 #include "./Systems/MovementSystem.hpp"
 #include "./Systems/RandomEnemyGeneratorSystem.hpp"
 #include "./Systems/ShootingSystem.hpp"

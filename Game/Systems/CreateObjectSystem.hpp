@@ -21,7 +21,7 @@ class CreateObjectSystem : public ISystem {
   void createPlayer(EntityID t_id, std::string t_sprite_path,
                     sf::Vector2f t_pos);
   void createBullet(EntityID t_id, sf::Vector2f t_pos);
-  void createEnemy(EntityID t_id, sf::Vector2f t_pos);
+  void createEnemy(EntityID t_id, sf::Vector2f t_pos, float velocity);
 };
 
 #endif  //R_TYPE_CLIENT_CREATEOBJECTSYSTEM_HPP

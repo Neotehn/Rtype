@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.6)
 project(r-type_client)
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
@@ -23,6 +23,7 @@ set(CLIENT_HPP ../GameEngine/inc/Button.hpp
                 ../Game/EventQueue.hpp 
                 ../Game/Systems/MovementSystem.hpp 
                 ../Game/Systems/ShootingSystem.hpp 
+                ../Game/Systems/DestroySystem.hpp 
                 ../Game/Systems/CollisionSystem.hpp 
                 ../Game/Systems/RandomEnemyGeneratorSystem.hpp 
                 ../Game/Game.hpp
@@ -35,6 +36,7 @@ set(CLIENT_HPP ../GameEngine/inc/Button.hpp
         src/Action/CreateAction.hpp
         src/Action/IncreaseAction.hpp
         src/Action/CollisionAction.hpp
+        src/Action/DestroyAction.hpp
         ../Server/Protocol/UdpServer.hpp
         ../Client/Protocol/UdpClient.hpp
         ../Game/CreateEntities/Init.hpp
@@ -61,6 +63,7 @@ set(CLIENT_SRC ../GameEngine/src/Button.cpp
                 ../Game/Systems/CollisionSystem.cpp
                 ../Game/Systems/RandomEnemyGeneratorSystem.cpp 
                 ../Game/Systems/AnimationSystem.cpp 
+                ../Game/Systems/DestroySystem.cpp 
                 ../Game/Game.cpp
                 src/Action/IAction.cpp
         src/Action/ShootAction.cpp
@@ -70,6 +73,7 @@ set(CLIENT_SRC ../GameEngine/src/Button.cpp
         src/Action/CreateAction.cpp
         src/Action/IncreaseAction.cpp
         src/Action/CollisionAction.cpp
+        src/Action/DestroyAction.cpp
         ../Game/Timer.cpp
         ../Server/Protocol/UdpServer.cpp
         ../Client/Protocol/UdpClient.cpp

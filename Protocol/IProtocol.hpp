@@ -17,6 +17,7 @@
 #include "../Client/src/Action/StateAction.hpp"
 #include "../Client/src/Action/PosAction.hpp"
 #include "../Client/src/Action/VoidAction.hpp"
+#include "../Client/src/Action/DestroyAction.hpp"
 
 class IProtocol {
  public:

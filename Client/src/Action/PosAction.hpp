@@ -12,4 +12,4 @@ class PosAction : public Action {
   ~PosAction() = default;
 };
 
-#endif  //R_TYPE_CLIENT_COLLISIONACTION_HPP
+#endif  //R_TYPE_CLIENT_POSACTION_HPP
