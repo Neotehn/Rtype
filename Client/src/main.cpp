@@ -6,8 +6,10 @@ int counter;
 int action_counter;
 
 int main(int ac, char *av[]) {
+  // if (std::stoi(av[1]) == 1) {
   if (std::stoi(av[1]) == 3) {
-    Core app = Core();
+    // if (std::stoi(av[1]) == 1) { action_counter = 1000; }
+    Core app = Core(std::atoi(av[1]));
     app.run();
   } else {
     if (std::stoi(av[1]) == 1) { action_counter = 1000; }

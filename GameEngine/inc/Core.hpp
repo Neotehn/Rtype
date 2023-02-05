@@ -8,7 +8,7 @@
 
 class Core {
  public:
-  Core();
+  Core(std::size_t t_flag);
   ~Core();
   Core(const Core &);
   void run();

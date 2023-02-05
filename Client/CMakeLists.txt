@@ -28,6 +28,7 @@ set(CLIENT_HPP ../GameEngine/inc/Button.hpp
                 ../Game/Systems/RandomEnemyGeneratorSystem.hpp 
                 ../Game/Game.hpp
                 src/Action/IAction.hpp
+                inc/GameState.hpp
                 ../Game/Timer.hpp
                 src/Action/ShootAction.hpp
         src/Action/MovementAction.hpp
@@ -65,6 +66,7 @@ set(CLIENT_SRC ../GameEngine/src/Button.cpp
                 ../Game/Systems/AnimationSystem.cpp 
                 ../Game/Systems/DestroySystem.cpp 
                 ../Game/Game.cpp
+                src/GameState.cpp
                 src/Action/IAction.cpp
         src/Action/ShootAction.cpp
         src/Action/MovementAction.cpp

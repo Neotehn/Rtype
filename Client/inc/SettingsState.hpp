@@ -14,7 +14,8 @@
 class SettingsState final : public State {
  public:
   SettingsState(StateMachine &t_machine, sf::RenderWindow &t_window,
-                MusicPlayer &t_music_player, bool t_replace = true);
+                MusicPlayer &t_music_player, std::size_t t_flag,
+                bool t_replace = true);
   void pause() override;
   void resume() override;
   void update() override;
@@ -24,6 +25,7 @@ class SettingsState final : public State {
   sf::Texture m_bg_t;
   sf::Sprite m_bg_s;
   Button m_start_btn;
+  std::size_t m_flag;
 };
 
 #endif  // !SETTINGSSTATE_HPP_

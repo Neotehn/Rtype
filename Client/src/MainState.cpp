@@ -1,9 +1,11 @@
 #include "../inc/MainState.hpp"
 #include "../inc/PlayState.hpp"
 #include "../inc/SettingsState.hpp"
+#include "../inc/GameState.hpp"
 
 MainState::MainState(StateMachine &t_machine, sf::RenderWindow &t_window,
-                     MusicPlayer &t_music_player, const bool t_replace)
+                     MusicPlayer &t_music_player, std::size_t t_flag,
+                     const bool t_replace)
     : State(t_machine, t_window, t_music_player, t_replace),
       m_start_btn(Button("./assets/startBtn.png",
                          sf::Vector2f(m_window.getSize().x / 2 - 135,
@@ -12,7 +14,8 @@ MainState::MainState(StateMachine &t_machine, sf::RenderWindow &t_window,
       m_settings_btn(Button(
         "./assets/gear.png",
         sf::Vector2f(m_window.getSize().x - 100, m_window.getSize().y - 100),
-        sf::Vector2f(64, 64))) {
+        sf::Vector2f(64, 64))),
+      m_flag(t_flag) {
   if (!m_bg_t.loadFromFile("./assets/menubg.jpg")) {
     throw std::runtime_error("Unable to load image.");
   }
@@ -41,13 +44,17 @@ void MainState::update() {
     if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
       if (m_start_btn.is_pressed(mouse_pos_f)) {
         std::cout << "startbtn pressed" << std::endl;
-        m_next = StateMachine::build<PlayState>(m_state_machine, m_window,
-                                                m_music_player, true);
+        if (m_flag == 3)
+          m_next = StateMachine::build<PlayState>(m_state_machine, m_window,
+                                                  m_music_player, m_flag, true);
+        else
+          m_next = StateMachine::build<GameState>(m_state_machine, m_window,
+                                                  m_music_player, m_flag, true);
       }
       if (m_settings_btn.is_pressed(mouse_pos_f)) {
         std::cout << "settingsbtn pressed" << std::endl;
-        m_next = StateMachine::build<SettingsState>(m_state_machine, m_window,
-                                                    m_music_player, true);
+        m_next = StateMachine::build<SettingsState>(
+          m_state_machine, m_window, m_music_player, m_flag, true);
       }
     }
     switch (event.type) {
@@ -56,10 +63,6 @@ void MainState::update() {
         break;
       case sf::Event::KeyPressed:
         switch (event.key.code) {
-          case sf::Keyboard::Space:
-            m_next = StateMachine::build<PlayState>(m_state_machine, m_window,
-                                                    m_music_player, true);
-            break;
           case sf::Keyboard::Escape:
             m_state_machine.quit();
             break;

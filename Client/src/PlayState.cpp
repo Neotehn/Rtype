@@ -48,17 +48,19 @@ EntityManager init() {
 }
 
 PlayState::PlayState(StateMachine &t_machine, sf::RenderWindow &t_window,
-                     MusicPlayer &t_music_player, const bool t_replace)
-    : State{t_machine, t_window, t_music_player, t_replace}, m_input_manager{} {
+                     MusicPlayer &t_music_player, std::size_t t_flag,
+                     const bool t_replace)
+    : State{t_machine, t_window, t_music_player, t_replace}, m_input_manager{},
+      m_flag(t_flag) {
   m_entity_manager = init();
   m_entity_manager_ptr = std::make_shared<EntityManager>(m_entity_manager);
   m_systems.push_back(
     std::make_shared<DisplaySystem>(m_entity_manager_ptr, t_window));
-  //m_systems.push_back(std::make_shared<MovementSystem>(m_entity_manager_ptr));
-  //  m_systems.push_back(std::make_shared<ShootingSystem>(m_entity_manager_ptr));
+  // m_systems.push_back(std::make_shared<MovementSystem>(m_entity_manager_ptr));
+  // m_systems.push_back(std::make_shared<ShootingSystem>(m_entity_manager_ptr));
   // m_systems.push_back(
   //   std::make_shared<RandomEnemyGeneratorSystem>(m_entity_manager_ptr));
-  //m_systems.push_back(std::make_shared<CollisionSystem>(m_entity_manager_ptr));
+  // m_systems.push_back(std::make_shared<CollisionSystem>(m_entity_manager_ptr));
   m_systems.push_back(std::make_shared<AnimationSystem>(m_entity_manager_ptr));
   m_music_player.play(MusicID::MISSIONTHEME);
   std::cout << "PlayState Init\n";
@@ -75,7 +77,7 @@ void PlayState::update() {
     if (event.type == sf::Event::KeyPressed)
       if (event.key.code == sf::Keyboard::Escape)
         m_next = StateMachine::build<MainState>(m_state_machine, m_window,
-                                                m_music_player, true);
+                                                m_music_player, m_flag, true);
     m_input_manager.recordInputs(event);
   }
 }

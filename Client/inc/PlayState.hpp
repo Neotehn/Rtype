@@ -28,7 +28,8 @@ class StateMachine;
 class PlayState final : public State {
  public:
   PlayState(StateMachine &t_machine, sf::RenderWindow &t_window,
-            MusicPlayer &t_music_player, bool t_replace = true);
+            MusicPlayer &t_music_player, std::size_t t_flag,
+            bool t_replace = true);
 
   void pause() override;
   void resume() override;
@@ -41,6 +42,7 @@ class PlayState final : public State {
   std::shared_ptr<EntityManager> m_entity_manager_ptr;
   std::vector<std::shared_ptr<ISystem>> m_systems;
   InputManager m_input_manager;
+  std::size_t m_flag;
 };
 
 #endif  // !PLAYSTATE_HPP_
