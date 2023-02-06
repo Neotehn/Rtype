@@ -14,6 +14,7 @@
 #include "./Systems/DisplaySystem.hpp"
 #include "./Systems/DestroySystem.hpp"
 #include "./Systems/MovementSystem.hpp"
+#include "./Systems/DamageSystem.hpp"
 #include "./Systems/RandomEnemyGeneratorSystem.hpp"
 #include "./Systems/ShootingSystem.hpp"
 #include "../Client/src/Action/Action.hpp"

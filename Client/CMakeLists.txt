@@ -25,7 +25,8 @@ set(CLIENT_HPP ../GameEngine/inc/Button.hpp
                 ../Game/Systems/ShootingSystem.hpp 
                 ../Game/Systems/DestroySystem.hpp 
                 ../Game/Systems/CollisionSystem.hpp 
-                ../Game/Systems/RandomEnemyGeneratorSystem.hpp 
+                ../Game/Systems/RandomEnemyGeneratorSystem.hpp
+                ../Game/Systems/DamageSystem.hpp 
                 ../Game/Game.hpp
                 src/Action/IAction.hpp
                 inc/GameState.hpp
@@ -65,6 +66,7 @@ set(CLIENT_SRC ../GameEngine/src/Button.cpp
                 ../Game/Systems/RandomEnemyGeneratorSystem.cpp 
                 ../Game/Systems/AnimationSystem.cpp 
                 ../Game/Systems/DestroySystem.cpp 
+                ../Game/Systems/DamageSystem.cpp 
                 ../Game/Game.cpp
                 src/GameState.cpp
                 src/Action/IAction.cpp

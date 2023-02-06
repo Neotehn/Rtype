@@ -87,6 +87,7 @@ void MovementSystem::updatePlayer(EntityID t_ent) {
     //              << std::endl;
   }
   body->setPosition(player->position);
+  updateHealthbar(player);
 
   if (player->velocity.x != 0 || player->velocity.y != 0)
     player->velocity *= 0.99f;
@@ -117,4 +118,13 @@ void MovementSystem::updateBullets(EntityID t_ent) {
   pos->x += *speed;
   if (pos->x >= 800) { m_em->destroyEntity(t_ent); }
   body->setPosition(*pos);
+}
+
+void MovementSystem::updateHealthbar(Pos *t_player_pos) {
+  for (EntityID healthbar :
+       EntityViewer<HealthBar, Pos, sf::RectangleShape>(*m_em.get())) {
+    sf::RectangleShape *body = (*m_em.get()).Get<sf::RectangleShape>(healthbar);
+    body->setPosition(sf::Vector2f{t_player_pos->position.x - 180,
+                                   t_player_pos->position.y - 70});
+  }
 }
