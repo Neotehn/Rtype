@@ -21,8 +21,7 @@ void RandomEnemyGeneratorSystem::update() {
     m_em->Assign<Pos>(enemy, {{-7, velocity_direction}, enemy_pos});
     m_em->Assign<AnimationTime>(
       enemy, {.current_animation_time = 0, .display_time = 1, .last_timer = 0});
-    m_em->Assign<AnimationRect>(
-      enemy, {.size = 34, .limit = 68, .has_been_reset = false});
+    m_em->Assign<AnimationRect>(enemy, {.size = 34, .limit = 68});
     sf::RectangleShape body;
     body.setSize({30, 30});
     body.setPosition(enemy_pos);

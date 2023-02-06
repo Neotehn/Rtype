@@ -14,7 +14,6 @@ struct AnimationTime {
 struct AnimationRect {
   int size;
   int limit;
-  bool has_been_reset;
 };
 
 struct SystemData {

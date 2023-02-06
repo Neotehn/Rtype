@@ -17,25 +17,22 @@ class EntityManager {
   EntityManager() {}
   ~EntityManager() {}
 
-  EntityID getNewID() {
-    EntityIndex newIndex = m_free_entities.back();
-    m_free_entities.pop_back();
-    EntityID newID =
-      createEntityId(newIndex, getEntityVersion(m_entities[newIndex].id));
-    return newID;
-  }
-
   EntityID createNewEntity(EntityID t_id = 0) {
-    if (!m_free_entities.empty()) {
-      EntityID newID;
-      if (t_id == 0) {
-        newID = getNewID();
-      } else {
+    if (t_id != 0) {
+      if (getEntityVersion(t_id) != 0) {
         m_free_entities.back();
         m_free_entities.pop_back();
-        newID = t_id;
+        m_entities[getEntityIndex(t_id)].id = t_id;
+        return m_entities[getEntityIndex(t_id)].id;
       }
-      EntityIndex newIndex = getEntityIndex(newID);
+      m_entities.push_back({t_id, ComponentMask()});
+      return m_entities.back().id;
+    }
+    if (!m_free_entities.empty()) {
+      EntityIndex newIndex = m_free_entities.back();
+      m_free_entities.pop_back();
+      EntityID newID =
+        createEntityId(newIndex, getEntityVersion(m_entities[newIndex].id));
       m_entities[newIndex].id = newID;
       return m_entities[newIndex].id;
     }

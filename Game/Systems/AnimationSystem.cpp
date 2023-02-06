@@ -1,6 +1,8 @@
 #include "AnimationSystem.hpp"
 
-AnimationSystem::AnimationSystem(std::shared_ptr<EntityManager> t_em) {
+AnimationSystem::AnimationSystem(std::shared_ptr<EntityManager> t_em,
+                                 InputManager &t_input_manager)
+    : m_input_manager(t_input_manager) {
   m_em = t_em;
   m_timer = Timer();
   m_timer.startTimer();
@@ -22,8 +24,13 @@ void AnimationSystem::update() {
       sf::RectangleShape *shape = (*m_em.get()).Get<sf::RectangleShape>(ent);
       sf::IntRect rect = shape->getTextureRect();
       if (rect.left >= anim_rect->limit) {
-        rect.left = 0;
-        anim_rect->has_been_reset = true;
+        std::string *type = (*m_em.get()).Get<std::string>(ent);
+        if (*type == "explosion") {
+          m_input_manager.addActionsToQueue(
+            std::make_shared<Action>(DestroyAction(ent)));
+        } else {
+          rect.left = 0;
+        }
       } else {
         rect.left += anim_rect->size;
       }

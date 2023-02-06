@@ -79,9 +79,8 @@ void CreateObjectSystem::createEnemy(EntityID t_id, sf::Vector2f t_pos,
   m_em->Assign<std::string>(enemy, "enemy");
   m_em->Assign<Pos>(enemy, {{-7, t_velocity}, t_pos});
   m_em->Assign<AnimationTime>(
-    enemy, {.current_animation_time = 0, .display_time = 1, .last_timer = 0});
-  m_em->Assign<AnimationRect>(
-    enemy, {.size = 34, .limit = 68, .has_been_reset = false});
+    enemy, {.current_animation_time = 0, .display_time = 0.1, .last_timer = 0});
+  m_em->Assign<AnimationRect>(enemy, {.size = 34, .limit = 68});
   sf::RectangleShape body;
   body.setSize({30, 30});
   body.setPosition(t_pos);
@@ -98,8 +97,7 @@ void CreateObjectSystem::createExplosion(EntityID t_id, sf::Vector2f t_pos) {
   m_em->Assign<AnimationTime>(
     explosion,
     {.current_animation_time = 0, .display_time = 0.06, .last_timer = 0});
-  m_em->Assign<AnimationRect>(
-    explosion, {.size = 96, .limit = 1056, .has_been_reset = false});
+  m_em->Assign<AnimationRect>(explosion, {.size = 96, .limit = 1056});
   sf::RectangleShape body;
   body.setSize({50, 50});
   body.setPosition(t_pos);
