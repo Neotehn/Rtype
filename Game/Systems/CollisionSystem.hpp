@@ -4,6 +4,7 @@
 #include <string>
 
 #include "../ECS/ISystem.hpp"
+#include "../ECS/DataTypesECS.hpp"
 #include "../../Server/Protocol/UdpServer.hpp"
 
 class CollisionSystem : public ISystem {
@@ -17,6 +18,8 @@ class CollisionSystem : public ISystem {
  private:
   std::shared_ptr<EntityManager> m_em;
   UdpServer *m_serverCom;
+
+  EntityID createExplosion();
 };
 
 #endif  // CLIENT_SRC_SYSTEMS_COLLISIONSYSTEM_HPP_

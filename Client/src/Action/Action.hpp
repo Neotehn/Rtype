@@ -24,6 +24,7 @@ class Action : public IAction {
     // PLAYER_DATA: X;Y;SPRITE_PATH
     // ENEMY_DATA:  X;Y;VELOCITY
     // BULLET_DATA: X;Y
+    // EXPLOSION_DATA: X;Y
     INCREASE,  // INCREASE;ID;TYPE;VALUE
     // TYPE = LIFE, SPEED, SHOOTING_SPEED
     COLLISION,  // COLLISION;ID1;ID2
@@ -32,7 +33,7 @@ class Action : public IAction {
     END,        // END; OR END;PORT_NB // TODO
     ERROR,
   };
-  enum ObjectType { PLAYER, ENEMY, BULLET, ERROR_O };
+  enum ObjectType { PLAYER, ENEMY, BULLET, EXPLOSION, ERROR_O };
   enum IncreaseType { SPEED, FIRE_RATE, DAMAGE, LIFE, SHIELD, BOMB, ERROR_I };
 
   Action(ActionType type, EntityID id);
