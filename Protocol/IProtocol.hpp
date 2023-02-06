@@ -8,7 +8,7 @@
 #include <boost/algorithm/string/find.hpp>
 #include <boost/algorithm/string.hpp>
 
-#include "../Client/src/Action/IAction.hpp"
+#include "../Client/src/Action/Action.hpp"
 #include "../Client/src/Action/CollisionAction.hpp"
 #include "../Client/src/Action/CreateAction.hpp"
 #include "../Client/src/Action/IncreaseAction.hpp"

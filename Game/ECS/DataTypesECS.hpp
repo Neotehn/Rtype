@@ -5,6 +5,18 @@
 #include <SFML/Graphics.hpp>
 #include "../EventQueue.hpp"
 
+struct AnimationTime {
+  float current_animation_time;
+  float display_time;
+  float last_timer;
+};
+
+struct AnimationRect {
+  int size;
+  int limit;
+  bool has_been_reset;
+};
+
 struct SystemData {
   EventQueue event_queue;
 };

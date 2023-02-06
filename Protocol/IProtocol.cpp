@@ -20,6 +20,10 @@ IProtocol::getCreateAction(std::vector<std::string> commands, int action_id,
   } else if (type == Action::ObjectType::BULLET) {
     return std::make_shared<Action>(CreateAction(
       id, CreateAction::BULLET, sf::Vector2f{x, y}, "", action_id, velocity));
+  } else if (type == Action::ObjectType::EXPLOSION) {
+    return std::make_shared<Action>(CreateAction(id, CreateAction::EXPLOSION,
+                                                 sf::Vector2f{x, y}, "",
+                                                 action_id, velocity));
   } else {
     return std::make_shared<Action>(VoidAction(id, 0));
   }

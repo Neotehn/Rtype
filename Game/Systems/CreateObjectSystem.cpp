@@ -31,6 +31,9 @@ void CreateObjectSystem::update() {
                   << velocity << std::endl;
         createEnemy(id, pos, velocity);
         break;
+      case Action::ObjectType::EXPLOSION:
+        createExplosion(id, pos);
+        break;
       default:
         break;
     }
@@ -77,10 +80,30 @@ void CreateObjectSystem::createEnemy(EntityID t_id, sf::Vector2f t_pos,
   m_em->Assign<Pos>(enemy, {{-7, t_velocity}, t_pos});
   m_em->Assign<AnimationTime>(
     enemy, {.current_animation_time = 0, .display_time = 1, .last_timer = 0});
+  m_em->Assign<AnimationRect>(
+    enemy, {.size = 34, .limit = 68, .has_been_reset = false});
   sf::RectangleShape body;
   body.setSize({30, 30});
   body.setPosition(t_pos);
   body.setTexture(sprite.getTexture());
   body.setTextureRect(sf::IntRect(0, 0, 34, 34));
   m_em->Assign<sf::RectangleShape>(enemy, body);
+}
+
+void CreateObjectSystem::createExplosion(EntityID t_id, sf::Vector2f t_pos) {
+  EntityID explosion = m_em->createNewEntity(t_id);
+  SpriteECS sprite = SpriteECS("./../Client/sprites/explosion/Explosion.png");
+  m_em->Assign<std::string>(explosion, "explosion");
+  m_em->Assign<Pos>(explosion, {{0, 0}, t_pos});
+  m_em->Assign<AnimationTime>(
+    explosion,
+    {.current_animation_time = 0, .display_time = 0.06, .last_timer = 0});
+  m_em->Assign<AnimationRect>(
+    explosion, {.size = 96, .limit = 1056, .has_been_reset = false});
+  sf::RectangleShape body;
+  body.setSize({50, 50});
+  body.setPosition(t_pos);
+  body.setTexture(sprite.getTexture());
+  body.setTextureRect(sf::IntRect(0, 0, 96, 96));
+  m_em->Assign<sf::RectangleShape>(explosion, body);
 }

@@ -3,12 +3,7 @@
 
 #include "../ECS/ISystem.hpp"
 #include "../Timer.hpp"
-
-struct AnimationTime {
-  float current_animation_time;
-  float display_time;
-  float last_timer;
-};
+#include "../ECS/DataTypesECS.hpp"
 
 class AnimationSystem : public ISystem {
  public:

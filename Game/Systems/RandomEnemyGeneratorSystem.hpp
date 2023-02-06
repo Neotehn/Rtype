@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "../ECS/ISystem.hpp"
-#include "./AnimationSystem.hpp"
+#include "../ECS/DataTypesECS.hpp"
 #include "../../Server/Protocol/UdpServer.hpp"
 
 class RandomEnemyGeneratorSystem : public ISystem {
