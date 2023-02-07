@@ -5,7 +5,6 @@
 #include <string>
 #include <iostream>
 #include <string>
-#include <boost/asio.hpp>
 #include <boost/bind.hpp>
 #include <boost/array.hpp>
 #include <boost/bind/bind.hpp>
@@ -46,7 +45,7 @@ class UdpServer : public IProtocol {
   udp::endpoint m_remoteEndpoint;
   std::array<char, 1024> m_recvBuffer;
   boost::asio::io_service &m_io_service;
-  std::array<int, 2> remotePortArray;
+  std::array<int, 2> m_remotePortArray;
   InputManager &m_input_manager;
   InputManager m_send_event_manager;
 };

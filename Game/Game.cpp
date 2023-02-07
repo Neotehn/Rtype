@@ -7,15 +7,16 @@ Game::Game(std::size_t t_flag)
   m_window.setFramerateLimit(60);
 
   if (t_flag == client) {
+    srand(time(NULL));
     m_flag = CommunicationFlag::client;
     m_port_number = rand() % 15000 + 40001;
 
     m_clientCom =
       new UdpClient(m_io_service, "localhost", "50000", m_port_number,
                     m_input_manager, m_client_input_manager);
+    std::cout << "Client port: " << m_port_number << std::endl;
   } else {
     m_flag = CommunicationFlag::server;
-
     m_serverCom = new UdpServer(m_io_service, m_input_manager);
   }
 }
@@ -70,10 +71,11 @@ void Game::run() {
   std::cout << "running " << m_flag << std::endl;
   while (m_window.isOpen()) {
     while (m_flag == CommunicationFlag::server &&
-           m_serverCom->m_flag != m_serverCom->single) {
+           m_serverCom->m_flag != m_serverCom->coop) {
       std::cout << "waiting on Client Connection" << std::endl;
       boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
     }
+
     while (m_flag == CommunicationFlag::client &&
            m_clientCom->m_flag != m_clientCom->connected) {
       std::cout << "Connecting to Server ..." << std::endl;

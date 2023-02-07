@@ -41,6 +41,7 @@ class Game {
   CommunicationFlag m_flag;
   UdpClient *m_clientCom = nullptr;
   UdpServer *m_serverCom = nullptr;
+  int m_current_connections = 0;
 
   EntityManager initEntityManager();
   std::vector<std::shared_ptr<ISystem>>

@@ -25,7 +25,7 @@ void UdpServer::handleSend(std::string t_msg,
                            std::size_t t_size) {}
 
 void UdpServer::receiveClient() {
-  std::cout << "listening" << std::endl;
+  std::cout << "listening to port " << m_remoteEndpoint.port() << std::endl;
   m_socket.async_receive_from(
     boost::asio::buffer(m_recvBuffer), m_remoteEndpoint,
     boost::bind(&UdpServer::handleReceive, this,
@@ -45,8 +45,19 @@ void UdpServer::handleReceive(const boost::system::error_code &t_error,
 
     if (std::string(m_recvBuffer.begin(), m_recvBuffer.begin() + t_size) !=
         "END\n") {
-      m_flag = GameMode::single;
-      receiveClient();
+      if (m_flag == GameMode::none) {
+        m_flag = GameMode::single;
+        //m_remotePortArray[0] = m_remoteEndpoint.port();
+        std::cout << "ertser connected" << std::endl;
+        receiveClient();
+      } else {
+        if (m_remotePortArray[0] == m_remoteEndpoint.port() or m_flag == GameMode::none) // not sure if none check is nessessary
+          return;
+        //m_remotePortArray[1] = m_remoteEndpoint.port();
+        std::cout << "zweiter connected" << std::endl;
+        m_flag = GameMode::coop;
+        receiveClient();
+      }
     }
   } else {
     m_socket.close();
