@@ -23,7 +23,12 @@ class SettingsState final : public State {
  private:
   sf::Texture m_bg_t;
   sf::Sprite m_bg_s;
+  sf::Font m_font;
+  sf::Text m_title;
+  sf::Text m_vol_txt;
   Button m_start_btn;
+  Button m_vol_up;
+  Button m_vol_down;
 };
 
 #endif  // !SETTINGSSTATE_HPP_

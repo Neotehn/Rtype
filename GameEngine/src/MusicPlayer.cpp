@@ -28,3 +28,10 @@ void MusicPlayer::setPaused(bool t_paused) {
   else
     m_music.play();
 }
+
+float MusicPlayer::getVolume() { return m_volume; }
+
+void MusicPlayer::setVolume(float t_volume) {
+  m_volume = t_volume;
+  m_music.setVolume(m_volume);
+}

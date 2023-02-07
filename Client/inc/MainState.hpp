@@ -26,6 +26,9 @@ class MainState final : public State {
   sf::Sprite m_bg_s;
   Button m_start_btn;
   Button m_settings_btn;
+  Button m_exit_btn;
+  sf::Font m_font;
+  sf::Text m_title;
 };
 
 #endif  //!MAINSTATE_HPP_

@@ -12,10 +12,21 @@ MainState::MainState(StateMachine &t_machine, sf::RenderWindow &t_window,
       m_settings_btn(Button(
         "./assets/gear.png",
         sf::Vector2f(m_window.getSize().x - 100, m_window.getSize().y - 100),
-        sf::Vector2f(64, 64))) {
+        sf::Vector2f(64, 64))),
+      m_exit_btn(Button(
+        "./assets/exit.png",
+        sf::Vector2f(m_window.getSize().x / 2 - 64, m_window.getSize().y - 228),
+        sf::Vector2f(128, 128))) {
   if (!m_bg_t.loadFromFile("./assets/menubg.jpg")) {
     throw std::runtime_error("Unable to load image.");
   }
+  if (!m_font.loadFromFile("./assets/font/Sansation.ttf"))
+    throw std::runtime_error("Unable to load font.");
+  m_title.setString("R-TYPE");
+  m_title.setFont(m_font);
+  m_title.setCharacterSize(100);
+  m_title.setPosition(
+    m_window.getSize().x / 2 - m_title.getGlobalBounds().width / 2, 50);
   float size_x = m_window.getSize().x;
   float size_y = m_window.getSize().y;
   float scale_x = size_x / m_bg_t.getSize().x;
@@ -37,6 +48,7 @@ void MainState::update() {
     if (event.type == sf::Event::MouseMoved) {
       m_start_btn.is_hovered(mouse_pos_f);
       m_settings_btn.is_hovered(mouse_pos_f);
+      m_exit_btn.is_hovered(mouse_pos_f);
     }
     if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
       if (m_start_btn.is_pressed(mouse_pos_f)) {
@@ -48,6 +60,10 @@ void MainState::update() {
         std::cout << "settingsbtn pressed" << std::endl;
         m_next = StateMachine::build<SettingsState>(m_state_machine, m_window,
                                                     m_music_player, true);
+      }
+      if (m_exit_btn.is_pressed(mouse_pos_f)) {
+        std::cout << "exit btn pressed" << std::endl;
+        m_state_machine.quit();
       }
     }
     switch (event.type) {
@@ -76,7 +92,9 @@ void MainState::update() {
 void MainState::draw() {
   m_window.clear();
   m_window.draw(m_bg_s);
+  m_window.draw(m_title);
   m_window.draw(m_start_btn.getSprite());
   m_window.draw(m_settings_btn.getSprite());
+  m_window.draw(m_exit_btn.getSprite());
   m_window.display();
 }
