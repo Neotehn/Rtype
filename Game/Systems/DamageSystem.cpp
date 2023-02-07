@@ -2,9 +2,10 @@
 
 DamageSystem::DamageSystem(std::shared_ptr<EntityManager> t_em,
                            InputManager &t_client_input_manager,
-                           std::size_t t_port_number, bool &t_is_running)
+                           std::size_t t_port_number, bool &t_is_running,
+                           std::vector<SoundSystem::SoundType> &t_sounds)
     : m_client_input_manager(t_client_input_manager),
-      m_is_running(t_is_running) {
+      m_is_running(t_is_running), m_play_sounds(t_sounds) {
   m_em = t_em;
   m_port_number = t_port_number;
 }
@@ -24,6 +25,7 @@ void DamageSystem::update() {
       if (new_health < 0) { return; }
       if (new_health == 0) {
         std::cout << "player died" << std::endl;
+        m_play_sounds.push_back(SoundSystem::SoundType::death);
         m_is_running = false;
         m_client_input_manager.addActionsToQueue(std::make_shared<Action>(
           StateAction(Action::ActionType::END, m_port_number)));

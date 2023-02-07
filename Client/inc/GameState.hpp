@@ -62,6 +62,7 @@ class GameState final : public State {
   UdpServer *m_serverCom = nullptr;
   std::vector<std::shared_ptr<ISystem>> m_systems;
   bool m_is_running;
+  std::vector<SoundSystem::SoundType> m_sounds;
 
   EntityManager initEntityManager();
   std::vector<std::shared_ptr<ISystem>>

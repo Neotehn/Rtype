@@ -7,10 +7,12 @@
 #include "../ECS/ISystem.hpp"
 #include "../ECS/DataTypesECS.hpp"
 #include "./AnimationSystem.hpp"
+#include "./SoundSystem.hpp"
 
 class CreateObjectSystem : public ISystem {
  public:
-  CreateObjectSystem(std::shared_ptr<EntityManager> t_em);
+  CreateObjectSystem(std::shared_ptr<EntityManager> t_em,
+                     std::vector<SoundSystem::SoundType> &t_sounds);
   ~CreateObjectSystem();
 
   void update();
@@ -19,6 +21,8 @@ class CreateObjectSystem : public ISystem {
  private:
   std::shared_ptr<EntityManager> m_em;
   EventQueue m_event_queue;
+  std::vector<SoundSystem::SoundType> &m_play_sounds;
+
   void createPlayer(EntityID t_id, std::string t_sprite_path,
                     sf::Vector2f t_pos);
   void initPlayerHealthBar(EntityID t_player_id);

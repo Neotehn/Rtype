@@ -1,6 +1,8 @@
 #include "PowerUpSystem.hpp"
 
-PowerUpSystem::PowerUpSystem(std::shared_ptr<EntityManager> t_em) {
+PowerUpSystem::PowerUpSystem(std::shared_ptr<EntityManager> t_em,
+                             std::vector<SoundSystem::SoundType> &t_sounds)
+    : m_play_sounds(t_sounds) {
   m_em = t_em;
 }
 
@@ -20,6 +22,7 @@ void PowerUpSystem::update() {
       case Action::IncreaseType::LIFE:
         std::cout << "increase player health" << std::endl;
         increaseHealth(action);
+        m_play_sounds.push_back(SoundSystem::SoundType::power_up);
         break;
       default:
         break;

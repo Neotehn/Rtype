@@ -4,10 +4,12 @@
 #include <memory>
 
 #include "../ECS/ISystem.hpp"
+#include "./SoundSystem.hpp"
 
 class PowerUpSystem : public ISystem {
  public:
-  PowerUpSystem(std::shared_ptr<EntityManager> t_em);
+  PowerUpSystem(std::shared_ptr<EntityManager> t_em,
+                std::vector<SoundSystem::SoundType> &t_sounds);
   ~PowerUpSystem();
 
   void update();
@@ -15,6 +17,7 @@ class PowerUpSystem : public ISystem {
 
  private:
   EventQueue m_event_queue;
+  std::vector<SoundSystem::SoundType> &m_play_sounds;
 
   void increaseHealth(std::shared_ptr<Action> action);
 };

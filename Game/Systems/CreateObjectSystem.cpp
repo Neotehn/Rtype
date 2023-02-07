@@ -1,6 +1,9 @@
 #include "CreateObjectSystem.hpp"
 
-CreateObjectSystem::CreateObjectSystem(std::shared_ptr<EntityManager> t_em) {
+CreateObjectSystem::CreateObjectSystem(
+  std::shared_ptr<EntityManager> t_em,
+  std::vector<SoundSystem::SoundType> &t_sounds)
+    : m_play_sounds(t_sounds) {
   m_em = t_em;
 }
 
@@ -97,6 +100,8 @@ void CreateObjectSystem::createBullet(EntityID t_id, sf::Vector2f t_pos) {
   bullet_body.setPosition(t_pos);
   bullet_body.setTexture(sprite.getTexture());
   m_em->Assign<sf::RectangleShape>(bullet, bullet_body);
+
+  m_play_sounds.push_back(SoundSystem::SoundType::shoot);
 }
 
 void CreateObjectSystem::createEnemy(EntityID t_id, sf::Vector2f t_pos,
@@ -131,6 +136,8 @@ void CreateObjectSystem::createExplosion(EntityID t_id, sf::Vector2f t_pos) {
   body.setTexture(sprite.getTexture());
   body.setTextureRect(sf::IntRect(0, 0, 96, 96));
   m_em->Assign<sf::RectangleShape>(explosion, body);
+
+  m_play_sounds.push_back(SoundSystem::SoundType::explosion);
 }
 
 void CreateObjectSystem::createPowerUp(EntityID t_id, sf::Vector2f t_pos) {

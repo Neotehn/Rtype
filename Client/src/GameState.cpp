@@ -66,7 +66,8 @@ GameState::initSystems(std::shared_ptr<EntityManager> entity_manager) {
   } else if (m_flag == CommunicationFlag::client) {
     systems.push_back(
       std::make_shared<AnimationSystem>(entity_manager, m_input_manager));
-    systems.push_back(std::make_shared<CreateObjectSystem>(entity_manager));
+    systems.push_back(
+      std::make_shared<CreateObjectSystem>(entity_manager, m_sounds));
     systems.push_back(
       std::make_shared<MovementSystem>(entity_manager, nullptr));
   }

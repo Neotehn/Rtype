@@ -17,6 +17,7 @@
 #include "./Systems/DamageSystem.hpp"
 #include "./Systems/RandomEnemyGeneratorSystem.hpp"
 #include "./Systems/ShootingSystem.hpp"
+#include "./Systems/SoundSystem.hpp"
 #include "./Systems/PowerUpSystem.hpp"
 #include "../Client/src/Action/Action.hpp"
 #include "../Client/src/InputManager/InputManager.hpp"
@@ -38,6 +39,7 @@ class Game {
   std::size_t m_port_number;
   boost::asio::io_service m_io_service;
   sf::RenderWindow m_window;
+  std::vector<SoundSystem::SoundType> m_sounds;
   InputManager m_input_manager;
   InputManager m_client_input_manager;
   CommunicationFlag m_flag;
