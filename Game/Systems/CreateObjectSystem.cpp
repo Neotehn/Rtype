@@ -57,6 +57,30 @@ void CreateObjectSystem::createPlayer(EntityID t_id, std::string t_sprite_path,
   //body.setOutlineThickness(5);
   sf::RectangleShape *player_body =
     m_em->Assign<sf::RectangleShape>(player, body);
+  initPlayerHealthBar(player);
+}
+
+void CreateObjectSystem::initPlayerHealthBar(EntityID t_player_id) {
+  SpriteECS player_health_bar_sprite_full =
+    SpriteECS("../Client/sprites/playerassets/Fulllife.png");
+
+  Pos bar_pos = Pos{sf::Vector2f(0, 0), sf::Vector2f(120, 230)};
+
+  HealthBar bar_stats =
+    HealthBar{std::vector<std::string>{
+                std::string("../Client/sprites/playerassets/ouch 3x.png"),
+                std::string("../Client/sprites/playerassets/ouch 2x.png"),
+                std::string("../Client/sprites/playerassets/ouch.png"),
+                std::string("../Client/sprites/playerassets/Fulllife.png")},
+              3};
+
+  sf::RectangleShape body;
+  body.setSize({126, 42});
+  body.setPosition(bar_pos.position);
+  body.setTexture(player_health_bar_sprite_full.getTexture());
+
+  Health *health =
+    m_em->Assign<Health>(t_player_id, Health{bar_stats, bar_pos, body});
 }
 
 void CreateObjectSystem::createBullet(EntityID t_id, sf::Vector2f t_pos) {

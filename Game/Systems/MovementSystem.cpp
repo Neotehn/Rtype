@@ -36,7 +36,7 @@ void MovementSystem::updateData(SystemData &t_data) {
 
 void MovementSystem::update() {
   for (EntityID ent :
-       EntityViewer<float, Pos, sf::RectangleShape>(*m_em.get())) {
+       EntityViewer<float, Health, Pos, sf::RectangleShape>(*m_em.get())) {
     updatePlayer(ent);
   }
   for (EntityID ent :
@@ -60,6 +60,7 @@ void MovementSystem::update() {
 void MovementSystem::updatePlayer(EntityID t_ent) {
   Pos *player = (*m_em.get()).Get<Pos>(t_ent);
   float *speed = (*m_em.get()).Get<float>(t_ent);
+  Health *health = (*m_em.get()).Get<Health>(t_ent);
   sf::RectangleShape *body = (*m_em.get()).Get<sf::RectangleShape>(t_ent);
   sf::Vector2f direction = {0, 0};
   if (m_event_queue.checkIfKeyPressed(Action::ActionType::LEFT)) {
@@ -87,7 +88,7 @@ void MovementSystem::updatePlayer(EntityID t_ent) {
     //              << std::endl;
   }
   body->setPosition(player->position);
-  updateHealthbar(player);
+  updateHealthbar(player, health);
 
   if (player->velocity.x != 0 || player->velocity.y != 0)
     player->velocity *= 0.99f;
@@ -120,11 +121,7 @@ void MovementSystem::updateBullets(EntityID t_ent) {
   body->setPosition(*pos);
 }
 
-void MovementSystem::updateHealthbar(Pos *t_player_pos) {
-  for (EntityID healthbar :
-       EntityViewer<HealthBar, Pos, sf::RectangleShape>(*m_em.get())) {
-    sf::RectangleShape *body = (*m_em.get()).Get<sf::RectangleShape>(healthbar);
-    body->setPosition(sf::Vector2f{t_player_pos->position.x - 180,
-                                   t_player_pos->position.y - 70});
-  }
+void MovementSystem::updateHealthbar(Pos *t_player_pos, Health *t_health) {
+  t_health->body.setPosition(sf::Vector2f{t_player_pos->position.x - 180,
+                                          t_player_pos->position.y - 70});
 }

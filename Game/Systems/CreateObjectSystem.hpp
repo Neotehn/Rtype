@@ -5,6 +5,7 @@
 #include <string>
 
 #include "../ECS/ISystem.hpp"
+#include "../ECS/DataTypesECS.hpp"
 #include "./AnimationSystem.hpp"
 
 class CreateObjectSystem : public ISystem {
@@ -20,6 +21,7 @@ class CreateObjectSystem : public ISystem {
   EventQueue m_event_queue;
   void createPlayer(EntityID t_id, std::string t_sprite_path,
                     sf::Vector2f t_pos);
+  void initPlayerHealthBar(EntityID t_player_id);
   void createBullet(EntityID t_id, sf::Vector2f t_pos);
   void createEnemy(EntityID t_id, sf::Vector2f t_pos, float velocity);
   void createExplosion(EntityID t_id, sf::Vector2f t_pos);

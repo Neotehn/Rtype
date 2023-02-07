@@ -6,25 +6,21 @@ DamageSystem::~DamageSystem() {}
 
 void DamageSystem::update() {
   for (std::shared_ptr<Action> action :
-       m_event_queue.getAllOfType(Action::ActionType::COLLISION)) {
+       m_event_queue.getAllOfType(Action::ActionType::DAMAGE)) {
     for (EntityID healthbar :
-         EntityViewer<HealthBar, Pos, sf::RectangleShape, std::size_t>(
-           *m_em.get())) {
-      sf::RectangleShape *body =
-        (*m_em.get()).Get<sf::RectangleShape>(healthbar);
-      HealthBar *bar = (*m_em.get()).Get<HealthBar>(healthbar);
-      std::size_t current_health = bar->getHealth();
+         EntityViewer<float, Health, Pos, sf::RectangleShape>(*m_em.get())) {
+      Health *health = (*m_em.get()).Get<Health>(healthbar);
+      int current_health = health->healthbar.getHealth();
+      int damage = action->getShootDamage();
 
-      if (current_health <= 0) { break; }
-      bar->setHealth(current_health - 1);
+      if (current_health - damage < 0) { return; }
+      health->healthbar.setHealth(current_health - damage);
 
-      SpriteECS health_new_bar =
-        SpriteECS(bar->getSpritesPaths()[bar->getHealth()]);
+      SpriteECS health_new_bar = SpriteECS(
+        health->healthbar.getSpritesPaths()[health->healthbar.getHealth()]);
 
-      body->setTexture(health_new_bar.getTexture());
+      health->body.setTexture(health_new_bar.getTexture());
     }
-    EntityID id = action->getId();
-    m_em->destroyEntity(id);
   }
 }
 

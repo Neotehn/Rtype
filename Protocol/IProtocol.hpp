@@ -11,13 +11,14 @@
 #include "../Client/src/Action/Action.hpp"
 #include "../Client/src/Action/CollisionAction.hpp"
 #include "../Client/src/Action/CreateAction.hpp"
+#include "../Client/src/Action/DamageAction.hpp"
+#include "../Client/src/Action/DestroyAction.hpp"
 #include "../Client/src/Action/IncreaseAction.hpp"
 #include "../Client/src/Action/MovementAction.hpp"
 #include "../Client/src/Action/ShootAction.hpp"
 #include "../Client/src/Action/StateAction.hpp"
 #include "../Client/src/Action/PosAction.hpp"
 #include "../Client/src/Action/VoidAction.hpp"
-#include "../Client/src/Action/DestroyAction.hpp"
 
 class IProtocol {
  public:

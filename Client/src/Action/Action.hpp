@@ -28,13 +28,14 @@ class Action : public IAction {
     INCREASE,  // INCREASE;ID;TYPE;VALUE
     // TYPE = LIFE, SPEED, SHOOTING_SPEED
     COLLISION,  // COLLISION;ID1;ID2
+    DAMAGE,     // DAMAGE;ID1;DMG
     DESTROY,    // DESTROY;ID1
     DEAD,       // DEAD;ID
     END,        // END; OR END;PORT_NB // TODO
     ERROR,
   };
   enum ObjectType { PLAYER, ENEMY, BULLET, EXPLOSION, ERROR_O };
-  enum IncreaseType { SPEED, FIRE_RATE, DAMAGE, LIFE, SHIELD, BOMB, ERROR_I };
+  enum IncreaseType { SPEED, FIRE_RATE, DAMAGE_I, LIFE, SHIELD, BOMB, ERROR_I };
 
   Action(ActionType type, EntityID id);
   Action(ActionType type, EntityID id, int t_action_id);

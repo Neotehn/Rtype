@@ -31,8 +31,9 @@ Game::~Game() {
 EntityManager Game::initEntityManager() {
   EntityManager entity_manager;
   initBackground(entity_manager);
-  initPlayer(entity_manager);
-  initPlayerHealthBar(entity_manager);
+  if (m_flag == CommunicationFlag::server) {
+    initPlayer(entity_manager, m_serverCom);
+  }
   return entity_manager;
 }
 

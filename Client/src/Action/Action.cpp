@@ -40,6 +40,8 @@ std::string Action::getTypeAsString() const {
       return "END";
     case ActionType::DESTROY:
       return "DESTROY";
+    case ActionType::DAMAGE:
+      return "DAMAGE";
     case ActionType::ERROR:
       return "ERROR";
   }
@@ -76,6 +78,9 @@ std::string Action::getCommand() const {
       return std::to_string(m_action_id) + ";INCREASE;" + std::to_string(m_id) +
              ";" + std::to_string(m_increase_type) + ";" +
              std::to_string(m_value) + ";";
+    case ActionType::DAMAGE:
+      return std::to_string(m_action_id) + ";DAMAGE;" + std::to_string(m_id) +
+             ";" + std::to_string(m_damage) + ";";
     case ActionType::CREATE:
       data =
         std::to_string(m_position.x) + ";" + std::to_string(m_position.y) + ";";

@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 
-void initPlayer(EntityManager &t_entity_manager) {
+void initPlayer(EntityManager &t_entity_manager, UdpServer *t_serverCom) {
   EntityID player = t_entity_manager.createNewEntity();
 
   SpriteECS player_sprite = SpriteECS("../Client/sprites/starship.png");
@@ -21,6 +21,10 @@ void initPlayer(EntityManager &t_entity_manager) {
   //body.setOutlineThickness(5);
   sf::RectangleShape *player_body =
     t_entity_manager.Assign<sf::RectangleShape>(player, body);
+  t_serverCom->addEvent(std::make_shared<Action>(
+    CreateAction(player, Action::ObjectType::PLAYER, player_pos->position,
+                 "../Client/sprites/starship.png")));
+  initPlayerHealthBar(player, t_entity_manager);
 }
 
 void initBackground(EntityManager &t_entity_manager) {
@@ -49,31 +53,28 @@ void initBackground(EntityManager &t_entity_manager) {
     background3, SpriteECS("../Client/sprites/background/bg3.png", {5, 5}));
 }
 
-void initPlayerHealthBar(EntityManager &t_entity_manager) {
-  EntityID player_health_bar = t_entity_manager.createNewEntity();
-
+void initPlayerHealthBar(EntityID t_player_id,
+                         EntityManager &t_entity_manager) {
   SpriteECS player_health_bar_sprite_full =
     SpriteECS("../Client/sprites/playerassets/Fulllife.png");
 
-  Pos *bar_pos = t_entity_manager.Assign<Pos>(
-    player_health_bar, Pos{sf::Vector2f(0, 0), sf::Vector2f(120, 230)});
+  Pos bar_pos = Pos{sf::Vector2f(0, 0), sf::Vector2f(120, 230)};
 
-  HealthBar *bar_stats = t_entity_manager.Assign<HealthBar>(
-    player_health_bar,
+  HealthBar bar_stats =
     HealthBar{std::vector<std::string>{
                 std::string("../Client/sprites/playerassets/ouch 3x.png"),
                 std::string("../Client/sprites/playerassets/ouch 2x.png"),
                 std::string("../Client/sprites/playerassets/ouch.png"),
                 std::string("../Client/sprites/playerassets/Fulllife.png")},
-              3});
-  t_entity_manager.Assign<std::size_t>(player_health_bar, 4);
+              3};
+
   sf::RectangleShape body;
   body.setSize({126, 42});
-  body.setPosition(bar_pos->position);
+  body.setPosition(bar_pos.position);
   body.setTexture(player_health_bar_sprite_full.getTexture());
 
-  sf::RectangleShape *bar_body =
-    t_entity_manager.Assign<sf::RectangleShape>(player_health_bar, body);
+  Health *health = t_entity_manager.Assign<Health>(
+    t_player_id, Health{bar_stats, bar_pos, body});
 }
 
 //void initEnemy()

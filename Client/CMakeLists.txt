@@ -38,6 +38,7 @@ set(CLIENT_HPP ../GameEngine/inc/Button.hpp
         src/Action/CreateAction.hpp
         src/Action/IncreaseAction.hpp
         src/Action/CollisionAction.hpp
+        src/Action/DamageAction.hpp
         src/Action/DestroyAction.hpp
         ../Server/Protocol/UdpServer.hpp
         ../Client/Protocol/UdpClient.hpp
@@ -74,6 +75,7 @@ set(CLIENT_SRC ../GameEngine/src/Button.cpp
         src/Action/MovementAction.cpp
         src/Action/StateAction.cpp
         src/Action/PosAction.cpp
+        src/Action/DamageAction.cpp
         src/Action/CreateAction.cpp
         src/Action/IncreaseAction.cpp
         src/Action/CollisionAction.cpp

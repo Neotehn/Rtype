@@ -45,7 +45,7 @@ void GameState::resume() { std::cout << "GameState Resume\n"; }
 EntityManager GameState::initEntityManager() {
   EntityManager entity_manager;
   initBackground(entity_manager);
-  initPlayer(entity_manager);
+  initPlayer(entity_manager, m_serverCom);
   return entity_manager;
 }
 

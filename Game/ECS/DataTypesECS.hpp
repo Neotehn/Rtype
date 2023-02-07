@@ -29,18 +29,24 @@ struct Pos {
 
 class HealthBar {
  public:
-  HealthBar(std::vector<std::string> t_sprites_paths, std::size_t t_health) {
+  HealthBar(std::vector<std::string> t_sprites_paths, int t_health) {
     m_sprites_paths = t_sprites_paths;
     m_health = t_health;
   }
 
-  const std::size_t getHealth() { return m_health; }
+  const int getHealth() { return m_health; }
   const std::vector<std::string> getSpritesPaths() { return m_sprites_paths; }
-  void setHealth(std::size_t t_health) { m_health = t_health; }
+  void setHealth(int t_health) { m_health = t_health; }
 
  private:
-  std::size_t m_health;
+  int m_health;
   std::vector<std::string> m_sprites_paths;
+};
+
+struct Health {
+  HealthBar healthbar;
+  Pos position;
+  sf::RectangleShape body;
 };
 
 class SpriteECS {
