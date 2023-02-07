@@ -5,6 +5,7 @@ Game::Game(std::size_t t_flag)
                                           ? "R-Type Epitech Server"
                                           : "R-Type Epitech Client") {
   m_window.setFramerateLimit(60);
+  m_is_running = true;
 
   if (t_flag == client) {
     m_flag = CommunicationFlag::client;
@@ -16,7 +17,7 @@ Game::Game(std::size_t t_flag)
   } else {
     m_flag = CommunicationFlag::server;
 
-    m_serverCom = new UdpServer(m_io_service, m_input_manager);
+    m_serverCom = new UdpServer(m_io_service, m_input_manager, m_is_running);
   }
 }
 
@@ -53,7 +54,8 @@ Game::initSystems(std::shared_ptr<EntityManager> entity_manager) {
   } else if (m_flag == CommunicationFlag::client) {
     systems.push_back(
       std::make_shared<AnimationSystem>(entity_manager, m_input_manager));
-    systems.push_back(std::make_shared<DamageSystem>(entity_manager));
+    systems.push_back(std::make_shared<DamageSystem>(
+      entity_manager, m_input_manager, m_port_number, m_is_running));
     systems.push_back(std::make_shared<CreateObjectSystem>(entity_manager));
     systems.push_back(
       std::make_shared<MovementSystem>(entity_manager, nullptr));
@@ -70,7 +72,7 @@ void Game::run() {
   std::vector<std::shared_ptr<ISystem>> systems = initSystems(entity_manager);
 
   std::cout << "running " << m_flag << std::endl;
-  while (m_window.isOpen()) {
+  while (m_is_running) {
     while (m_flag == CommunicationFlag::server &&
            m_serverCom->m_flag != m_serverCom->single) {
       std::cout << "waiting on Client Connection" << std::endl;
@@ -86,13 +88,15 @@ void Game::run() {
       std::cout << "waiting on Server Connection" << std::endl;
     }
     sf::Event event;
-    while (m_window.pollEvent(event)) {
-      if (event.type == sf::Event::Closed) {
-        m_window.close();
-        std::cout << "yes close pls" << std::endl;
+    if (m_window.isOpen()) {
+      while (m_window.pollEvent(event)) {
+        if (event.type == sf::Event::Closed) {
+          m_is_running = false;
+          std::cout << "yes close pls" << std::endl;
+        }
+        if (m_flag == CommunicationFlag::client)
+          m_client_input_manager.recordInputs(event);
       }
-      if (m_flag == CommunicationFlag::client)
-        m_client_input_manager.recordInputs(event);
     }
     SystemData data = {.event_queue = m_input_manager.getInputs()};
     if (m_flag == CommunicationFlag::client && m_clientCom->m_flag) {
@@ -116,6 +120,7 @@ void Game::run() {
       system->update();
     }
   }
+  if (m_window.isOpen()) { m_window.close(); }
   if (m_flag == CommunicationFlag::client) {
     std::cout << "Stop connection to Server ..." << std::endl;
     StateAction start_action =

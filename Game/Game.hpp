@@ -34,6 +34,7 @@ class Game {
 
  private:
   enum CommunicationFlag { server, client };
+  bool m_is_running;
   std::size_t m_port_number;
   boost::asio::io_service m_io_service;
   sf::RenderWindow m_window;

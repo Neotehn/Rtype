@@ -11,6 +11,7 @@ GameState::GameState(StateMachine &t_machine, sf::RenderWindow &t_window,
                      MusicPlayer &t_music_player, std::size_t t_flag,
                      const bool t_replace)
     : State{t_machine, t_window, t_music_player, t_replace} {
+  m_is_running = true;
   if (t_flag == client) {
     m_flag = CommunicationFlag::client;
     m_port_number = rand() % 15000 + 40001;
@@ -21,7 +22,7 @@ GameState::GameState(StateMachine &t_machine, sf::RenderWindow &t_window,
   } else {
     m_flag = CommunicationFlag::server;
 
-    m_serverCom = new UdpServer(m_io_service, m_input_manager);
+    m_serverCom = new UdpServer(m_io_service, m_input_manager, m_is_running);
   }
   m_music_player.play(MusicID::MISSIONTHEME);
   std::shared_ptr<EntityManager> entity_manager =

@@ -61,6 +61,7 @@ class GameState final : public State {
   UdpClient *m_clientCom = nullptr;
   UdpServer *m_serverCom = nullptr;
   std::vector<std::shared_ptr<ISystem>> m_systems;
+  bool m_is_running;
 
   EntityManager initEntityManager();
   std::vector<std::shared_ptr<ISystem>>

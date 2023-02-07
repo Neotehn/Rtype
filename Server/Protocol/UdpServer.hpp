@@ -26,7 +26,7 @@ using boost::system::error_code;
 class UdpServer : public IProtocol {
  public:
   UdpServer(boost::asio::io_service &t_io_service,
-            InputManager &t_input_manager);
+            InputManager &t_input_manager, bool &t_is_running);
   ~UdpServer();
   void sendMessage(const std::string &);
   void receiveClient();
@@ -49,6 +49,7 @@ class UdpServer : public IProtocol {
   std::array<int, 2> remotePortArray;
   InputManager &m_input_manager;
   InputManager m_send_event_manager;
+  bool &m_is_running;
 };
 
 #endif /* !PROTOCOL_UDPSERVER_HPP_ */
