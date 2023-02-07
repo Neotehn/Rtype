@@ -34,6 +34,9 @@ void CreateObjectSystem::update() {
       case Action::ObjectType::EXPLOSION:
         createExplosion(id, pos);
         break;
+      case Action::ObjectType::POWER_UP:
+        createPowerUp(id, pos);
+        break;
       default:
         break;
     }
@@ -104,4 +107,21 @@ void CreateObjectSystem::createExplosion(EntityID t_id, sf::Vector2f t_pos) {
   body.setTexture(sprite.getTexture());
   body.setTextureRect(sf::IntRect(0, 0, 96, 96));
   m_em->Assign<sf::RectangleShape>(explosion, body);
+}
+
+void CreateObjectSystem::createPowerUp(EntityID t_id, sf::Vector2f t_pos) {
+  EntityID powerup = m_em->createNewEntity(t_id);
+  SpriteECS sprite = SpriteECS("./../Client/sprites/powerup/coin.png");
+  m_em->Assign<std::string>(powerup, "powerup");
+  m_em->Assign<Pos>(powerup, {{-7, 0}, t_pos});
+  m_em->Assign<AnimationTime>(
+    powerup,
+    {.current_animation_time = 0, .display_time = 0.1, .last_timer = 0});
+  m_em->Assign<AnimationRect>(powerup, {.size = 84, .limit = 420});
+  sf::RectangleShape body;
+  body.setSize({30, 30});
+  body.setPosition(t_pos);
+  body.setTexture(sprite.getTexture());
+  body.setTextureRect(sf::IntRect(0, 0, 84, 84));
+  m_em->Assign<sf::RectangleShape>(powerup, body);
 }

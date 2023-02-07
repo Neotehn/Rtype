@@ -2,6 +2,7 @@
 #define CLIENT_SRC_SYSTEMS_RANDOMENEMYGENERATORSYSTEM_HPP_
 
 #include <memory>
+#include <string>
 
 #include "../ECS/ISystem.hpp"
 #include "../ECS/DataTypesECS.hpp"
@@ -19,6 +20,9 @@ class RandomEnemyGeneratorSystem : public ISystem {
  private:
   std::shared_ptr<EntityManager> m_em;
   UdpServer *m_serverCom;
+
+  void generateEnemy(int random);
+  void generatePowerUp(int random);
 };
 
 #endif  // CLIENT_SRC_SYSTEMS_RANDOMENEMYGENERATORSYSTEM_HPP_

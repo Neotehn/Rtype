@@ -17,6 +17,7 @@
 #include "./Systems/DamageSystem.hpp"
 #include "./Systems/RandomEnemyGeneratorSystem.hpp"
 #include "./Systems/ShootingSystem.hpp"
+#include "./Systems/PowerUpSystem.hpp"
 #include "../Client/src/Action/Action.hpp"
 #include "../Client/src/InputManager/InputManager.hpp"
 #include "../Client/Protocol/UdpClient.hpp"
