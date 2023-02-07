@@ -25,20 +25,30 @@ void CollisionSystem::update() {
       sf::RectangleShape *player_body =
         (*m_em.get()).Get<sf::RectangleShape>(player_ent);
       Pos *enemy_pos = (*m_em.get()).Get<Pos>(enemy_ent);
+      std::string *enemy_type = (*m_em.get()).Get<std::string>(enemy_ent);
       sf::RectangleShape *enemy_body =
         (*m_em.get()).Get<sf::RectangleShape>(enemy_ent);
       bool collision = player_body->getGlobalBounds().intersects(
         enemy_body->getGlobalBounds());
 
       if (collision) {
-        m_serverCom->addEvent(std::make_shared<Action>(
-          CreateAction(createExplosion(), Action::ObjectType::EXPLOSION,
-                       enemy_pos->position, "")));
-        m_serverCom->addEvent(
-          std::make_shared<Action>(DamageAction(enemy_ent, 1)));
-        m_serverCom->addEvent(
-          std::make_shared<Action>(DestroyAction(enemy_ent)));
-        m_em->destroyEntity(enemy_ent);
+        if (*enemy_type == "enemy") {
+          //        m_serverCom->addEvent(
+          //          std::make_shared<Action>(CollisionAction(player_ent, enemy_ent)));
+          m_serverCom->addEvent(std::make_shared<Action>(
+            CreateAction(createExplosion(), Action::ObjectType::EXPLOSION,
+                         enemy_pos->position, "")));
+          m_serverCom->addEvent(
+            std::make_shared<Action>(DestroyAction(enemy_ent)));
+          m_em->destroyEntity(enemy_ent);
+        }
+        if (*enemy_type == "powerup") {
+          m_serverCom->addEvent(std::make_shared<Action>(
+            IncreaseAction(player_ent, Action::IncreaseType::LIFE, 1)));
+          m_serverCom->addEvent(
+            std::make_shared<Action>(DestroyAction(enemy_ent)));
+          m_em->destroyEntity(enemy_ent);
+        }
       }
     }
   }

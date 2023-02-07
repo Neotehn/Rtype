@@ -25,6 +25,7 @@ class CreateObjectSystem : public ISystem {
   void createBullet(EntityID t_id, sf::Vector2f t_pos);
   void createEnemy(EntityID t_id, sf::Vector2f t_pos, float velocity);
   void createExplosion(EntityID t_id, sf::Vector2f t_pos);
+  void createPowerUp(EntityID t_id, sf::Vector2f t_pos);
 };
 
 #endif  //R_TYPE_CLIENT_CREATEOBJECTSYSTEM_HPP

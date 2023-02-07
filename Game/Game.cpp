@@ -57,6 +57,7 @@ Game::initSystems(std::shared_ptr<EntityManager> entity_manager) {
     systems.push_back(std::make_shared<CreateObjectSystem>(entity_manager));
     systems.push_back(
       std::make_shared<MovementSystem>(entity_manager, nullptr));
+    systems.push_back(std::make_shared<PowerUpSystem>(entity_manager));
   }
   systems.push_back(std::make_shared<DisplaySystem>(entity_manager, m_window));
   systems.push_back(std::make_shared<DestroySystem>(entity_manager));

@@ -46,8 +46,8 @@ set(CLIENT_HPP ../GameEngine/inc/Button.hpp
         ../Game/Systems/AnimationSystem.hpp
         src/Action/VoidAction.hpp
         src/Action/Action.hpp
-        ../Game/Systems/CreateObjectSystem.cpp
-        ../Game/Systems/CreateObjectSystem.hpp)
+        ../Game/Systems/CreateObjectSystem.hpp
+        ../Game/Systems/PowerUpSystem.hpp)
 
 set(CLIENT_SRC ../GameEngine/src/Button.cpp
                 ../GameEngine/src/Core.cpp
@@ -86,7 +86,9 @@ set(CLIENT_SRC ../GameEngine/src/Button.cpp
         ../Game/CreateEntities/Init.cpp
         src/main.cpp ../Protocol/IProtocol.cpp
         src/Action/VoidAction.cpp
-        src/Action/Action.cpp ../Game/Systems/CreateObjectSystem.cpp ../Game/Systems/CreateObjectSystem.hpp)
+        src/Action/Action.cpp
+        ../Game/Systems/CreateObjectSystem.cpp
+        ../Game/Systems/PowerUpSystem.cpp)
 
 include(FetchContent)
 FetchContent_Declare(SFML

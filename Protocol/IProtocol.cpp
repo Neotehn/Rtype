@@ -24,6 +24,9 @@ IProtocol::getCreateAction(std::vector<std::string> commands, int action_id,
     return std::make_shared<Action>(CreateAction(id, CreateAction::EXPLOSION,
                                                  sf::Vector2f{x, y}, "",
                                                  action_id, velocity));
+  } else if (type == Action::ObjectType::POWER_UP) {
+    return std::make_shared<Action>(CreateAction(
+      id, CreateAction::POWER_UP, sf::Vector2f{x, y}, "", action_id, velocity));
   } else {
     return std::make_shared<Action>(VoidAction(id, 0));
   }
@@ -32,25 +35,24 @@ IProtocol::getCreateAction(std::vector<std::string> commands, int action_id,
 std::shared_ptr<Action>
 IProtocol::getIncreaseAction(std::vector<std::string> commands, int action_id,
                              EntityID id) {
-  std::string type = commands[3];
+  int type = std::stoi(commands[3]);
   int value = std::stoi(commands[4]);
-  // TODO: adjust: dont compare with string but enum value
-  if (type == "SPEED") {
+  if (type == Action::IncreaseType::SPEED) {
     return std::make_shared<Action>(
       IncreaseAction(id, IncreaseAction::SPEED, value, action_id));
-  } else if (type == "FIRE_RATE") {
+  } else if (type == Action::IncreaseType::FIRE_RATE) {
     return std::make_shared<Action>(
       IncreaseAction(id, IncreaseAction::FIRE_RATE, value, action_id));
-  } else if (type == "DAMAGE") {
+  } else if (type == Action::IncreaseType::DAMAGE) {
     return std::make_shared<Action>(
       IncreaseAction(id, IncreaseAction::DAMAGE_I, value, action_id));
-  } else if (type == "LIFE") {
+  } else if (type == Action::IncreaseType::LIFE) {
     return std::make_shared<Action>(
       IncreaseAction(id, IncreaseAction::LIFE, value, action_id));
-  } else if (type == "SHIELD") {
+  } else if (type == Action::IncreaseType::SHIELD) {
     return std::make_shared<Action>(
       IncreaseAction(id, IncreaseAction::SHIELD, value, action_id));
-  } else if (type == "BOMB") {
+  } else if (type == Action::IncreaseType::BOMB) {
     return std::make_shared<Action>(
       IncreaseAction(id, IncreaseAction::BOMB, value, action_id));
   } else {
