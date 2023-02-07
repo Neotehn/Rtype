@@ -43,7 +43,7 @@ IProtocol::getIncreaseAction(std::vector<std::string> commands, int action_id,
   } else if (type == Action::IncreaseType::FIRE_RATE) {
     return std::make_shared<Action>(
       IncreaseAction(id, IncreaseAction::FIRE_RATE, value, action_id));
-  } else if (type == Action::IncreaseType::DAMAGE) {
+  } else if (type == Action::IncreaseType::DAMAGE_I) {
     return std::make_shared<Action>(
       IncreaseAction(id, IncreaseAction::DAMAGE_I, value, action_id));
   } else if (type == Action::IncreaseType::LIFE) {

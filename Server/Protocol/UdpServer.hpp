@@ -37,7 +37,7 @@ class UdpServer : public IProtocol {
   void addEvent(std::shared_ptr<Action> event);
   void sendEvents();
 
-  enum GameMode { none, single, coop };
+  enum GameMode { none, single, coop, end };
   GameMode m_flag;
 
  private:

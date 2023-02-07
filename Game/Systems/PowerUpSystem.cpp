@@ -19,14 +19,21 @@ void PowerUpSystem::update() {
     switch (type) {
       case Action::IncreaseType::LIFE:
         std::cout << "increase player health" << std::endl;
-
-        //        health_bar = (*m_em.get()).Get<HealthBar>(action->getId());
-        //        if (health_bar->getHealth() < 3) {
-        //          health_bar->setHealth(health_bar->getHealth() + 1);
-        //        }
+        increaseHealth(action);
         break;
       default:
         break;
     }
   }
+}
+
+void PowerUpSystem::increaseHealth(std::shared_ptr<Action> action) {
+  Health *health_bar = (*m_em.get()).Get<Health>(action->getId());
+  if (health_bar->healthbar.getHealth() < 3) {
+    health_bar->healthbar.setHealth(health_bar->healthbar.getHealth() + 1);
+  }
+  SpriteECS health_new_bar = SpriteECS(
+    health_bar->healthbar.getSpritesPaths()[health_bar->healthbar.getHealth()]);
+
+  health_bar->body.setTexture(health_new_bar.getTexture());
 }

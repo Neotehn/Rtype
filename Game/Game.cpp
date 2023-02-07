@@ -116,4 +116,10 @@ void Game::run() {
       system->update();
     }
   }
+  if (m_flag == CommunicationFlag::client) {
+    std::cout << "Stop connection to Server ..." << std::endl;
+    StateAction start_action =
+      StateAction(Action::ActionType::END, m_port_number);
+    m_clientCom->sendMessage(start_action.getCommand());
+  }
 }

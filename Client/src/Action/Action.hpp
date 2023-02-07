@@ -32,7 +32,7 @@ class Action : public IAction {
     DAMAGE,     // DAMAGE;ID1;DMG
     DESTROY,    // DESTROY;ID1
     DEAD,       // DEAD;ID
-    END,        // END; OR END;PORT_NB // TODO
+    END,        // END; OR END;PORT_NB
     ERROR,
   };
   enum ObjectType { PLAYER, ENEMY, BULLET, EXPLOSION, POWER_UP, ERROR_O };

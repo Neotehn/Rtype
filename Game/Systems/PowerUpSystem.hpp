@@ -15,6 +15,8 @@ class PowerUpSystem : public ISystem {
 
  private:
   EventQueue m_event_queue;
+
+  void increaseHealth(std::shared_ptr<Action> action);
 };
 
 #endif  //R_TYPE_CLIENT_POWERUPSYSTEM_HPP

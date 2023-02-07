@@ -33,13 +33,15 @@ void CollisionSystem::update() {
 
       if (collision) {
         if (*enemy_type == "enemy") {
-          //        m_serverCom->addEvent(
-          //          std::make_shared<Action>(CollisionAction(player_ent, enemy_ent)));
+          m_serverCom->addEvent(
+            std::make_shared<Action>(CollisionAction(player_ent, enemy_ent)));
           m_serverCom->addEvent(std::make_shared<Action>(
             CreateAction(createExplosion(), Action::ObjectType::EXPLOSION,
                          enemy_pos->position, "")));
           m_serverCom->addEvent(
             std::make_shared<Action>(DestroyAction(enemy_ent)));
+          m_serverCom->addEvent(
+            std::make_shared<Action>(DamageAction(enemy_ent, 1)));
           m_em->destroyEntity(enemy_ent);
         }
         if (*enemy_type == "powerup") {

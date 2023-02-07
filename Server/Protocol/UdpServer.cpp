@@ -47,6 +47,9 @@ void UdpServer::handleReceive(const boost::system::error_code &t_error,
         "END\n") {
       m_flag = GameMode::single;
       receiveClient();
+    } else {
+      m_flag = GameMode::end;
+      m_socket.close();
     }
   } else {
     m_socket.close();
