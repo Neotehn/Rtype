@@ -22,8 +22,10 @@ void keepPlayerInsideScreen(sf::Vector2f &t_position,
   }
 }
 
-MovementSystem::MovementSystem(std::shared_ptr<EntityManager> t_em) {
+MovementSystem::MovementSystem(std::shared_ptr<EntityManager> t_em,
+                               UdpServer *t_serverCom) {
   m_em = t_em;
+  m_serverCom = t_serverCom;
 }
 
 MovementSystem::~MovementSystem() {}
@@ -34,7 +36,7 @@ void MovementSystem::updateData(SystemData &t_data) {
 
 void MovementSystem::update() {
   for (EntityID ent :
-       EntityViewer<float, Pos, sf::RectangleShape>(*m_em.get())) {
+       EntityViewer<float, Health, Pos, sf::RectangleShape>(*m_em.get())) {
     updatePlayer(ent);
   }
   for (EntityID ent :
@@ -44,6 +46,9 @@ void MovementSystem::update() {
   for (EntityID ent :
        EntityViewer<float, sf::Vector2f, sf::RectangleShape>(*m_em.get())) {
     updateBullets(ent);
+  }
+  for (EntityID ent : EntityViewer<Bullet, sf::RectangleShape>(*m_em.get())) {
+    updateBulletsServer(ent);
   }
   // update enemy
   for (EntityID ent :
@@ -58,23 +63,44 @@ void MovementSystem::update() {
 void MovementSystem::updatePlayer(EntityID t_ent) {
   Pos *player = (*m_em.get()).Get<Pos>(t_ent);
   float *speed = (*m_em.get()).Get<float>(t_ent);
+  Health *health = (*m_em.get()).Get<Health>(t_ent);
   sf::RectangleShape *body = (*m_em.get()).Get<sf::RectangleShape>(t_ent);
   sf::Vector2f direction = {0, 0};
-  if (m_event_queue.checkIfKeyPressed(sf::Keyboard::A)) { direction.x = -1; }
-  if (m_event_queue.checkIfKeyPressed(sf::Keyboard::D)) { direction.x = 1; }
-  if (m_event_queue.checkIfKeyPressed(sf::Keyboard::W)) { direction.y = -1; }
-  if (m_event_queue.checkIfKeyPressed(sf::Keyboard::S)) { direction.y = 1; }
+  if (m_event_queue.checkIfKeyPressed(Action::ActionType::LEFT)) {
+    direction.x = -1;
+  }
+  if (m_event_queue.checkIfKeyPressed(Action::ActionType::RIGHT)) {
+    direction.x = 1;
+  }
+  if (m_event_queue.checkIfKeyPressed(Action::ActionType::UP)) {
+    direction.y = -1;
+  }
+  if (m_event_queue.checkIfKeyPressed(Action::ActionType::DOWN)) {
+    direction.y = 1;
+  }
   if (direction.x != 0 || direction.y != 0) {
     player->velocity = direction * *speed;
   }
   player->position += player->velocity;
+  //  std::cout << "last pos: " << player->position.x << " " <<
+  //            player->position.y << std::endl;
   keepPlayerInsideScreen(player->position, body->getSize());
+  if (m_event_queue.checkIfKeyPressed(Action::ActionType::POS)) {
+    player->position = m_event_queue.getLatestPos(t_ent);
+    //    std::cout << "new pos: " << player->position.x << " " << player->position.y
+    //              << std::endl;
+  }
   body->setPosition(player->position);
+  updateHealthbar(player, health);
 
   if (player->velocity.x != 0 || player->velocity.y != 0)
     player->velocity *= 0.99f;
   //  std::cout << "Player position: " << player->position.x << " " <<
   //  player->position.y << std::endl;
+  if (m_serverCom != nullptr && direction != sf::Vector2f{0, 0}) {
+    m_serverCom->addEvent(
+      std::make_shared<Action>(PosAction(t_ent, player->position)));
+  }
 }
 
 void MovementSystem::updateBackground(EntityID t_ent) {
@@ -96,4 +122,18 @@ void MovementSystem::updateBullets(EntityID t_ent) {
   pos->x += *speed;
   if (pos->x >= 800) { m_em->destroyEntity(t_ent); }
   body->setPosition(*pos);
+}
+
+void MovementSystem::updateBulletsServer(EntityID t_ent) {
+  sf::RectangleShape *body = (*m_em.get()).Get<sf::RectangleShape>(t_ent);
+  Bullet *bullet = (*m_em.get()).Get<Bullet>(t_ent);
+
+  bullet->bullet_pos.x += bullet->bullet_speed;
+  if (bullet->bullet_pos.x >= 800) { m_em->destroyEntity(t_ent); }
+  body->setPosition(bullet->bullet_pos);
+}
+
+void MovementSystem::updateHealthbar(Pos *t_player_pos, Health *t_health) {
+  t_health->body.setPosition(sf::Vector2f{t_player_pos->position.x - 180,
+                                          t_player_pos->position.y - 70});
 }

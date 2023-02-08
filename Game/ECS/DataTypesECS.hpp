@@ -2,8 +2,21 @@
 #define ECS_DATATYPESECS_HPP_
 
 #include <iostream>
+#include <string>
+#include <vector>
 #include <SFML/Graphics.hpp>
 #include "../EventQueue.hpp"
+
+struct AnimationTime {
+  float current_animation_time;
+  float display_time;
+  float last_timer;
+};
+
+struct AnimationRect {
+  int size;
+  int limit;
+};
 
 struct SystemData {
   EventQueue event_queue;
@@ -12,6 +25,33 @@ struct SystemData {
 struct Pos {
   sf::Vector2f velocity;
   sf::Vector2f position;
+};
+
+class HealthBar {
+ public:
+  HealthBar(std::vector<std::string> t_sprites_paths, int t_health) {
+    m_sprites_paths = t_sprites_paths;
+    m_health = t_health;
+  }
+
+  const int getHealth() { return m_health; }
+  const std::vector<std::string> getSpritesPaths() { return m_sprites_paths; }
+  void setHealth(int t_health) { m_health = t_health; }
+
+ private:
+  int m_health;
+  std::vector<std::string> m_sprites_paths;
+};
+
+struct Health {
+  HealthBar healthbar;
+  Pos position;
+  sf::RectangleShape body;
+};
+
+struct Bullet {
+  float bullet_speed;
+  sf::Vector2f bullet_pos;
 };
 
 class SpriteECS {

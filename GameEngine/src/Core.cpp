@@ -1,13 +1,12 @@
 #include "../inc/Core.hpp"
 #include "../../Client/inc/MainState.hpp"
 
-Core::Core() {
-  m_window.create({1280, 720}, "R-Type",
-                  sf::Style::Titlebar | sf::Style::Close);
+Core::Core(std::size_t t_flag) {
+  m_window.create({800, 800}, "R-Type", sf::Style::Titlebar | sf::Style::Close);
   m_window.setFramerateLimit(30);
 
-  m_state_machine.run(
-    StateMachine::build<MainState>(m_state_machine, m_window, true));
+  m_state_machine.run(StateMachine::build<MainState>(
+    m_state_machine, m_window, m_music_player, t_flag, true));
 }
 
 Core::~Core() {}

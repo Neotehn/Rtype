@@ -4,12 +4,14 @@
 #include <memory>
 #include <SFML/Graphics/RenderWindow.hpp>
 
+#include "MusicPlayer.hpp"
+
 class StateMachine;
 
 class State {
  public:
   State(StateMachine &t_machine, sf::RenderWindow &t_window,
-        bool t_replace = true);
+        MusicPlayer &t_music_player, bool t_replace = true);
 
   virtual ~State() = default;
 
@@ -28,6 +30,7 @@ class State {
  protected:
   StateMachine &m_state_machine;
   sf::RenderWindow &m_window;
+  MusicPlayer &m_music_player;
   bool m_replace;
   std::unique_ptr<State> m_next;
 };

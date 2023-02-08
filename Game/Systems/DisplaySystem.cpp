@@ -20,6 +20,12 @@ void DisplaySystem::update() {
     m_window->draw(*sprite);
   }
 
+  for (EntityID ent : EntityViewer<Health>(*m_em.get())) {
+    Health *sprite = (*m_em.get()).Get<Health>(ent);
+
+    m_window->draw(sprite->body);
+  }
+
   m_window->display();
 }
 
