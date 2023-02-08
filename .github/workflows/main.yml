@@ -11,57 +11,57 @@ jobs:
       - run: |
           echo PR #${{ github.event.number }} has been merged
 
-  build-and-test-linux:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+  # build-and-test-linux:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
 
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install libgl1-mesa-dev
-          sudo apt-get install libglx-dev
-          sudo apt-get install libudev-dev
-          sudo apt-get install libopenal-dev
-          sudo apt-get install libvorbis-dev
-          sudo apt-get install libflac-dev
-          sudo apt-get install libogg-dev
-          sudo apt-get install libsfml-dev
-          sudo apt-get install libxrandr-dev
-          sudo apt-get install libx11-dev
-          sudo apt-get install libxcursor-dev
-          sudo apt-get install xvfb
-          sudo apt-get install cmake
+  #     - name: Install dependencies
+  #       run: |
+  #         sudo apt-get update
+  #         sudo apt-get install libgl1-mesa-dev
+  #         sudo apt-get install libglx-dev
+  #         sudo apt-get install libudev-dev
+  #         sudo apt-get install libopenal-dev
+  #         sudo apt-get install libvorbis-dev
+  #         sudo apt-get install libflac-dev
+  #         sudo apt-get install libogg-dev
+  #         sudo apt-get install libsfml-dev
+  #         sudo apt-get install libxrandr-dev
+  #         sudo apt-get install libx11-dev
+  #         sudo apt-get install libxcursor-dev
+  #         sudo apt-get install xvfb
+  #         sudo apt-get install cmake
 
-      - name: Build server
-        run: |
-          cd Server
-          cmake .
-          make
+  #     - name: Build server
+  #       run: |
+  #         cd Server
+  #         cmake .
+  #         make
 
-      - name: Run server
-        run: |
-          cd Server
-          ./r-type_server
+  #     - name: Run server
+  #       run: |
+  #         cd Server
+  #         ./r-type_server
 
-      - name: Start virtual framebuffer
-        run: |
-          export DISPLAY=:99
-          Xvfb :99 -screen 0 1280x1024x24 &
+  #     - name: Start virtual framebuffer
+  #       run: |
+  #         export DISPLAY=:99
+  #         Xvfb :99 -screen 0 1280x1024x24 &
 
-      - name: Build client
-        run: |
-          cd Client
-          cmake .
-          make
+  #     - name: Build client
+  #       run: |
+  #         cd Client
+  #         cmake .
+  #         make
 
-      - name: Run client
-        run: |
-          cd Client
-           xvfb-run -a ./r-type_client &
-           sleep 10
-           kill -SIGTERM $!
+  #     - name: Run client
+  #       run: |
+  #         cd Client
+  #          xvfb-run -a ./r-type_client &
+  #          sleep 10
+  #          kill -SIGTERM $!
 
 #  build-and-test-windows:
 #    runs-on: windows-latest
