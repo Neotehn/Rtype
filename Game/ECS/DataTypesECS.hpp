@@ -49,6 +49,12 @@ struct Health {
   sf::RectangleShape body;
 };
 
+struct Bullet {
+  float bullet_speed;
+  sf::Vector2f bullet_pos;
+  sf::RectangleShape bullet_body;
+};
+
 class SpriteECS {
  public:
   SpriteECS(std::string t_sprite_path, sf::Vector2f t_scale = {1, 1}) {

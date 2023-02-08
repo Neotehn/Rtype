@@ -54,4 +54,30 @@ void CollisionSystem::update() {
       }
     }
   }
+  bulletEnemyCollision();
+}
+
+void CollisionSystem::bulletEnemyCollision() {
+  for (EntityID enemy_ent :
+       EntityViewer<std::string, Pos, sf::RectangleShape>(*m_em.get())) {
+    std::string *enemy_type = (*m_em.get()).Get<std::string>(enemy_ent);
+
+    if (*enemy_type != "enemy") { continue; }
+    for (EntityID bullet_ent : EntityViewer<Bullet>(*m_em.get())) {
+      sf::RectangleShape *enemy_body =
+        (*m_em.get()).Get<sf::RectangleShape>(enemy_ent);
+      Bullet *bullet = (*m_em.get()).Get<Bullet>(bullet_ent);
+
+      bool collision = enemy_body->getGlobalBounds().intersects(
+        bullet->bullet_body.getGlobalBounds());
+      if (collision) {
+        m_serverCom->addEvent(
+          std::make_shared<Action>(DestroyAction(enemy_ent)));
+        m_serverCom->addEvent(
+          std::make_shared<Action>(DestroyAction(bullet_ent)));
+        m_em->destroyEntity(enemy_ent);
+        m_em->destroyEntity(bullet_ent);
+      }
+    }
+  }
 }

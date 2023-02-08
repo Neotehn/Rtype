@@ -14,6 +14,7 @@ class CollisionSystem : public ISystem {
 
   void update();
   void updateData(SystemData &t_data);
+  void bulletEnemyCollision();
 
  private:
   std::shared_ptr<EntityManager> m_em;

@@ -20,17 +20,15 @@ void ShootingSystem::update() {
       sf::RectangleShape *body = (*m_em.get()).Get<sf::RectangleShape>(ent);
       EntityID bullet = m_em->createNewEntity();
       SpriteECS sprite = SpriteECS("./../Client/sprites/shoot2.png");
-      m_em->Assign<float>(bullet, 10.0);
       sf::Vector2f bullet_pos = {player->position.x - 20,
                                  player->position.y + body->getSize().y / 2 -
                                    10};
-      m_em->Assign<sf::Vector2f>(bullet, bullet_pos);
-
       sf::RectangleShape bullet_body;
+
       bullet_body.setSize({20, 20});
       bullet_body.setPosition(bullet_pos);
       bullet_body.setTexture(sprite.getTexture());
-      m_em->Assign<sf::RectangleShape>(bullet, bullet_body);
+      m_em->Assign<Bullet>(bullet, Bullet{10.0, bullet_pos, bullet_body});
       m_serverCom->addEvent(std::make_shared<Action>(
         CreateAction(bullet, Action::ObjectType::BULLET, bullet_pos, "")));
     }
