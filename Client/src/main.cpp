@@ -9,6 +9,5 @@ int main(int ac, char *av[]) {
   if (std::stoi(av[1]) == 1) { action_counter = 1000; }
   Game game(std::stoi(av[1]));
   game.run();
-
   return 0;
 }
