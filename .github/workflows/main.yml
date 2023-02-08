@@ -109,7 +109,7 @@ jobs:
 
   sync-github:
     runs-on: ubuntu-latest
-    needs: [build-and-test-linux, merge_job]
+    needs: [merge_job]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@main
