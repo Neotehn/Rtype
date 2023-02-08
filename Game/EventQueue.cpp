@@ -16,6 +16,17 @@ bool EventQueue::checkIfKeyPressed(Action::ActionType t_type) {
   return false;
 }
 
+bool EventQueue::checkIfKeyPressedOnPlayer(Action::ActionType t_type,
+                                           EntityID t_id) {
+  for (int i = 0; i < this->m_eventQueue.size(); i++) {
+    if (this->m_eventQueue[i].get()->getType() == t_type &&
+        this->m_eventQueue[i].get()->getId() == t_id) {
+      return true;
+    }
+  }
+  return false;
+}
+
 std::vector<std::shared_ptr<Action>>
 EventQueue::getAllOfType(Action::ActionType t_type) {
   std::vector<std::shared_ptr<Action>> actions;

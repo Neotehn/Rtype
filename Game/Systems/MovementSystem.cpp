@@ -62,16 +62,19 @@ void MovementSystem::updatePlayer(EntityID t_ent) {
   float *speed = (*m_em.get()).Get<float>(t_ent);
   sf::RectangleShape *body = (*m_em.get()).Get<sf::RectangleShape>(t_ent);
   sf::Vector2f direction = {0, 0};
-  if (m_event_queue.checkIfKeyPressed(Action::ActionType::LEFT)) {
+  if (m_event_queue.checkIfKeyPressedOnPlayer(Action::ActionType::LEFT,
+                                              t_ent)) {
     direction.x = -1;
   }
-  if (m_event_queue.checkIfKeyPressed(Action::ActionType::RIGHT)) {
+  if (m_event_queue.checkIfKeyPressedOnPlayer(Action::ActionType::RIGHT,
+                                              t_ent)) {
     direction.x = 1;
   }
-  if (m_event_queue.checkIfKeyPressed(Action::ActionType::UP)) {
+  if (m_event_queue.checkIfKeyPressedOnPlayer(Action::ActionType::UP, t_ent)) {
     direction.y = -1;
   }
-  if (m_event_queue.checkIfKeyPressed(Action::ActionType::DOWN)) {
+  if (m_event_queue.checkIfKeyPressedOnPlayer(Action::ActionType::DOWN,
+                                              t_ent)) {
     direction.y = 1;
   }
   if (direction.x != 0 || direction.y != 0) {

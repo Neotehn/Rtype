@@ -23,6 +23,8 @@ class EventQueue {
                             Action::ActionType t_type);
   void setEventQueue(std::vector<std::shared_ptr<Action>> t_eventQueue);
   bool checkIfKeyPressed(Action::ActionType t_actionType);
+  bool checkIfKeyPressedOnPlayer(Action::ActionType t_actionType,
+                                 EntityID t_id);
   std::vector<std::shared_ptr<Action>> getAllOfType(Action::ActionType t_type);
 
   sf::Vector2f getLatestPos(EntityID t_id);

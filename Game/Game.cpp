@@ -10,6 +10,9 @@ Game::Game(std::size_t t_flag)
     srand(time(NULL));
     m_flag = CommunicationFlag::client;
     m_port_number = rand() % 15000 + 40001;
+    while (m_port_number == 50000) {
+      m_port_number = rand() % 15000 + 40001;
+    }
 
     m_clientCom =
       new UdpClient(m_io_service, "localhost", "50000", m_port_number,
@@ -63,6 +66,24 @@ Game::initSystems(std::shared_ptr<EntityManager> entity_manager) {
   return systems;
 }
 
+void Game::waitForConnection() {
+  while (m_flag == CommunicationFlag::server &&
+         m_serverCom->m_flag != m_serverCom->coop) {
+    std::cout << "waiting on Client Connection" << std::endl;
+    boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
+  }
+
+  while (m_flag == CommunicationFlag::client &&
+         m_clientCom->m_flag != m_clientCom->connected) {
+    std::cout << "Connecting to Server ..." << std::endl;
+    boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
+    StateAction start_action =
+      StateAction(Action::ActionType::START, m_port_number);
+    m_clientCom->sendMessage(start_action.getCommand());
+    std::cout << "waiting on Server Connection" << std::endl;
+  }
+}
+
 void Game::run() {
   std::shared_ptr<EntityManager> entity_manager =
     std::make_shared<EntityManager>(initEntityManager());
@@ -70,21 +91,6 @@ void Game::run() {
 
   std::cout << "running " << m_flag << std::endl;
   while (m_window.isOpen()) {
-    while (m_flag == CommunicationFlag::server &&
-           m_serverCom->m_flag != m_serverCom->coop) {
-      std::cout << "waiting on Client Connection" << std::endl;
-      boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
-    }
-
-    while (m_flag == CommunicationFlag::client &&
-           m_clientCom->m_flag != m_clientCom->connected) {
-      std::cout << "Connecting to Server ..." << std::endl;
-      boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
-      StateAction start_action =
-        StateAction(Action::ActionType::START, m_port_number);
-      m_clientCom->sendMessage(start_action.getCommand());
-      std::cout << "waiting on Server Connection" << std::endl;
-    }
     sf::Event event;
     while (m_window.pollEvent(event)) {
       if (event.type == sf::Event::Closed) {

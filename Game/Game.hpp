@@ -29,6 +29,7 @@ class Game {
   Game(std::size_t t_flag);
   ~Game();
 
+  void waitForConnection();
   void run();
 
  private:

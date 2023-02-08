@@ -14,6 +14,8 @@ int main(int ac, char *av[]) {
   } else {
     if (std::stoi(av[1]) == 1) { action_counter = 1000; }
     Game game(std::stoi(av[1]));
+    // TODO: add single and multi player mode?
+    game.waitForConnection();
     game.run();
   }
   return 0;

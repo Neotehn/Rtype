@@ -17,7 +17,10 @@ UdpServer::~UdpServer() {
 
 void UdpServer::sendMessage(const std::string &t_msg) {
   std::cout << t_msg << std::endl;
-  m_socket.send_to(boost::asio::buffer(t_msg, t_msg.size()), m_remoteEndpoint);
+  for (udp::endpoint endpoint : m_remotePortArray) {
+    std::cout << "sending to port " << endpoint.port() << std::endl;
+    m_socket.send_to(boost::asio::buffer(t_msg, t_msg.size()), endpoint);
+  }
 }
 
 void UdpServer::handleSend(std::string t_msg,
@@ -31,6 +34,13 @@ void UdpServer::receiveClient() {
     boost::bind(&UdpServer::handleReceive, this,
                 boost::asio::placeholders::error,
                 boost::asio::placeholders::bytes_transferred));
+  if (m_remoteEndpoint.port() == 0) return;
+  if (m_remotePortArray.size() == 0) {
+    m_remotePortArray.push_back(m_remoteEndpoint);
+  } else if (m_remotePortArray.size() == 1 &&
+             m_remotePortArray[0] != m_remoteEndpoint) {
+    m_remotePortArray.push_back(m_remoteEndpoint);
+  }
 }
 
 void UdpServer::handleReceive(const boost::system::error_code &t_error,
@@ -51,8 +61,7 @@ void UdpServer::handleReceive(const boost::system::error_code &t_error,
         std::cout << "ertser connected" << std::endl;
         receiveClient();
       } else {
-        if (m_remotePortArray[0] == m_remoteEndpoint.port() or m_flag == GameMode::none) // not sure if none check is nessessary
-          return;
+        if (m_remotePortArray.size() < 2) return;
         //m_remotePortArray[1] = m_remoteEndpoint.port();
         std::cout << "zweiter connected" << std::endl;
         m_flag = GameMode::coop;
