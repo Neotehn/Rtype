@@ -20,6 +20,7 @@ class MovementSystem : public ISystem {
   void updateBackground(EntityID t_ent);
   void updateBullets(EntityID t_ent);
   void updateHealthbar(Pos *t_ent, Health *t_health);
+  void updateBulletsServer(EntityID t_ent);
 
  private:
   EventQueue m_event_queue;

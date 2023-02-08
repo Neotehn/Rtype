@@ -47,6 +47,9 @@ void MovementSystem::update() {
        EntityViewer<float, sf::Vector2f, sf::RectangleShape>(*m_em.get())) {
     updateBullets(ent);
   }
+  for (EntityID ent : EntityViewer<Bullet, sf::RectangleShape>(*m_em.get())) {
+    updateBulletsServer(ent);
+  }
   // update enemy
   for (EntityID ent :
        EntityViewer<std::string, Pos, sf::RectangleShape>(*m_em.get())) {
@@ -119,6 +122,15 @@ void MovementSystem::updateBullets(EntityID t_ent) {
   pos->x += *speed;
   if (pos->x >= 800) { m_em->destroyEntity(t_ent); }
   body->setPosition(*pos);
+}
+
+void MovementSystem::updateBulletsServer(EntityID t_ent) {
+  sf::RectangleShape *body = (*m_em.get()).Get<sf::RectangleShape>(t_ent);
+  Bullet *bullet = (*m_em.get()).Get<Bullet>(t_ent);
+
+  bullet->bullet_pos.x += bullet->bullet_speed;
+  if (bullet->bullet_pos.x >= 800) { m_em->destroyEntity(t_ent); }
+  body->setPosition(bullet->bullet_pos);
 }
 
 void MovementSystem::updateHealthbar(Pos *t_player_pos, Health *t_health) {

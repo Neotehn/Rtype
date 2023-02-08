@@ -67,9 +67,11 @@ void CollisionSystem::bulletEnemyCollision() {
       sf::RectangleShape *enemy_body =
         (*m_em.get()).Get<sf::RectangleShape>(enemy_ent);
       Bullet *bullet = (*m_em.get()).Get<Bullet>(bullet_ent);
+      sf::RectangleShape *bullet_body =
+        (*m_em.get()).Get<sf::RectangleShape>(bullet_ent);
 
       bool collision = enemy_body->getGlobalBounds().intersects(
-        bullet->bullet_body.getGlobalBounds());
+        bullet_body->getGlobalBounds());
       if (collision) {
         m_serverCom->addEvent(
           std::make_shared<Action>(DestroyAction(enemy_ent)));
@@ -77,6 +79,7 @@ void CollisionSystem::bulletEnemyCollision() {
           std::make_shared<Action>(DestroyAction(bullet_ent)));
         m_em->destroyEntity(enemy_ent);
         m_em->destroyEntity(bullet_ent);
+        break;
       }
     }
   }
