@@ -95,7 +95,7 @@ set(CLIENT_SRC ../GameEngine/src/Button.cpp
 include(FetchContent)
 FetchContent_Declare(SFML
         GIT_REPOSITORY https://github.com/SFML/SFML.git
-        GIT_TAG 2.6.x)
+        GIT_TAG 2.5.1)
 FetchContent_MakeAvailable(SFML)
 
 if (NOT Boost_FOUND)
@@ -111,7 +111,7 @@ endif()
 find_package(Boost 1.69.0 COMPONENTS chrono system thread REQUIRED)
 
 find_package(OpenGL REQUIRED OPTIONAL_COMPONENTS OpenGL)
-include_directories(${OPENGL_INCLUDE_DIR})
+include_directories(${OPENGL_INCLUDE_DIR}, ${Boost_INCLUDE_DIRS})
 add_executable(r-type_client ${CLIENT_SRC} ${CLIENT_HPP})
 
 target_link_libraries(r-type_client sfml-graphics sfml-audio
