@@ -29,6 +29,7 @@
 class Game {
  public:
   Game(std::size_t t_flag);
+  Game(std::size_t t_flag, std::string t_ip_address);
   ~Game();
 
   void run();

@@ -35,6 +35,7 @@ class UdpServer : public IProtocol {
                   std::size_t t_size);
 
   void addEvent(std::shared_ptr<Action> event);
+  std::string getAddress(boost::asio::io_service &t_io_service);
   void sendEvents();
 
   enum GameMode { none, single, coop, end };

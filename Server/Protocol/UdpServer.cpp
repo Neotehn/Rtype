@@ -5,6 +5,7 @@ UdpServer::UdpServer(boost::asio::io_service &t_io_service,
     : m_io_service(t_io_service), m_input_manager(t_input_manager),
       m_socket(t_io_service, udp::endpoint(udp::v4(), 50000)),
       m_is_running(t_is_running) {
+  std::cout << getAddress(m_io_service) << std::endl;
   m_flag = GameMode::none;
   receiveClient();
 
@@ -14,6 +15,15 @@ UdpServer::UdpServer(boost::asio::io_service &t_io_service,
 UdpServer::~UdpServer() {
   m_socket.close();
   m_io_service.stop();
+}
+
+std::string UdpServer::getAddress(boost::asio::io_service &t_io_service) {
+  boost::asio::ip::tcp::resolver resolver(t_io_service);
+
+  return resolver.resolve(boost::asio::ip::host_name(), "")
+    ->endpoint()
+    .address()
+    .to_string();
 }
 
 void UdpServer::sendMessage(const std::string &t_msg) {

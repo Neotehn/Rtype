@@ -7,18 +7,24 @@ Game::Game(std::size_t t_flag)
   m_window.setFramerateLimit(60);
   m_is_running = true;
 
-  if (t_flag == client) {
-    m_flag = CommunicationFlag::client;
-    m_port_number = rand() % 15000 + 40001;
+  m_flag = CommunicationFlag::server;
 
-    m_clientCom =
-      new UdpClient(m_io_service, "localhost", "50000", m_port_number,
-                    m_input_manager, m_client_input_manager);
-  } else {
-    m_flag = CommunicationFlag::server;
+  m_serverCom = new UdpServer(m_io_service, m_input_manager, m_is_running);
+}
 
-    m_serverCom = new UdpServer(m_io_service, m_input_manager, m_is_running);
-  }
+Game::Game(std::size_t t_flag, std::string t_ip_address)
+    : m_window(sf::VideoMode(800, 800), t_flag == CommunicationFlag::server
+                                          ? "R-Type Epitech Server"
+                                          : "R-Type Epitech Client") {
+  m_window.setFramerateLimit(60);
+  m_is_running = true;
+
+  m_flag = CommunicationFlag::client;
+  m_port_number = rand() % 15000 + 40001;
+
+  m_clientCom =
+    new UdpClient(m_io_service, t_ip_address, "50000", m_port_number,
+                  m_input_manager, m_client_input_manager);
 }
 
 Game::~Game() {
