@@ -100,6 +100,7 @@ FetchContent_Declare(SFML
         GIT_TAG 2.5.1)
 FetchContent_MakeAvailable(SFML)
 
+
 if (NOT Boost_FOUND)
     message("Boost not found--> downloading and building")
     include(FetchContent)
