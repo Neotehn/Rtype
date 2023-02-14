@@ -3,6 +3,8 @@ project(r-type_client)
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
 set(CLIENT_HPP ../GameEngine/inc/Button.hpp
                 ../GameEngine/inc/Core.hpp
                 inc/MainState.hpp
@@ -109,6 +111,8 @@ if (NOT Boost_FOUND)
 endif()
 
 find_package(Boost 1.69.0 COMPONENTS chrono system thread REQUIRED)
+
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 
 find_package(OpenGL REQUIRED OPTIONAL_COMPONENTS OpenGL)
 include_directories(${OPENGL_INCLUDE_DIR}, ${Boost_INCLUDE_DIRS})

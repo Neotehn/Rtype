@@ -11,3 +11,4 @@ _deps
 r-type_client
 Client/cmake-build-debug/
 Client/.idea
+build/
