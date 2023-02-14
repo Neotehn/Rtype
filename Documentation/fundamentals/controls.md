@@ -9,4 +9,4 @@
 | SPACE  | SHOOT       |
 | ESCAPE | MENU / EXIT |
 
-[Back](../../)
+[Back](../../README.md)

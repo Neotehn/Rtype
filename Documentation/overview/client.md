@@ -6,4 +6,4 @@ The Client contains to the most part only the different Screens. For how to add 
 
 <figure><img src="../assets/image (3).png" alt=""><figcaption><p>Overview of the client</p></figcaption></figure>
 
-[BACK](../../)
+[Back](../../README.md)
