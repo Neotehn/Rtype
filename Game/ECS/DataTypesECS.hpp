@@ -49,11 +49,6 @@ struct Health {
   sf::RectangleShape body;
 };
 
-struct Bullet {
-  float bullet_speed;
-  sf::Vector2f bullet_pos;
-};
-
 class SpriteECS {
  public:
   SpriteECS(std::string t_sprite_path, sf::Vector2f t_scale = {1, 1}) {
@@ -80,6 +75,35 @@ class SpriteECS {
  private:
   sf::Sprite m_sprite;
   sf::Texture *m_texture = new sf::Texture();
+};
+
+struct BackgroundLayer {
+  SpriteECS sprite;
+  sf::Vector2f position;
+  float speed;
+  int limit;
+};
+
+struct Player {
+  SpriteECS sprite;
+  Pos position;
+  sf::RectangleShape body;
+  Health health;
+  float speed;
+};
+
+struct Bullet {
+  sf::RectangleShape body;
+  float speed;
+  sf::Vector2f pos;
+};
+
+struct AnimationObj {
+  std::string type;
+  Pos position;
+  AnimationTime time;
+  AnimationRect rect;
+  sf::RectangleShape body;
 };
 
 #endif  // ECS_DATATYPESECS_HPP_
