@@ -2,7 +2,7 @@
 #define R_TYPE_CLIENT_IGRAPHIC_HPP
 
 #include "GraphicDataTypes.hpp"
-#include "SFML/SFMLWindow.hpp"
+#include "SFML/RenderWindow.hpp"
 
 namespace rtype {
   class IGraphic {

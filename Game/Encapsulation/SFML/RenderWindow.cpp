@@ -1,4 +1,4 @@
-#include "./SFMLWindow.hpp"
+#include "./RenderWindow.hpp"
 
 rtype::RenderWindow::RenderWindow() {}
 

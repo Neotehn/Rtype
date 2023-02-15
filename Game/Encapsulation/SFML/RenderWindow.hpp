@@ -1,5 +1,5 @@
-#ifndef R_TYPE_CLIENT_SFML_WINDOW_HPP
-#define R_TYPE_CLIENT_SFML_WINDOW_HPP
+#ifndef R_TYPE_CLIENT_RENDERWINDOW_HPP
+#define R_TYPE_CLIENT_RENDERWINDOW_HPP
 
 #include <string>
 
@@ -35,4 +35,4 @@ namespace rtype {
   };
 }  // namespace rtype
 
-#endif  //R_TYPE_CLIENT_SFML_WINDOW_HPP
+#endif  //R_TYPE_CLIENT_RENDERWINDOW_HPP

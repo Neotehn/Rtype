@@ -39,12 +39,21 @@ set(CLIENT_HPP ../Game/ECS/ComponentPool.hpp
         ../Game/Systems/CreateObjectSystem.hpp
         ../Game/Systems/PowerUpSystem.hpp
         ../Game/Systems/SoundSystem.hpp
-        ../Game/Encapsulation/SFML/SFMLWindow.hpp
-        ../Game/Encapsulation/IGraphic.hpp
-        ../Game/Encapsulation/IRenderWindow.hpp
         ../Game/Encapsulation/Event.hpp
+        ../Game/Encapsulation/GraphicDataTypes.hpp
+        ../Game/Encapsulation/IGraphic.hpp
+        ../Game/Encapsulation/IMusic.hpp
+        ../Game/Encapsulation/IRectangleShape.hpp
+        ../Game/Encapsulation/IRenderWindow.hpp
+        ../Game/Encapsulation/ISounds.hpp
+        ../Game/Encapsulation/ISprite.hpp
+        ../Game/Encapsulation/ITexture.hpp
+        ../Game/Encapsulation/SFML/Music.hpp
         ../Game/Encapsulation/SFML/RectangleShape.hpp
-        )
+        ../Game/Encapsulation/SFML/RenderWindow.hpp
+        ../Game/Encapsulation/SFML/Sounds.hpp
+        ../Game/Encapsulation/SFML/Sprite.hpp
+        ../Game/Encapsulation/SFML/Texture.hpp)
 
 set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         src/InputManager/InputManager.cpp
@@ -77,8 +86,11 @@ set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         ../Game/Systems/CreateObjectSystem.cpp
         ../Game/Systems/PowerUpSystem.cpp
         ../Game/Systems/SoundSystem.cpp
-        ../Game/Encapsulation/SFML/SFMLWindow.cpp
-        ../Game/Encapsulation/SFML/Texture.cpp ../Game/Encapsulation/SFML/Texture.hpp)
+        ../Game/Encapsulation/SFML/Music.cpp
+        ../Game/Encapsulation/SFML/RenderWindow.cpp
+        ../Game/Encapsulation/SFML/Sounds.cpp
+        ../Game/Encapsulation/SFML/Sprite.cpp
+        ../Game/Encapsulation/SFML/Texture.cpp)
 
 include(FetchContent)
 FetchContent_Declare(SFML

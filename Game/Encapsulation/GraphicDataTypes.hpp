@@ -38,6 +38,13 @@ namespace rtype {
     unsigned int y;
   };
 
+  struct IntRect {
+    int left;
+    int top;
+    int width;
+    int height;
+  };
+
   struct Color {
     unsigned char r;
     unsigned char g;

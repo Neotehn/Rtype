@@ -10,7 +10,7 @@
 #include "./ECS/ISystem.hpp"
 
 #include "./Encapsulation/IRenderWindow.hpp"
-#include "./Encapsulation/SFML/SFMLWindow.hpp"
+#include "./Encapsulation/SFML/RenderWindow.hpp"
 
 #include "./Systems/AnimationSystem.hpp"
 #include "./Systems/CollisionSystem.hpp"
