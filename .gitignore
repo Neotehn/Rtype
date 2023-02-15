@@ -7,7 +7,8 @@ CMakeCache.txt
 CPackConfig.cmake
 CPackSourceConfig.cmake
 _deps
-r-type_client
 Client/cmake-build-debug/
 Client/.idea
 build/
+r-type_server
+r-type_client
