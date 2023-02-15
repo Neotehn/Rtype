@@ -2,8 +2,7 @@ BIN = bin
 BUILD = build
 
 install:
-	conan install conanfile.txt -if $(BUILD) --build=missing -c tools.system.package_manager:mode=install
-	cd $(BUILD)/ && chmod +x ./activate.sh && source ./activate.sh
+	pip install conan
 
 build: normdir conan
 	cmake -S . -B $(BUILD);
@@ -25,8 +24,8 @@ normdir:
 	$(eval BUILD="build")
 
 conan:
-	conan install conanfile.txt -if $(BUILD) --build=missing
-	cd $(BUILD)/ && source activate.sh
+	conan install conanfile.txt -if $(BUILD) --build=missing -c tools.system.package_manager:mode=install
+	cd $(BUILD)/ && chmod +x ./activate.sh && source ./activate.sh
 
 cleanbuild: normdir clean
 
