@@ -19,7 +19,6 @@ class MovementSystem : public ISystem {
   void updatePlayer(EntityID t_ent);
   void updateBackground(EntityID t_ent);
   void updateBullets(EntityID t_ent);
-  void updateHealthbar(Pos *t_ent, Health *t_health);
   void updateBulletsServer(EntityID t_ent);
 
  private:

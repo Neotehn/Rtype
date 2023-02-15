@@ -35,36 +35,24 @@ void MovementSystem::updateData(SystemData &t_data) {
 }
 
 void MovementSystem::update() {
-  for (EntityID ent :
-       EntityViewer<float, Health, Pos, sf::RectangleShape>(*m_em.get())) {
+  for (EntityID ent : EntityViewer<Player>(*m_em.get())) {
     updatePlayer(ent);
   }
-  for (EntityID ent :
-       EntityViewer<int, float, sf::Vector2f, SpriteECS>(*m_em.get())) {
+  for (EntityID ent : EntityViewer<BackgroundLayer>(*m_em.get())) {
     updateBackground(ent);
   }
-  for (EntityID ent :
-       EntityViewer<float, sf::Vector2f, sf::RectangleShape>(*m_em.get())) {
+  for (EntityID ent : EntityViewer<Bullet>(*m_em.get())) {
     updateBullets(ent);
   }
-  for (EntityID ent : EntityViewer<Bullet, sf::RectangleShape>(*m_em.get())) {
-    updateBulletsServer(ent);
-  }
-  // update enemy
-  for (EntityID ent :
-       EntityViewer<std::string, Pos, sf::RectangleShape>(*m_em.get())) {
-    sf::RectangleShape *body = (*m_em.get()).Get<sf::RectangleShape>(ent);
-    Pos *pos = (*m_em.get()).Get<Pos>(ent);
-    pos->position += pos->velocity;
-    body->setPosition(pos->position);
+  for (EntityID ent : EntityViewer<AnimationObj>(*m_em.get())) {
+    AnimationObj *anim = (*m_em.get()).Get<AnimationObj>(ent);
+    anim->position.position += anim->position.velocity;
+    anim->body.setPosition(anim->position.position);
   }
 }
 
 void MovementSystem::updatePlayer(EntityID t_ent) {
-  Pos *player = (*m_em.get()).Get<Pos>(t_ent);
-  float *speed = (*m_em.get()).Get<float>(t_ent);
-  Health *health = (*m_em.get()).Get<Health>(t_ent);
-  sf::RectangleShape *body = (*m_em.get()).Get<sf::RectangleShape>(t_ent);
+  Player *player = (*m_em.get()).Get<Player>(t_ent);
   sf::Vector2f direction = {0, 0};
   if (m_event_queue.checkIfKeyPressed(Action::ActionType::LEFT)) {
     direction.x = -1;
@@ -79,61 +67,36 @@ void MovementSystem::updatePlayer(EntityID t_ent) {
     direction.y = 1;
   }
   if (direction.x != 0 || direction.y != 0) {
-    player->velocity = direction * *speed;
+    player->position.velocity = direction * player->speed;
   }
-  player->position += player->velocity;
-  //  std::cout << "last pos: " << player->position.x << " " <<
-  //            player->position.y << std::endl;
-  keepPlayerInsideScreen(player->position, body->getSize());
+  player->position.position += player->position.velocity;
+  keepPlayerInsideScreen(player->position.position, player->body.getSize());
   if (m_event_queue.checkIfKeyPressed(Action::ActionType::POS)) {
-    player->position = m_event_queue.getLatestPos(t_ent);
-    //    std::cout << "new pos: " << player->position.x << " " << player->position.y
-    //              << std::endl;
+    player->position.position = m_event_queue.getLatestPos(t_ent);
   }
-  body->setPosition(player->position);
-  updateHealthbar(player, health);
+  player->body.setPosition(player->position.position);
+  player->health.body.setPosition(sf::Vector2f{
+    player->position.position.x - 180, player->position.position.y - 70});
 
-  if (player->velocity.x != 0 || player->velocity.y != 0)
-    player->velocity *= 0.99f;
-  //  std::cout << "Player position: " << player->position.x << " " <<
-  //  player->position.y << std::endl;
+  if (player->position.velocity.x != 0 || player->position.velocity.y != 0)
+    player->position.velocity *= 0.99f;
   if (m_serverCom != nullptr && direction != sf::Vector2f{0, 0}) {
     m_serverCom->addEvent(
-      std::make_shared<Action>(PosAction(t_ent, player->position)));
+      std::make_shared<Action>(PosAction(t_ent, player->position.position)));
   }
 }
 
 void MovementSystem::updateBackground(EntityID t_ent) {
-  SpriteECS *sprite = (*m_em.get()).Get<SpriteECS>(t_ent);
-  int *limit = (*m_em.get()).Get<int>(t_ent);
-  float *speed = (*m_em.get()).Get<float>(t_ent);
-  sf::Vector2f *pos = (*m_em.get()).Get<sf::Vector2f>(t_ent);
-  pos->x -= *speed;
-  if (pos->x <= *limit) { pos->x = 0; }
-  //  std::cout << "Bg position of " << getEntityIndex(t_ent) << ": " << pos->x
-  //            << " " << pos->y << std::endl;
-  sprite->setPosition(*pos);
+  BackgroundLayer *layer = (*m_em.get()).Get<BackgroundLayer>(t_ent);
+  layer->position.x -= layer->speed;
+  if (layer->position.x <= layer->limit) { layer->position.x = 0; }
+  layer->sprite.setPosition(layer->position);
 }
 
 void MovementSystem::updateBullets(EntityID t_ent) {
-  sf::RectangleShape *body = (*m_em.get()).Get<sf::RectangleShape>(t_ent);
-  sf::Vector2f *pos = (*m_em.get()).Get<sf::Vector2f>(t_ent);
-  float *speed = (*m_em.get()).Get<float>(t_ent);
-  pos->x += *speed;
-  if (pos->x >= 800) { m_em->destroyEntity(t_ent); }
-  body->setPosition(*pos);
-}
-
-void MovementSystem::updateBulletsServer(EntityID t_ent) {
-  sf::RectangleShape *body = (*m_em.get()).Get<sf::RectangleShape>(t_ent);
   Bullet *bullet = (*m_em.get()).Get<Bullet>(t_ent);
 
-  bullet->bullet_pos.x += bullet->bullet_speed;
-  if (bullet->bullet_pos.x >= 800) { m_em->destroyEntity(t_ent); }
-  body->setPosition(bullet->bullet_pos);
-}
-
-void MovementSystem::updateHealthbar(Pos *t_player_pos, Health *t_health) {
-  t_health->body.setPosition(sf::Vector2f{t_player_pos->position.x - 180,
-                                          t_player_pos->position.y - 70});
+  bullet->pos.x += bullet->speed;
+  if (bullet->pos.x >= 800) { m_em->destroyEntity(t_ent); }
+  bullet->body.setPosition(bullet->pos);
 }
