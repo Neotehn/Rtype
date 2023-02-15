@@ -3,6 +3,7 @@
 EntityManager init() {
   EntityManager entity_manager;
 
+  // TODO: use init file
   // background layer 1
   EntityID background1 = entity_manager.createNewEntity();
   entity_manager.Assign<int>(background1, (-272 * 5));
