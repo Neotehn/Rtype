@@ -45,6 +45,13 @@ namespace rtype {
     int height;
   };
 
+  struct FloatRect {
+    float left;
+    float top;
+    float width;
+    float height;
+  };
+
   struct Color {
     unsigned char r;
     unsigned char g;

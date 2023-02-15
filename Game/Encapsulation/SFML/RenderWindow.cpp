@@ -11,6 +11,7 @@ rtype::RenderWindow::~RenderWindow() {}
 
 void rtype::RenderWindow::draw(sf::Sprite t_sprite) { m_window.draw(t_sprite); }
 
+// TODO: how to handle this?
 void rtype::RenderWindow::draw(sf::RectangleShape t_shape) {
   m_window.draw(t_shape);
 }

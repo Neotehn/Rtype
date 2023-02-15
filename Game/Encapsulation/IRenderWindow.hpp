@@ -5,6 +5,7 @@
 
 #include "Event.hpp"
 #include "GraphicDataTypes.hpp"
+#include "IRectangleShape.hpp"
 
 namespace rtype {
 

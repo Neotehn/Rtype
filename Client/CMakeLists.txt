@@ -90,7 +90,8 @@ set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         ../Game/Encapsulation/SFML/RenderWindow.cpp
         ../Game/Encapsulation/SFML/Sounds.cpp
         ../Game/Encapsulation/SFML/Sprite.cpp
-        ../Game/Encapsulation/SFML/Texture.cpp)
+        ../Game/Encapsulation/SFML/Texture.cpp
+        ../Game/Encapsulation/SFML/RectangleShape.cpp)
 
 include(FetchContent)
 FetchContent_Declare(SFML
