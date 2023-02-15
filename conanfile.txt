@@ -5,3 +5,9 @@ sfml/2.5.1
 [generators]
 virtualenv
 cmake
+
+[options]
+sfml:network=True
+sfml:graphics=True
+sfml:audio=True
+sfml:window=True

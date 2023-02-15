@@ -10,6 +10,7 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 
 SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+
 SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 
@@ -21,7 +22,7 @@ conan_basic_setup()
 message("test conan libs" ${CONAN_LIBS})
 
 
-SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
+SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 SET(CLIENT_HPP GameEngine/inc/Button.hpp
         GameEngine/inc/Core.hpp
@@ -138,6 +139,7 @@ target_link_libraries(r-type_client ${CONAN_LIBS}
 target_link_directories(r-type_client PUBLIC ${Boost_LIBRARY_DIRS})
 
 target_compile_features(r-type_client PRIVATE cxx_std_17)
+
 if (WIN32 AND BUILD_SHARED_LIBS)
     add_custom_command(TARGET r-type_client POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:r-type_client> $<TARGET_FILE_DIR:r-type_client> COMMAND_EXPAND_LISTS)
