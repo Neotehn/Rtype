@@ -1,7 +1,8 @@
 name: Build and Test
 on:
-  pull_request:
-    types: [ closed ]
+   pull_request:
+    types: [ pushed, opened, synchronize, reopened, closed ]
+   push: [RTB-5-test-new-pm]
 
 jobs:
   merge_job:
