@@ -97,7 +97,7 @@ FetchContent_Declare(SFML
         GIT_REPOSITORY https://github.com/SFML/SFML.git
         GIT_TAG 2.6.x)
 FetchContent_MakeAvailable(SFML)
-
+FIND_PACKAGE(Boost)
 if (NOT Boost_FOUND)
     message("Boost not found--> downloading and building")
     include(FetchContent)

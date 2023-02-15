@@ -74,7 +74,7 @@ CustomState.cpp:
 25 void CustomState::resume() { std::cout << "CustomState resume\n"; }
 26
 27 void MainState::update() {
-28     for (sf::Event = sf::Event{}; m_window.pollEvent(event);) {
+28     for (sf::Event event = sf::Event{}; m_window.pollEvent(event);) {
 29         sf::Vector2i mouse_pos = sf::Mouse::getPosition(m_window);
 30         sf::Vector2f mouse_pos_f(static_cast(mouse_pos.x),
 31                                  static_cast(mouse_pos.y));

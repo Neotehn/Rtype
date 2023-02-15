@@ -33,7 +33,7 @@ void MainState::pause() { std::cout << "MenuState Pause\n"; }
 void MainState::resume() { std::cout << "MenuState resume\n"; }
 
 void MainState::update() {
-  for (auto event = sf::Event{}; m_window.pollEvent(event);) {
+  for (sf::Event event = sf::Event{}; m_window.pollEvent(event);) {
     sf::Vector2i mouse_pos = sf::Mouse::getPosition(m_window);
     sf::Vector2f mouse_pos_f(static_cast<float>(mouse_pos.x),
                              static_cast<float>(mouse_pos.y));
