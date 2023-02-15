@@ -5,22 +5,22 @@ message("Das CMake-Binary-Verzeichnis ist: ${CMAKE_BINARY_DIR}")
 message("Das CMake-Source-Verzeichnis ist: ${CMAKE_SOURCE_DIR}")
 message("Das CMake-Current-Verzeichnis ist: ${CMAKE_CURRENT_SOURCE_DIR}")
 SET(CMAKE_BUILD_DIR ${CMAKE_SOURCE_DIR}/build)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BUILD_DIR})
 
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+SET(CMAKE_CXX_STANDARD 17)
+
 
 SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 
 SET(CMAKE_INCLUDE_CURRENT_DIR ON)
+SET(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
 
 include(${CMAKE_BUILD_DIR}/conanbuildinfo.cmake)
 
 conan_basic_setup()
 
 message("test conan libs" ${CONAN_LIBS})
-
-
-SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 SET(CLIENT_HPP GameEngine/inc/Button.hpp
         GameEngine/inc/Core.hpp

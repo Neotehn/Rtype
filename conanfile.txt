@@ -11,3 +11,6 @@ sfml:network=True
 sfml:graphics=True
 sfml:audio=True
 sfml:window=True
+
+[imports]
+lib, *.dylib* -> ./build

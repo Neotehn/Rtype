@@ -5,10 +5,9 @@ install:
 	pip install conan
 
 build: normdir conan
-	cmake -S ./ -B $(BUILD);
+	cmake -S . -B $(BUILD);
 	cmake --build $(BUILD);
-	cp $(BIN)/r-type_client ./ && mv ./r-type_client ./r-type_server
-	cp $(BIN)/r-type_client ./
+	#cp r-type_client ./r-type_server
 
 test: testdir conan
 	cmake -S . -B $(BUILD) -DTESTMODE=1;
