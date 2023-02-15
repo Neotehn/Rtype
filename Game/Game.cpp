@@ -1,10 +1,11 @@
 #include "Game.hpp"
 
-Game::Game(std::size_t t_flag)
-    : m_window(sf::VideoMode(800, 800), t_flag == CommunicationFlag::server
-                                          ? "R-Type Epitech Server"
-                                          : "R-Type Epitech Client") {
-  m_window.setFramerateLimit(60);
+Game::Game(std::size_t t_flag) {
+  m_window = new rtype::RenderWindow(800, 800,
+                                     t_flag == CommunicationFlag::server
+                                       ? "R-Type Epitech Server"
+                                       : "R-Type Epitech Client");
+  m_window->setFramerateLimit(60);
   m_is_running = true;
 
   if (t_flag == client) {
@@ -90,10 +91,10 @@ void Game::run() {
       m_clientCom->sendMessage(start_action.getCommand());
       std::cout << "waiting on Server Connection" << std::endl;
     }
-    sf::Event event;
-    if (m_window.isOpen()) {
-      while (m_window.pollEvent(event)) {
-        if (event.type == sf::Event::Closed) {
+    rtype::Event event;
+    if (m_window->isOpen()) {
+      while (m_window->pollEvent(event)) {
+        if (event.type == rtype::EventType::Closed) {
           m_is_running = false;
           std::cout << "yes close pls" << std::endl;
         }
@@ -123,7 +124,7 @@ void Game::run() {
       system->update();
     }
   }
-  if (m_window.isOpen()) { m_window.close(); }
+  if (m_window->isOpen()) { m_window->close(); }
   if (m_flag == CommunicationFlag::client) {
     std::cout << "Stop connection to Server ..." << std::endl;
     StateAction start_action =

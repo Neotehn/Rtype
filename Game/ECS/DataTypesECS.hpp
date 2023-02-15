@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <SFML/Graphics.hpp>
+#include "../Encapsulation/GraphicDataTypes.hpp"
 #include "../EventQueue.hpp"
 
 struct AnimationTime {
@@ -23,8 +24,8 @@ struct SystemData {
 };
 
 struct Pos {
-  sf::Vector2f velocity;
-  sf::Vector2f position;
+  rtype::Vector2f velocity;
+  rtype::Vector2f position;
 };
 
 class HealthBar {
@@ -51,17 +52,19 @@ struct Health {
 
 class SpriteECS {
  public:
-  SpriteECS(std::string t_sprite_path, sf::Vector2f t_scale = {1, 1}) {
+  SpriteECS(std::string t_sprite_path, rtype::Vector2f t_scale = {1, 1}) {
     m_texture->loadFromFile(t_sprite_path);
     m_sprite.setTexture(*m_texture);
-    m_sprite.setScale(t_scale);
+    m_sprite.setScale({t_scale.x, t_scale.y});
   }
 
   const sf::Sprite *getSprite() const { return &m_sprite; }
 
   const sf::Texture *getTexture() const { return m_texture; }
 
-  void setPosition(sf::Vector2f pos) { m_sprite.setPosition(pos); }
+  void setPosition(rtype::Vector2f pos) {
+    m_sprite.setPosition({pos.x, pos.y});
+  }
 
   bool loadFromFile(std::string t_filepath) {
     if (!m_texture->loadFromFile(t_filepath)) {
@@ -79,7 +82,7 @@ class SpriteECS {
 
 struct BackgroundLayer {
   SpriteECS sprite;
-  sf::Vector2f position;
+  rtype::Vector2f position;
   float speed;
   int limit;
 };
@@ -95,7 +98,7 @@ struct Player {
 struct Bullet {
   sf::RectangleShape body;
   float speed;
-  sf::Vector2f pos;
+  rtype::Vector2f pos;
 };
 
 struct AnimationObj {

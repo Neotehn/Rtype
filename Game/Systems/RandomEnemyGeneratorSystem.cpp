@@ -20,12 +20,12 @@ void RandomEnemyGeneratorSystem::generateEnemy(int random) {
   if (random < 1) {
     EntityID enemy = m_em->createNewEntity();
     SpriteECS sprite = SpriteECS("./../Client/sprites/r-typesheet30a.gif");
-    sf::Vector2f enemy_pos = {800, float(rand() % 600 + 100)};
+    rtype::Vector2f enemy_pos = {800, float(rand() % 600 + 100)};
     float velocity_direction = float(rand() % 3 - 1);
 
     sf::RectangleShape body;
     body.setSize({30, 30});
-    body.setPosition(enemy_pos);
+    body.setPosition({enemy_pos.x, enemy_pos.y});
     body.setTexture(sprite.getTexture());
     body.setTextureRect(sf::IntRect(0, 0, 34, 34));
 
@@ -46,11 +46,11 @@ void RandomEnemyGeneratorSystem::generatePowerUp(int random) {
     if ((rand() % 10) < 1) {
       EntityID powerup = m_em->createNewEntity();
       SpriteECS sprite = SpriteECS("./../Client/sprites/powerup/coin.png");
-      sf::Vector2f powerup_pos = {800, float(rand() % 600 + 100)};
+      rtype::Vector2f powerup_pos = {800, float(rand() % 600 + 100)};
 
       sf::RectangleShape body;
       body.setSize({30, 30});
-      body.setPosition(powerup_pos);
+      body.setPosition({powerup_pos.x, powerup_pos.y});
       body.setTexture(sprite.getTexture());
       body.setTextureRect(sf::IntRect(0, 0, 84, 84));
 

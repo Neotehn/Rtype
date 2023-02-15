@@ -18,7 +18,7 @@ void CreateObjectSystem::update() {
        m_event_queue.getAllOfType(Action::ActionType::CREATE)) {
     Action::ObjectType type = action->getCreateType();
     EntityID id = action->getId();
-    sf::Vector2f pos = action->getCreatePosition();
+    rtype::Vector2f pos = action->getCreatePosition();
     float velocity = 0;
     switch (type) {
       // TODO: add player creation somewhere to event queue of udp server
@@ -47,15 +47,15 @@ void CreateObjectSystem::update() {
 }
 
 void CreateObjectSystem::createPlayer(EntityID t_id, std::string t_sprite_path,
-                                      sf::Vector2f t_pos) {
+                                      rtype::Vector2f t_pos) {
   EntityID player = m_em->createNewEntity(t_id);
   SpriteECS player_sprite = SpriteECS(t_sprite_path);
 
-  Pos player_pos = Pos{sf::Vector2f(0, 0), t_pos};
+  Pos player_pos = Pos{rtype::Vector2f{0, 0}, t_pos};
 
   sf::RectangleShape body;
   body.setSize({200, 200});
-  body.setPosition(player_pos.position);
+  body.setPosition({player_pos.position.x, player_pos.position.y});
   body.setTexture(player_sprite.getTexture());
   body.setRotation(90.0);
   body.setOutlineColor(sf::Color::Red);
@@ -69,7 +69,7 @@ Health CreateObjectSystem::initPlayerHealthBar(EntityID t_player_id) {
   SpriteECS player_health_bar_sprite_full =
     SpriteECS("../Client/sprites/playerassets/Fulllife.png");
 
-  Pos bar_pos = Pos{sf::Vector2f(0, 0), sf::Vector2f(120, 230)};
+  Pos bar_pos = Pos{rtype::Vector2f{0, 0}, rtype::Vector2f{120, 230}};
 
   HealthBar bar_stats =
     HealthBar{std::vector<std::string>{
@@ -81,19 +81,19 @@ Health CreateObjectSystem::initPlayerHealthBar(EntityID t_player_id) {
 
   sf::RectangleShape body;
   body.setSize({126, 42});
-  body.setPosition(bar_pos.position);
+  body.setPosition({bar_pos.position.x, bar_pos.position.y});
   body.setTexture(player_health_bar_sprite_full.getTexture());
 
   return Health{bar_stats, bar_pos, body};
 }
 
-void CreateObjectSystem::createBullet(EntityID t_id, sf::Vector2f t_pos) {
+void CreateObjectSystem::createBullet(EntityID t_id, rtype::Vector2f t_pos) {
   EntityID bullet = m_em->createNewEntity(t_id);
   SpriteECS sprite = SpriteECS("./../Client/sprites/shoot2.png");
 
   sf::RectangleShape bullet_body;
   bullet_body.setSize({20, 20});
-  bullet_body.setPosition(t_pos);
+  bullet_body.setPosition({t_pos.x, t_pos.y});
   bullet_body.setTexture(sprite.getTexture());
 
   m_play_sounds.push_back(SoundSystem::SoundType::shoot);
@@ -102,13 +102,13 @@ void CreateObjectSystem::createBullet(EntityID t_id, sf::Vector2f t_pos) {
   std::cout << "create bullet" << std::endl;
 }
 
-void CreateObjectSystem::createEnemy(EntityID t_id, sf::Vector2f t_pos,
+void CreateObjectSystem::createEnemy(EntityID t_id, rtype::Vector2f t_pos,
                                      float t_velocity) {
   EntityID enemy = m_em->createNewEntity(t_id);
   SpriteECS sprite = SpriteECS("./../Client/sprites/r-typesheet30a.gif");
   sf::RectangleShape body;
   body.setSize({30, 30});
-  body.setPosition(t_pos);
+  body.setPosition({t_pos.x, t_pos.y});
   body.setTexture(sprite.getTexture());
   body.setTextureRect(sf::IntRect(0, 0, 34, 34));
 
@@ -121,12 +121,12 @@ void CreateObjectSystem::createEnemy(EntityID t_id, sf::Vector2f t_pos,
   m_em->Assign<AnimationObj>(enemy, enemy_obj);
 }
 
-void CreateObjectSystem::createExplosion(EntityID t_id, sf::Vector2f t_pos) {
+void CreateObjectSystem::createExplosion(EntityID t_id, rtype::Vector2f t_pos) {
   EntityID explosion = m_em->createNewEntity(t_id);
   SpriteECS sprite = SpriteECS("./../Client/sprites/explosion/Explosion.png");
   sf::RectangleShape body;
   body.setSize({50, 50});
-  body.setPosition(t_pos);
+  body.setPosition({t_pos.x, t_pos.y});
   body.setTexture(sprite.getTexture());
   body.setTextureRect(sf::IntRect(0, 0, 96, 96));
 
@@ -141,12 +141,12 @@ void CreateObjectSystem::createExplosion(EntityID t_id, sf::Vector2f t_pos) {
   m_play_sounds.push_back(SoundSystem::SoundType::explosion);
 }
 
-void CreateObjectSystem::createPowerUp(EntityID t_id, sf::Vector2f t_pos) {
+void CreateObjectSystem::createPowerUp(EntityID t_id, rtype::Vector2f t_pos) {
   EntityID powerup = m_em->createNewEntity(t_id);
   SpriteECS sprite = SpriteECS("./../Client/sprites/powerup/coin.png");
   sf::RectangleShape body;
   body.setSize({30, 30});
-  body.setPosition(t_pos);
+  body.setPosition({t_pos.x, t_pos.y});
   body.setTexture(sprite.getTexture());
   body.setTextureRect(sf::IntRect(0, 0, 84, 84));
 

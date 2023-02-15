@@ -3,33 +3,23 @@ project(r-type_client)
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 
-set(CLIENT_HPP ../GameEngine/inc/Button.hpp
-                ../GameEngine/inc/Core.hpp
-                inc/MainState.hpp
-                inc/PlayState.hpp
-                inc/SettingsState.hpp
-                ../GameEngine/inc/Sprite.hpp
-                ../GameEngine/inc/State.hpp
-                ../GameEngine/inc/StateMachine.hpp
-                ../GameEngine/inc/MusicPlayer.hpp
-                ../Game/ECS/ComponentPool.hpp
-                ../Game/ECS/ECS.hpp 
-                ../Game/ECS/EntityManager.hpp
-                ../Game/ECS/EntityViewer.hpp 
-                ../Game/ECS/DataTypesECS.hpp 
-                ../Game/ECS/ISystem.hpp
-                src/InputManager/InputManager.hpp
-                ../Game/Systems/DisplaySystem.hpp
-                ../Game/EventQueue.hpp 
-                ../Game/Systems/MovementSystem.hpp 
-                ../Game/Systems/ShootingSystem.hpp 
+set(CLIENT_HPP ../Game/ECS/ComponentPool.hpp
+        ../Game/ECS/ECS.hpp
+        ../Game/ECS/EntityManager.hpp
+        ../Game/ECS/EntityViewer.hpp
+        ../Game/ECS/DataTypesECS.hpp
+        ../Game/ECS/ISystem.hpp
+        src/InputManager/InputManager.hpp
+        ../Game/Systems/DisplaySystem.hpp
+        ../Game/EventQueue.hpp
+        ../Game/Systems/MovementSystem.hpp
+        ../Game/Systems/ShootingSystem.hpp
                 ../Game/Systems/DestroySystem.hpp 
                 ../Game/Systems/CollisionSystem.hpp 
                 ../Game/Systems/RandomEnemyGeneratorSystem.hpp
                 ../Game/Systems/DamageSystem.hpp 
                 ../Game/Game.hpp
                 src/Action/IAction.hpp
-                inc/GameState.hpp
                 ../Game/Timer.hpp
                 src/Action/ShootAction.hpp
         src/Action/MovementAction.hpp
@@ -48,29 +38,25 @@ set(CLIENT_HPP ../GameEngine/inc/Button.hpp
         src/Action/Action.hpp
         ../Game/Systems/CreateObjectSystem.hpp
         ../Game/Systems/PowerUpSystem.hpp
-        ../Game/Systems/SoundSystem.hpp)
+        ../Game/Systems/SoundSystem.hpp
+        ../Game/Encapsulation/SFML/SFMLWindow.hpp
+        ../Game/Encapsulation/IGraphic.hpp
+        ../Game/Encapsulation/IRenderWindow.hpp
+        ../Game/Encapsulation/Event.hpp
+        ../Game/Encapsulation/SFML/RectangleShape.hpp
+        )
 
-set(CLIENT_SRC ../GameEngine/src/Button.cpp
-                ../GameEngine/src/Core.cpp
-                src/MainState.cpp
-                src/PlayState.cpp
-                src/SettingsState.cpp
-                ../GameEngine/src/Sprite.cpp
-                ../GameEngine/src/State.cpp
-                ../GameEngine/src/StateMachine.cpp
-                ../GameEngine/src/MusicPlayer.cpp
-                ../Game/Systems/DisplaySystem.cpp
-                src/InputManager/InputManager.cpp
-                ../Game/EventQueue.cpp 
-                ../Game/Systems/MovementSystem.cpp
-                ../Game/Systems/ShootingSystem.cpp
-                ../Game/Systems/CollisionSystem.cpp
-                ../Game/Systems/RandomEnemyGeneratorSystem.cpp 
-                ../Game/Systems/AnimationSystem.cpp 
-                ../Game/Systems/DestroySystem.cpp 
-                ../Game/Systems/DamageSystem.cpp 
-                ../Game/Game.cpp
-                src/GameState.cpp
+set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
+        src/InputManager/InputManager.cpp
+        ../Game/EventQueue.cpp
+        ../Game/Systems/MovementSystem.cpp
+        ../Game/Systems/ShootingSystem.cpp
+        ../Game/Systems/CollisionSystem.cpp
+        ../Game/Systems/RandomEnemyGeneratorSystem.cpp
+        ../Game/Systems/AnimationSystem.cpp
+        ../Game/Systems/DestroySystem.cpp
+        ../Game/Systems/DamageSystem.cpp
+        ../Game/Game.cpp
                 src/Action/IAction.cpp
         src/Action/ShootAction.cpp
         src/Action/MovementAction.cpp
@@ -90,7 +76,9 @@ set(CLIENT_SRC ../GameEngine/src/Button.cpp
         src/Action/Action.cpp
         ../Game/Systems/CreateObjectSystem.cpp
         ../Game/Systems/PowerUpSystem.cpp
-        ../Game/Systems/SoundSystem.cpp)
+        ../Game/Systems/SoundSystem.cpp
+        ../Game/Encapsulation/SFML/SFMLWindow.cpp
+        ../Game/Encapsulation/SFML/Texture.cpp ../Game/Encapsulation/SFML/Texture.hpp)
 
 include(FetchContent)
 FetchContent_Declare(SFML

@@ -3,8 +3,6 @@
 
 #include <string>
 
-#include <SFML/System/Vector2.hpp>
-
 #include "../../../Game/ECS/ECS.hpp"
 
 extern int action_counter;

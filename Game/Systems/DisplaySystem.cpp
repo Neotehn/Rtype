@@ -1,9 +1,9 @@
 #include "DisplaySystem.hpp"
 
 DisplaySystem::DisplaySystem(std::shared_ptr<EntityManager> t_em,
-                             sf::RenderWindow &t_window) {
+                             rtype::IRenderWindow *t_window) {
   m_em = t_em;
-  m_window = &t_window;
+  m_window = t_window;
 }
 
 DisplaySystem::~DisplaySystem() {}

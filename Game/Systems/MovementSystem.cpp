@@ -6,8 +6,8 @@
 */
 #include "MovementSystem.hpp"
 
-void keepPlayerInsideScreen(sf::Vector2f &t_position,
-                            const sf::Vector2f &t_size) {
+void keepPlayerInsideScreen(rtype::Vector2f &t_position,
+                            const rtype::Vector2f &t_size) {
   int screen_width = 800;
   int screen_height = 800;
   if (t_position.x - t_size.x <= 0) {
@@ -47,13 +47,14 @@ void MovementSystem::update() {
   for (EntityID ent : EntityViewer<AnimationObj>(*m_em.get())) {
     AnimationObj *anim = (*m_em.get()).Get<AnimationObj>(ent);
     anim->position.position += anim->position.velocity;
-    anim->body.setPosition(anim->position.position);
+    anim->body.setPosition(
+      {anim->position.position.x, anim->position.position.y});
   }
 }
 
 void MovementSystem::updatePlayer(EntityID t_ent) {
   Player *player = (*m_em.get()).Get<Player>(t_ent);
-  sf::Vector2f direction = {0, 0};
+  rtype::Vector2f direction = {0, 0};
   if (m_event_queue.checkIfKeyPressed(Action::ActionType::LEFT)) {
     direction.x = -1;
   }
@@ -70,17 +71,19 @@ void MovementSystem::updatePlayer(EntityID t_ent) {
     player->position.velocity = direction * player->speed;
   }
   player->position.position += player->position.velocity;
-  keepPlayerInsideScreen(player->position.position, player->body.getSize());
+  keepPlayerInsideScreen(player->position.position,
+                         {player->body.getSize().x, player->body.getSize().y});
   if (m_event_queue.checkIfKeyPressed(Action::ActionType::POS)) {
     player->position.position = m_event_queue.getLatestPos(t_ent);
   }
-  player->body.setPosition(player->position.position);
-  player->health.body.setPosition(sf::Vector2f{
-    player->position.position.x - 180, player->position.position.y - 70});
+  player->body.setPosition(
+    {player->position.position.x, player->position.position.y});
+  player->health.body.setPosition(
+    {player->position.position.x - 180, player->position.position.y - 70});
 
   if (player->position.velocity.x != 0 || player->position.velocity.y != 0)
     player->position.velocity *= 0.99f;
-  if (m_serverCom != nullptr && direction != sf::Vector2f{0, 0}) {
+  if (m_serverCom != nullptr && direction != rtype::Vector2f{0, 0}) {
     m_serverCom->addEvent(
       std::make_shared<Action>(PosAction(t_ent, player->position.position)));
   }
@@ -98,5 +101,5 @@ void MovementSystem::updateBullets(EntityID t_ent) {
 
   bullet->pos.x += bullet->speed;
   if (bullet->pos.x >= 800) { m_em->destroyEntity(t_ent); }
-  bullet->body.setPosition(bullet->pos);
+  bullet->body.setPosition({bullet->pos.x, bullet->pos.y});
 }

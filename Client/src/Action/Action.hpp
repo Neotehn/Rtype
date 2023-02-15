@@ -4,6 +4,7 @@
 #include <string>
 
 #include "./IAction.hpp"
+#include "../../../Game/Encapsulation/GraphicDataTypes.hpp"
 
 extern int action_counter;
 
@@ -53,7 +54,7 @@ class Action : public IAction {
   EntityID getCollisionPartnerId() const;
 
   ObjectType getCreateType() const;
-  sf::Vector2f getCreatePosition() const;
+  rtype::Vector2f getCreatePosition() const;
   std::string getCreateSpritePath() const;
 
   IncreaseType getIncreaseType() const;
@@ -72,7 +73,7 @@ class Action : public IAction {
   bool m_triggered_by_user = false;
   EntityID m_collision_partner_id = 0;
   ObjectType m_object_type = ObjectType::ERROR_O;
-  sf::Vector2f m_position = {0, 0};
+  rtype::Vector2f m_position = {0, 0};
   std::string m_sprite_path;
   IncreaseType m_increase_type = IncreaseType::ERROR_I;
   int m_value = 0;

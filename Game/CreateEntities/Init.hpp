@@ -3,6 +3,7 @@
 
 #include "../ECS/EntityManager.hpp"
 #include "../../Server/Protocol/UdpServer.hpp"
+#include "../Encapsulation/GraphicDataTypes.hpp"
 
 void initPlayer(EntityManager &t_entity_manager, UdpServer *t_serverCom);
 void initEnemy();
