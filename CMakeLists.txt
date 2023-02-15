@@ -13,8 +13,6 @@ SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-
-
 include(${CMAKE_BUILD_DIR}/conanbuildinfo.cmake)
 
 conan_basic_setup()
@@ -126,8 +124,6 @@ if (NOT Boost_FOUND)
             )
     FetchContent_MakeAvailable(Boost)
 endif()
-
-
 
 
 find_package(OpenGL REQUIRED OPTIONAL_COMPONENTS OpenGL)

@@ -2,7 +2,8 @@ BIN = bin
 BUILD = build
 
 install:
-	pip install conan
+	conan install conanfile.txt -if $(BUILD) --build=missing -c tools.system.package_manager:mode=install
+	cd $(BUILD)/ && chmod +x ./activate.sh && source ./activate.sh
 
 build: normdir conan
 	cmake -S . -B $(BUILD);
