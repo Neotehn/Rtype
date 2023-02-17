@@ -12,7 +12,7 @@ jobs:
       - name: Check Commit Type
         uses: gsactions/commit-message-checker@v2
         with:
-          pattern: '\[(SETUP|CLIENT|SERVER)] \[(ADD|MODIFY|DELETE|REMOVE|MERGE|TEST|CLEAN|FIX|DISABLE|WIP)] .*'
+          pattern: '\[(SETUP|CLIENT|GAME|SERVER)] \[(ADD|MODIFY|DELETE|REMOVE|MERGE|TEST|CLEAN|FIX|DISABLE|WIP)] .*'
           flags: 'gm'
           error: 'Your commit title has to follow the format:
           [platform] [verb] message ticket'
