@@ -15,8 +15,9 @@ void rtype::RenderWindow::draw(const rtype::ISprite *t_sprite) {
   m_window.draw(dynamic_cast<rtype::Sprite *>(sprite)->getSprite());
 }
 
-void rtype::RenderWindow::draw(sf::RectangleShape t_shape) {
-  m_window.draw(t_shape);
+void rtype::RenderWindow::draw(rtype::IRectangleShape *t_shape) {
+  m_window.draw(
+    dynamic_cast<rtype::RectangleShape *>(t_shape)->getRectangleShape());
 }
 
 void rtype::RenderWindow::display() { m_window.display(); }

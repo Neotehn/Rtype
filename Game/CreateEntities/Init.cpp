@@ -9,12 +9,11 @@ void initPlayer(EntityManager &t_entity_manager, UdpServer *t_serverCom) {
 
   Pos player_pos = Pos{rtype::Vector2f{0.0, 0.0}, rtype::Vector2f{300, 300}};
 
-  sf::RectangleShape body;
-  body.setSize({200, 200});
-  body.setPosition({player_pos.position.x, player_pos.position.y});
-  body.setTexture(player_sprite.getSfTexture());
-  body.setRotation(90.0);
-  body.setOutlineColor(sf::Color::Red);
+  rtype::IRectangleShape *body = new rtype::RectangleShape();
+  body->setSize({200, 200});
+  body->setPosition({player_pos.position.x, player_pos.position.y});
+  body->setTexture(player_sprite.getTexture());
+  body->setRotation(90.0);
 
   Health health = initPlayerHealthBar(t_entity_manager);
   Player player_obj = Player{player_sprite, player_pos, body, health, 10};
@@ -61,10 +60,10 @@ Health initPlayerHealthBar(EntityManager &t_entity_manager) {
                 std::string("../Client/sprites/playerassets/Fulllife.png")},
               3};
 
-  sf::RectangleShape body;
-  body.setSize({126, 42});
-  body.setPosition({bar_pos.position.x, bar_pos.position.y});
-  body.setTexture(player_health_bar_sprite_full.getSfTexture());
+  rtype::IRectangleShape *body = new rtype::RectangleShape();
+  body->setSize({126, 42});
+  body->setPosition({bar_pos.position.x, bar_pos.position.y});
+  body->setTexture(player_health_bar_sprite_full.getTexture());
 
   return Health{bar_stats, bar_pos, body};
 }

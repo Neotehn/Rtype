@@ -20,12 +20,12 @@ void ShootingSystem::update() {
       SpriteECS sprite = SpriteECS("./../Client/sprites/shoot2.png");
       rtype::Vector2f bullet_pos = {player->position.position.x - 20,
                                     player->position.position.y +
-                                      player->body.getSize().y / 2 - 10};
-      sf::RectangleShape bullet_body;
+                                      player->body->getSize().y / 2 - 10};
+      rtype::IRectangleShape *bullet_body = new rtype::RectangleShape();
 
-      bullet_body.setSize({20, 20});
-      bullet_body.setPosition({bullet_pos.x, bullet_pos.y});
-      bullet_body.setTexture(sprite.getSfTexture());
+      bullet_body->setSize({20, 20});
+      bullet_body->setPosition({bullet_pos.x, bullet_pos.y});
+      bullet_body->setTexture(sprite.getTexture());
 
       m_em->Assign<Bullet>(bullet, Bullet{bullet_body, 10.0, bullet_pos});
       m_serverCom->addEvent(std::make_shared<Action>(

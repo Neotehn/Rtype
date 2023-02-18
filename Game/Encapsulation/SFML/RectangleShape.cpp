@@ -20,8 +20,10 @@ void rtype::RectangleShape::setPosition(const rtype::Vector2f &position) {
   m_shape.setPosition(sf::Vector2f(position.x, position.y));
 }
 
-void rtype::RectangleShape::setTexture(const sf::Texture &texture) {
-  m_shape.setTexture(&texture);
+void rtype::RectangleShape::setTexture(const rtype::ITexture *texture) {
+  rtype::ITexture *texture_cast = const_cast<rtype::ITexture *>(texture);
+  m_shape.setTexture(
+    dynamic_cast<rtype::Texture *>(texture_cast)->getTexture());
 }
 
 void rtype::RectangleShape::setTextureRect(const rtype::IntRect &rect) {
@@ -47,6 +49,11 @@ void rtype::RectangleShape::scale(const rtype::Vector2f &factors) {
   m_shape.scale(sf::Vector2f(factors.x, factors.y));
 }
 
+bool rtype::RectangleShape::intersects(const rtype::FloatRect &rect) {
+  return m_shape.getGlobalBounds().intersects(
+    sf::FloatRect(rect.left, rect.top, rect.width, rect.height));
+}
+
 const rtype::Vector2f &rtype::RectangleShape::getSize() {
   sf::Vector2f sfml_vector = m_shape.getSize();
   m_size = {sfml_vector.x, sfml_vector.y};
@@ -66,6 +73,13 @@ const rtype::FloatRect &rtype::RectangleShape::getGlobalBounds() {
   return m_globalBounds;
 }
 
+const rtype::IntRect &rtype::RectangleShape::getTextureRect() {
+  sf::IntRect sfml_rect = m_shape.getTextureRect();
+  rtype::IntRect *m_textureRect = new rtype::IntRect{
+    sfml_rect.left, sfml_rect.top, sfml_rect.width, sfml_rect.height};
+  return *m_textureRect;
+}
+
 float rtype::RectangleShape::getRotation() const {
   return m_shape.getRotation();
 }
@@ -80,4 +94,8 @@ const rtype::Vector2f &rtype::RectangleShape::getOrigin() {
   sf::Vector2f sfml_vector = m_shape.getOrigin();
   m_origin = {sfml_vector.x, sfml_vector.y};
   return m_origin;
+}
+
+sf::RectangleShape &rtype::RectangleShape::getRectangleShape() {
+  return m_shape;
 }

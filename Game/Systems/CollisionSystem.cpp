@@ -23,8 +23,7 @@ void CollisionSystem::update() {
       Player *player = (*m_em.get()).Get<Player>(player_ent);
       AnimationObj *enemy = (*m_em.get()).Get<AnimationObj>(enemy_ent);
 
-      bool collision = player->body.getGlobalBounds().intersects(
-        enemy->body.getGlobalBounds());
+      bool collision = player->body->intersects(enemy->body->getGlobalBounds());
 
       if (collision) {
         if (enemy->type == "enemy") {
@@ -59,8 +58,7 @@ void CollisionSystem::bulletEnemyCollision() {
     for (EntityID bullet_ent : EntityViewer<Bullet>(*m_em.get())) {
       Bullet *bullet = (*m_em.get()).Get<Bullet>(bullet_ent);
 
-      bool collision = enemy->body.getGlobalBounds().intersects(
-        bullet->body.getGlobalBounds());
+      bool collision = enemy->body->intersects(bullet->body->getGlobalBounds());
       if (collision) {
         m_serverCom->addEvent(
           std::make_shared<Action>(DestroyAction(enemy_ent)));

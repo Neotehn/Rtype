@@ -4,12 +4,12 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <SFML/Graphics.hpp>
 #include "../Encapsulation/GraphicDataTypes.hpp"
 #include "../Encapsulation/ITexture.hpp"
 #include "../Encapsulation/SFML/Texture.hpp"
 #include "../Encapsulation/ISprite.hpp"
 #include "../Encapsulation/SFML/Sprite.hpp"
+#include "../Encapsulation/IRectangleShape.hpp"
 #include "../EventQueue.hpp"
 
 struct AnimationTime {
@@ -51,7 +51,7 @@ class HealthBar {
 struct Health {
   HealthBar healthbar;
   Pos position;
-  sf::RectangleShape body;
+  rtype::IRectangleShape *body;
 };
 
 class SpriteECS {
@@ -67,12 +67,6 @@ class SpriteECS {
   const rtype::ISprite *getSprite() const { return m_sprite; }
 
   const rtype::ITexture *getTexture() const { return m_texture; }
-
-  const sf::Texture *getSfTexture() const {
-    return dynamic_cast<rtype::Texture *>(
-             const_cast<rtype::ITexture *>(m_texture))
-      ->getTexture();
-  }
 
   void setPosition(rtype::Vector2f pos) {
     m_sprite->setPosition({pos.x, pos.y});
@@ -102,13 +96,13 @@ struct BackgroundLayer {
 struct Player {
   SpriteECS sprite;
   Pos position;
-  sf::RectangleShape body;
+  rtype::IRectangleShape *body;
   Health health;
   float speed;
 };
 
 struct Bullet {
-  sf::RectangleShape body;
+  rtype::IRectangleShape *body;
   float speed;
   rtype::Vector2f pos;
 };
@@ -118,7 +112,7 @@ struct AnimationObj {
   Pos position;
   AnimationTime time;
   AnimationRect rect;
-  sf::RectangleShape body;
+  rtype::IRectangleShape *body;
 };
 
 #endif  // ECS_DATATYPESECS_HPP_

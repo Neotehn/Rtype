@@ -34,7 +34,7 @@ void DamageSystem::update() {
         SpriteECS(player->health.healthbar
                     .getSpritesPaths()[player->health.healthbar.getHealth()]);
 
-      player->health.body.setTexture(health_new_bar.getSfTexture());
+      player->health.body->setTexture(health_new_bar.getTexture());
     }
   }
 }

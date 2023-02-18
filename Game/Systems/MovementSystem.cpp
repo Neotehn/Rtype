@@ -47,7 +47,7 @@ void MovementSystem::update() {
   for (EntityID ent : EntityViewer<AnimationObj>(*m_em.get())) {
     AnimationObj *anim = (*m_em.get()).Get<AnimationObj>(ent);
     anim->position.position += anim->position.velocity;
-    anim->body.setPosition(
+    anim->body->setPosition(
       {anim->position.position.x, anim->position.position.y});
   }
 }
@@ -71,14 +71,15 @@ void MovementSystem::updatePlayer(EntityID t_ent) {
     player->position.velocity = direction * player->speed;
   }
   player->position.position += player->position.velocity;
-  keepPlayerInsideScreen(player->position.position,
-                         {player->body.getSize().x, player->body.getSize().y});
+  keepPlayerInsideScreen(
+    player->position.position,
+    {player->body->getSize().x, player->body->getSize().y});
   if (m_event_queue.checkIfKeyPressed(Action::ActionType::POS)) {
     player->position.position = m_event_queue.getLatestPos(t_ent);
   }
-  player->body.setPosition(
+  player->body->setPosition(
     {player->position.position.x, player->position.position.y});
-  player->health.body.setPosition(
+  player->health.body->setPosition(
     {player->position.position.x - 180, player->position.position.y - 70});
 
   if (player->position.velocity.x != 0 || player->position.velocity.y != 0)
@@ -101,5 +102,5 @@ void MovementSystem::updateBullets(EntityID t_ent) {
 
   bullet->pos.x += bullet->speed;
   if (bullet->pos.x >= 800) { m_em->destroyEntity(t_ent); }
-  bullet->body.setPosition({bullet->pos.x, bullet->pos.y});
+  bullet->body->setPosition({bullet->pos.x, bullet->pos.y});
 }
