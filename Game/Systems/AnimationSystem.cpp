@@ -21,7 +21,7 @@ void AnimationSystem::update() {
     }
     if (anim->time.current_animation_time >= anim->time.display_time) {
       anim->time.current_animation_time = 0;
-      sf::IntRect rect = anim->body.getTextureRect();
+      rtype::IntRect rect = anim->body->getTextureRect();
       if (rect.left >= anim->rect.limit) {
         if (anim->type == "explosion") {
           m_input_manager.addActionsToQueue(
@@ -32,7 +32,7 @@ void AnimationSystem::update() {
       } else {
         rect.left += anim->rect.size;
       }
-      anim->body.setTextureRect(rect);
+      anim->body->setTextureRect(rect);
     }
     anim->time.current_animation_time +=
       m_timer.returnTime() - anim->time.last_timer;
