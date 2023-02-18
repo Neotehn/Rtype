@@ -12,7 +12,7 @@ void initPlayer(EntityManager &t_entity_manager, UdpServer *t_serverCom) {
   sf::RectangleShape body;
   body.setSize({200, 200});
   body.setPosition({player_pos.position.x, player_pos.position.y});
-  body.setTexture(player_sprite.getTexture());
+  body.setTexture(player_sprite.getSfTexture());
   body.setRotation(90.0);
   body.setOutlineColor(sf::Color::Red);
 
@@ -64,7 +64,7 @@ Health initPlayerHealthBar(EntityManager &t_entity_manager) {
   sf::RectangleShape body;
   body.setSize({126, 42});
   body.setPosition({bar_pos.position.x, bar_pos.position.y});
-  body.setTexture(player_health_bar_sprite_full.getTexture());
+  body.setTexture(player_health_bar_sprite_full.getSfTexture());
 
   return Health{bar_stats, bar_pos, body};
 }

@@ -56,7 +56,7 @@ const rtype::Vector2f &rtype::RectangleShape::getSize() {
 const rtype::Vector2f &rtype::RectangleShape::getPosition() {
   sf::Vector2f sfml_vector = m_shape.getPosition();
   m_position = {sfml_vector.x, sfml_vector.y};
-  return m_position
+  return m_position;
 }
 
 const rtype::FloatRect &rtype::RectangleShape::getGlobalBounds() {

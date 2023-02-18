@@ -6,6 +6,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "../IRenderWindow.hpp"
+#include "./Sprite.hpp"
 
 namespace rtype {
 
@@ -16,7 +17,7 @@ namespace rtype {
                  std::string t_title);
     ~RenderWindow();
 
-    void draw(sf::Sprite t_sprite) override;
+    void draw(const rtype::ISprite *t_sprite) override;
     void draw(sf::RectangleShape t_shape) override;
     void display() override;
     rtype::Vector2u getSize() const override;
@@ -31,7 +32,6 @@ namespace rtype {
    private:
     sf::RenderWindow m_window;
     sf::Event m_event;
-    rtype::IRenderWindow *m_windowPtr;
   };
 }  // namespace rtype
 

@@ -26,7 +26,7 @@ void RandomEnemyGeneratorSystem::generateEnemy(int random) {
     sf::RectangleShape body;
     body.setSize({30, 30});
     body.setPosition({enemy_pos.x, enemy_pos.y});
-    body.setTexture(sprite.getTexture());
+    body.setTexture(sprite.getSfTexture());
     body.setTextureRect(sf::IntRect(0, 0, 34, 34));
 
     AnimationObj enemy_obj =
@@ -51,7 +51,7 @@ void RandomEnemyGeneratorSystem::generatePowerUp(int random) {
       sf::RectangleShape body;
       body.setSize({30, 30});
       body.setPosition({powerup_pos.x, powerup_pos.y});
-      body.setTexture(sprite.getTexture());
+      body.setTexture(sprite.getSfTexture());
       body.setTextureRect(sf::IntRect(0, 0, 84, 84));
 
       AnimationObj powerup_obj =

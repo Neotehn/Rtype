@@ -9,9 +9,12 @@ rtype::RenderWindow::RenderWindow(unsigned int t_width, unsigned int t_height,
 
 rtype::RenderWindow::~RenderWindow() {}
 
-void rtype::RenderWindow::draw(sf::Sprite t_sprite) { m_window.draw(t_sprite); }
+void rtype::RenderWindow::draw(const rtype::ISprite *t_sprite) {
+  rtype::ISprite *sprite = const_cast<rtype::ISprite *>(t_sprite);
 
-// TODO: how to handle this?
+  m_window.draw(dynamic_cast<rtype::Sprite *>(sprite)->getSprite());
+}
+
 void rtype::RenderWindow::draw(sf::RectangleShape t_shape) {
   m_window.draw(t_shape);
 }

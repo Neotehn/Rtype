@@ -25,7 +25,7 @@ void ShootingSystem::update() {
 
       bullet_body.setSize({20, 20});
       bullet_body.setPosition({bullet_pos.x, bullet_pos.y});
-      bullet_body.setTexture(sprite.getTexture());
+      bullet_body.setTexture(sprite.getSfTexture());
 
       m_em->Assign<Bullet>(bullet, Bullet{bullet_body, 10.0, bullet_pos});
       m_serverCom->addEvent(std::make_shared<Action>(

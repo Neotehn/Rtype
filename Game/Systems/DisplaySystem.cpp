@@ -12,7 +12,7 @@ void DisplaySystem::update() {
   m_window->clear();
   for (EntityID ent : EntityViewer<BackgroundLayer>(*m_em.get())) {
     BackgroundLayer *background = (*m_em.get()).Get<BackgroundLayer>(ent);
-    m_window->draw(*background->sprite.getSprite());
+    m_window->draw(background->sprite.getSprite());
   }
   for (EntityID ent : EntityViewer<Player>(*m_em.get())) {
     Player *player = (*m_em.get()).Get<Player>(ent);

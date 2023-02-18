@@ -56,7 +56,7 @@ void CreateObjectSystem::createPlayer(EntityID t_id, std::string t_sprite_path,
   sf::RectangleShape body;
   body.setSize({200, 200});
   body.setPosition({player_pos.position.x, player_pos.position.y});
-  body.setTexture(player_sprite.getTexture());
+  body.setTexture(player_sprite.getSfTexture());
   body.setRotation(90.0);
   body.setOutlineColor(sf::Color::Red);
   Health health = initPlayerHealthBar(player);
@@ -82,7 +82,7 @@ Health CreateObjectSystem::initPlayerHealthBar(EntityID t_player_id) {
   sf::RectangleShape body;
   body.setSize({126, 42});
   body.setPosition({bar_pos.position.x, bar_pos.position.y});
-  body.setTexture(player_health_bar_sprite_full.getTexture());
+  body.setTexture(player_health_bar_sprite_full.getSfTexture());
 
   return Health{bar_stats, bar_pos, body};
 }
@@ -94,7 +94,7 @@ void CreateObjectSystem::createBullet(EntityID t_id, rtype::Vector2f t_pos) {
   sf::RectangleShape bullet_body;
   bullet_body.setSize({20, 20});
   bullet_body.setPosition({t_pos.x, t_pos.y});
-  bullet_body.setTexture(sprite.getTexture());
+  bullet_body.setTexture(sprite.getSfTexture());
 
   m_play_sounds.push_back(SoundSystem::SoundType::shoot);
   Bullet displayable_bullet = Bullet{bullet_body, 10.0, t_pos};
@@ -109,7 +109,7 @@ void CreateObjectSystem::createEnemy(EntityID t_id, rtype::Vector2f t_pos,
   sf::RectangleShape body;
   body.setSize({30, 30});
   body.setPosition({t_pos.x, t_pos.y});
-  body.setTexture(sprite.getTexture());
+  body.setTexture(sprite.getSfTexture());
   body.setTextureRect(sf::IntRect(0, 0, 34, 34));
 
   AnimationObj enemy_obj =
@@ -127,7 +127,7 @@ void CreateObjectSystem::createExplosion(EntityID t_id, rtype::Vector2f t_pos) {
   sf::RectangleShape body;
   body.setSize({50, 50});
   body.setPosition({t_pos.x, t_pos.y});
-  body.setTexture(sprite.getTexture());
+  body.setTexture(sprite.getSfTexture());
   body.setTextureRect(sf::IntRect(0, 0, 96, 96));
 
   AnimationObj explosion_obj =
@@ -147,7 +147,7 @@ void CreateObjectSystem::createPowerUp(EntityID t_id, rtype::Vector2f t_pos) {
   sf::RectangleShape body;
   body.setSize({30, 30});
   body.setPosition({t_pos.x, t_pos.y});
-  body.setTexture(sprite.getTexture());
+  body.setTexture(sprite.getSfTexture());
   body.setTextureRect(sf::IntRect(0, 0, 84, 84));
 
   AnimationObj power_up =

@@ -6,6 +6,10 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include "../Encapsulation/GraphicDataTypes.hpp"
+#include "../Encapsulation/ITexture.hpp"
+#include "../Encapsulation/SFML/Texture.hpp"
+#include "../Encapsulation/ISprite.hpp"
+#include "../Encapsulation/SFML/Sprite.hpp"
 #include "../EventQueue.hpp"
 
 struct AnimationTime {
@@ -53,17 +57,25 @@ struct Health {
 class SpriteECS {
  public:
   SpriteECS(std::string t_sprite_path, rtype::Vector2f t_scale = {1, 1}) {
+    m_sprite = new rtype::Sprite();
+    m_texture = new rtype::Texture();
     m_texture->loadFromFile(t_sprite_path);
-    m_sprite.setTexture(*m_texture);
-    m_sprite.setScale({t_scale.x, t_scale.y});
+    m_sprite->setTexture(m_texture);
+    m_sprite->setScale({t_scale.x, t_scale.y});
   }
 
-  const sf::Sprite *getSprite() const { return &m_sprite; }
+  const rtype::ISprite *getSprite() const { return m_sprite; }
 
-  const sf::Texture *getTexture() const { return m_texture; }
+  const rtype::ITexture *getTexture() const { return m_texture; }
+
+  const sf::Texture *getSfTexture() const {
+    return dynamic_cast<rtype::Texture *>(
+             const_cast<rtype::ITexture *>(m_texture))
+      ->getTexture();
+  }
 
   void setPosition(rtype::Vector2f pos) {
-    m_sprite.setPosition({pos.x, pos.y});
+    m_sprite->setPosition({pos.x, pos.y});
   }
 
   bool loadFromFile(std::string t_filepath) {
@@ -71,13 +83,13 @@ class SpriteECS {
       std::cerr << "Error loading sprite" << std::endl;
       return false;
     }
-    m_sprite.setTexture(*m_texture);
+    m_sprite->setTexture(m_texture);
     return true;
   }
 
  private:
-  sf::Sprite m_sprite;
-  sf::Texture *m_texture = new sf::Texture();
+  rtype::ISprite *m_sprite;
+  rtype::ITexture *m_texture;
 };
 
 struct BackgroundLayer {

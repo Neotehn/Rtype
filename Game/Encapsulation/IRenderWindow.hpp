@@ -6,14 +6,14 @@
 #include "Event.hpp"
 #include "GraphicDataTypes.hpp"
 #include "IRectangleShape.hpp"
+#include "ISprite.hpp"
 
 namespace rtype {
-
   class IRenderWindow {
    public:
     ~IRenderWindow() = default;
 
-    virtual void draw(sf::Sprite t_sprite) = 0;
+    virtual void draw(const rtype::ISprite *t_sprite) = 0;
     virtual void draw(sf::RectangleShape t_shape) = 0;
     virtual void display() = 0;
     virtual rtype::Vector2u getSize() const = 0;
