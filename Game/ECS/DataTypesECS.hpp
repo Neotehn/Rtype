@@ -4,7 +4,12 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <SFML/Graphics.hpp>
+#include "../Encapsulation/GraphicDataTypes.hpp"
+#include "../Encapsulation/ITexture.hpp"
+#include "../Encapsulation/SFML/Texture.hpp"
+#include "../Encapsulation/ISprite.hpp"
+#include "../Encapsulation/SFML/Sprite.hpp"
+#include "../Encapsulation/IRectangleShape.hpp"
 #include "../EventQueue.hpp"
 
 struct AnimationTime {
@@ -23,8 +28,8 @@ struct SystemData {
 };
 
 struct Pos {
-  sf::Vector2f velocity;
-  sf::Vector2f position;
+  rtype::Vector2f velocity;
+  rtype::Vector2f position;
 };
 
 class HealthBar {
@@ -46,40 +51,68 @@ class HealthBar {
 struct Health {
   HealthBar healthbar;
   Pos position;
-  sf::RectangleShape body;
-};
-
-struct Bullet {
-  float bullet_speed;
-  sf::Vector2f bullet_pos;
+  rtype::IRectangleShape *body;
 };
 
 class SpriteECS {
  public:
-  SpriteECS(std::string t_sprite_path, sf::Vector2f t_scale = {1, 1}) {
+  SpriteECS(std::string t_sprite_path, rtype::Vector2f t_scale = {1, 1}) {
+    m_sprite = new rtype::Sprite();
+    m_texture = new rtype::Texture();
     m_texture->loadFromFile(t_sprite_path);
-    m_sprite.setTexture(*m_texture);
-    m_sprite.setScale(t_scale);
+    m_sprite->setTexture(m_texture);
+    m_sprite->setScale({t_scale.x, t_scale.y});
   }
 
-  const sf::Sprite *getSprite() const { return &m_sprite; }
+  const rtype::ISprite *getSprite() const { return m_sprite; }
 
-  const sf::Texture *getTexture() const { return m_texture; }
+  const rtype::ITexture *getTexture() const { return m_texture; }
 
-  void setPosition(sf::Vector2f pos) { m_sprite.setPosition(pos); }
+  void setPosition(rtype::Vector2f pos) {
+    m_sprite->setPosition({pos.x, pos.y});
+  }
 
   bool loadFromFile(std::string t_filepath) {
     if (!m_texture->loadFromFile(t_filepath)) {
       std::cerr << "Error loading sprite" << std::endl;
       return false;
     }
-    m_sprite.setTexture(*m_texture);
+    m_sprite->setTexture(m_texture);
     return true;
   }
 
  private:
-  sf::Sprite m_sprite;
-  sf::Texture *m_texture = new sf::Texture();
+  rtype::ISprite *m_sprite;
+  rtype::ITexture *m_texture;
+};
+
+struct BackgroundLayer {
+  SpriteECS sprite;
+  rtype::Vector2f position;
+  float speed;
+  int limit;
+};
+
+struct Player {
+  SpriteECS sprite;
+  Pos position;
+  rtype::IRectangleShape *body;
+  Health health;
+  float speed;
+};
+
+struct Bullet {
+  rtype::IRectangleShape *body;
+  float speed;
+  rtype::Vector2f pos;
+};
+
+struct AnimationObj {
+  std::string type;
+  Pos position;
+  AnimationTime time;
+  AnimationRect rect;
+  rtype::IRectangleShape *body;
 };
 
 #endif  // ECS_DATATYPESECS_HPP_

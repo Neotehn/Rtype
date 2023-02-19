@@ -24,12 +24,12 @@ class CreateObjectSystem : public ISystem {
   std::vector<SoundSystem::SoundType> &m_play_sounds;
 
   void createPlayer(EntityID t_id, std::string t_sprite_path,
-                    sf::Vector2f t_pos);
-  void initPlayerHealthBar(EntityID t_player_id);
-  void createBullet(EntityID t_id, sf::Vector2f t_pos);
-  void createEnemy(EntityID t_id, sf::Vector2f t_pos, float velocity);
-  void createExplosion(EntityID t_id, sf::Vector2f t_pos);
-  void createPowerUp(EntityID t_id, sf::Vector2f t_pos);
+                    rtype::Vector2f t_pos);
+  Health initPlayerHealthBar(EntityID t_player_id);
+  void createBullet(EntityID t_id, rtype::Vector2f t_pos);
+  void createEnemy(EntityID t_id, rtype::Vector2f t_pos, float velocity);
+  void createExplosion(EntityID t_id, rtype::Vector2f t_pos);
+  void createPowerUp(EntityID t_id, rtype::Vector2f t_pos);
 };
 
 #endif  //R_TYPE_CLIENT_CREATEOBJECTSYSTEM_HPP

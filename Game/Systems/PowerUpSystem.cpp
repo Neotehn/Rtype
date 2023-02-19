@@ -16,7 +16,6 @@ void PowerUpSystem::update() {
   for (std::shared_ptr<Action> action :
        m_event_queue.getAllOfType(Action::ActionType::INCREASE)) {
     Action::IncreaseType type = action->getIncreaseType();
-    HealthBar *health_bar;
 
     switch (type) {
       case Action::IncreaseType::LIFE:
@@ -31,12 +30,14 @@ void PowerUpSystem::update() {
 }
 
 void PowerUpSystem::increaseHealth(std::shared_ptr<Action> action) {
-  Health *health_bar = (*m_em.get()).Get<Health>(action->getId());
-  if (health_bar->healthbar.getHealth() < 3) {
-    health_bar->healthbar.setHealth(health_bar->healthbar.getHealth() + 1);
+  Player *player = (*m_em.get()).Get<Player>(action->getId());
+  if (player->health.healthbar.getHealth() < 3) {
+    player->health.healthbar.setHealth(player->health.healthbar.getHealth() +
+                                       1);
   }
-  SpriteECS health_new_bar = SpriteECS(
-    health_bar->healthbar.getSpritesPaths()[health_bar->healthbar.getHealth()]);
+  SpriteECS health_new_bar =
+    SpriteECS(player->health.healthbar
+                .getSpritesPaths()[player->health.healthbar.getHealth()]);
 
-  health_bar->body.setTexture(health_new_bar.getTexture());
+  player->health.body->setTexture(health_new_bar.getTexture());
 }

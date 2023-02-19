@@ -15,27 +15,26 @@ DamageSystem::~DamageSystem() {}
 void DamageSystem::update() {
   for (std::shared_ptr<Action> action :
        m_event_queue.getAllOfType(Action::ActionType::DAMAGE)) {
-    for (EntityID healthbar :
-         EntityViewer<float, Health, Pos, sf::RectangleShape>(*m_em.get())) {
-      Health *health = (*m_em.get()).Get<Health>(healthbar);
-      int current_health = health->healthbar.getHealth();
+    for (EntityID player_id : EntityViewer<Player>(*m_em.get())) {
+      Player *player = (*m_em.get()).Get<Player>(player_id);
+      int current_health = player->health.healthbar.getHealth();
       int damage = action->getShootDamage();
       int new_health = current_health - damage;
 
       if (new_health < 0) { return; }
       if (new_health == 0) {
-        std::cout << "player died" << std::endl;
+        std::cout << "Player died :(" << std::endl;
         m_play_sounds.push_back(SoundSystem::SoundType::death);
-        m_is_running = false;
         m_client_input_manager.addActionsToQueue(std::make_shared<Action>(
           StateAction(Action::ActionType::END, m_port_number)));
       }
-      health->healthbar.setHealth(new_health);
+      player->health.healthbar.setHealth(new_health);
 
-      SpriteECS health_new_bar = SpriteECS(
-        health->healthbar.getSpritesPaths()[health->healthbar.getHealth()]);
+      SpriteECS health_new_bar =
+        SpriteECS(player->health.healthbar
+                    .getSpritesPaths()[player->health.healthbar.getHealth()]);
 
-      health->body.setTexture(health_new_bar.getTexture());
+      player->health.body->setTexture(health_new_bar.getTexture());
     }
   }
 }

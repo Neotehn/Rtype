@@ -13,30 +13,29 @@ AnimationSystem::~AnimationSystem() {}
 void AnimationSystem::updateData(SystemData &t_data) {}
 
 void AnimationSystem::update() {
-  for (EntityID ent : EntityViewer<std::string, Pos, sf::RectangleShape,
-                                   AnimationTime, AnimationRect>(*m_em.get())) {
-    AnimationTime *time = (*m_em.get()).Get<AnimationTime>(ent);
-    AnimationRect *anim_rect = (*m_em.get()).Get<AnimationRect>(ent);
+  for (EntityID ent : EntityViewer<AnimationObj>(*m_em.get())) {
+    AnimationObj *anim = (*m_em.get()).Get<AnimationObj>(ent);
 
-    if (time->last_timer == 0) { time->last_timer = m_timer.returnTime(); }
-    if (time->current_animation_time >= time->display_time) {
-      time->current_animation_time = 0;
-      sf::RectangleShape *shape = (*m_em.get()).Get<sf::RectangleShape>(ent);
-      sf::IntRect rect = shape->getTextureRect();
-      if (rect.left >= anim_rect->limit) {
-        std::string *type = (*m_em.get()).Get<std::string>(ent);
-        if (*type == "explosion") {
+    if (anim->time.last_timer == 0) {
+      anim->time.last_timer = m_timer.returnTime();
+    }
+    if (anim->time.current_animation_time >= anim->time.display_time) {
+      anim->time.current_animation_time = 0;
+      rtype::IntRect rect = anim->body->getTextureRect();
+      if (rect.left >= anim->rect.limit) {
+        if (anim->type == "explosion") {
           m_input_manager.addActionsToQueue(
             std::make_shared<Action>(DestroyAction(ent)));
         } else {
           rect.left = 0;
         }
       } else {
-        rect.left += anim_rect->size;
+        rect.left += anim->rect.size;
       }
-      shape->setTextureRect(rect);
+      anim->body->setTextureRect(rect);
     }
-    time->current_animation_time += m_timer.returnTime() - time->last_timer;
-    time->last_timer = m_timer.returnTime();
+    anim->time.current_animation_time +=
+      m_timer.returnTime() - anim->time.last_timer;
+    anim->time.last_timer = m_timer.returnTime();
   }
 }

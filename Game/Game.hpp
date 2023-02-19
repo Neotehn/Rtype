@@ -8,6 +8,10 @@
 #include "./ECS/EntityManager.hpp"
 #include "./ECS/DataTypesECS.hpp"
 #include "./ECS/ISystem.hpp"
+
+#include "./Encapsulation/IRenderWindow.hpp"
+#include "./Encapsulation/SFML/RenderWindow.hpp"
+
 #include "./Systems/AnimationSystem.hpp"
 #include "./Systems/CollisionSystem.hpp"
 #include "./Systems/CreateObjectSystem.hpp"
@@ -38,7 +42,7 @@ class Game {
   bool m_is_running;
   std::size_t m_port_number;
   boost::asio::io_service m_io_service;
-  sf::RenderWindow m_window;
+  rtype::IRenderWindow *m_window;
   std::vector<SoundSystem::SoundType> m_sounds;
   InputManager m_input_manager;
   InputManager m_client_input_manager;

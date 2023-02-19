@@ -3,9 +3,11 @@
 
 #include <memory>
 
-#include <SFML/Audio.hpp>
-
 #include "../ECS/ISystem.hpp"
+#include "../Encapsulation/IMusic.hpp"
+#include "../Encapsulation/SFML/Music.hpp"
+#include "../Encapsulation/ISounds.hpp"
+#include "../Encapsulation/SFML/Sounds.hpp"
 
 class SoundSystem : public ISystem {
  public:
@@ -18,13 +20,10 @@ class SoundSystem : public ISystem {
   virtual void updateData(SystemData &t_data);
 
  private:
-  sf::Music m_music;
-  std::vector<sf::SoundBuffer *> m_sound_buffers;
-  std::vector<sf::Sound> m_sounds;
+  rtype::IMusic *m_music;
+  rtype::ISounds *m_sounds;
 
   std::vector<SoundType> &m_play_sounds;
-
-  void initSound(std::string path);
 };
 
 #endif  //R_TYPE_CLIENT_SOUNDSYSTEM_HPP
