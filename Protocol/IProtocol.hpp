@@ -20,6 +20,8 @@
 #include "../Client/src/Action/PosAction.hpp"
 #include "../Client/src/Action/VoidAction.hpp"
 
+#include "../Game/Encapsulation/Networking/Boost/SplitEncaps.hpp"
+
 class IProtocol {
  public:
   IProtocol() = default;

@@ -53,7 +53,13 @@ set(CLIENT_HPP ../Game/ECS/ComponentPool.hpp
         ../Game/Encapsulation/SFML/RenderWindow.hpp
         ../Game/Encapsulation/SFML/Sounds.hpp
         ../Game/Encapsulation/SFML/Sprite.hpp
-        ../Game/Encapsulation/SFML/Texture.hpp)
+        ../Game/Encapsulation/SFML/Texture.hpp
+        ../Game/Encapsulation/Networking/NetworkDataTypes.hpp
+        ../Game/Encapsulation/Networking/IIoService.hpp
+        ../Game/Encapsulation/Networking/Boost/IoService.hpp
+        ../Game/Encapsulation/Networking/Boost/ErrorCode.hpp
+        ../Game/Encapsulation/Networking/Boost/MethodEncaps.hpp
+        ../Game/Encapsulation/Networking/Boost/Thread.hpp ../Game/Encapsulation/Networking/Boost/SplitEncaps.hpp)
 
 set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         src/InputManager/InputManager.cpp
@@ -91,13 +97,17 @@ set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         ../Game/Encapsulation/SFML/Sounds.cpp
         ../Game/Encapsulation/SFML/Sprite.cpp
         ../Game/Encapsulation/SFML/Texture.cpp
-        ../Game/Encapsulation/SFML/RectangleShape.cpp)
+        ../Game/Encapsulation/SFML/RectangleShape.cpp
+        ../Game/Encapsulation/Networking/Boost/IoService.cpp
+        ../Game/Encapsulation/Networking/Boost/ErrorCode.cpp)
 
-include(FetchContent)
-FetchContent_Declare(SFML
-        GIT_REPOSITORY https://github.com/SFML/SFML.git
-        GIT_TAG 2.6.x)
-FetchContent_MakeAvailable(SFML)
+if (NOT SFML_FOUND)
+    include(FetchContent)
+    FetchContent_Declare(SFML
+            GIT_REPOSITORY https://github.com/SFML/SFML.git
+            GIT_TAG 2.6.x)
+    FetchContent_MakeAvailable(SFML)
+endif ()
 
 if (NOT Boost_FOUND)
     message("Boost not found--> downloading and building")

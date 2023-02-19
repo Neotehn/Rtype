@@ -20,18 +20,23 @@
 #include "../../Client/src/InputManager/InputManager.hpp"
 #include "./UdpSession.hpp"
 
+#include "../../Game/Encapsulation/Networking/NetworkDataTypes.hpp"
+#include "../../Game/Encapsulation/Networking/IIoService.hpp"
+#include "../../Game/Encapsulation/Networking/Boost/IoService.hpp"
+#include "../../Game/Encapsulation/Networking/Boost/ErrorCode.hpp"
+#include "../../Game/Encapsulation/Networking/Boost/MethodEncaps.hpp"
+
 using boost::asio::ip::udp;
-using boost::system::error_code;
 
 class UdpServer : public IProtocol {
  public:
-  UdpServer(boost::asio::io_service &t_io_service,
-            InputManager &t_input_manager, bool &t_is_running);
+  UdpServer(rtype::IIoService &t_io_service, InputManager &t_input_manager,
+            bool &t_is_running);
   ~UdpServer();
   void sendMessage(const std::string &);
   void receiveClient();
-  void handleReceive(const boost::system::error_code &error, std::size_t size);
-  void handleSend(std::string t_msg, const boost::system::error_code &t_error,
+  void handleReceive(const rtype::ErrorCode &error, std::size_t size);
+  void handleSend(std::string t_msg, const rtype::ErrorCode &t_errort_error,
                   std::size_t t_size);
 
   void addEvent(std::shared_ptr<Action> event);
@@ -45,7 +50,7 @@ class UdpServer : public IProtocol {
   udp::socket m_socket;
   udp::endpoint m_remoteEndpoint;
   std::array<char, 1024> m_recvBuffer;
-  boost::asio::io_service &m_io_service;
+  rtype::IIoService &m_io_service;
   std::array<int, 2> remotePortArray;
   InputManager &m_input_manager;
   InputManager m_send_event_manager;

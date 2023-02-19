@@ -42,7 +42,7 @@ void InputManager::recordInputs(const rtype::Event &t_event) {
       break;
   }
 
-  //std::this_thread::sleep_for(std::chrono::milliseconds(100)); // This should change
+  //rtype::thread_sleep(100); // This should change
 }
 
 void InputManager::addActionsToQueue(std::shared_ptr<Action> t_action) {

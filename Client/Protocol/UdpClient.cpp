@@ -1,12 +1,12 @@
 #include "./UdpClient.hpp"
 
-UdpClient::UdpClient(boost::asio::io_service &t_io_service,
-                     const std::string &t_host, const std::string &t_port,
-                     const std::size_t &t_ownPort,
+UdpClient::UdpClient(rtype::IIoService &t_io_service, const std::string &t_host,
+                     const std::string &t_port, const std::size_t &t_ownPort,
                      InputManager &t_input_manager,
                      InputManager &t_client_input_manager)
     : m_io_service(t_io_service), m_remoteEndpoint(udp::v4(), stoi(t_port)),
-      m_socket(t_io_service, udp::endpoint(udp::v4(), t_ownPort)),
+      m_socket(t_io_service.getIoService(),
+               udp::endpoint(udp::v4(), t_ownPort)),
       m_input_manager(t_input_manager),
       m_client_input_manager(t_client_input_manager) {
   m_flag = ConnectState::none;
@@ -23,20 +23,17 @@ void UdpClient::sendMessage(const std::string &t_msg) {
   m_socket.send_to(boost::asio::buffer(t_msg, t_msg.size()), m_remoteEndpoint);
 }
 
-void UdpClient::handleSend(std::string t_msg,
-                           const boost::system::error_code &t_error,
+void UdpClient::handleSend(std::string t_msg, const rtype::ErrorCode &t_error,
                            std::size_t t_size) {}
 
 void UdpClient::receiveClient() {
   std::cout << "listening" << std::endl;
-  m_socket.async_receive_from(
-    boost::asio::buffer(m_recvBuffer), m_remoteEndpoint,
-    boost::bind(&UdpClient::handleReceive, this,
-                boost::asio::placeholders::error,
-                boost::asio::placeholders::bytes_transferred));
+  m_socket.async_receive_from(boost::asio::buffer(m_recvBuffer),
+                              m_remoteEndpoint,
+                              rtype::bind(&UdpClient::handleReceive, this));
 }
 
-void UdpClient::handleReceive(const boost::system::error_code &t_error,
+void UdpClient::handleReceive(const rtype::ErrorCode &t_error,
                               std::size_t t_size) {
   if (!t_error) {
     std::string msg =

@@ -65,7 +65,7 @@ IProtocol::getIncreaseAction(std::vector<std::string> commands, int action_id,
 std::shared_ptr<Action> IProtocol::getAction(std::string command) {
   std::vector<std::string> commands;
 
-  boost::split(commands, command, boost::is_any_of(";"));
+  rtype::split_command(commands, command, ";");
 
   int action_id = std::stoi(commands[0]);
   std::string action_type = commands[1];

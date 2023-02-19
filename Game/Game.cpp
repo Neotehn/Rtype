@@ -1,6 +1,7 @@
 #include "Game.hpp"
 
-Game::Game(std::size_t t_flag) {
+Game::Game(std::size_t t_flag, rtype::IIoService &t_io_service)
+    : m_io_service(t_io_service) {
   m_window = new rtype::RenderWindow(800, 800,
                                      t_flag == CommunicationFlag::server
                                        ? "R-Type Epitech Server"
@@ -80,12 +81,12 @@ void Game::run() {
     while (m_flag == CommunicationFlag::server &&
            m_serverCom->m_flag != m_serverCom->single) {
       std::cout << "waiting on Client Connection" << std::endl;
-      boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
+      rtype::thread_sleep(3000);
     }
     while (m_flag == CommunicationFlag::client &&
            m_clientCom->m_flag != m_clientCom->connected) {
       std::cout << "Connecting to Server ..." << std::endl;
-      boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
+      rtype::thread_sleep(3000);
       StateAction start_action =
         StateAction(Action::ActionType::START, m_port_number);
       m_clientCom->sendMessage(start_action.getCommand());

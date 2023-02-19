@@ -9,6 +9,7 @@
 #include "./ECS/DataTypesECS.hpp"
 #include "./ECS/ISystem.hpp"
 
+#include "./Encapsulation/Networking/Boost/MethodEncaps.hpp"
 #include "./Encapsulation/IRenderWindow.hpp"
 #include "./Encapsulation/SFML/RenderWindow.hpp"
 
@@ -32,7 +33,7 @@
 
 class Game {
  public:
-  Game(std::size_t t_flag);
+  Game(std::size_t t_flag, rtype::IIoService &t_io_service);
   ~Game();
 
   void run();
@@ -41,7 +42,7 @@ class Game {
   enum CommunicationFlag { server, client };
   bool m_is_running;
   std::size_t m_port_number;
-  boost::asio::io_service m_io_service;
+  rtype::IIoService &m_io_service;
   rtype::IRenderWindow *m_window;
   std::vector<SoundSystem::SoundType> m_sounds;
   InputManager m_input_manager;

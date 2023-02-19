@@ -1,9 +1,9 @@
 #include "./UdpServer.hpp"
 
-UdpServer::UdpServer(boost::asio::io_service &t_io_service,
+UdpServer::UdpServer(rtype::IIoService &t_io_service,
                      InputManager &t_input_manager, bool &t_is_running)
     : m_io_service(t_io_service), m_input_manager(t_input_manager),
-      m_socket(t_io_service, udp::endpoint(udp::v4(), 50000)),
+      m_socket(t_io_service.getIoService(), udp::endpoint(udp::v4(), 50000)),
       m_is_running(t_is_running) {
   m_flag = GameMode::none;
   receiveClient();
@@ -21,20 +21,17 @@ void UdpServer::sendMessage(const std::string &t_msg) {
   m_socket.send_to(boost::asio::buffer(t_msg, t_msg.size()), m_remoteEndpoint);
 }
 
-void UdpServer::handleSend(std::string t_msg,
-                           const boost::system::error_code &t_error,
+void UdpServer::handleSend(std::string t_msg, const rtype::ErrorCode &t_error,
                            std::size_t t_size) {}
 
 void UdpServer::receiveClient() {
   std::cout << "listening" << std::endl;
   m_socket.async_receive_from(
     boost::asio::buffer(m_recvBuffer), m_remoteEndpoint,
-    boost::bind(&UdpServer::handleReceive, this,
-                boost::asio::placeholders::error,
-                boost::asio::placeholders::bytes_transferred));
+    rtype::bind<UdpServer>(&UdpServer::handleReceive, this));
 }
 
-void UdpServer::handleReceive(const boost::system::error_code &t_error,
+void UdpServer::handleReceive(const rtype::ErrorCode &t_error,
                               std::size_t t_size) {
   if (!t_error) {
     std::string msg =
