@@ -43,9 +43,16 @@ void rtype::RenderWindow::create(unsigned int t_width, unsigned int t_height,
   m_window.create(sf::VideoMode(t_width, t_height), t_title);
 }
 
+void rtype::RenderWindow::create(unsigned int t_width, unsigned int t_height,
+                                 std::string t_title, rtype::Style t_style) {
+  m_window.create(sf::VideoMode(t_width, t_height), t_title, t_style);
+}
+
 bool rtype::RenderWindow::pollEvent(rtype::Event &t_event) {
   bool res = m_window.pollEvent(m_event);
   t_event.type = rtype::EventType(m_event.type);
   t_event.key = rtype::EventKey(m_event.key.code);
   return res;
 }
+
+sf::RenderWindow *rtype::RenderWindow::getRenderWindow() { return &m_window; }

@@ -16,6 +16,8 @@ namespace rtype {
     bool loadFromFile(const std::string &filename,
                       const IntRect &area = IntRect()) override;
 
+    rtype::Vector2u getSize() const override;
+
     const sf::Texture *getTexture();
 
    private:

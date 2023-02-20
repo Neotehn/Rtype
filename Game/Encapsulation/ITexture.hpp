@@ -13,6 +13,8 @@ namespace rtype {
     virtual bool loadFromFile(const std::string &filename) = 0;
     virtual bool loadFromFile(const std::string &filename,
                               const IntRect &area) = 0;
+
+    virtual rtype::Vector2u getSize() const = 0;
   };
 }  // namespace rtype
 

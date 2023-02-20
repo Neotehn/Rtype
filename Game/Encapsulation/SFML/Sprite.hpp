@@ -13,18 +13,21 @@ namespace rtype {
     Sprite() = default;
     ~Sprite() override = default;
 
-    void setTexture(rtype::ITexture *texture) override;
+    void setTexture(rtype::ITexture *texture, bool reset_rect) override;
     void setTextureRect(const rtype::IntRect &rectangle) override;
     void setPosition(const rtype::Vector2f &position) override;
     void setScale(const rtype::Vector2f &factor) override;
     void setRotation(float angle) override;
     void setOrigin(const rtype::Vector2f &origin) override;
+    void setColor(const rtype::Color &color) override;
     void move(const rtype::Vector2f &offset) override;
     void rotate(float angle) override;
     void scale(const rtype::Vector2f &factor) override;
     const rtype::ITexture *getTexture() const override;
     rtype::FloatRect getLocalBounds() const override;
     rtype::FloatRect getGlobalBounds() const override;
+
+    bool contains(const rtype::Vector2f &point) const override;
 
     sf::Sprite &getSprite();
 

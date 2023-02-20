@@ -2,15 +2,18 @@
 #define STATE_HPP_
 
 #include <memory>
-#include <SFML/Graphics/RenderWindow.hpp>
 
-#include "MusicPlayer.hpp"
+#include "../../Game/Encapsulation/GraphicDataTypes.hpp"
+#include "../../Game/Encapsulation/IRenderWindow.hpp"
+#include "../../Game/Encapsulation/IMouse.hpp"
+#include "../../Game/Encapsulation/SFML/Mouse.hpp"
+#include "./MusicPlayer.hpp"
 
 class StateMachine;
 
 class State {
  public:
-  State(StateMachine &t_machine, sf::RenderWindow &t_window,
+  State(StateMachine &t_machine, rtype::IRenderWindow *t_window,
         MusicPlayer &t_music_player, bool t_replace = true);
 
   virtual ~State() = default;
@@ -29,7 +32,8 @@ class State {
 
  protected:
   StateMachine &m_state_machine;
-  sf::RenderWindow &m_window;
+  rtype::IRenderWindow *m_window;
+  rtype::IMouse *m_mouse;
   MusicPlayer &m_music_player;
   bool m_replace;
   std::unique_ptr<State> m_next;

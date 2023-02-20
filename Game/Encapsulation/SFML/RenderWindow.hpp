@@ -28,7 +28,11 @@ namespace rtype {
     void setFramerateLimit(unsigned int t_fps) override;
     void create(unsigned int t_width, unsigned int t_height,
                 std::string t_title) override;
+    void create(unsigned int t_width, unsigned int t_height,
+                std::string t_title, rtype::Style t_style) override;
     bool pollEvent(rtype::Event &t_event) override;
+
+    sf::RenderWindow *getRenderWindow();
 
    private:
     sf::RenderWindow m_window;

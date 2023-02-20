@@ -1,13 +1,10 @@
-#include "Game.hpp"
+#include "./GameState.hpp"
 
-Game::Game(std::size_t t_flag) {
-  m_window = new rtype::RenderWindow(800, 800,
-                                     t_flag == CommunicationFlag::server
-                                       ? "R-Type Epitech Server"
-                                       : "R-Type Epitech Client");
-  m_window->setFramerateLimit(60);
+GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
+                     MusicPlayer &t_music_player, std::size_t t_flag,
+                     const bool t_replace)
+    : State{t_machine, t_window, t_music_player, t_replace} {
   m_is_running = true;
-
   if (t_flag == client) {
     m_flag = CommunicationFlag::client;
     m_port_number = rand() % 15000 + 40001;
@@ -20,9 +17,14 @@ Game::Game(std::size_t t_flag) {
 
     m_serverCom = new UdpServer(m_io_service, m_input_manager, m_is_running);
   }
+  m_music_player.play(MusicID::MISSION_THEME);
+  std::shared_ptr<EntityManager> entity_manager =
+    std::make_shared<EntityManager>(initEntityManager());
+  //   std::vector<std::shared_ptr<ISystem>> systems = initSystems(entity_manager);
+  m_systems = initSystems(entity_manager);
 }
 
-Game::~Game() {
+GameState::~GameState() {
   if (m_flag == CommunicationFlag::server) {
     delete m_serverCom;
   } else {
@@ -30,7 +32,7 @@ Game::~Game() {
   }
 }
 
-EntityManager Game::initEntityManager() {
+EntityManager GameState::initEntityManager() {
   EntityManager entity_manager;
   initBackground(entity_manager);
   if (m_flag == CommunicationFlag::server) {
@@ -40,7 +42,7 @@ EntityManager Game::initEntityManager() {
 }
 
 std::vector<std::shared_ptr<ISystem>>
-Game::initSystems(std::shared_ptr<EntityManager> entity_manager) {
+GameState::initSystems(std::shared_ptr<EntityManager> entity_manager) {
   std::vector<std::shared_ptr<ISystem>> systems;
 
   if (m_flag == CommunicationFlag::server) {
@@ -70,12 +72,11 @@ Game::initSystems(std::shared_ptr<EntityManager> entity_manager) {
   return systems;
 }
 
-void Game::run() {
-  std::shared_ptr<EntityManager> entity_manager =
-    std::make_shared<EntityManager>(initEntityManager());
-  std::vector<std::shared_ptr<ISystem>> systems = initSystems(entity_manager);
+void GameState::pause() { std::cout << "GameState Pause\n"; }
 
-  std::cout << "running " << m_flag << std::endl;
+void GameState::resume() { std::cout << "GameState Resume\n"; }
+
+void GameState::update() {
   while (m_is_running) {
     while (m_flag == CommunicationFlag::server &&
            m_serverCom->m_flag != m_serverCom->single) {
@@ -119,7 +120,7 @@ void Game::run() {
     if (m_flag == CommunicationFlag::server && m_serverCom->m_flag) {
       m_serverCom->sendEvents();
     }
-    for (std::shared_ptr<ISystem> system : systems) {
+    for (std::shared_ptr<ISystem> system : m_systems) {
       system->updateData(data);
       system->update();
     }
@@ -131,4 +132,7 @@ void Game::run() {
       StateAction(Action::ActionType::END, m_port_number);
     m_clientCom->sendMessage(start_action.getCommand());
   }
+  m_state_machine.quit();
 }
+
+void GameState::draw() {}
