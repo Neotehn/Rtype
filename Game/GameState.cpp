@@ -20,7 +20,6 @@ GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
   m_music_player.play(MusicID::MISSION_THEME);
   std::shared_ptr<EntityManager> entity_manager =
     std::make_shared<EntityManager>(initEntityManager());
-  //   std::vector<std::shared_ptr<ISystem>> systems = initSystems(entity_manager);
   m_systems = initSystems(entity_manager);
 }
 

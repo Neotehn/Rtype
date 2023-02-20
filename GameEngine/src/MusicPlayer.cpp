@@ -8,6 +8,8 @@ MusicPlayer::MusicPlayer() : m_volume(100.f) {
   m_music->setVolume(m_volume);
 }
 
+MusicPlayer::~MusicPlayer() { delete m_music; }
+
 void MusicPlayer::play(MusicID t_theme) { m_music->play(t_theme); }
 
 void MusicPlayer::stop() { m_music->stop(); }
