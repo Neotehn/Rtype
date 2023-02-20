@@ -1,7 +1,8 @@
 #include "Sprite.hpp"
 
-void rtype::Sprite::setTexture(rtype::ITexture *texture) {
-  m_sprite.setTexture(*dynamic_cast<rtype::Texture *>(texture)->getTexture());
+void rtype::Sprite::setTexture(rtype::ITexture *texture, bool reset_rect) {
+  m_sprite.setTexture(*dynamic_cast<rtype::Texture *>(texture)->getTexture(),
+                      reset_rect);
 }
 
 void rtype::Sprite::setTextureRect(const rtype::IntRect &rectangle) {
@@ -22,6 +23,11 @@ void rtype::Sprite::setRotation(float angle) { m_sprite.setRotation(angle); }
 
 void rtype::Sprite::setOrigin(const rtype::Vector2f &origin) {
   m_sprite.setOrigin(origin.x, origin.y);
+}
+
+void rtype::Sprite::setColor(const rtype::Color &color) {
+  sf::Color sfml_color(color.r, color.g, color.b, color.a);
+  m_sprite.setColor(sfml_color);
 }
 
 void rtype::Sprite::move(const rtype::Vector2f &offset) {
@@ -50,6 +56,10 @@ rtype::FloatRect rtype::Sprite::getGlobalBounds() const {
   sf::FloatRect sfml_bounds = m_sprite.getGlobalBounds();
   return rtype::FloatRect{sfml_bounds.left, sfml_bounds.top, sfml_bounds.width,
                           sfml_bounds.height};
+}
+
+bool rtype::Sprite::contains(const rtype::Vector2f &point) const {
+  return m_sprite.getGlobalBounds().contains(point.x, point.y);
 }
 
 sf::Sprite &rtype::Sprite::getSprite() { return m_sprite; }

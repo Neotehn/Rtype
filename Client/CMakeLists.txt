@@ -14,14 +14,13 @@ set(CLIENT_HPP ../Game/ECS/ComponentPool.hpp
         ../Game/EventQueue.hpp
         ../Game/Systems/MovementSystem.hpp
         ../Game/Systems/ShootingSystem.hpp
-                ../Game/Systems/DestroySystem.hpp 
-                ../Game/Systems/CollisionSystem.hpp 
-                ../Game/Systems/RandomEnemyGeneratorSystem.hpp
-                ../Game/Systems/DamageSystem.hpp 
-                ../Game/Game.hpp
-                src/Action/IAction.hpp
-                ../Game/Timer.hpp
-                src/Action/ShootAction.hpp
+        ../Game/Systems/DestroySystem.hpp
+        ../Game/Systems/CollisionSystem.hpp
+        ../Game/Systems/RandomEnemyGeneratorSystem.hpp
+        ../Game/Systems/DamageSystem.hpp
+        src/Action/IAction.hpp
+        ../Game/Timer.hpp
+        src/Action/ShootAction.hpp
         src/Action/MovementAction.hpp
         src/Action/StateAction.hpp
         src/Action/PosAction.hpp
@@ -53,7 +52,18 @@ set(CLIENT_HPP ../Game/ECS/ComponentPool.hpp
         ../Game/Encapsulation/SFML/RenderWindow.hpp
         ../Game/Encapsulation/SFML/Sounds.hpp
         ../Game/Encapsulation/SFML/Sprite.hpp
-        ../Game/Encapsulation/SFML/Texture.hpp)
+        ../Game/Encapsulation/SFML/Texture.hpp
+        ../GameEngine/src/Button.hpp
+        ../GameEngine/src/Core.hpp
+        ../GameEngine/src/MusicPlayer.hpp
+        ../GameEngine/src/Sprite.hpp
+        ../GameEngine/src/State.hpp
+        ../GameEngine/src/StateMachine.hpp
+        ../Game/GameState.hpp
+        ../GameEngine/src/States/MainState.hpp
+        ../GameEngine/src/States/SettingsState.hpp
+        ../Game/Encapsulation/IMouse.hpp
+        ../Game/Encapsulation/SFML/Mouse.hpp)
 
 set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         src/InputManager/InputManager.cpp
@@ -65,8 +75,7 @@ set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         ../Game/Systems/AnimationSystem.cpp
         ../Game/Systems/DestroySystem.cpp
         ../Game/Systems/DamageSystem.cpp
-        ../Game/Game.cpp
-                src/Action/IAction.cpp
+        src/Action/IAction.cpp
         src/Action/ShootAction.cpp
         src/Action/MovementAction.cpp
         src/Action/StateAction.cpp
@@ -91,7 +100,17 @@ set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         ../Game/Encapsulation/SFML/Sounds.cpp
         ../Game/Encapsulation/SFML/Sprite.cpp
         ../Game/Encapsulation/SFML/Texture.cpp
-        ../Game/Encapsulation/SFML/RectangleShape.cpp)
+        ../Game/Encapsulation/SFML/RectangleShape.cpp
+        ../GameEngine/src/Button.cpp
+        ../GameEngine/src/Core.cpp
+        ../GameEngine/src/MusicPlayer.cpp
+        ../GameEngine/src/Sprite.cpp
+        ../GameEngine/src/State.cpp
+        ../GameEngine/src/StateMachine.cpp
+        ../Game/GameState.cpp
+        ../GameEngine/src/States/MainState.cpp
+        ../GameEngine/src/States/SettingsState.cpp
+        ../Game/Encapsulation/SFML/Mouse.cpp)
 
 include(FetchContent)
 FetchContent_Declare(SFML

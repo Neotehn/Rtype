@@ -6,13 +6,13 @@
 #include <stack>
 #include <stdexcept>
 
-#include "MusicPlayer.hpp"
-#include "State.hpp"
+#include "./MusicPlayer.hpp"
+#include "./State.hpp"
 
 class StateMachine {
  public:
   StateMachine();
-  const bool running() { return m_running; }
+  const bool running();
   void run(std::unique_ptr<State> t_state);
   void nextState();
   void update();
@@ -22,7 +22,7 @@ class StateMachine {
 
   template<typename T>
   static std::unique_ptr<T> build(StateMachine &t_machine,
-                                  sf::RenderWindow &t_window,
+                                  rtype::IRenderWindow *t_window,
                                   MusicPlayer &t_music_playerbool,
                                   std::size_t t_flag, bool t_replace = true);
 
@@ -34,7 +34,7 @@ class StateMachine {
 
 template<typename T>
 std::unique_ptr<T> StateMachine::build(StateMachine &t_machine,
-                                       sf::RenderWindow &t_window,
+                                       rtype::IRenderWindow *t_window,
                                        MusicPlayer &t_music_player,
                                        std::size_t t_flag, bool t_replace) {
   auto new_state = std::unique_ptr<T>{nullptr};

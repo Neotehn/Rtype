@@ -16,4 +16,9 @@ bool rtype::Texture::loadFromFile(const std::string &filename,
   return m_texture->loadFromFile(filename, sfml_area);
 }
 
+rtype::Vector2u rtype::Texture::getSize() const {
+  sf::Vector2u size = m_texture->getSize();
+  return {size.x, size.y};
+}
+
 const sf::Texture *rtype::Texture::getTexture() { return m_texture; }

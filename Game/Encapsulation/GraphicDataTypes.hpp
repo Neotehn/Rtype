@@ -38,6 +38,11 @@ namespace rtype {
     unsigned int y;
   };
 
+  struct Vector2i {
+    int x;
+    int y;
+  };
+
   struct IntRect {
     int left;
     int top;
@@ -68,6 +73,16 @@ namespace rtype {
   static const Color Magenta = {255, 0, 255, 255};
   static const Color Cyan = {0, 255, 255, 255};
   static const Color Transparent = {0, 0, 0, 0};
+
+  enum Style {
+    None = 0,
+    Titlebar = 1 << 0,
+    Resize = 1 << 1,
+    Close = 1 << 2,
+    Fullscreen = 1 << 3,
+
+    Default = Titlebar | Resize | Close
+  };
 
 }  // namespace rtype
 #endif  //R_TYPE_CLIENT_GRAPHICDATATYPES_HPP
