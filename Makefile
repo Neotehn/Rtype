@@ -16,6 +16,7 @@ ifeq ($(wildcard ./build), )
 endif
 
 run: install
+	ls
 	cmake CmakeLists.txt
 
 clean:
