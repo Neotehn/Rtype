@@ -1,4 +1,4 @@
-#include "../inc/StateMachine.hpp"
+#include "./StateMachine.hpp"
 
 StateMachine::StateMachine() : m_resume(false), m_running(false) {}
 
@@ -6,6 +6,8 @@ void StateMachine::run(std::unique_ptr<State> t_state) {
   m_running = true;
   m_states.push(std::move(t_state));
 }
+
+const bool StateMachine::running() { return m_running; }
 
 void StateMachine::draw() { m_states.top()->draw(); }
 

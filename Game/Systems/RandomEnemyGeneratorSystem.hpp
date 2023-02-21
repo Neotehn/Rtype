@@ -7,6 +7,7 @@
 #include "../ECS/ISystem.hpp"
 #include "../ECS/DataTypesECS.hpp"
 #include "../../Server/Protocol/UdpServer.hpp"
+#include "../Encapsulation/SFML/RectangleShape.hpp"
 
 class RandomEnemyGeneratorSystem : public ISystem {
  public:

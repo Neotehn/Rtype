@@ -114,7 +114,7 @@ EntityID Action::getCollisionPartnerId() const {
 
 Action::ObjectType Action::getCreateType() const { return m_object_type; }
 
-sf::Vector2f Action::getCreatePosition() const { return m_position; }
+rtype::Vector2f Action::getCreatePosition() const { return m_position; }
 
 std::string Action::getCreateSpritePath() const { return m_sprite_path; }
 

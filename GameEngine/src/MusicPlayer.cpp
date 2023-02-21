@@ -1,30 +1,22 @@
-/*
-** EPITECH PROJECT, 2023
-** Rtype
-** File description:
-** MusicPlayer
-*/
+#include "./MusicPlayer.hpp"
 
-#include "../inc/MusicPlayer.hpp"
-
-MusicPlayer::MusicPlayer() : m_music(), m_filenames(), m_volume(100.f) {
-  m_filenames[MusicID::MENUTHEME] = "./assets/music/music1.ogg";
-  m_filenames[MusicID::MISSIONTHEME] = "./assets/music/music2.ogg";
+MusicPlayer::MusicPlayer() : m_volume(100.f) {
+  m_music = new rtype::Music();
+  m_music->openFromFile("./assets/music/music1.ogg");
+  m_music->openFromFile("./assets/music/music2.ogg");
+  m_music->setLoop(true);
+  m_music->setVolume(m_volume);
 }
 
-void MusicPlayer::play(MusicID t_theme) {
-  std::string filename = m_filenames[t_theme];
-  if (!m_music.openFromFile(filename))
-    throw std::runtime_error("Music " + filename + " could not be loaded.");
-  m_music.setVolume(m_volume);
-  m_music.setLoop(true);
-  m_music.play();
-}
+MusicPlayer::~MusicPlayer() { delete m_music; }
 
-void MusicPlayer::stop() { m_music.stop(); }
+void MusicPlayer::play(MusicID t_theme) { m_music->play(t_theme); }
+
+void MusicPlayer::stop() { m_music->stop(); }
+
 void MusicPlayer::setPaused(bool t_paused) {
   if (t_paused)
-    m_music.pause();
+    m_music->pause();
   else
-    m_music.play();
+    m_music->play();
 }

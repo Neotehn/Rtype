@@ -4,6 +4,9 @@
 #include <memory>
 #include "EntityViewer.hpp"
 #include "DataTypesECS.hpp"
+#include "../Encapsulation/GraphicDataTypes.hpp"
+#include "../Encapsulation/IRectangleShape.hpp"
+#include "../Encapsulation/SFML/RectangleShape.hpp"
 
 class ISystem {
  public:

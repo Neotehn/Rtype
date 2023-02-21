@@ -1,9 +1,9 @@
 #include "DisplaySystem.hpp"
 
 DisplaySystem::DisplaySystem(std::shared_ptr<EntityManager> t_em,
-                             sf::RenderWindow &t_window) {
+                             rtype::IRenderWindow *t_window) {
   m_em = t_em;
-  m_window = &t_window;
+  m_window = t_window;
 }
 
 DisplaySystem::~DisplaySystem() {}
@@ -12,7 +12,7 @@ void DisplaySystem::update() {
   m_window->clear();
   for (EntityID ent : EntityViewer<BackgroundLayer>(*m_em.get())) {
     BackgroundLayer *background = (*m_em.get()).Get<BackgroundLayer>(ent);
-    m_window->draw(*background->sprite.getSprite());
+    m_window->draw(background->sprite.getSprite());
   }
   for (EntityID ent : EntityViewer<Player>(*m_em.get())) {
     Player *player = (*m_em.get()).Get<Player>(ent);

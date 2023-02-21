@@ -23,7 +23,7 @@ void DamageSystem::update() {
 
       if (new_health < 0) { return; }
       if (new_health == 0) {
-        std::cout << "Player died" << std::endl;
+        std::cout << "Player died :(" << std::endl;
         m_play_sounds.push_back(SoundSystem::SoundType::death);
         m_client_input_manager.addActionsToQueue(std::make_shared<Action>(
           StateAction(Action::ActionType::END, m_port_number)));
@@ -34,7 +34,7 @@ void DamageSystem::update() {
         SpriteECS(player->health.healthbar
                     .getSpritesPaths()[player->health.healthbar.getHealth()]);
 
-      player->health.body.setTexture(health_new_bar.getTexture());
+      player->health.body->setTexture(health_new_bar.getTexture());
     }
   }
 }
