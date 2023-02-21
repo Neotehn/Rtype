@@ -9,8 +9,8 @@ sudo apt-get install -y libgl1-mesa-dev libglx-dev libudev-dev libopenal-dev lib
 
 # Move installed packages to the created folder
 sudo cp /usr/include/SFML $install_folder/
-sudo cp /usr/lib/x86_64-linux-gnu/libsfml-* $install_folder/
-sudo cp /usr/lib/x86_64-linux-gnu/pkgconfig/sfml-* $install_folder/
+sudo cp /usr/lib/x86_64-linux-gnu/libsfml-. $install_folder/
+sudo cp /usr/lib/x86_64-linux-gnu/pkgconfig/sfml-. $install_folder/
 sudo cp /usr/share/SFML $install_folder/
 
 # Print installation summary
