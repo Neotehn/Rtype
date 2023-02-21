@@ -5,10 +5,10 @@ UdpClient::UdpClient(boost::asio::io_service &t_io_service,
                      const std::size_t &t_ownPort,
                      InputManager &t_input_manager,
                      InputManager &t_client_input_manager)
-    : m_io_service(t_io_service), m_remoteEndpoint(udp::v4(), stoi(t_port)),
-      m_socket(t_io_service,
-               udp::endpoint(boost::asio::ip::address::from_string(t_host),
-                             t_ownPort)),
+    : m_io_service(t_io_service),
+      m_remoteEndpoint(boost::asio::ip::address::from_string(t_host),
+                       stoi(t_port)),
+      m_socket(t_io_service, udp::endpoint(udp::v4(), t_ownPort)),
       m_input_manager(t_input_manager),
       m_client_input_manager(t_client_input_manager) {
   m_flag = ConnectState::none;
@@ -22,7 +22,6 @@ UdpClient::~UdpClient() {
 }
 
 void UdpClient::sendMessage(const std::string &t_msg) {
-  // m_socket.send_to(boost::asio::buffer(m_data_received, sizeof(BinaryData) + m_message_lenght), m_remoteEndpoint);
   m_socket.send_to(boost::asio::buffer(t_msg, t_msg.size()), m_remoteEndpoint);
 }
 

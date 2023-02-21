@@ -18,7 +18,7 @@ class SettingsState final : public State {
  public:
   SettingsState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
                 MusicPlayer &t_music_player, std::size_t t_flag,
-                bool t_replace = true);
+                std::string t_address, bool t_replace = true);
   void pause() override;
   void resume() override;
   void update() override;
@@ -29,6 +29,7 @@ class SettingsState final : public State {
   rtype::ISprite *m_bg_s;
   Button m_start_btn;
   std::size_t m_flag;
+  std::string m_address;
 };
 
 #endif  // !SETTINGSSTATE_HPP_

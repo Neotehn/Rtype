@@ -2,16 +2,14 @@
 
 GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
                      MusicPlayer &t_music_player, std::size_t t_flag,
-                     const bool t_replace)
+                     std::string t_address, const bool t_replace)
     : State{t_machine, t_window, t_music_player, t_replace} {
   m_is_running = true;
   if (t_flag == client) {
     m_flag = CommunicationFlag::client;
     m_port_number = rand() % 15000 + 40001;
-
-    m_clientCom =
-      new UdpClient(m_io_service, "localhost", "50000", m_port_number,
-                    m_input_manager, m_client_input_manager);
+    m_clientCom = new UdpClient(m_io_service, t_address, "50000", m_port_number,
+                                m_input_manager, m_client_input_manager);
   } else {
     m_flag = CommunicationFlag::server;
 

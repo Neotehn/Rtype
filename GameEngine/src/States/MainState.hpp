@@ -19,7 +19,7 @@ class MainState final : public State {
  public:
   MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
             MusicPlayer &t_music_player, std::size_t t_flag,
-            bool t_replace = true);
+            std::string t_address, bool t_replace = true);
   void pause() override;
   void resume() override;
   void update() override;
@@ -31,6 +31,7 @@ class MainState final : public State {
   Button m_start_btn;
   Button m_settings_btn;
   std::size_t m_flag;
+  std::string m_address;
 };
 
 #endif  //!MAINSTATE_HPP_

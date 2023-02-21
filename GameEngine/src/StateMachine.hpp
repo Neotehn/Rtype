@@ -21,10 +21,10 @@ class StateMachine {
   void lastState();
 
   template<typename T>
-  static std::unique_ptr<T> build(StateMachine &t_machine,
-                                  rtype::IRenderWindow *t_window,
-                                  MusicPlayer &t_music_playerbool,
-                                  std::size_t t_flag, bool t_replace = true);
+  static std::unique_ptr<T>
+  build(StateMachine &t_machine, rtype::IRenderWindow *t_window,
+        MusicPlayer &t_music_playerbool, std::size_t t_flag,
+        std::string t_address, bool t_replace = true);
 
  private:
   bool m_running;
@@ -33,15 +33,18 @@ class StateMachine {
 };
 
 template<typename T>
-std::unique_ptr<T> StateMachine::build(StateMachine &t_machine,
-                                       rtype::IRenderWindow *t_window,
-                                       MusicPlayer &t_music_player,
-                                       std::size_t t_flag, bool t_replace) {
+std::unique_ptr<T>
+StateMachine::build(StateMachine &t_machine, rtype::IRenderWindow *t_window,
+                    MusicPlayer &t_music_player, std::size_t t_flag,
+                    std::string t_address, bool t_replace) {
   auto new_state = std::unique_ptr<T>{nullptr};
 
   try {
+    std::cout << "yes" << std::endl;
+    std::cout << t_address << std::endl;
+    std::cout << "yes" << std::endl;
     new_state = std::make_unique<T>(t_machine, t_window, t_music_player, t_flag,
-                                    t_replace);
+                                    t_address, t_replace);
   } catch (std::runtime_error &exception) {
     std::cout << "Failed to create new State\n";
     std::cout << exception.what() << std::endl;

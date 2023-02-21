@@ -37,7 +37,7 @@ class GameState final : public State {
  public:
   GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
             MusicPlayer &t_music_player, std::size_t t_flag,
-            bool t_replace = true);
+            std::string t_address, bool t_replace = true);
   ~GameState();
 
   void pause() override;
@@ -58,6 +58,7 @@ class GameState final : public State {
   std::vector<std::shared_ptr<ISystem>> m_systems;
   bool m_is_running;
   std::vector<SoundSystem::SoundType> m_sounds;
+  std::string m_address;
 
   EntityManager initEntityManager();
   std::vector<std::shared_ptr<ISystem>>
