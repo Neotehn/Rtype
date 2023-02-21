@@ -22,6 +22,7 @@ UdpClient::~UdpClient() {
 }
 
 void UdpClient::sendMessage(const std::string &t_msg) {
+  // m_socket.send_to(boost::asio::buffer(m_data_received, sizeof(BinaryData) + m_message_lenght), m_remoteEndpoint);
   m_socket.send_to(boost::asio::buffer(t_msg, t_msg.size()), m_remoteEndpoint);
 }
 

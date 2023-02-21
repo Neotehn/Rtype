@@ -47,6 +47,7 @@ void UdpServer::receiveClient() {
 void UdpServer::handleReceive(const boost::system::error_code &t_error,
                               std::size_t t_size) {
   if (!t_error) {
+    std::cout << "size: " << std::to_string(t_size) << std::endl;
     std::string msg =
       std::string(m_recvBuffer.begin(), m_recvBuffer.begin() + t_size);
     std::cout << "Received: '" << msg << "' (" << t_error.message() << ")\n";

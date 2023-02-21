@@ -48,7 +48,8 @@ set(CLIENT_HPP ../GameEngine/inc/Button.hpp
         src/Action/Action.hpp
         ../Game/Systems/CreateObjectSystem.hpp
         ../Game/Systems/PowerUpSystem.hpp
-        ../Game/Systems/SoundSystem.hpp)
+        ../Game/Systems/SoundSystem.hpp
+        ../Protocol/BinarySerialization.hpp)
 
 set(CLIENT_SRC ../GameEngine/src/Button.cpp
                 ../GameEngine/src/Core.cpp
@@ -90,7 +91,8 @@ set(CLIENT_SRC ../GameEngine/src/Button.cpp
         src/Action/Action.cpp
         ../Game/Systems/CreateObjectSystem.cpp
         ../Game/Systems/PowerUpSystem.cpp
-        ../Game/Systems/SoundSystem.cpp)
+        ../Game/Systems/SoundSystem.cpp
+        ../Protocol/BinarySerialization.cpp)
 
 include(FetchContent)
 FetchContent_Declare(SFML

@@ -19,6 +19,7 @@
 #include "../../Protocol/IProtocol.hpp"
 #include "../../Client/src/InputManager/InputManager.hpp"
 #include "./UdpSession.hpp"
+#include "../../Protocol/BinarySerialization.hpp"
 
 using boost::asio::ip::udp;
 using boost::system::error_code;
@@ -50,6 +51,7 @@ class UdpServer : public IProtocol {
   std::array<int, 2> remotePortArray;
   InputManager &m_input_manager;
   InputManager m_send_event_manager;
+  BinarySerialization m_data_received;
   bool &m_is_running;
 };
 

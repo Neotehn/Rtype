@@ -13,6 +13,7 @@
 #include <boost/thread.hpp>
 #include "../../Protocol/IProtocol.hpp"
 #include "../src/InputManager/InputManager.hpp"
+#include "../../Protocol/BinarySerialization.hpp"
 
 using boost::asio::ip::udp;
 
@@ -39,6 +40,7 @@ class UdpClient : public IProtocol {
   InputManager &m_input_manager;
   InputManager &m_client_input_manager;
   boost::thread m_thread;
+  BinarySerialization m_received_data;
 };
 
 #endif /* !PROTOCOL_UDPCLIENT_HPP_ */
