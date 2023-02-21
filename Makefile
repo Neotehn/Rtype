@@ -16,7 +16,7 @@ ifeq ($(wildcard ./build), )
 endif
 
 run: install
-	cmake .
+	cmake CmakeLists.txt
 
 clean:
 	$(RM) $(OBJS)
