@@ -21,12 +21,13 @@ class Action : public IAction {
     // DAMAGE = amount of damage based on load time
     // TYPE = 1, 2, ...
     CREATE,  // ACTION_ID;CREATE;ID;TYPE;TYPE_DATA
-    // TYPE = PLAYER, ENEMY, BULLET
+    // TYPE = PLAYER, ENEMY, BULLET, EXPLOSION, POWER_UP, ITEM
     // PLAYER_DATA: X;Y;SPRITE_PATH
     // ENEMY_DATA:  X;Y;VELOCITY
     // BULLET_DATA: X;Y
     // EXPLOSION_DATA: X;Y
     // POWER_UP_DATA: X;Y
+    // ITEM:  X;Y;ITEM_TYPE
     INCREASE,  // ACTION_ID;INCREASE;ID;TYPE;VALUE
     // TYPE = LIFE, SPEED, SHOOTING_SPEED
     COLLISION,  // ACTION_ID;COLLISION;ID1;ID2
@@ -36,7 +37,7 @@ class Action : public IAction {
     END,        // ACTION_ID;END; OR END;PORT_NB
     ERROR,
   };
-  enum ObjectType { PLAYER, ENEMY, BULLET, EXPLOSION, POWER_UP, ERROR_O };
+  enum ObjectType { PLAYER, ENEMY, BULLET, EXPLOSION, POWER_UP, ITEM, ERROR_O };
   enum IncreaseType { SPEED, FIRE_RATE, DAMAGE_I, LIFE, SHIELD, BOMB, ERROR_I };
 
   Action(ActionType type, EntityID id);
@@ -64,6 +65,7 @@ class Action : public IAction {
   int getShootType() const;
 
   float getVelocity() const;
+  int getItemType() const;
 
  protected:
   int m_action_id;
@@ -80,6 +82,7 @@ class Action : public IAction {
   int m_damage = 0;
   int m_shoot_type = 0;
   float m_velocity = -2;
+  int m_item_type = 0;
 };
 
 #endif  //R_TYPE_CLIENT_ACTION_HPP

@@ -115,4 +115,23 @@ struct AnimationObj {
   rtype::IRectangleShape *body;
 };
 
+namespace rtype {
+  enum ItemType {
+    NO_ITEM,  // needs to stay at first position in enum
+    LIFE_ITEM,
+    SPEED_ITEM,
+    BOMB_ITEM,
+    FIRE_ITEM,
+  };
+}
+
+struct SpinningItem {
+  rtype::ItemType type;
+  int value;
+  SpriteECS sprite;
+  Pos position;
+  AnimationTime time;
+  rtype::IRectangleShape *body;
+};
+
 #endif  // ECS_DATATYPESECS_HPP_

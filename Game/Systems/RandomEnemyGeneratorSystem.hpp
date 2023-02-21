@@ -24,6 +24,8 @@ class RandomEnemyGeneratorSystem : public ISystem {
 
   void generateEnemy(int random);
   void generatePowerUp(int random);
+  void createCoin();
+  void createItem(std::string t_path, rtype::ItemType t_type, int t_value);
 };
 
 #endif  // CLIENT_SRC_SYSTEMS_RANDOMENEMYGENERATORSYSTEM_HPP_

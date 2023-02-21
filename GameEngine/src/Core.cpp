@@ -3,7 +3,7 @@
 Core::Core(std::size_t t_flag) {
   m_window = new rtype::RenderWindow();
   m_window->create(
-    800, 800, "R-Type",
+    800, 800, t_flag == 0 ? "R-Type Server" : "R-Type Client",
     static_cast<rtype::Style>(rtype::Style::Titlebar | rtype::Style::Close));
   m_window->setFramerateLimit(30);
 

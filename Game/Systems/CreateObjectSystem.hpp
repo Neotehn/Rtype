@@ -30,6 +30,8 @@ class CreateObjectSystem : public ISystem {
   void createEnemy(EntityID t_id, rtype::Vector2f t_pos, float velocity);
   void createExplosion(EntityID t_id, rtype::Vector2f t_pos);
   void createPowerUp(EntityID t_id, rtype::Vector2f t_pos);
+  void createItem(EntityID t_id, rtype::ItemType t_item_type,
+                  rtype::Vector2f t_pos);
 };
 
 #endif  //R_TYPE_CLIENT_CREATEOBJECTSYSTEM_HPP

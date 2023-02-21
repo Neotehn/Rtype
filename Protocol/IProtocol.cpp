@@ -29,6 +29,10 @@ IProtocol::getCreateAction(std::vector<std::string> commands, int action_id,
     return std::make_shared<Action>(CreateAction(id, CreateAction::POWER_UP,
                                                  rtype::Vector2f{x, y}, "",
                                                  action_id, velocity));
+  } else if (type == Action::ObjectType::ITEM) {
+    velocity = std::stof(commands[6]);
+    return std::make_shared<Action>(CreateAction(
+      id, CreateAction::ITEM, rtype::Vector2f{x, y}, "", action_id, velocity));
   } else {
     return std::make_shared<Action>(VoidAction(id, 0));
   }
