@@ -38,7 +38,16 @@ class Action : public IAction {
     ERROR,
   };
   enum ObjectType { PLAYER, ENEMY, BULLET, EXPLOSION, POWER_UP, ITEM, ERROR_O };
-  enum IncreaseType { SPEED, FIRE_RATE, DAMAGE_I, LIFE, SHIELD, BOMB, ERROR_I };
+  enum IncreaseType {
+    SPEED,
+    FIRE_SHOT,
+    DAMAGE_I,
+    LIFE,
+    SHIELD,
+    BOMB_SHOT,
+    COINS,
+    ERROR_I
+  };
 
   Action(ActionType type, EntityID id);
   Action(ActionType type, EntityID id, int t_action_id);

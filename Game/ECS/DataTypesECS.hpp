@@ -41,11 +41,20 @@ class HealthBar {
 
   const int getHealth() { return m_health; }
   const std::vector<std::string> getSpritesPaths() { return m_sprites_paths; }
-  void setHealth(int t_health) { m_health = t_health; }
+  void setHealth(int t_health) {
+    if (t_health < 0 || t_health > m_max_health) return;
+    m_health = t_health;
+  }
+  void increaseHealth(int t_health) {
+    m_health += t_health;
+    if (m_health > m_max_health) m_health = m_max_health;
+  }
+  void setMaxHealth(int t_max_health) { m_max_health = t_max_health; }
 
  private:
   int m_health;
   std::vector<std::string> m_sprites_paths;
+  int m_max_health = 3;
 };
 
 struct Health {
@@ -99,6 +108,9 @@ struct Player {
   rtype::IRectangleShape *body;
   Health health;
   float speed;
+  int fire_shot = 0;
+  int bomb_shot = 0;
+  int coins = 0;
 };
 
 struct Bullet {

@@ -46,9 +46,9 @@ IProtocol::getIncreaseAction(std::vector<std::string> commands, int action_id,
   if (type == Action::IncreaseType::SPEED) {
     return std::make_shared<Action>(
       IncreaseAction(id, IncreaseAction::SPEED, value, action_id));
-  } else if (type == Action::IncreaseType::FIRE_RATE) {
+  } else if (type == Action::IncreaseType::FIRE_SHOT) {
     return std::make_shared<Action>(
-      IncreaseAction(id, IncreaseAction::FIRE_RATE, value, action_id));
+      IncreaseAction(id, IncreaseAction::FIRE_SHOT, value, action_id));
   } else if (type == Action::IncreaseType::DAMAGE_I) {
     return std::make_shared<Action>(
       IncreaseAction(id, IncreaseAction::DAMAGE_I, value, action_id));
@@ -58,9 +58,12 @@ IProtocol::getIncreaseAction(std::vector<std::string> commands, int action_id,
   } else if (type == Action::IncreaseType::SHIELD) {
     return std::make_shared<Action>(
       IncreaseAction(id, IncreaseAction::SHIELD, value, action_id));
-  } else if (type == Action::IncreaseType::BOMB) {
+  } else if (type == Action::IncreaseType::BOMB_SHOT) {
     return std::make_shared<Action>(
-      IncreaseAction(id, IncreaseAction::BOMB, value, action_id));
+      IncreaseAction(id, IncreaseAction::BOMB_SHOT, value, action_id));
+  } else if (type == Action::IncreaseType::COINS) {
+    return std::make_shared<Action>(
+      IncreaseAction(id, IncreaseAction::COINS, value, action_id));
   } else {
     return std::make_shared<Action>(VoidAction(id, 0));
   }

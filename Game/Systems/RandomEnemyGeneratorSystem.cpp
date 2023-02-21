@@ -11,13 +11,13 @@ RandomEnemyGeneratorSystem::~RandomEnemyGeneratorSystem() {}
 void RandomEnemyGeneratorSystem::updateData(SystemData &t_data) {}
 
 void RandomEnemyGeneratorSystem::update() {
-  int random = rand() % 100;
+  int random = rand() % 1000;
   generateEnemy(random);
   generatePowerUp(random);
 }
 
 void RandomEnemyGeneratorSystem::generateEnemy(int random) {
-  if (random < 1) {
+  if (random < 10) {
     EntityID enemy = m_em->createNewEntity();
     SpriteECS sprite = SpriteECS("./../Client/sprites/r-typesheet30a.gif");
     rtype::Vector2f enemy_pos = {800, float(rand() % 600 + 100)};
@@ -42,24 +42,22 @@ void RandomEnemyGeneratorSystem::generateEnemy(int random) {
 }
 
 void RandomEnemyGeneratorSystem::generatePowerUp(int random) {
-  if (random > 98) {
-    if ((rand() % 10) < 1) {
-      int random_powerup = rand() % 5;
-      if (random_powerup == 0) {
-        createCoin();
-      } else if (random_powerup == 1) {
-        createItem("../Client/sprites/powerup/life_item.png",
-                   rtype::ItemType::LIFE_ITEM, 1);
-      } else if (random_powerup == 2) {
-        createItem("../Client/sprites/powerup/speed_item.png",
-                   rtype::ItemType::SPEED_ITEM, 3);
-      } else if (random_powerup == 3) {
-        createItem("../Client/sprites/powerup/bomb_item.png",
-                   rtype::ItemType::BOMB_ITEM, 5);
-      } else {
-        createItem("../Client/sprites/powerup/fire_item.png",
-                   rtype::ItemType::FIRE_ITEM, 5);
-      }
+  if (random > 998) {
+    int random_powerup = rand() % 5;
+    if (random_powerup == 0) {
+      createCoin();
+    } else if (random_powerup == 1) {
+      createItem("../Client/sprites/powerup/life_item.png",
+                 rtype::ItemType::LIFE_ITEM, 1);
+    } else if (random_powerup == 2) {
+      createItem("../Client/sprites/powerup/speed_item.png",
+                 rtype::ItemType::SPEED_ITEM, 3);
+    } else if (random_powerup == 3) {
+      createItem("../Client/sprites/powerup/bomb_item.png",
+                 rtype::ItemType::BOMB_ITEM, 5);
+    } else {
+      createItem("../Client/sprites/powerup/fire_item.png",
+                 rtype::ItemType::FIRE_ITEM, 5);
     }
   }
 }
