@@ -15,6 +15,7 @@ enum MusicID {
 class MusicPlayer {
  public:
   MusicPlayer();
+  ~MusicPlayer();
   void play(MusicID t_theme);
   void stop();
   void setPaused(bool t_paused);
