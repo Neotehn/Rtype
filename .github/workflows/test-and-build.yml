@@ -13,89 +13,66 @@
 
        - name: Install dependencies
          run: |
-           sudo apt-get update
-           sudo apt-get install libgl1-mesa-dev
-           sudo apt-get install libglx-dev
-           sudo apt-get install libudev-dev
-           sudo apt-get install libopenal-dev
-           sudo apt-get install libvorbis-dev
-           sudo apt-get install libflac-dev
-           sudo apt-get install libogg-dev
-           sudo apt-get install libsfml-dev
-           sudo apt-get install libxrandr-dev
-           sudo apt-get install libx11-dev
-           sudo apt-get install libxcursor-dev
            sudo apt-get install xvfb
-           sudo apt-get install cmake
-
-       - name: Build server
-         run: |
-           cd Server
-           cmake .
-           make
-
-       - name: Run server
-         run: |
-           cd Server
-           ./r-type_server
 
        - name: Start virtual framebuffer
          run: |
            export DISPLAY=:99
            Xvfb :99 -screen 0 1280x1024x24 &
 
-       - name: Build client
+       - name: Build
          run: |
-           cd Client
-           cmake .
-           make
+           make run
 
        - name: Run client
          run: |
-           cd Client
-            xvfb-run -a ./r-type_client &
-            sleep 10
-            kill -SIGTERM $!
+           cd build
+           ./r-type_client 1
 
-   build-and-test-windows:
-     runs-on: windows-latest
-     steps:
-       - name: Checkout code
-         uses: actions/checkout@v3
-
-
-       - name: Install dependencies
-         shell: powershell
+       - name: Run Server
          run: |
-           choco install -y vcbuildtools
-           choco install -y cmake
+           cd build
+           ./r-type_server 0
 
-       - name: Add MSBuild to PATH
-         shell: powershell
-         run: setx PATH "%PATH%;%ProgramFiles(x86)%\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin"
-
-
-       - name: Build server
-         shell: powershell
-         run: |
-           cd Server\
-           cmake --build . --config Release
-
-       - name: Run server
-         shell: powershell
-         run: |
-           cd Server\x64\Release
-           r-type_server.exe
-
-       - name: Build client
-         shell: powershell
-         run: |
-           cd Client\
-           cmake .
-           msbuild.exe r-type_client.sln /p:Configuration=Release
-
-       - name: Run client
-         shell: powershell
-         run: |
-           cd Client\x64\Release
-           r-type_client
+#   build-and-test-windows:
+#     runs-on: windows-latest
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+#
+#
+#       - name: Install dependencies
+#         shell: powershell
+#         run: |
+#           choco install -y vcbuildtools
+#           choco install -y cmake
+#
+#       - name: Add MSBuild to PATH
+#         shell: powershell
+#         run: setx PATH "%PATH%;%ProgramFiles(x86)%\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin"
+#
+#
+#       - name: Build server
+#         shell: powershell
+#         run: |
+#           cd Server\
+#           cmake --build . --config Release
+#
+#       - name: Run server
+#         shell: powershell
+#         run: |
+#           cd Server\x64\Release
+#           r-type_server.exe
+#
+#       - name: Build client
+#         shell: powershell
+#         run: |
+#           cd Client\
+#           cmake .
+#           msbuild.exe r-type_client.sln /p:Configuration=Release
+#
+#       - name: Run client
+#         shell: powershell
+#         run: |
+#           cd Client\x64\Release
+#           r-type_client
