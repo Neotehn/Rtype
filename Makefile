@@ -2,12 +2,12 @@ UNAME := $(shell uname)
 
 installOSspecific:
 ifeq ($(UNAME), Linux)
-   	$(shell mkdir -p ./build)
-   	$(shell cp installLinux.sh ./build && cd ./build && chmod +x installLinux.sh && ./installLinux.sh)
+	$(shell mkdir -p ./build)
+	$(shell cp installLinux.sh ./build && cd ./build && chmod +x installLinux.sh && ./installLinux.sh)
 endif
 ifeq ($(UNAME), Darwin)
-   	$(shell mkdir -p ./build)
-   	$(shell cp installMac.sh ./build && cd ./build && chmod +x installMac.sh && ./installMac.sh)
+	$(shell mkdir -p ./build)
+	$(shell cp installMac.sh ./build && cd ./build && chmod +x installMac.sh && ./installMac.sh)
 endif
 
 install:
