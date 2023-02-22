@@ -1,5 +1,5 @@
 [requires]
-asio/1.24.0
+boost/1.81.0
 sfml/2.5.1
 
 [generators]
@@ -11,3 +11,8 @@ sfml:network=True
 sfml:graphics=True
 sfml:audio=True
 sfml:window=True
+
+[imports]
+ bin, *.dll -> ./bin # Copies all dll files from packages bin folder to my "bin" folder
+ lib, *.dylib* -> ./bin # Copies all dylib files from packages lib folder to my "bin" folder
+ lib, *.so* -> ./bin # Copies all so files from packages lib folder to my "bin" folder

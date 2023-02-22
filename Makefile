@@ -7,7 +7,7 @@ install:
 
 build: normdir conan
 	cmake -S . -B $(BUILD);
-	cmake --build $(BUILD);
+	cmake --build $(BUILD) --config Release;
 	#cp r-type_client ./r-type_server
 
 test: testdir conan
