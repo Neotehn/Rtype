@@ -2,6 +2,7 @@ BUILD = build
 
 install:
 	pip install conan
+	conan profile detect
 	make build
 
 build: normdir conan

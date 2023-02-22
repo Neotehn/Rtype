@@ -11,6 +11,8 @@ sfml:network=True
 sfml:graphics=True
 sfml:audio=True
 sfml:window=True
+sfml:shared=True
+boost:shared=True
 
 [imports]
  bin, *.dll -> ./bin # Copies all dll files from packages bin folder to my "bin" folder
