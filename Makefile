@@ -10,27 +10,16 @@ build: normdir conan
 	cmake --build $(BUILD) --config Release;
 	#cp r-type_client ./r-type_server
 
-test: testdir conan
-	cmake -S . -B $(BUILD) -DTESTMODE=1;
-	cmake --build $(BUILD);
-
-coverage: cleantest test
-	./bin/Tests
-	./outputCoverage.sh
-
-testdir:
-	$(eval BUILD="test/build")
-
 normdir:
 	$(eval BUILD="build")
 
 conan:
-	conan install conanfile.txt -if $(BUILD) --build=missing -c tools.system.package_manager:mode=install
+	conan install conanfile.txt -if $(BUILD) --build=missing
 	cd $(BUILD)/ && chmod +x ./activate.sh && source ./activate.sh
+	echo "Conan env running"
 
 cleanbuild: normdir clean
 
-cleantest: testdir clean cleancoverage
 
 cleancoverage:
 	find . -name "*.gcno" -delete
@@ -45,5 +34,3 @@ clean:
 	rm -rf $(BIN)/*
 
 rebuild: cleanbuild build
-
-retest: testdir cleantest test

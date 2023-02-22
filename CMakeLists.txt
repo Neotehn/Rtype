@@ -4,19 +4,28 @@ project(r-type_client)
 message("Das CMake-Binary-Verzeichnis ist: ${CMAKE_BINARY_DIR}")
 message("Das CMake-Source-Verzeichnis ist: ${CMAKE_SOURCE_DIR}")
 message("Das CMake-Current-Verzeichnis ist: ${CMAKE_CURRENT_SOURCE_DIR}")
+
 SET(CMAKE_BUILD_DIR ${CMAKE_SOURCE_DIR}/build)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BUILD_DIR})
 
 SET(CMAKE_CXX_STANDARD 20)
 
 SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-
 SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 SET(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
 
 include(${CMAKE_BUILD_DIR}/conanbuildinfo.cmake)
-conan_basic_setup(TARGETS)
+conan_basic_setup()
+
+
+if (MSVC)
+    set (CMAKE_GENERATOR "Visual Studio 17" CACHE INTERNAL "" FORCE)
+    add_compile_definitions(WIN32_LEAN_AND_MEAN)
+    add_compile_definitions(_WIN32_WINNT=0x0601)
+else()
+    set (CMAKE_GENERATOR "Unix Makefiles" CACHE INTERNAL "" FORCE)
+    add_compile_options(-g3 -pthread )
+endif()
 
 
 
@@ -113,18 +122,26 @@ set(CLIENT_SRC GameEngine/src/Button.cpp
 
 include(FetchContent)
 
-find_package(SFML 2.5.1 COMPONENTS graphics audio window network)
-find_package(Boost 1.81 REQUIRED system)
-find_package(OpenGL REQUIRED OPTIONAL_COMPONENTS OpenGL)
+#find_package(SFML 2.5.1 COMPONENTS graphics audio window network)
+#find_package(Boost 1.81 REQUIRED system)
+#find_package(OpenGL REQUIRED OPTIONAL_COMPONENTS OpenGL)
+
+
+
+
+#link_directories(${CONAN_LIB_DIRS_BOOST} ${CONAN_LIB_DIRS_SFML})
 
 add_executable(r-type_client ${CLIENT_SRC} ${CLIENT_HPP})
-target_link_libraries(r-type_client ${CONAN_LIBS} sfml-graphics sfml-audio sfml-window sfml-network Boost::system)
+target_link_libraries(r-type_client ${CONAN_LIBS})
+
+#target_include_directories(r-type_client PUBLIC ${CONAN_INCLUDE_DIRS_BOOST} ${CONAN_INCLUDE_DIR_SFML})
 
 target_compile_features(r-type_client PRIVATE cxx_std_17)
+target_compile_options(r-type_client PRIVATE -pthread)
 
-if (WIN32 AND BUILD_SHARED_LIBS)
-    add_custom_command(TARGET r-type_client POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:r-type_client> $<TARGET_FILE_DIR:r-type_client> COMMAND_EXPAND_LISTS)
-endif()
+#if (WIN32 AND BUILD_SHARED_LIBS)
+#    add_custom_command(TARGET r-type_client POST_BUILD
+#            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:r-type_client> $<TARGET_FILE_DIR:r-type_client> COMMAND_EXPAND_LISTS)
+#endif()
 
 install(TARGETS r-type_client)
