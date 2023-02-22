@@ -2,9 +2,11 @@
 
 GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
                      MusicPlayer &t_music_player, std::size_t t_flag,
+                     rtype::IGraphicLoader *t_graphic_loader,
                      const bool t_replace)
-    : State{t_machine, t_window, t_music_player, t_replace} {
+    : State{t_machine, t_window, t_music_player, t_graphic_loader, t_replace} {
   m_is_running = true;
+  m_graphic_loader = t_graphic_loader;
   if (t_flag == client) {
     m_flag = CommunicationFlag::client;
     m_port_number = rand() % 15000 + 40001;

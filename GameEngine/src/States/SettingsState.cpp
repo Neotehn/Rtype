@@ -3,16 +3,17 @@
 SettingsState::SettingsState(StateMachine &t_machine,
                              rtype::IRenderWindow *t_window,
                              MusicPlayer &t_music_player, std::size_t t_flag,
+                             rtype::IGraphicLoader *t_graphic_loader,
                              const bool t_replace)
-    : State(t_machine, t_window, t_music_player, t_replace),
+    : State(t_machine, t_window, t_music_player, t_graphic_loader, t_replace),
       m_start_btn(
         Button("./assets/startBtn.png",
                rtype::Vector2f{static_cast<float>(m_window->getSize().x - 320),
                                static_cast<float>(m_window->getSize().y - 180)},
-               rtype::Vector2f{270, 130})),
+               rtype::Vector2f{270, 130}, t_graphic_loader)),
       m_flag(t_flag) {
-  m_bg_t = new rtype::Texture();
-  m_bg_s = new rtype::Sprite();
+  m_bg_t = m_graphic_loader->loadTexture();
+  m_bg_s = m_graphic_loader->loadSprite();
   if (!m_bg_t->loadFromFile("./assets/menubg.jpg")) {
     throw std::runtime_error("Unable to load image.");
   }
@@ -40,7 +41,8 @@ void SettingsState::update() {
       if (m_start_btn.is_pressed(mouse_pos_f)) {
         std::cout << "startbtn pressed" << std::endl;
         m_next = StateMachine::build<MainState>(m_state_machine, m_window,
-                                                m_music_player, m_flag, true);
+                                                m_music_player, m_flag,
+                                                m_graphic_loader, true);
       }
     }
     switch (event.type) {
@@ -50,8 +52,9 @@ void SettingsState::update() {
       case rtype::EventType::KeyPressed:
         switch (event.key) {
           case rtype::EventKey::Space:
-            m_next = StateMachine::build<MainState>(
-              m_state_machine, m_window, m_music_player, m_flag, true);
+            m_next = StateMachine::build<MainState>(m_state_machine, m_window,
+                                                    m_music_player, m_flag,
+                                                    m_graphic_loader, true);
             break;
           case rtype::EventKey::Escape:
             m_state_machine.quit();
