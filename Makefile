@@ -3,6 +3,7 @@ BUILD = build
 
 install:
 	pip install conan
+	make build
 
 build: normdir conan
 	cmake -S . -B $(BUILD);
