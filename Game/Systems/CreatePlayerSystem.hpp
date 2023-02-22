@@ -8,7 +8,8 @@
 class CreatePlayerSystem : public ISystem {
  public:
   CreatePlayerSystem(std::shared_ptr<EntityManager> t_em,
-                     UdpServer *t_server_com);
+                     UdpServer *t_server_com,
+                     rtype::IGraphicLoader *t_graphic_loader);
   ~CreatePlayerSystem() = default;
 
   void update();
@@ -19,6 +20,7 @@ class CreatePlayerSystem : public ISystem {
   EventQueue m_event_queue;
   UdpServer *m_server_com;
   std::vector<int> m_registered_players;
+  rtype::IGraphicLoader *m_graphic_loader;
 
   bool isRegistered(int t_id);
 };

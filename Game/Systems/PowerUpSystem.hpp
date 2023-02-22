@@ -9,7 +9,8 @@
 class PowerUpSystem : public ISystem {
  public:
   PowerUpSystem(std::shared_ptr<EntityManager> t_em,
-                std::vector<SoundSystem::SoundType> &t_sounds);
+                std::vector<SoundSystem::SoundType> &t_sounds,
+                rtype::IGraphicLoader *t_graphic_loader);
   ~PowerUpSystem();
 
   void update();
@@ -18,6 +19,7 @@ class PowerUpSystem : public ISystem {
  private:
   EventQueue m_event_queue;
   std::vector<SoundSystem::SoundType> &m_play_sounds;
+  rtype::IGraphicLoader *m_graphic_loader;
 
   void increaseHealth(std::shared_ptr<Action> action);
 };

@@ -1,9 +1,11 @@
 #include "ShootingSystem.hpp"
 
 ShootingSystem::ShootingSystem(std::shared_ptr<EntityManager> t_em,
-                               UdpServer *t_serverCom) {
+                               UdpServer *t_serverCom,
+                               rtype::IGraphicLoader *t_graphic_loader) {
   m_em = t_em;
   m_serverCom = t_serverCom;
+  m_graphic_loader = t_graphic_loader;
 }
 
 ShootingSystem::~ShootingSystem() {}
@@ -34,11 +36,12 @@ void ShootingSystem::update() {
 void ShootingSystem::shoot(std::shared_ptr<Action> action) {
   Player *player = (*m_em.get()).Get<Player>(action->getId());
   EntityID bullet = m_em->createNewEntity();
-  SpriteECS sprite = SpriteECS("./../Client/sprites/shoot2.png");
+  SpriteECS sprite =
+    SpriteECS("./../Client/sprites/shoot2.png", m_graphic_loader);
   rtype::Vector2f bullet_pos = {player->position.position.x - 20,
                                 player->position.position.y +
                                   player->body->getSize().y / 2 - 10};
-  rtype::IRectangleShape *bullet_body = new rtype::RectangleShape();
+  rtype::IRectangleShape *bullet_body = m_graphic_loader->loadRectangleShape();
 
   bullet_body->setSize({20, 20});
   bullet_body->setPosition({bullet_pos.x, bullet_pos.y});
@@ -59,11 +62,12 @@ void ShootingSystem::shootFire(std::shared_ptr<Action> action) {
 
   // TODO: replace by actual fire shoot
   EntityID bullet = m_em->createNewEntity();
-  SpriteECS sprite = SpriteECS("./../Client/sprites/shoot3.png");
+  SpriteECS sprite =
+    SpriteECS("./../Client/sprites/shoot3.png", m_graphic_loader);
   rtype::Vector2f bullet_pos = {player->position.position.x - 20,
                                 player->position.position.y +
                                   player->body->getSize().y / 2 - 10};
-  rtype::IRectangleShape *bullet_body = new rtype::RectangleShape();
+  rtype::IRectangleShape *bullet_body = m_graphic_loader->loadRectangleShape();
 
   bullet_body->setSize({20, 20});
   bullet_body->setPosition({bullet_pos.x, bullet_pos.y});
@@ -84,11 +88,12 @@ void ShootingSystem::shootBomb(std::shared_ptr<Action> action) {
 
   // TODO: replace by actual bomb shoot
   EntityID bullet = m_em->createNewEntity();
-  SpriteECS sprite = SpriteECS("./../Client/sprites/shoot4.png");
+  SpriteECS sprite =
+    SpriteECS("./../Client/sprites/shoot4.png", m_graphic_loader);
   rtype::Vector2f bullet_pos = {player->position.position.x - 20,
                                 player->position.position.y +
                                   player->body->getSize().y / 2 - 10};
-  rtype::IRectangleShape *bullet_body = new rtype::RectangleShape();
+  rtype::IRectangleShape *bullet_body = m_graphic_loader->loadRectangleShape();
 
   bullet_body->setSize({20, 20});
   bullet_body->setPosition({bullet_pos.x, bullet_pos.y});

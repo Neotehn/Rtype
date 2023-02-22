@@ -9,7 +9,8 @@
 
 class ShootingSystem : public ISystem {
  public:
-  ShootingSystem(std::shared_ptr<EntityManager> t_em, UdpServer *t_serverCom);
+  ShootingSystem(std::shared_ptr<EntityManager> t_em, UdpServer *t_serverCom,
+                 rtype::IGraphicLoader *t_graphic_loader);
   ~ShootingSystem();
 
   void update();
@@ -18,6 +19,7 @@ class ShootingSystem : public ISystem {
  private:
   EventQueue m_event_queue;
   UdpServer *m_serverCom;
+  rtype::IGraphicLoader *m_graphic_loader;
 
   void shoot(std::shared_ptr<Action> action);
   void shootFire(std::shared_ptr<Action> action);

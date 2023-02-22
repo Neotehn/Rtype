@@ -1,9 +1,11 @@
 #include "./CreatePlayerSystem.hpp"
 
-CreatePlayerSystem::CreatePlayerSystem(std::shared_ptr<EntityManager> t_em,
-                                       UdpServer *t_server_com) {
+CreatePlayerSystem::CreatePlayerSystem(
+  std::shared_ptr<EntityManager> t_em, UdpServer *t_server_com,
+  rtype::IGraphicLoader *t_graphic_loader) {
   m_em = t_em;
   m_server_com = t_server_com;
+  m_graphic_loader = t_graphic_loader;
 }
 
 void CreatePlayerSystem::updateData(SystemData &t_data) {
@@ -23,7 +25,7 @@ void CreatePlayerSystem::update() {
        m_event_queue.getAllOfType(Action::ActionType::START)) {
     if (!isRegistered(action->getId())) {
       m_registered_players.push_back(action->getId());
-      EntityID player_id = initPlayer(m_em, m_server_com);
+      EntityID player_id = initPlayer(m_em, m_server_com, m_graphic_loader);
       action->setPlayerId(player_id);
     }
   }

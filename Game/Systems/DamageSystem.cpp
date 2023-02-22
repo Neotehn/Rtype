@@ -3,11 +3,13 @@
 DamageSystem::DamageSystem(std::shared_ptr<EntityManager> t_em,
                            InputManager &t_client_input_manager,
                            std::size_t t_port_number, bool &t_is_running,
-                           std::vector<SoundSystem::SoundType> &t_sounds)
+                           std::vector<SoundSystem::SoundType> &t_sounds,
+                           rtype::IGraphicLoader *t_graphic_loader)
     : m_client_input_manager(t_client_input_manager),
       m_is_running(t_is_running), m_play_sounds(t_sounds) {
   m_em = t_em;
   m_port_number = t_port_number;
+  m_graphic_loader = t_graphic_loader;
 }
 
 DamageSystem::~DamageSystem() {}
@@ -32,7 +34,8 @@ void DamageSystem::update() {
 
       SpriteECS health_new_bar =
         SpriteECS(player->health.healthbar
-                    .getSpritesPaths()[player->health.healthbar.getHealth()]);
+                    .getSpritesPaths()[player->health.healthbar.getHealth()],
+                  m_graphic_loader);
 
       player->health.body->setTexture(health_new_bar.getTexture());
     }

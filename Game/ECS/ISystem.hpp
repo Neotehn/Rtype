@@ -6,7 +6,7 @@
 #include "DataTypesECS.hpp"
 #include "../Encapsulation/GraphicDataTypes.hpp"
 #include "../Encapsulation/IRectangleShape.hpp"
-#include "../Encapsulation/SFML/RectangleShape.hpp"
+#include "../Encapsulation/IGraphicLoader.hpp"
 
 class ISystem {
  public:
