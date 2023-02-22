@@ -3,6 +3,30 @@ project(r-type_client)
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 
+message("Das CMake-Binary-Verzeichnis ist: ${CMAKE_BINARY_DIR}")
+message("Das CMake-Source-Verzeichnis ist: ${CMAKE_SOURCE_DIR}")
+message("Das CMake-Current-Verzeichnis ist: ${CMAKE_CURRENT_SOURCE_DIR}")
+
+
+SET(CMAKE_BUILD_DIR ${CMAKE_SOURCE_DIR}/build)
+SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+SET(CMAKE_INCLUDE_CURRENT_DIR ON)
+SET(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
+
+include(${CMAKE_BUILD_DIR}/conanbuildinfo.cmake)
+conan_basic_setup()
+
+
+if (MSVC)
+    set (CMAKE_GENERATOR "Visual Studio 17" CACHE INTERNAL "" FORCE)
+    add_compile_definitions(WIN32_LEAN_AND_MEAN)
+    add_compile_definitions(_WIN32_WINNT=0x0601)
+else()
+    set (CMAKE_GENERATOR "Unix Makefiles" CACHE INTERNAL "" FORCE)
+    add_compile_options(-g3 -pthread )
+endif()
+
+
 set(CLIENT_HPP ../Game/ECS/ComponentPool.hpp
         ../Game/ECS/ECS.hpp
         ../Game/ECS/EntityManager.hpp
@@ -114,36 +138,14 @@ set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         ../Game/Encapsulation/SFML/Mouse.cpp
         ../Game/Systems/CreatePlayerSystem.cpp)
 
+
 include(FetchContent)
-FetchContent_Declare(SFML
-        GIT_REPOSITORY https://github.com/SFML/SFML.git
-        GIT_TAG 2.6.x)
-FetchContent_MakeAvailable(SFML)
 
-if (NOT Boost_FOUND)
-    message("Boost not found--> downloading and building")
-    include(FetchContent)
-    FetchContent_Declare(Boost
-            GIT_REPOSITORY https://github.com/boostorg/boost.git
-            GIT_TAG boost-1.81.0
-            )
-    FetchContent_MakeAvailable(Boost)
-endif()
 
-find_package(Boost 1.69.0 COMPONENTS chrono system thread REQUIRED)
-
-find_package(OpenGL REQUIRED OPTIONAL_COMPONENTS OpenGL)
-include_directories(${OPENGL_INCLUDE_DIR})
 add_executable(r-type_client ${CLIENT_SRC} ${CLIENT_HPP})
-
-target_link_libraries(r-type_client sfml-graphics sfml-audio
-        ${OPENGL_LIBRARIES} ${Boost_SYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY} ${Boost_CHRONO_LIBRARY})
-target_link_directories(r-type_client PUBLIC ${Boost_LIBRARY_DIRS})
+target_link_libraries(r-type_client ${CONAN_LIBS})
 
 target_compile_features(r-type_client PRIVATE cxx_std_17)
-if (WIN32 AND BUILD_SHARED_LIBS)
-    add_custom_command(TARGET r-type_client POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:r-type_client> $<TARGET_FILE_DIR:r-type_client> COMMAND_EXPAND_LISTS)
-endif()
+
 
 install(TARGETS r-type_client)
