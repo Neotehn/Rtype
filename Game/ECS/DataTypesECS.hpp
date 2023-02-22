@@ -4,7 +4,12 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <SFML/Graphics.hpp>
+#include "../Encapsulation/GraphicDataTypes.hpp"
+#include "../Encapsulation/ITexture.hpp"
+#include "../Encapsulation/SFML/Texture.hpp"
+#include "../Encapsulation/ISprite.hpp"
+#include "../Encapsulation/SFML/Sprite.hpp"
+#include "../Encapsulation/IRectangleShape.hpp"
 #include "../EventQueue.hpp"
 
 struct AnimationTime {
@@ -23,8 +28,8 @@ struct SystemData {
 };
 
 struct Pos {
-  sf::Vector2f velocity;
-  sf::Vector2f position;
+  rtype::Vector2f velocity;
+  rtype::Vector2f position;
 };
 
 class HealthBar {
@@ -36,50 +41,63 @@ class HealthBar {
 
   const int getHealth() { return m_health; }
   const std::vector<std::string> getSpritesPaths() { return m_sprites_paths; }
-  void setHealth(int t_health) { m_health = t_health; }
+  void setHealth(int t_health) {
+    if (t_health < 0 || t_health > m_max_health) return;
+    m_health = t_health;
+  }
+  void increaseHealth(int t_health) {
+    m_health += t_health;
+    if (m_health > m_max_health) m_health = m_max_health;
+  }
+  void setMaxHealth(int t_max_health) { m_max_health = t_max_health; }
 
  private:
   int m_health;
   std::vector<std::string> m_sprites_paths;
+  int m_max_health = 3;
 };
 
 struct Health {
   HealthBar healthbar;
   Pos position;
-  sf::RectangleShape body;
+  rtype::IRectangleShape *body;
 };
 
 class SpriteECS {
  public:
-  SpriteECS(std::string t_sprite_path, sf::Vector2f t_scale = {1, 1}) {
+  SpriteECS(std::string t_sprite_path, rtype::Vector2f t_scale = {1, 1}) {
+    m_sprite = new rtype::Sprite();
+    m_texture = new rtype::Texture();
     m_texture->loadFromFile(t_sprite_path);
-    m_sprite.setTexture(*m_texture);
-    m_sprite.setScale(t_scale);
+    m_sprite->setTexture(m_texture);
+    m_sprite->setScale({t_scale.x, t_scale.y});
   }
 
-  const sf::Sprite *getSprite() const { return &m_sprite; }
+  const rtype::ISprite *getSprite() const { return m_sprite; }
 
-  const sf::Texture *getTexture() const { return m_texture; }
+  const rtype::ITexture *getTexture() const { return m_texture; }
 
-  void setPosition(sf::Vector2f pos) { m_sprite.setPosition(pos); }
+  void setPosition(rtype::Vector2f pos) {
+    m_sprite->setPosition({pos.x, pos.y});
+  }
 
   bool loadFromFile(std::string t_filepath) {
     if (!m_texture->loadFromFile(t_filepath)) {
       std::cerr << "Error loading sprite" << std::endl;
       return false;
     }
-    m_sprite.setTexture(*m_texture);
+    m_sprite->setTexture(m_texture);
     return true;
   }
 
  private:
-  sf::Sprite m_sprite;
-  sf::Texture *m_texture = new sf::Texture();
+  rtype::ISprite *m_sprite;
+  rtype::ITexture *m_texture;
 };
 
 struct BackgroundLayer {
   SpriteECS sprite;
-  sf::Vector2f position;
+  rtype::Vector2f position;
   float speed;
   int limit;
 };
@@ -87,15 +105,18 @@ struct BackgroundLayer {
 struct Player {
   SpriteECS sprite;
   Pos position;
-  sf::RectangleShape body;
+  rtype::IRectangleShape *body;
   Health health;
   float speed;
+  int fire_shot = 5;  //TODO reset to 0, 5 only for testing purposes
+  int bomb_shot = 5;  //TODO reset to 0, 5 only for testing purposes
+  int coins = 0;
 };
 
 struct Bullet {
-  sf::RectangleShape body;
+  rtype::IRectangleShape *body;
   float speed;
-  sf::Vector2f pos;
+  rtype::Vector2f pos;
 };
 
 struct AnimationObj {
@@ -103,7 +124,26 @@ struct AnimationObj {
   Pos position;
   AnimationTime time;
   AnimationRect rect;
-  sf::RectangleShape body;
+  rtype::IRectangleShape *body;
+};
+
+namespace rtype {
+  enum ItemType {
+    NO_ITEM,  // needs to stay at first position in enum
+    LIFE_ITEM,
+    SPEED_ITEM,
+    BOMB_ITEM,
+    FIRE_ITEM,
+  };
+}
+
+struct SpinningItem {
+  rtype::ItemType type;
+  int value;
+  SpriteECS sprite;
+  Pos position;
+  AnimationTime time;
+  rtype::IRectangleShape *body;
 };
 
 #endif  // ECS_DATATYPESECS_HPP_

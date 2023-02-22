@@ -34,6 +34,20 @@ void UdpServer::receiveClient() {
                 boost::asio::placeholders::bytes_transferred));
 }
 
+bool UdpServer::doesAlreadyExist(std::shared_ptr<Action> t_action) {
+  if (t_action->getType() == Action::ActionType::START) {
+    int id = t_action->getId();
+
+    for (int registered_id : m_client_ports) {
+      if (registered_id == id) { return true; }
+    }
+    std::cout << "register new client port: " << std::to_string(id)
+              << std::endl;
+    m_client_ports.push_back(id);
+  }
+  return false;
+}
+
 void UdpServer::handleReceive(const boost::system::error_code &t_error,
                               std::size_t t_size) {
   if (!t_error) {
@@ -41,8 +55,10 @@ void UdpServer::handleReceive(const boost::system::error_code &t_error,
       std::string(m_recvBuffer.begin(), m_recvBuffer.begin() + t_size);
     std::cout << "Received: '" << msg << "' (" << t_error.message() << ")\n";
     std::shared_ptr<Action> action = getAction(msg);
-    m_input_manager.addActionsToQueue(action);
-    m_send_event_manager.addActionsToQueue(action);
+    if (!doesAlreadyExist(action)) {
+      m_input_manager.addActionsToQueue(action);
+      m_send_event_manager.addActionsToQueue(action);
+    }
 
     if (action->getType() != Action::ActionType::END) {
       m_flag = GameMode::single;
@@ -61,9 +77,24 @@ void UdpServer::addEvent(std::shared_ptr<Action> event) {
   m_send_event_manager.addActionsToQueue(event);
 }
 
+bool UdpServer::isUpdated(std::shared_ptr<Action> t_event) {
+  if (t_event->getType() == Action::ActionType::START) {
+    for (int id : m_client_ports) {
+      if (t_event->getId() == id) { return false; }
+    }
+  }
+  return true;
+}
+
 void UdpServer::sendEvents() {
   EventQueue eq = m_send_event_manager.getInputs();
   for (std::shared_ptr<Action> event : eq.getEventQueue()) {
+    if (!isUpdated(event)) {
+      std::cout << "add start event again" << std::endl;
+      m_input_manager.addActionsToQueue(event);
+      m_send_event_manager.addActionsToQueue(event);
+      continue;
+    }
     if (event->getType() != Action::ActionType::SHOOT &&
         event->getType() != Action::ActionType::UP &&
         event->getType() != Action::ActionType::DOWN &&

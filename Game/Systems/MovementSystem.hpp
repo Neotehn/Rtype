@@ -16,14 +16,14 @@ class MovementSystem : public ISystem {
   void update();
   void updateData(SystemData &t_data);
 
+ private:
+  EventQueue m_event_queue;
+  UdpServer *m_serverCom;
+
   void updatePlayer(EntityID t_ent);
   void updateBackground(EntityID t_ent);
   void updateBullets(EntityID t_ent);
   void updateBulletsServer(EntityID t_ent);
-
- private:
-  EventQueue m_event_queue;
-  UdpServer *m_serverCom;
 };
 
 #endif  // CLIENT_SRC_SYSTEMS_MOVEMENTSYSTEM_HPP_

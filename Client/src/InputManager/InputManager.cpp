@@ -7,36 +7,51 @@ InputManager::InputManager() {
 }
 
 // -4 = UP ; -3 = LEFT ; -2 = DOWN ; -1 = RIGHT
-void InputManager::recordInputs(const sf::Event &t_event) {
-  switch (t_event.key.code) {
-    case sf::Keyboard::W:
+void InputManager::recordInputs(const rtype::Event &t_event) {
+  switch (t_event.key) {
+    case rtype::EventKey::W:
       m_input_queue.addToQueueIfNotExist(
         std::make_shared<Action>(
           MovementAction(Action::ActionType::UP, m_player_id, true)),
         Action::ActionType::UP);
       break;
-    case sf::Keyboard::S:
+    case rtype::EventKey::S:
       m_input_queue.addToQueueIfNotExist(
         std::make_shared<Action>(
           MovementAction(Action::ActionType::DOWN, m_player_id, true)),
         Action::ActionType::DOWN);
       break;
-    case sf::Keyboard::D:
+    case rtype::EventKey::D:
       m_input_queue.addToQueueIfNotExist(
         std::make_shared<Action>(
           MovementAction(Action::ActionType::RIGHT, m_player_id, true)),
         Action::ActionType::RIGHT);
       break;
-    case sf::Keyboard::A:
+    case rtype::EventKey::A:
       m_input_queue.addToQueueIfNotExist(
         std::make_shared<Action>(
           MovementAction(Action::ActionType::LEFT, m_player_id, true)),
         Action::ActionType::LEFT);
       break;
-    case sf::Keyboard::Space:
+    case rtype::EventKey::Space:
       m_input_queue.addToQueueIfNotExist(
-        std::make_shared<Action>(ShootAction(m_player_id, 1, 1, true)),
+        std::make_shared<Action>(
+          ShootAction(m_player_id, 1, Action::ShootingType::NORMAL, true)),
         Action::ActionType::SHOOT);
+      break;
+    case rtype::EventKey::M:
+      m_input_queue.addToQueueIfNotExist(
+        std::make_shared<Action>(
+          ShootAction(m_player_id, 1, Action::ShootingType::BOMB, true)),
+        Action::ActionType::SHOOT);
+      break;
+    case rtype::EventKey::N:
+      m_input_queue.addToQueueIfNotExist(
+        std::make_shared<Action>(
+          ShootAction(m_player_id, 1, Action::ShootingType::FIRE, true)),
+        Action::ActionType::SHOOT);
+      break;
+    default:
       break;
   }
 
@@ -62,10 +77,6 @@ EventQueue InputManager::getInputsWithoutPop() {
   return event_queue;
 }
 
-sf::Vector2i InputManager::getMousePosition() {
-  return sf::Mouse::getPosition();
-}
-
 bool InputManager::doesActionExist(std::shared_ptr<Action> t_action) {
   for (std::shared_ptr<Action> action : this->m_input_queue.getEventQueue()) {
     if (action->getActionId() == t_action->getActionId()) return true;
@@ -74,12 +85,25 @@ bool InputManager::doesActionExist(std::shared_ptr<Action> t_action) {
   return false;
 }
 
-bool InputManager::isMouseLeftClicked() {
-  return sf::Mouse::isButtonPressed(sf::Mouse::Left);
-  // Needs click position
+bool InputManager::isPlayerIdSet() {
+  if (m_player_id != 0) return true;
+  return false;
 }
 
-bool InputManager::isMouseRightClicked() {
-  return sf::Mouse::isButtonPressed(sf::Mouse::Right);
-  // Needs click position
+void InputManager::setPlayerId(EntityID t_player_id) {
+  m_player_id = t_player_id;
 }
+
+//sf::Vector2i InputManager::getMousePosition() {
+//  return sf::Mouse::getPosition();
+//}
+//
+//bool InputManager::isMouseLeftClicked() {
+//  return sf::Mouse::isButtonPressed(sf::Mouse::Left);
+//  // Needs click position
+//}
+//
+//bool InputManager::isMouseRightClicked() {
+//  return sf::Mouse::isButtonPressed(sf::Mouse::Right);
+//  // Needs click position
+//}

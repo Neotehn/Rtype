@@ -7,6 +7,7 @@
 #include "../ECS/ISystem.hpp"
 #include "../ECS/DataTypesECS.hpp"
 #include "../../Server/Protocol/UdpServer.hpp"
+#include "../Encapsulation/SFML/RectangleShape.hpp"
 
 class RandomEnemyGeneratorSystem : public ISystem {
  public:
@@ -23,6 +24,8 @@ class RandomEnemyGeneratorSystem : public ISystem {
 
   void generateEnemy(int random);
   void generatePowerUp(int random);
+  void createCoin();
+  void createItem(std::string t_path, rtype::ItemType t_type, int t_value);
 };
 
 #endif  // CLIENT_SRC_SYSTEMS_RANDOMENEMYGENERATORSYSTEM_HPP_

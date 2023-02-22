@@ -4,6 +4,7 @@
 #include <string>
 
 #include "./IAction.hpp"
+#include "../../../Game/Encapsulation/GraphicDataTypes.hpp"
 
 extern int action_counter;
 
@@ -20,12 +21,13 @@ class Action : public IAction {
     // DAMAGE = amount of damage based on load time
     // TYPE = 1, 2, ...
     CREATE,  // ACTION_ID;CREATE;ID;TYPE;TYPE_DATA
-    // TYPE = PLAYER, ENEMY, BULLET
+    // TYPE = PLAYER, ENEMY, BULLET, EXPLOSION, POWER_UP, ITEM
     // PLAYER_DATA: X;Y;SPRITE_PATH
     // ENEMY_DATA:  X;Y;VELOCITY
-    // BULLET_DATA: X;Y
+    // BULLET_DATA: X;Y;SHOOTING_TYPE
     // EXPLOSION_DATA: X;Y
     // POWER_UP_DATA: X;Y
+    // ITEM:  X;Y;ITEM_TYPE
     INCREASE,  // ACTION_ID;INCREASE;ID;TYPE;VALUE
     // TYPE = LIFE, SPEED, SHOOTING_SPEED
     COLLISION,  // ACTION_ID;COLLISION;ID1;ID2
@@ -35,8 +37,18 @@ class Action : public IAction {
     END,        // ACTION_ID;END; OR END;PORT_NB
     ERROR,
   };
-  enum ObjectType { PLAYER, ENEMY, BULLET, EXPLOSION, POWER_UP, ERROR_O };
-  enum IncreaseType { SPEED, FIRE_RATE, DAMAGE_I, LIFE, SHIELD, BOMB, ERROR_I };
+  enum ShootingType { NORMAL, FIRE, BOMB };
+  enum ObjectType { PLAYER, ENEMY, BULLET, EXPLOSION, POWER_UP, ITEM, ERROR_O };
+  enum IncreaseType {
+    SPEED,
+    FIRE_SHOT,
+    DAMAGE_I,
+    LIFE,
+    SHIELD,
+    BOMB_SHOT,
+    COINS,
+    ERROR_I
+  };
 
   Action(ActionType type, EntityID id);
   Action(ActionType type, EntityID id, int t_action_id);
@@ -53,16 +65,19 @@ class Action : public IAction {
   EntityID getCollisionPartnerId() const;
 
   ObjectType getCreateType() const;
-  sf::Vector2f getCreatePosition() const;
+  rtype::Vector2f getCreatePosition() const;
   std::string getCreateSpritePath() const;
 
   IncreaseType getIncreaseType() const;
   int getIncreaseValue() const;
 
   int getShootDamage() const;
-  int getShootType() const;
+  ShootingType getShootType() const;
 
   float getVelocity() const;
+  int getItemType() const;
+
+  void setPlayerId(EntityID t_id);
 
  protected:
   int m_action_id;
@@ -72,13 +87,14 @@ class Action : public IAction {
   bool m_triggered_by_user = false;
   EntityID m_collision_partner_id = 0;
   ObjectType m_object_type = ObjectType::ERROR_O;
-  sf::Vector2f m_position = {0, 0};
+  rtype::Vector2f m_position = {0, 0};
   std::string m_sprite_path;
   IncreaseType m_increase_type = IncreaseType::ERROR_I;
   int m_value = 0;
   int m_damage = 0;
-  int m_shoot_type = 0;
+  ShootingType m_shoot_type = ShootingType::NORMAL;
   float m_velocity = -2;
+  int m_item_type = 0;
 };
 
 #endif  //R_TYPE_CLIENT_ACTION_HPP

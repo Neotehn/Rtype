@@ -1,7 +1,8 @@
 #include "CreateAction.hpp"
 
 CreateAction::CreateAction(EntityID t_id, ObjectType t_object_type,
-                           sf::Vector2f t_position, std::string t_sprite_path)
+                           rtype::Vector2f t_position,
+                           std::string t_sprite_path)
     : Action(ActionType::CREATE, t_id) {
   m_object_type = t_object_type;
   m_position = t_position;
@@ -9,21 +10,35 @@ CreateAction::CreateAction(EntityID t_id, ObjectType t_object_type,
 }
 
 CreateAction::CreateAction(EntityID t_id, ObjectType t_object_type,
-                           sf::Vector2f t_position, std::string t_sprite_path,
-                           int t_action_id, float t_velocity)
+                           rtype::Vector2f t_position,
+                           std::string t_sprite_path, int t_action_id,
+                           float t_velocity)
     : Action(ActionType::CREATE, t_id, t_action_id) {
   m_object_type = t_object_type;
   m_position = t_position;
   m_sprite_path = t_sprite_path;
-  m_velocity = t_velocity;
+  if (t_object_type == ObjectType::ITEM) {
+    m_item_type = int(t_velocity);
+  } else {
+    m_velocity = t_velocity;
+  }
 }
 
 CreateAction::CreateAction(EntityID t_id, ObjectType t_object_type,
-                           sf::Vector2f t_position, std::string t_sprite_path,
-                           float t_velocity)
+                           rtype::Vector2f t_position,
+                           std::string t_sprite_path, float t_velocity)
     : Action(ActionType::CREATE, t_id) {
   m_object_type = t_object_type;
   m_position = t_position;
   m_sprite_path = t_sprite_path;
   m_velocity = t_velocity;
+}
+
+CreateAction::CreateAction(EntityID t_id, ObjectType t_object_type,
+                           rtype::Vector2f t_position,
+                           Action::ShootingType t_shooting_type)
+    : Action(ActionType::CREATE, t_id) {
+  m_object_type = t_object_type;
+  m_position = t_position;
+  m_shoot_type = t_shooting_type;
 }

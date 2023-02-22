@@ -7,8 +7,8 @@
 
 class PosAction : public Action {
  public:
-  PosAction(EntityID t_id, sf::Vector2f t_pos);
-  PosAction(EntityID t_id, sf::Vector2f t_pos, int t_action_id);
+  PosAction(EntityID t_id, rtype::Vector2f t_pos);
+  PosAction(EntityID t_id, rtype::Vector2f t_pos, int t_action_id);
   ~PosAction() = default;
 };
 
