@@ -2,9 +2,11 @@
 
 CreateObjectSystem::CreateObjectSystem(
   std::shared_ptr<EntityManager> t_em,
-  std::vector<SoundSystem::SoundType> &t_sounds)
+  std::vector<SoundSystem::SoundType> &t_sounds,
+  rtype::IGraphicLoader *t_graphic_loader)
     : m_play_sounds(t_sounds) {
   m_em = t_em;
+  m_graphic_loader = t_graphic_loader;
 }
 
 CreateObjectSystem::~CreateObjectSystem() {}
@@ -50,11 +52,11 @@ void CreateObjectSystem::update() {
 void CreateObjectSystem::createPlayer(EntityID t_id, std::string t_sprite_path,
                                       rtype::Vector2f t_pos) {
   EntityID player = m_em->createNewEntity(t_id);
-  SpriteECS player_sprite = SpriteECS(t_sprite_path);
+  SpriteECS player_sprite = SpriteECS(t_sprite_path, m_graphic_loader);
 
   Pos player_pos = Pos{rtype::Vector2f{0, 0}, t_pos};
 
-  rtype::IRectangleShape *body = new rtype::RectangleShape();
+  rtype::IRectangleShape *body = m_graphic_loader->loadRectangleShape();
   body->setSize({200, 200});
   body->setPosition({player_pos.position.x, player_pos.position.y});
   body->setTexture(player_sprite.getTexture());
@@ -68,7 +70,7 @@ void CreateObjectSystem::createPlayer(EntityID t_id, std::string t_sprite_path,
 
 Health CreateObjectSystem::initPlayerHealthBar(EntityID t_player_id) {
   SpriteECS player_health_bar_sprite_full =
-    SpriteECS("../Client/sprites/playerassets/Fulllife.png");
+    SpriteECS("../Client/sprites/playerassets/Fulllife.png", m_graphic_loader);
 
   Pos bar_pos = Pos{rtype::Vector2f{0, 0}, rtype::Vector2f{120, 230}};
 
@@ -80,7 +82,7 @@ Health CreateObjectSystem::initPlayerHealthBar(EntityID t_player_id) {
                 std::string("../Client/sprites/playerassets/Fulllife.png")},
               3};
 
-  rtype::IRectangleShape *body = new rtype::RectangleShape();
+  rtype::IRectangleShape *body = m_graphic_loader->loadRectangleShape();
   body->setSize({126, 42});
   body->setPosition({bar_pos.position.x, bar_pos.position.y});
   body->setTexture(player_health_bar_sprite_full.getTexture());
@@ -92,22 +94,25 @@ void CreateObjectSystem::createBullet(EntityID t_id, rtype::Vector2f t_pos,
                                       Action::ShootingType t_shooting_type) {
   EntityID bullet = m_em->createNewEntity(t_id);
 
-  rtype::IRectangleShape *bullet_body = new rtype::RectangleShape();
+  rtype::IRectangleShape *bullet_body = m_graphic_loader->loadRectangleShape();
   bullet_body->setSize({20, 20});
   bullet_body->setPosition({t_pos.x, t_pos.y});
 
   switch (t_shooting_type) {
     case Action::ShootingType::NORMAL:
       bullet_body->setTexture(
-        SpriteECS("./../Client/sprites/shoot2.png").getTexture());
+        SpriteECS("./../Client/sprites/shoot2.png", m_graphic_loader)
+          .getTexture());
       break;
     case Action::ShootingType::FIRE:
       bullet_body->setTexture(
-        SpriteECS("./../Client/sprites/shoot3.png").getTexture());
+        SpriteECS("./../Client/sprites/shoot3.png", m_graphic_loader)
+          .getTexture());
       break;
     case Action::ShootingType::BOMB:
       bullet_body->setTexture(
-        SpriteECS("./../Client/sprites/shoot4.png").getTexture());
+        SpriteECS("./../Client/sprites/shoot4.png", m_graphic_loader)
+          .getTexture());
       break;
   }
 
@@ -120,8 +125,9 @@ void CreateObjectSystem::createBullet(EntityID t_id, rtype::Vector2f t_pos,
 void CreateObjectSystem::createEnemy(EntityID t_id, rtype::Vector2f t_pos,
                                      float t_velocity) {
   EntityID enemy = m_em->createNewEntity(t_id);
-  SpriteECS sprite = SpriteECS("./../Client/sprites/r-typesheet30a.gif");
-  rtype::IRectangleShape *body = new rtype::RectangleShape();
+  SpriteECS sprite =
+    SpriteECS("./../Client/sprites/r-typesheet30a.gif", m_graphic_loader);
+  rtype::IRectangleShape *body = m_graphic_loader->loadRectangleShape();
   body->setSize({30, 30});
   body->setPosition({t_pos.x, t_pos.y});
   body->setTexture(sprite.getTexture());
@@ -138,8 +144,9 @@ void CreateObjectSystem::createEnemy(EntityID t_id, rtype::Vector2f t_pos,
 
 void CreateObjectSystem::createExplosion(EntityID t_id, rtype::Vector2f t_pos) {
   EntityID explosion = m_em->createNewEntity(t_id);
-  SpriteECS sprite = SpriteECS("./../Client/sprites/explosion/Explosion.png");
-  rtype::IRectangleShape *body = new rtype::RectangleShape();
+  SpriteECS sprite =
+    SpriteECS("./../Client/sprites/explosion/Explosion.png", m_graphic_loader);
+  rtype::IRectangleShape *body = m_graphic_loader->loadRectangleShape();
   body->setSize({50, 50});
   body->setPosition({t_pos.x, t_pos.y});
   body->setTexture(sprite.getTexture());
@@ -158,8 +165,9 @@ void CreateObjectSystem::createExplosion(EntityID t_id, rtype::Vector2f t_pos) {
 
 void CreateObjectSystem::createPowerUp(EntityID t_id, rtype::Vector2f t_pos) {
   EntityID powerup = m_em->createNewEntity(t_id);
-  SpriteECS sprite = SpriteECS("./../Client/sprites/powerup/coin.png");
-  rtype::IRectangleShape *body = new rtype::RectangleShape();
+  SpriteECS sprite =
+    SpriteECS("./../Client/sprites/powerup/coin.png", m_graphic_loader);
+  rtype::IRectangleShape *body = m_graphic_loader->loadRectangleShape();
   body->setSize({30, 30});
   body->setPosition({t_pos.x, t_pos.y});
   body->setTexture(sprite.getTexture());
@@ -199,11 +207,11 @@ void CreateObjectSystem::createItem(EntityID t_id, rtype::ItemType t_item_type,
       break;
   }
   EntityID item = m_em->createNewEntity(t_id);
-  SpriteECS item_sprite = SpriteECS(path);
+  SpriteECS item_sprite = SpriteECS(path, m_graphic_loader);
 
   Pos player_pos = Pos{rtype::Vector2f{-7, 0}, t_pos};
 
-  rtype::IRectangleShape *body = new rtype::RectangleShape();
+  rtype::IRectangleShape *body = m_graphic_loader->loadRectangleShape();
   body->setSize({40, 40});
   body->setOrigin({20, 20});
   body->setPosition({player_pos.position.x, player_pos.position.y});

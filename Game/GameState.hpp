@@ -38,7 +38,7 @@ class GameState final : public State {
  public:
   GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
             MusicPlayer &t_music_player, std::size_t t_flag,
-            bool t_replace = true);
+            rtype::IGraphicLoader *t_graphic_loader, bool t_replace = true);
   ~GameState();
 
   void pause() override;

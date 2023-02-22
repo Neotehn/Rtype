@@ -7,12 +7,12 @@
 #include "../ECS/ISystem.hpp"
 #include "../ECS/DataTypesECS.hpp"
 #include "../../Server/Protocol/UdpServer.hpp"
-#include "../Encapsulation/SFML/RectangleShape.hpp"
 
 class RandomEnemyGeneratorSystem : public ISystem {
  public:
   RandomEnemyGeneratorSystem(std::shared_ptr<EntityManager> t_em,
-                             UdpServer *t_serverCom);
+                             UdpServer *t_serverCom,
+                             rtype::IGraphicLoader *t_graphic_loader);
   ~RandomEnemyGeneratorSystem();
 
   void update();
@@ -21,6 +21,7 @@ class RandomEnemyGeneratorSystem : public ISystem {
  private:
   std::shared_ptr<EntityManager> m_em;
   UdpServer *m_serverCom;
+  rtype::IGraphicLoader *m_graphic_loader;
 
   void generateEnemy(int random);
   void generatePowerUp(int random);

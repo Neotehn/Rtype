@@ -1,8 +1,11 @@
 #include "./Sprite.hpp"
 
-Sprite::Sprite(std::string t_path, rtype::Vector2f t_pos) : m_path(t_path) {
-  m_texture = new rtype::Texture();
-  m_sprite = new rtype::Sprite();
+Sprite::Sprite(std::string t_path, rtype::Vector2f t_pos,
+               rtype::IGraphicLoader *t_graphic_loader)
+    : m_path(t_path) {
+  m_graphic_loader = t_graphic_loader;
+  m_texture = m_graphic_loader->loadTexture();
+  m_sprite = m_graphic_loader->loadSprite();
   if (!m_texture->loadFromFile(m_path))
     std::cout << "Can't find image: " << m_path << std::endl;
   m_sprite->setTexture(m_texture);

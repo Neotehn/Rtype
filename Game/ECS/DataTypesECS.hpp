@@ -6,10 +6,9 @@
 #include <vector>
 #include "../Encapsulation/GraphicDataTypes.hpp"
 #include "../Encapsulation/ITexture.hpp"
-#include "../Encapsulation/SFML/Texture.hpp"
 #include "../Encapsulation/ISprite.hpp"
-#include "../Encapsulation/SFML/Sprite.hpp"
 #include "../Encapsulation/IRectangleShape.hpp"
+#include "../Encapsulation/IGraphicLoader.hpp"
 #include "../EventQueue.hpp"
 
 struct AnimationTime {
@@ -65,9 +64,10 @@ struct Health {
 
 class SpriteECS {
  public:
-  SpriteECS(std::string t_sprite_path, rtype::Vector2f t_scale = {1, 1}) {
-    m_sprite = new rtype::Sprite();
-    m_texture = new rtype::Texture();
+  SpriteECS(std::string t_sprite_path, rtype::IGraphicLoader *t_graphic_loader,
+            rtype::Vector2f t_scale = {1, 1}) {
+    m_sprite = t_graphic_loader->loadSprite();
+    m_texture = t_graphic_loader->loadTexture();
     m_texture->loadFromFile(t_sprite_path);
     m_sprite->setTexture(m_texture);
     m_sprite->setScale({t_scale.x, t_scale.y});

@@ -12,7 +12,8 @@
 class CreateObjectSystem : public ISystem {
  public:
   CreateObjectSystem(std::shared_ptr<EntityManager> t_em,
-                     std::vector<SoundSystem::SoundType> &t_sounds);
+                     std::vector<SoundSystem::SoundType> &t_sounds,
+                     rtype::IGraphicLoader *t_graphic_loader);
   ~CreateObjectSystem();
 
   void update();
@@ -22,6 +23,7 @@ class CreateObjectSystem : public ISystem {
   std::shared_ptr<EntityManager> m_em;
   EventQueue m_event_queue;
   std::vector<SoundSystem::SoundType> &m_play_sounds;
+  rtype::IGraphicLoader *m_graphic_loader;
 
   void createPlayer(EntityID t_id, std::string t_sprite_path,
                     rtype::Vector2f t_pos);

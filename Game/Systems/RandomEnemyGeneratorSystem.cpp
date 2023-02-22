@@ -1,9 +1,11 @@
 #include "RandomEnemyGeneratorSystem.hpp"
 
 RandomEnemyGeneratorSystem::RandomEnemyGeneratorSystem(
-  std::shared_ptr<EntityManager> t_em, UdpServer *t_serverCom) {
+  std::shared_ptr<EntityManager> t_em, UdpServer *t_serverCom,
+  rtype::IGraphicLoader *t_graphic_loader) {
   m_em = t_em;
   m_serverCom = t_serverCom;
+  m_graphic_loader = t_graphic_loader;
 }
 
 RandomEnemyGeneratorSystem::~RandomEnemyGeneratorSystem() {}
@@ -19,11 +21,12 @@ void RandomEnemyGeneratorSystem::update() {
 void RandomEnemyGeneratorSystem::generateEnemy(int random) {
   if (random < 10) {
     EntityID enemy = m_em->createNewEntity();
-    SpriteECS sprite = SpriteECS("./../Client/sprites/r-typesheet30a.gif");
+    SpriteECS sprite =
+      SpriteECS("./../Client/sprites/r-typesheet30a.gif", m_graphic_loader);
     rtype::Vector2f enemy_pos = {800, float(rand() % 600 + 100)};
     float velocity_direction = float(rand() % 3 - 1);
 
-    rtype::IRectangleShape *body = new rtype::RectangleShape();
+    rtype::IRectangleShape *body = m_graphic_loader->loadRectangleShape();
     body->setSize({30, 30});
     body->setPosition({enemy_pos.x, enemy_pos.y});
     body->setTexture(sprite.getTexture());
@@ -64,10 +67,11 @@ void RandomEnemyGeneratorSystem::generatePowerUp(int random) {
 
 void RandomEnemyGeneratorSystem::createCoin() {
   EntityID powerup = m_em->createNewEntity();
-  SpriteECS sprite = SpriteECS("./../Client/sprites/powerup/coin.png");
+  SpriteECS sprite =
+    SpriteECS("./../Client/sprites/powerup/coin.png", m_graphic_loader);
   rtype::Vector2f powerup_pos = {800, float(rand() % 600 + 100)};
 
-  rtype::IRectangleShape *body = new rtype::RectangleShape();
+  rtype::IRectangleShape *body = m_graphic_loader->loadRectangleShape();
   body->setSize({30, 30});
   body->setPosition({powerup_pos.x, powerup_pos.y});
   body->setTexture(sprite.getTexture());
@@ -89,10 +93,10 @@ void RandomEnemyGeneratorSystem::createItem(std::string t_path,
                                             rtype::ItemType t_type,
                                             int t_value) {
   EntityID powerup = m_em->createNewEntity();
-  SpriteECS sprite = SpriteECS(t_path);
+  SpriteECS sprite = SpriteECS(t_path, m_graphic_loader);
   rtype::Vector2f powerup_pos = {800, float(rand() % 600 + 100)};
 
-  rtype::IRectangleShape *body = new rtype::RectangleShape();
+  rtype::IRectangleShape *body = m_graphic_loader->loadRectangleShape();
   body->setSize({30, 30});
   body->setPosition({powerup_pos.x, powerup_pos.y});
   body->setTexture(sprite.getTexture());
