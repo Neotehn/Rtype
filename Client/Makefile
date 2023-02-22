@@ -14,7 +14,7 @@ normdir:
 	$(eval BUILD="build")
 
 conan:
-	conan install conanfile.txt -if $(BUILD) --build=missing
+	conan install conanfile.txt --build=missing -s build_type=Release
 	cd $(BUILD)/ && chmod +x ./activate.sh && source ./activate.sh
 	echo "Conan env running"
 
