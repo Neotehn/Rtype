@@ -1,0 +1,157 @@
+Epitech Berlin                                                     Gylian Karsch
+Request for Comments: 1000                                        Josefine Mende
+                                                                     Marc Pister
+                                                                    Ramon Werner
+                                                                         Epitech
+                                                                      March 2023
+
+                                R-Type Protocol
+
+Status of this Memo
+
+    This memo is the official specification of the R-Type Protocol.
+    The R-Type is a year three project from EPITECH.
+
+Table of Contents
+
+    1. Introduction
+    2. R-Type architecture
+    3. R-Type UDP Protocol
+
+1. Introduction
+
+    The goal of the R-Type project is to create the classic R-Type game with
+    an online multiplayer.
+
+2. R-Type architecture
+
+    R-Type is build like a classic server-client game. The game runs in the 
+    server and the client has to connect to the server. The connection works
+    through an UDP protocol.
+
+3. R-Type UDP Protocol
+
+    The client and server communicate through during the game with the 
+    UDP protocol.
+
+    3.1. Commands
+
+        Every command has a simmilar structure:
+
+            int ACTION_ID;
+            ActionType ACTION_TYPE,
+            int ID;
+            // followed by ACTION_TYPE dependant data
+
+        Where ACTION_ID is an integer that increases with every command, 
+        ACTION_TYPE is an element of the ActionType enumeration (described 
+        below), the ID is the identifier of an entity (e.g.: Player, Enemy or 
+        Projectile). The remaining part of the command is dependant of the 
+        ACTION_TYPE.
+
+        The ActionType enumeration:
+
+            enum ActionType {
+                START,  // ACTION_ID;START;PORT_NB OR START;OWN_PLAYER_ID
+                UP,     // ACTION_ID;UP;ID;USER_TRIGGERED
+                DOWN,   // ACTION_ID;DOWN;ID;USER_TRIGGERED
+                LEFT,   // ACTION_ID;LEFT;ID;USER_TRIGGERED
+                RIGHT,  // ACTION_ID;RIGHT;ID;USER_TRIGGERED
+                POS,    // ACTION_ID;POS;ID;X;
+                SHOOT,  // ACTION_ID;SHOOT;ID;;USER_TRIGGERED;DAMAGE;TYPE
+                // DAMAGE = amount of damage based on load time
+                // TYPE = 1, 2, ...
+                CREATE,  // ACTION_ID;CREATE;ID;TYPE;TYPE_DATA
+                // TYPE = PLAYER, ENEMY, BULLET
+                // PLAYER_DATA: X;Y;SPRITE_PATH
+                // ENEMY_DATA:  X;Y;VELOCITY
+                // BULLET_DATA: X;Y
+                // EXPLOSION_DATA: X;Y
+                // POWER_UP_DATA: X;Y
+                INCREASE,  // ACTION_ID;INCREASE;ID;TYPE;VALUE
+                // TYPE = LIFE, SPEED, SHOOTING_SPEED
+                COLLISION,  // ACTION_ID;COLLISION;ID1;ID2
+                DAMAGE,     // ACTION_ID;DAMAGE;ID1;DMG
+                DESTROY,    // ACTION_ID;DESTROY;ID1
+                DEAD,       // ACTION_ID;DEAD;ID
+                END,        // ACTION_ID;END; OR END;PORT_NB
+                ERROR,
+            };
+
+        To send a command you need to write the data in the order mentioned
+        in the ActionType enumeration above (behind the '//').
+
+    3.2. Server connection
+
+        When the server is running it waits for a client to connect. It listens
+        for a command containing:
+
+            ACTION_ID = 0
+            ACTION_TYPE = START
+            PORT_NB = port the client is running on
+
+        On success the server response with command to create the player:
+
+            ACTION_ID = 1
+            ACTION_TYPE = CREATE
+            ID = id of entity
+            TYPE = PLAYER (0)
+            X = x coordinate of player
+            Y = y coordinate of player
+            SPRITE_PATH = path to player sprite 
+
+    3.3 Game start 
+
+        Once the game is running the client sends the player input or 
+        an end command to the server. The following ACTION_TYPES are possible:
+
+            enum ActionType {
+                UP,
+                DOWN,
+                LEFT,
+                RIGHT,
+                SHOOT,
+                END,
+            };
+
+        For the player movement the command has the same structure:
+
+            ACTION_ID = automatic generated value 
+            ACTION_TYPE = UP / DOWN / LEFT / RIGHT
+            ID = id of the player
+            USER_TRIGGERED = TRUE (bool)
+
+        The server answers with the new position of the player:
+
+            ACTION_ID = automatic generated value
+            ACTION_TYPE = POS
+            ID = id of the player
+            X = new x coordinate of the player
+            Y = new y coordinate of the player 
+
+        The SHOOT command follows following structure:
+
+            ACTION_ID = automatic generated value
+            ACTION_TYPE = SHOOT
+            ID = id of the player
+            USER_TRIGGERED = TRUE (bool)
+            DAMAGE = amount of damage based on load time
+            TYPE = 1, 2, ... (what kind of bullet gets shot)
+
+        The server answers with another CREATE command:
+
+            ACTION_ID = automatic generated value
+            ACTION_TYPE = CREATE
+            ID = id of the the bullet
+            TYPE = BULLET (2)
+            X = x coordinate of bullet
+            Y = y coordinate of bullet
+
+        If the client window gets closed the client sends a command that
+        disconnects the server and the client:
+
+            ACTION_ID = automatic generated value
+            ACTION_TYPE = END
+            PORT_NB = port the client is running in
+
+        
