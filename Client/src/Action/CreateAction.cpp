@@ -33,3 +33,12 @@ CreateAction::CreateAction(EntityID t_id, ObjectType t_object_type,
   m_sprite_path = t_sprite_path;
   m_velocity = t_velocity;
 }
+
+CreateAction::CreateAction(EntityID t_id, ObjectType t_object_type,
+                           rtype::Vector2f t_position,
+                           Action::ShootingType t_shooting_type)
+    : Action(ActionType::CREATE, t_id) {
+  m_object_type = t_object_type;
+  m_position = t_position;
+  m_shoot_type = t_shooting_type;
+}

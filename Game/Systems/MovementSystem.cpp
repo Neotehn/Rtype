@@ -89,7 +89,7 @@ void MovementSystem::updatePlayer(EntityID t_ent) {
     {player->position.position.x - 180, player->position.position.y - 70});
 
   if (player->position.velocity.x != 0 || player->position.velocity.y != 0)
-    player->position.velocity *= 0.9f;
+    player->position.velocity *= 0.99f;
   if (m_serverCom != nullptr && direction != rtype::Vector2f{0, 0}) {
     m_serverCom->addEvent(
       std::make_shared<Action>(PosAction(t_ent, player->position.position)));

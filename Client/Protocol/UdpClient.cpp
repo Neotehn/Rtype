@@ -36,6 +36,14 @@ void UdpClient::receiveClient() {
                 boost::asio::placeholders::bytes_transferred));
 }
 
+void UdpClient::setPlayerId(std::shared_ptr<Action> t_action) {
+  if (!m_client_input_manager.isPlayerIdSet()) {
+    if (t_action->getType() == Action::ActionType::START) {
+      m_client_input_manager.setPlayerId(t_action->getId());
+    }
+  }
+}
+
 void UdpClient::handleReceive(const boost::system::error_code &t_error,
                               std::size_t t_size) {
   if (!t_error) {
@@ -43,6 +51,7 @@ void UdpClient::handleReceive(const boost::system::error_code &t_error,
       std::string(m_recvBuffer.begin(), m_recvBuffer.begin() + t_size);
     try {
       std::shared_ptr<Action> action = getAction(msg);
+      setPlayerId(action);
       //      if (!m_client_input_manager.doesActionExist(action)) {
       m_client_input_manager.addActionsToQueue(action);
       //      }

@@ -63,7 +63,8 @@ set(CLIENT_HPP ../Game/ECS/ComponentPool.hpp
         ../GameEngine/src/States/MainState.hpp
         ../GameEngine/src/States/SettingsState.hpp
         ../Game/Encapsulation/IMouse.hpp
-        ../Game/Encapsulation/SFML/Mouse.hpp)
+        ../Game/Encapsulation/SFML/Mouse.hpp
+        ../Game/Systems/CreatePlayerSystem.hpp)
 
 set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         src/InputManager/InputManager.cpp
@@ -110,7 +111,8 @@ set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         ../Game/GameState.cpp
         ../GameEngine/src/States/MainState.cpp
         ../GameEngine/src/States/SettingsState.cpp
-        ../Game/Encapsulation/SFML/Mouse.cpp)
+        ../Game/Encapsulation/SFML/Mouse.cpp
+        ../Game/Systems/CreatePlayerSystem.cpp)
 
 include(FetchContent)
 FetchContent_Declare(SFML

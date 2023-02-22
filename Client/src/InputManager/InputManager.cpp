@@ -35,7 +35,20 @@ void InputManager::recordInputs(const rtype::Event &t_event) {
       break;
     case rtype::EventKey::Space:
       m_input_queue.addToQueueIfNotExist(
-        std::make_shared<Action>(ShootAction(m_player_id, 1, 1, true)),
+        std::make_shared<Action>(
+          ShootAction(m_player_id, 1, Action::ShootingType::NORMAL, true)),
+        Action::ActionType::SHOOT);
+      break;
+    case rtype::EventKey::M:
+      m_input_queue.addToQueueIfNotExist(
+        std::make_shared<Action>(
+          ShootAction(m_player_id, 1, Action::ShootingType::BOMB, true)),
+        Action::ActionType::SHOOT);
+      break;
+    case rtype::EventKey::N:
+      m_input_queue.addToQueueIfNotExist(
+        std::make_shared<Action>(
+          ShootAction(m_player_id, 1, Action::ShootingType::FIRE, true)),
         Action::ActionType::SHOOT);
       break;
     default:
@@ -70,6 +83,15 @@ bool InputManager::doesActionExist(std::shared_ptr<Action> t_action) {
     if (action->getType() == t_action->getType()) return true;
   }
   return false;
+}
+
+bool InputManager::isPlayerIdSet() {
+  if (m_player_id != 0) return true;
+  return false;
+}
+
+void InputManager::setPlayerId(EntityID t_player_id) {
+  m_player_id = t_player_id;
 }
 
 //sf::Vector2i InputManager::getMousePosition() {

@@ -21,12 +21,11 @@ void CreateObjectSystem::update() {
     rtype::Vector2f pos = action->getCreatePosition();
     float velocity = 0;
     switch (type) {
-      // TODO: add player creation somewhere to event queue of udp server
       case Action::ObjectType::PLAYER:
         createPlayer(id, action->getCreateSpritePath(), pos);
         break;
       case Action::ObjectType::BULLET:
-        createBullet(id, pos);
+        createBullet(id, pos, action->getShootType());
         break;
       case Action::ObjectType::ENEMY:
         velocity = action->getVelocity();
@@ -89,14 +88,28 @@ Health CreateObjectSystem::initPlayerHealthBar(EntityID t_player_id) {
   return Health{bar_stats, bar_pos, body};
 }
 
-void CreateObjectSystem::createBullet(EntityID t_id, rtype::Vector2f t_pos) {
+void CreateObjectSystem::createBullet(EntityID t_id, rtype::Vector2f t_pos,
+                                      Action::ShootingType t_shooting_type) {
   EntityID bullet = m_em->createNewEntity(t_id);
-  SpriteECS sprite = SpriteECS("./../Client/sprites/shoot2.png");
 
   rtype::IRectangleShape *bullet_body = new rtype::RectangleShape();
   bullet_body->setSize({20, 20});
   bullet_body->setPosition({t_pos.x, t_pos.y});
-  bullet_body->setTexture(sprite.getTexture());
+
+  switch (t_shooting_type) {
+    case Action::ShootingType::NORMAL:
+      bullet_body->setTexture(
+        SpriteECS("./../Client/sprites/shoot2.png").getTexture());
+      break;
+    case Action::ShootingType::FIRE:
+      bullet_body->setTexture(
+        SpriteECS("./../Client/sprites/shoot3.png").getTexture());
+      break;
+    case Action::ShootingType::BOMB:
+      bullet_body->setTexture(
+        SpriteECS("./../Client/sprites/shoot4.png").getTexture());
+      break;
+  }
 
   m_play_sounds.push_back(SoundSystem::SoundType::shoot);
   Bullet displayable_bullet = Bullet{bullet_body, 10.0, t_pos};

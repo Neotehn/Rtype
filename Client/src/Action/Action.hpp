@@ -24,7 +24,7 @@ class Action : public IAction {
     // TYPE = PLAYER, ENEMY, BULLET, EXPLOSION, POWER_UP, ITEM
     // PLAYER_DATA: X;Y;SPRITE_PATH
     // ENEMY_DATA:  X;Y;VELOCITY
-    // BULLET_DATA: X;Y
+    // BULLET_DATA: X;Y;SHOOTING_TYPE
     // EXPLOSION_DATA: X;Y
     // POWER_UP_DATA: X;Y
     // ITEM:  X;Y;ITEM_TYPE
@@ -37,6 +37,7 @@ class Action : public IAction {
     END,        // ACTION_ID;END; OR END;PORT_NB
     ERROR,
   };
+  enum ShootingType { NORMAL, FIRE, BOMB };
   enum ObjectType { PLAYER, ENEMY, BULLET, EXPLOSION, POWER_UP, ITEM, ERROR_O };
   enum IncreaseType {
     SPEED,
@@ -71,10 +72,12 @@ class Action : public IAction {
   int getIncreaseValue() const;
 
   int getShootDamage() const;
-  int getShootType() const;
+  ShootingType getShootType() const;
 
   float getVelocity() const;
   int getItemType() const;
+
+  void setPlayerId(EntityID t_id);
 
  protected:
   int m_action_id;
@@ -89,7 +92,7 @@ class Action : public IAction {
   IncreaseType m_increase_type = IncreaseType::ERROR_I;
   int m_value = 0;
   int m_damage = 0;
-  int m_shoot_type = 0;
+  ShootingType m_shoot_type = ShootingType::NORMAL;
   float m_velocity = -2;
   int m_item_type = 0;
 };

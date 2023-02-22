@@ -2,8 +2,9 @@
 #include <string>
 #include <vector>
 
-void initPlayer(EntityManager &t_entity_manager, UdpServer *t_serverCom) {
-  EntityID player = t_entity_manager.createNewEntity();
+EntityID initPlayer(std::shared_ptr<EntityManager> t_entity_manager,
+                    UdpServer *t_serverCom) {
+  EntityID player = t_entity_manager->createNewEntity();
 
   SpriteECS player_sprite = SpriteECS("../Client/sprites/starship.png");
 
@@ -15,12 +16,13 @@ void initPlayer(EntityManager &t_entity_manager, UdpServer *t_serverCom) {
   body->setTexture(player_sprite.getTexture());
   body->setRotation(90.0);
 
-  Health health = initPlayerHealthBar(t_entity_manager);
+  Health health = initPlayerHealthBar();
   Player player_obj = Player{player_sprite, player_pos, body, health, 10};
-  t_entity_manager.Assign<Player>(player, player_obj);
+  t_entity_manager->Assign<Player>(player, player_obj);
   t_serverCom->addEvent(std::make_shared<Action>(
     CreateAction(player, Action::ObjectType::PLAYER, player_pos.position,
                  "../Client/sprites/starship.png")));
+  return player;
 }
 
 void initBackground(EntityManager &t_entity_manager) {
@@ -46,7 +48,7 @@ void initBackground(EntityManager &t_entity_manager) {
   t_entity_manager.Assign<BackgroundLayer>(background3, background_layer3);
 }
 
-Health initPlayerHealthBar(EntityManager &t_entity_manager) {
+Health initPlayerHealthBar() {
   SpriteECS player_health_bar_sprite_full =
     SpriteECS("../Client/sprites/playerassets/Fulllife.png");
 

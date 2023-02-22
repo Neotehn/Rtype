@@ -8,6 +8,7 @@ IProtocol::getCreateAction(std::vector<std::string> commands, int action_id,
   float y = std::stof(commands[5]);
   std::string sprite_path;
   float velocity = 0;
+  Action::ShootingType shooting_type;
   if (type == Action::ObjectType::PLAYER) {
     sprite_path = commands[6];
     return std::make_shared<Action>(
@@ -18,9 +19,9 @@ IProtocol::getCreateAction(std::vector<std::string> commands, int action_id,
     return std::make_shared<Action>(CreateAction(
       id, CreateAction::ENEMY, rtype::Vector2f{x, y}, "", action_id, velocity));
   } else if (type == Action::ObjectType::BULLET) {
-    return std::make_shared<Action>(CreateAction(id, CreateAction::BULLET,
-                                                 rtype::Vector2f{x, y}, "",
-                                                 action_id, velocity));
+    shooting_type = Action::ShootingType(std::stoi(commands[6]));
+    return std::make_shared<Action>(CreateAction(
+      id, CreateAction::BULLET, rtype::Vector2f{x, y}, shooting_type));
   } else if (type == Action::ObjectType::EXPLOSION) {
     return std::make_shared<Action>(CreateAction(id, CreateAction::EXPLOSION,
                                                  rtype::Vector2f{x, y}, "",
@@ -97,8 +98,8 @@ std::shared_ptr<Action> IProtocol::getAction(std::string command) {
     rtype::Vector2f pos = {std::stof(commands[3]), std::stof(commands[4])};
     return std::make_shared<Action>(PosAction(id, pos, action_id));
   } else if (action_type == "SHOOT") {
-    int damage = std::stoi(commands[3]);
-    int type = std::stoi(commands[4]);
+    int damage = std::stoi(commands[4]);
+    Action::ShootingType type = Action::ShootingType(std::stoi(commands[5]));
     return std::make_shared<Action>(
       ShootAction(id, damage, type, false, action_id));
   } else if (action_type == "CREATE") {
