@@ -7,11 +7,6 @@ mkdir -p $install_folder
 brew update
 brew install libgl1-mesa-dev libglx-dev libudev-dev libopenal-dev libvorbis-dev libflac-dev libogg-dev libsfml-dev libxrandr-dev libx11-dev libxcursor-dev xvfb cmake
 
-# Move installed packages to the created folder
-sudo cp /usr/include/SFML $install_folder/
-sudo cp /usr/lib/x86_64-linux-gnu/libsfml-* $install_folder/
-sudo cp /usr/lib/x86_64-linux-gnu/pkgconfig/sfml-* $install_folder/
-sudo cp /usr/share/SFML $install_folder/
 
 # Print installation summary
 echo "Packages installed to: $install_folder"

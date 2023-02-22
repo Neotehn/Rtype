@@ -7,6 +7,5 @@ mkdir -p $install_folder
 sudo apt-get update
 sudo apt-get install -y libgl1-mesa-dev libglx-dev libudev-dev libopenal-dev libvorbis-dev libflac-dev libogg-dev libsfml-dev libxrandr-dev libx11-dev libxcursor-dev xvfb cmake
 
-
 # Print installation summary
 echo "Packages installed"
