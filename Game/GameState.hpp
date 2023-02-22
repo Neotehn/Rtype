@@ -15,6 +15,7 @@
 #include "Systems/AnimationSystem.hpp"
 #include "Systems/CollisionSystem.hpp"
 #include "Systems/CreateObjectSystem.hpp"
+#include "Systems/CreatePlayerSystem.hpp"
 #include "Systems/DisplaySystem.hpp"
 #include "Systems/DestroySystem.hpp"
 #include "Systems/MovementSystem.hpp"

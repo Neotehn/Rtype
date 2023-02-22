@@ -39,6 +39,8 @@ class UdpClient : public IProtocol {
   InputManager &m_input_manager;
   InputManager &m_client_input_manager;
   boost::thread m_thread;
+
+  void setPlayerId(std::shared_ptr<Action> t_action);
 };
 
 #endif /* !PROTOCOL_UDPCLIENT_HPP_ */

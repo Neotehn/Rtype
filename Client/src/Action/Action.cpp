@@ -86,6 +86,9 @@ std::string Action::getCommand() const {
         std::to_string(m_position.x) + ";" + std::to_string(m_position.y) + ";";
       if (m_sprite_path.length() > 0) { data += m_sprite_path + ";"; }
       if (m_velocity >= -1) { data += std::to_string(m_velocity) + ";"; }
+      if (m_item_type != 0) {
+        data += std::to_string(float(m_item_type)) + ";";
+      }
       std::cout << std::to_string(m_velocity) << std::endl;
 
       return std::to_string(m_action_id) + ";CREATE;" + std::to_string(m_id) +
@@ -124,6 +127,10 @@ int Action::getIncreaseValue() const { return m_value; }
 
 int Action::getShootDamage() const { return m_damage; }
 
-int Action::getShootType() const { return m_shoot_type; }
+Action::ShootingType Action::getShootType() const { return m_shoot_type; }
 
 float Action::getVelocity() const { return m_velocity; }
+
+int Action::getItemType() const { return m_item_type; }
+
+void Action::setPlayerId(EntityID t_id) { m_id = t_id; }

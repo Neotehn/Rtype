@@ -18,6 +18,10 @@ class ShootingSystem : public ISystem {
  private:
   EventQueue m_event_queue;
   UdpServer *m_serverCom;
+
+  void shoot(std::shared_ptr<Action> action);
+  void shootFire(std::shared_ptr<Action> action);
+  void shootBomb(std::shared_ptr<Action> action);
 };
 
 #endif  // CLIENT_SRC_SYSTEMS_SHOOTINGSYSTEM_HPP_

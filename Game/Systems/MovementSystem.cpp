@@ -50,6 +50,12 @@ void MovementSystem::update() {
     anim->body->setPosition(
       {anim->position.position.x, anim->position.position.y});
   }
+  for (EntityID ent : EntityViewer<SpinningItem>(*m_em.get())) {
+    SpinningItem *anim = (*m_em.get()).Get<SpinningItem>(ent);
+    anim->position.position += anim->position.velocity;
+    anim->body->setPosition(
+      {anim->position.position.x, anim->position.position.y});
+  }
 }
 
 void MovementSystem::updatePlayer(EntityID t_ent) {

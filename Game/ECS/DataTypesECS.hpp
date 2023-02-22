@@ -41,11 +41,20 @@ class HealthBar {
 
   const int getHealth() { return m_health; }
   const std::vector<std::string> getSpritesPaths() { return m_sprites_paths; }
-  void setHealth(int t_health) { m_health = t_health; }
+  void setHealth(int t_health) {
+    if (t_health < 0 || t_health > m_max_health) return;
+    m_health = t_health;
+  }
+  void increaseHealth(int t_health) {
+    m_health += t_health;
+    if (m_health > m_max_health) m_health = m_max_health;
+  }
+  void setMaxHealth(int t_max_health) { m_max_health = t_max_health; }
 
  private:
   int m_health;
   std::vector<std::string> m_sprites_paths;
+  int m_max_health = 3;
 };
 
 struct Health {
@@ -99,6 +108,9 @@ struct Player {
   rtype::IRectangleShape *body;
   Health health;
   float speed;
+  int fire_shot = 5;  //TODO reset to 0, 5 only for testing purposes
+  int bomb_shot = 5;  //TODO reset to 0, 5 only for testing purposes
+  int coins = 0;
 };
 
 struct Bullet {
@@ -112,6 +124,25 @@ struct AnimationObj {
   Pos position;
   AnimationTime time;
   AnimationRect rect;
+  rtype::IRectangleShape *body;
+};
+
+namespace rtype {
+  enum ItemType {
+    NO_ITEM,  // needs to stay at first position in enum
+    LIFE_ITEM,
+    SPEED_ITEM,
+    BOMB_ITEM,
+    FIRE_ITEM,
+  };
+}
+
+struct SpinningItem {
+  rtype::ItemType type;
+  int value;
+  SpriteECS sprite;
+  Pos position;
+  AnimationTime time;
   rtype::IRectangleShape *body;
 };
 

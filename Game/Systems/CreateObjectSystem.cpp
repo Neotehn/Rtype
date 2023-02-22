@@ -21,12 +21,11 @@ void CreateObjectSystem::update() {
     rtype::Vector2f pos = action->getCreatePosition();
     float velocity = 0;
     switch (type) {
-      // TODO: add player creation somewhere to event queue of udp server
       case Action::ObjectType::PLAYER:
         createPlayer(id, action->getCreateSpritePath(), pos);
         break;
       case Action::ObjectType::BULLET:
-        createBullet(id, pos);
+        createBullet(id, pos, action->getShootType());
         break;
       case Action::ObjectType::ENEMY:
         velocity = action->getVelocity();
@@ -40,6 +39,8 @@ void CreateObjectSystem::update() {
       case Action::ObjectType::POWER_UP:
         createPowerUp(id, pos);
         break;
+      case Action::ObjectType::ITEM:
+        createItem(id, rtype::ItemType(action->getItemType()), pos);
       default:
         break;
     }
@@ -87,14 +88,28 @@ Health CreateObjectSystem::initPlayerHealthBar(EntityID t_player_id) {
   return Health{bar_stats, bar_pos, body};
 }
 
-void CreateObjectSystem::createBullet(EntityID t_id, rtype::Vector2f t_pos) {
+void CreateObjectSystem::createBullet(EntityID t_id, rtype::Vector2f t_pos,
+                                      Action::ShootingType t_shooting_type) {
   EntityID bullet = m_em->createNewEntity(t_id);
-  SpriteECS sprite = SpriteECS("./../Client/sprites/shoot2.png");
 
   rtype::IRectangleShape *bullet_body = new rtype::RectangleShape();
   bullet_body->setSize({20, 20});
   bullet_body->setPosition({t_pos.x, t_pos.y});
-  bullet_body->setTexture(sprite.getTexture());
+
+  switch (t_shooting_type) {
+    case Action::ShootingType::NORMAL:
+      bullet_body->setTexture(
+        SpriteECS("./../Client/sprites/shoot2.png").getTexture());
+      break;
+    case Action::ShootingType::FIRE:
+      bullet_body->setTexture(
+        SpriteECS("./../Client/sprites/shoot3.png").getTexture());
+      break;
+    case Action::ShootingType::BOMB:
+      bullet_body->setTexture(
+        SpriteECS("./../Client/sprites/shoot4.png").getTexture());
+      break;
+  }
 
   m_play_sounds.push_back(SoundSystem::SoundType::shoot);
   Bullet displayable_bullet = Bullet{bullet_body, 10.0, t_pos};
@@ -157,4 +172,51 @@ void CreateObjectSystem::createPowerUp(EntityID t_id, rtype::Vector2f t_pos) {
                                .last_timer = 0},
                  AnimationRect{.size = 84, .limit = 420}, body};
   m_em->Assign<AnimationObj>(powerup, power_up);
+}
+
+void CreateObjectSystem::createItem(EntityID t_id, rtype::ItemType t_item_type,
+                                    rtype::Vector2f t_pos) {
+  std::string path = "";
+  int value = 0;
+  switch (t_item_type) {
+    case rtype::LIFE_ITEM:
+      path = "../Client/sprites/powerup/life_item.png";
+      value = 1;
+      break;
+    case rtype::SPEED_ITEM:
+      path = "../Client/sprites/powerup/speed_item.png";
+      value = 3;
+      break;
+    case rtype::BOMB_ITEM:
+      path = "../Client/sprites/powerup/bomb_item.png";
+      value = 5;
+      break;
+    case rtype::FIRE_ITEM:
+      path = "../Client/sprites/powerup/fire_item.png";
+      value = 5;
+      break;
+    default:
+      break;
+  }
+  EntityID item = m_em->createNewEntity(t_id);
+  SpriteECS item_sprite = SpriteECS(path);
+
+  Pos player_pos = Pos{rtype::Vector2f{-7, 0}, t_pos};
+
+  rtype::IRectangleShape *body = new rtype::RectangleShape();
+  body->setSize({40, 40});
+  body->setOrigin({20, 20});
+  body->setPosition({player_pos.position.x, player_pos.position.y});
+  body->setTexture(item_sprite.getTexture());
+  body->setRotation(90.0);
+
+  SpinningItem item_obj = {t_item_type,
+                           value,
+                           item_sprite,
+                           player_pos,
+                           AnimationTime{.current_animation_time = 0,
+                                         .display_time = 0.06,
+                                         .last_timer = 0},
+                           body};
+  m_em->Assign<SpinningItem>(item, item_obj);
 }

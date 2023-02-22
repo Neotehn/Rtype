@@ -34,9 +34,6 @@ GameState::~GameState() {
 EntityManager GameState::initEntityManager() {
   EntityManager entity_manager;
   initBackground(entity_manager);
-  if (m_flag == CommunicationFlag::server) {
-    initPlayer(entity_manager, m_serverCom);
-  }
   return entity_manager;
 }
 
@@ -45,6 +42,8 @@ GameState::initSystems(std::shared_ptr<EntityManager> entity_manager) {
   std::vector<std::shared_ptr<ISystem>> systems;
 
   if (m_flag == CommunicationFlag::server) {
+    systems.push_back(
+      std::make_shared<CreatePlayerSystem>(entity_manager, m_serverCom));
     systems.push_back(std::make_shared<RandomEnemyGeneratorSystem>(
       entity_manager, m_serverCom));
     systems.push_back(
@@ -53,15 +52,15 @@ GameState::initSystems(std::shared_ptr<EntityManager> entity_manager) {
       std::make_shared<ShootingSystem>(entity_manager, m_serverCom));
     systems.push_back(
       std::make_shared<MovementSystem>(entity_manager, m_serverCom));
-  } else if (m_flag == CommunicationFlag::client) {
-    systems.push_back(
-      std::make_shared<AnimationSystem>(entity_manager, m_input_manager));
+  } else {
     systems.push_back(std::make_shared<DamageSystem>(
       entity_manager, m_input_manager, m_port_number, m_is_running, m_sounds));
     systems.push_back(
       std::make_shared<CreateObjectSystem>(entity_manager, m_sounds));
     systems.push_back(
       std::make_shared<MovementSystem>(entity_manager, nullptr));
+    systems.push_back(
+      std::make_shared<AnimationSystem>(entity_manager, m_input_manager));
     systems.push_back(
       std::make_shared<PowerUpSystem>(entity_manager, m_sounds));
     systems.push_back(std::make_shared<SoundSystem>(entity_manager, m_sounds));

@@ -3,9 +3,9 @@
 Core::Core(std::size_t t_flag) {
   m_window = new rtype::RenderWindow();
   m_window->create(
-    800, 800, "R-Type",
+    800, 800, t_flag == 0 ? "R-Type Server" : "R-Type Client",
     static_cast<rtype::Style>(rtype::Style::Titlebar | rtype::Style::Close));
-  m_window->setFramerateLimit(30);
+  m_window->setFramerateLimit(60);
 
   if (t_flag == 1)
     m_state_machine.run(StateMachine::build<MainState>(

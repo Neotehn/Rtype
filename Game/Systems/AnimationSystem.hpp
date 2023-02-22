@@ -22,6 +22,9 @@ class AnimationSystem : public ISystem {
  private:
   Timer m_timer;
   InputManager &m_input_manager;
+
+  void animateAnimationObj();
+  void animateSpinningItem();
 };
 
 #endif  // CLIENT_SRC_SYSTEMS_ANIMATIONSYSTEM_HPP_

@@ -26,10 +26,13 @@ class CreateObjectSystem : public ISystem {
   void createPlayer(EntityID t_id, std::string t_sprite_path,
                     rtype::Vector2f t_pos);
   Health initPlayerHealthBar(EntityID t_player_id);
-  void createBullet(EntityID t_id, rtype::Vector2f t_pos);
+  void createBullet(EntityID t_id, rtype::Vector2f t_pos,
+                    Action::ShootingType t_shooting_type);
   void createEnemy(EntityID t_id, rtype::Vector2f t_pos, float velocity);
   void createExplosion(EntityID t_id, rtype::Vector2f t_pos);
   void createPowerUp(EntityID t_id, rtype::Vector2f t_pos);
+  void createItem(EntityID t_id, rtype::ItemType t_item_type,
+                  rtype::Vector2f t_pos);
 };
 
 #endif  //R_TYPE_CLIENT_CREATEOBJECTSYSTEM_HPP
