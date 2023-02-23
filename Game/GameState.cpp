@@ -58,7 +58,7 @@ GameState::initSystems(std::shared_ptr<EntityManager> entity_manager) {
     systems.push_back(
       std::make_shared<CreateObjectSystem>(entity_manager, m_sounds));
     systems.push_back(
-      std::make_shared<MovementSystem>(entity_manager, nullptr));
+      std::make_shared<MovementSystem>(entity_manager, nullptr, m_clientCom));
     systems.push_back(
       std::make_shared<AnimationSystem>(entity_manager, m_input_manager));
     systems.push_back(
@@ -77,7 +77,7 @@ void GameState::resume() { std::cout << "GameState Resume\n"; }
 void GameState::update() {
   while (m_is_running) {
     while (m_flag == CommunicationFlag::server &&
-           m_serverCom->m_flag != m_serverCom->single) {
+           m_serverCom->m_flag != m_serverCom->coop) {
       std::cout << "waiting on Client Connection" << std::endl;
       boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
     }
@@ -115,7 +115,7 @@ void GameState::update() {
           m_clientCom->sendMessage(action->getCommand());
       }
     }
-    if (m_flag == CommunicationFlag::server && m_serverCom->m_flag) {
+    if (m_flag == CommunicationFlag::server && m_serverCom->m_flag == 2) {
       m_serverCom->sendEvents();
     }
     for (std::shared_ptr<ISystem> system : m_systems) {

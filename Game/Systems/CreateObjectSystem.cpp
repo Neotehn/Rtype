@@ -20,9 +20,10 @@ void CreateObjectSystem::update() {
     EntityID id = action->getId();
     rtype::Vector2f pos = action->getCreatePosition();
     float velocity = 0;
+    int player_id = action->getClientId();
     switch (type) {
       case Action::ObjectType::PLAYER:
-        createPlayer(id, action->getCreateSpritePath(), pos);
+        createPlayer(id, action->getCreateSpritePath(), pos, player_id);
         break;
       case Action::ObjectType::BULLET:
         createBullet(id, pos, action->getShootType());
@@ -48,7 +49,7 @@ void CreateObjectSystem::update() {
 }
 
 void CreateObjectSystem::createPlayer(EntityID t_id, std::string t_sprite_path,
-                                      rtype::Vector2f t_pos) {
+                                      rtype::Vector2f t_pos, int t_player_id) {
   EntityID player = m_em->createNewEntity(t_id);
   SpriteECS player_sprite = SpriteECS(t_sprite_path);
 
@@ -62,7 +63,8 @@ void CreateObjectSystem::createPlayer(EntityID t_id, std::string t_sprite_path,
   body->setOutlineColor(rtype::Red);
   Health health = initPlayerHealthBar(player);
 
-  Player player_obj = Player{player_sprite, player_pos, body, health, 10};
+  Player player_obj =
+    Player{player_sprite, player_pos, body, health, 10, t_player_id};
   m_em->Assign<Player>(player, player_obj);
 }
 

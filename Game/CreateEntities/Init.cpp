@@ -17,11 +17,14 @@ EntityID initPlayer(std::shared_ptr<EntityManager> t_entity_manager,
   body->setRotation(90.0);
 
   Health health = initPlayerHealthBar();
-  Player player_obj = Player{player_sprite, player_pos, body, health, 10};
+  Player player_obj =
+    Player{player_sprite, player_pos, body,
+           health,        10,         t_serverCom->getPlayerIdCount()};
+  t_serverCom->setPlayerIdCount(t_serverCom->getPlayerIdCount() + 1);
   t_entity_manager->Assign<Player>(player, player_obj);
-  t_serverCom->addEvent(std::make_shared<Action>(
-    CreateAction(player, Action::ObjectType::PLAYER, player_pos.position,
-                 "../Client/sprites/starship.png")));
+  t_serverCom->addEvent(std::make_shared<Action>(CreateAction(
+    player, Action::ObjectType::PLAYER, player_pos.position,
+    "../Client/sprites/starship.png", t_serverCom->getPlayerIdCount())));
   return player;
 }
 

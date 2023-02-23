@@ -108,6 +108,7 @@ struct Player {
   rtype::IRectangleShape *body;
   Health health;
   float speed;
+  int player_id;
   int fire_shot = 5;  //TODO reset to 0, 5 only for testing purposes
   int bomb_shot = 5;  //TODO reset to 0, 5 only for testing purposes
   int coins = 0;

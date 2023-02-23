@@ -30,6 +30,7 @@ class UdpClient : public IProtocol {
                   std::size_t t_size);
   enum ConnectState { none, connected };
   ConnectState m_flag;
+  int m_id;
 
  private:
   udp::socket m_socket;

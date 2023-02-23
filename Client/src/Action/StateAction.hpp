@@ -9,6 +9,8 @@ class StateAction : public Action {
  public:
   StateAction(ActionType t_type, EntityID t_id);
   StateAction(ActionType t_type, EntityID t_id, int t_action_id);
+  StateAction(ActionType t_type, EntityID t_id, int t_action_id,
+              int t_player_id);
   ~StateAction() override = default;
 };
 

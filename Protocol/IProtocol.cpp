@@ -8,12 +8,14 @@ IProtocol::getCreateAction(std::vector<std::string> commands, int action_id,
   float y = std::stof(commands[5]);
   std::string sprite_path;
   float velocity = 0;
+  int player_id = 0;
   Action::ShootingType shooting_type;
   if (type == Action::ObjectType::PLAYER) {
     sprite_path = commands[6];
+    player_id = std::stoi(commands[7]);
     return std::make_shared<Action>(
       CreateAction(id, CreateAction::PLAYER, rtype::Vector2f{x, y}, sprite_path,
-                   action_id, velocity));
+                   action_id, player_id, velocity));
   } else if (type == Action::ObjectType::ENEMY) {
     velocity = std::stof(commands[6]);
     return std::make_shared<Action>(CreateAction(
@@ -80,8 +82,9 @@ std::shared_ptr<Action> IProtocol::getAction(std::string command) {
   EntityID id = std::stoull(commands[2]);
 
   if (action_type == "START") {
+    int player_id = std::stoi(commands[3]);
     return std::make_shared<Action>(
-      StateAction(Action::ActionType::START, id, action_id));
+      StateAction(Action::ActionType::START, id, action_id, player_id));
   } else if (action_type == "UP") {
     return std::make_shared<Action>(
       MovementAction(Action::ActionType::UP, id, false, action_id));

@@ -7,10 +7,12 @@
 #include "../ECS/ISystem.hpp"
 #include "../../Client/src/Action/Action.hpp"
 #include "../../Server/Protocol/UdpServer.hpp"
+#include "../../Client/Protocol/UdpClient.hpp"
 
 class MovementSystem : public ISystem {
  public:
   MovementSystem(std::shared_ptr<EntityManager> t_em, UdpServer *t_serverCom);
+  MovementSystem(std::shared_ptr<EntityManager> t_em, UdpServer *t_serverCom, UdpClient *t_clientCom);
   ~MovementSystem();
 
   void update();
@@ -19,8 +21,10 @@ class MovementSystem : public ISystem {
  private:
   EventQueue m_event_queue;
   UdpServer *m_serverCom;
+  UdpClient *m_clientCom;
 
   void updatePlayer(EntityID t_ent);
+  void updatePlayerClient(EntityID t_ent);
   void updateBackground(EntityID t_ent);
   void updateBullets(EntityID t_ent);
   void updateBulletsServer(EntityID t_ent);
