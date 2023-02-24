@@ -13,12 +13,12 @@ SettingsState::SettingsState(StateMachine &t_machine,
         rtype::Vector2f{64, 64}, t_graphic_loader)),
       m_vol_up(Button(
         "./assets/icons/plus.png",
-        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 50),
+        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 81.5),
                         static_cast<float>(m_window->getSize().y / 2)},
         rtype::Vector2f{64, 64}, t_graphic_loader)),
       m_vol_down(Button(
         "./assets/icons/minus.png",
-        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 + 50),
+        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 + 17.5),
                         static_cast<float>(m_window->getSize().y / 2)},
         rtype::Vector2f{64, 64}, t_graphic_loader)),
       m_flag(t_flag) {
@@ -33,6 +33,23 @@ SettingsState::SettingsState(StateMachine &t_machine,
   float scale_y = size_y / m_bg_t->getSize().y;
   m_bg_s->setTexture(m_bg_t, true);
   m_bg_s->setScale({scale_x, scale_y});
+  m_font = m_graphic_loader->loadFont();
+  if (!m_font->loadFromFile("./assets/font/nasalization-rg.ttf")) {
+    throw std::runtime_error("Unable to load font.");
+  }
+  m_title = m_graphic_loader->loadText();
+  m_title->setFont(m_font);
+  m_title->setString("SETTINGS");
+  m_title->setCharacterSize(50);
+  m_title->setPosition(
+    {(size_x / 2) - (m_title->getLocalBounds().width / 2), 100});
+  m_vol_txt = m_graphic_loader->loadText();
+  m_vol_txt->setFont(m_font);
+  m_vol_txt->setString("VOLUME");
+  m_vol_txt->setCharacterSize(35);
+  m_vol_txt->setPosition(
+    {(size_x / 2) - (m_vol_txt->getLocalBounds().width / 2),
+     (size_y / 2) - 50});
   m_music_player.play(MusicID::MENU_THEME);
 }
 
@@ -97,6 +114,8 @@ void SettingsState::update() {
 void SettingsState::draw() {
   m_window->clear();
   m_window->draw(m_bg_s);
+  m_window->draw(m_title);
+  m_window->draw(m_vol_txt);
   m_window->draw(m_start_btn.getSprite());
   m_window->draw(m_vol_down.getSprite());
   m_window->draw(m_vol_up.getSprite());

@@ -40,6 +40,10 @@ class LobbyState final : public State {
   std::size_t m_flag;
   rtype::IFont *m_font;
   rtype::IText *m_title;
+  Button m_player_one;
+  Button m_player_two;
+  Button m_player_three;
+  Button m_player_four;
 };
 
 #endif /* !LOBBYSTATE_HPP_ */

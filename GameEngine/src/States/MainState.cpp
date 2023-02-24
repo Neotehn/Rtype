@@ -32,6 +32,16 @@ MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
   float scale_y = size_y / m_bg_t->getSize().y;
   m_bg_s->setTexture(m_bg_t, true);
   m_bg_s->setScale({scale_x, scale_y});
+  m_font = m_graphic_loader->loadFont();
+  if (!m_font->loadFromFile("./assets/font/nasalization-rg.ttf")) {
+    throw std::runtime_error("Unable to load font.");
+  }
+  m_title = m_graphic_loader->loadText();
+  m_title->setFont(m_font);
+  m_title->setString("R-TYPE");
+  m_title->setCharacterSize(50);
+  m_title->setPosition(
+    {(size_x / 2) - (m_title->getLocalBounds().width / 2), 100});
   m_music_player.play(MusicID::MENU_THEME);
 }
 
@@ -89,6 +99,7 @@ void MainState::update() {
 void MainState::draw() {
   m_window->clear();
   m_window->draw(m_bg_s);
+  m_window->draw(m_title);
   m_window->draw(m_start_btn.getSprite());
   m_window->draw(m_settings_btn.getSprite());
   m_window->draw(m_exit_btn.getSprite());

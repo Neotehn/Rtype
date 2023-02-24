@@ -6,6 +6,8 @@
 #include "../../../Game/Encapsulation/IRenderWindow.hpp"
 #include "../../../Game/Encapsulation/ITexture.hpp"
 #include "../../../Game/Encapsulation/ISprite.hpp"
+#include "../../../Game/Encapsulation/IFont.hpp"
+#include "../../../Game/Encapsulation/IText.hpp"
 
 #include "./MainState.hpp"
 #include "../MusicPlayer.hpp"
@@ -29,6 +31,10 @@ class SettingsState final : public State {
   Button m_start_btn;
   Button m_vol_up;
   Button m_vol_down;
+  rtype::IFont *m_font;
+  rtype::IText *m_title;
+  rtype::IText *m_vol_txt;
+
   std::size_t m_flag;
 };
 

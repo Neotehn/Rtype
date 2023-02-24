@@ -5,6 +5,8 @@
 
 #include "../../../Game/Encapsulation/ITexture.hpp"
 #include "../../../Game/Encapsulation/ISprite.hpp"
+#include "../../../Game/Encapsulation/IFont.hpp"
+#include "../../../Game/Encapsulation/IText.hpp"
 
 #include "../Button.hpp"
 #include "./LobbyState.hpp"
@@ -30,6 +32,8 @@ class MainState final : public State {
   Button m_start_btn;
   Button m_settings_btn;
   Button m_exit_btn;
+  rtype::IFont *m_font;
+  rtype::IText *m_title;
   std::size_t m_flag;
 };
 
