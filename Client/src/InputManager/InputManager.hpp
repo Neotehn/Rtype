@@ -22,13 +22,15 @@ class InputManager {
   EventQueue getInputs();
   EventQueue getInputsWithoutPop();
   bool doesActionExist(std::shared_ptr<Action> t_action_id);
+  bool isPlayerIdSet();
+  void setPlayerId(EntityID t_player_id);
   // TODO: encapsulate sf::Mouse
   //  sf::Vector2i getMousePosition();
   //  bool isMouseLeftClicked();
   //  bool isMouseRightClicked();
 
  private:
-  EntityID m_player_id;
+  EntityID m_player_id = 0;
   EventQueue m_input_queue;
 };
 

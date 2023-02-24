@@ -4,9 +4,7 @@
 #include <iostream>
 
 #include "../../../Game/Encapsulation/ITexture.hpp"
-#include "../../../Game/Encapsulation/SFML/Texture.hpp"
 #include "../../../Game/Encapsulation/ISprite.hpp"
-#include "../../../Game/Encapsulation/SFML/Sprite.hpp"
 
 #include "../Button.hpp"
 #include "./LobbyState.hpp"
@@ -20,7 +18,7 @@ class MainState final : public State {
  public:
   MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
             MusicPlayer &t_music_player, std::size_t t_flag,
-            bool t_replace = true);
+            rtype::IGraphicLoader *t_graphic_loader, bool t_replace = true);
   void pause() override;
   void resume() override;
   void update() override;

@@ -41,6 +41,7 @@ class UdpServer : public IProtocol {
   GameMode m_flag;
 
  private:
+  std::vector<int> m_client_ports;
   boost::thread m_thread;
   udp::socket m_socket;
   udp::endpoint m_remoteEndpoint;
@@ -50,6 +51,9 @@ class UdpServer : public IProtocol {
   InputManager &m_input_manager;
   InputManager m_send_event_manager;
   bool &m_is_running;
+
+  bool doesAlreadyExist(std::shared_ptr<Action> t_action);
+  bool isUpdated(std::shared_ptr<Action> t_event);
 };
 
 #endif /* !PROTOCOL_UDPSERVER_HPP_ */
