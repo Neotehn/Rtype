@@ -2,11 +2,17 @@
 
 A binary protocol for client/server communications. We must use UDP for communications between the server and the client.
 
+### Architecture
+
+The architecture is a client-server game architecture. The game is handled in the server. The client connects to the server by using an UDP protocol.
+
 ### Commands
 
-Following commands are implemented.
+The transmitted payload follows a simple structure: ACTION\_ID;ACTION\_TYPE;ID;DATA;.
 
-The Transmitted commands are build of multiple arguments. Depending on the action the command contains different arguments. The first argument is an "ACTION\_ID", followed by the command (e.g. "UP", "DOWN", "SHOOT", etc). The third argument is the entity id. Following that the next command is depending on the second argument, you can view that from the following "ActionType" enum.&#x20;
+Where ACTION\_ID is an integer that grows with every new action. ACTION\_TYPE is the transmitted action we want to convey (see implemented commands below). The ID is the user id and DATA depends on the ACTION\_TYPE (see implemented commands below).
+
+Following commands are implemented:
 
 ```
 enum ActionType {
@@ -36,5 +42,27 @@ enum ActionType {
     ERROR,
 };
 ```
+
+### Server connection
+
+The server waits till a clients starts to connect with it. To connect with the server the client needs to send following command to the server: 1000;START;PORT\_NB;.
+
+On success the server answers with the command to create the player (0;CREATE;ID;PLAYER;X\_CORD;Y\_CORD;SPRITE\_PATH;.
+
+### Game
+
+The client transmits player events. These are defined in the ActionType enumeration. To clarify which events are player events, you will find a slimmed down version below.
+
+```
+enum ActionType {
+    UP,
+    DOWN,
+    RIGHT,
+    LEFT,
+    SHOOT,
+};
+```
+
+The server responds to these actions by sending the new position of the player. In case of the SHOOT action, the server sends the CREATE action to create a new bullet at the required position.
 
 [Back](../../README.md)
