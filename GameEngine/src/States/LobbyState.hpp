@@ -11,13 +11,9 @@
 #include <iostream>
 
 #include "../../../Game/Encapsulation/ITexture.hpp"
-#include "../../../Game/Encapsulation/SFML/Texture.hpp"
 #include "../../../Game/Encapsulation/ISprite.hpp"
-#include "../../../Game/Encapsulation/SFML/Sprite.hpp"
 #include "../../../Game/Encapsulation/IFont.hpp"
-#include "../../../Game/Encapsulation/SFML/Font.hpp"
 #include "../../../Game/Encapsulation/IText.hpp"
-#include "../../../Game/Encapsulation/SFML/Text.hpp"
 
 #include "../Button.hpp"
 #include "../MusicPlayer.hpp"
@@ -30,7 +26,7 @@ class LobbyState final : public State {
  public:
   LobbyState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
              MusicPlayer &t_music_player, std::size_t t_flag,
-             bool t_replace = true);
+             rtype::IGraphicLoader *t_graphic_loader, bool t_replace = true);
   void pause() override;
   void resume() override;
   void update() override;
@@ -42,8 +38,8 @@ class LobbyState final : public State {
   Button m_start_btn;
   Button m_settings_btn;
   std::size_t m_flag;
-  rtype::Font *m_font;
-  rtype::Text *m_title;
+  rtype::IFont *m_font;
+  rtype::IText *m_title;
 };
 
 #endif /* !LOBBYSTATE_HPP_ */
