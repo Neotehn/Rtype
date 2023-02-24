@@ -5,11 +5,21 @@ SettingsState::SettingsState(StateMachine &t_machine,
                              MusicPlayer &t_music_player, std::size_t t_flag,
                              const bool t_replace)
     : State(t_machine, t_window, t_music_player, t_replace),
-      m_start_btn(
-        Button("./assets/startBtn.png",
-               rtype::Vector2f{static_cast<float>(m_window->getSize().x - 320),
-                               static_cast<float>(m_window->getSize().y - 180)},
-               rtype::Vector2f{270, 130})),
+      m_start_btn(Button(
+        "./assets/icons/home.png",
+        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 32),
+                        static_cast<float>(m_window->getSize().y - 100)},
+        rtype::Vector2f{64, 64})),
+      m_vol_up(Button(
+        "./assets/icons/plus.png",
+        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 50),
+                        static_cast<float>(m_window->getSize().y / 2)},
+        rtype::Vector2f{64, 64})),
+      m_vol_down(Button(
+        "./assets/icons/minus.png",
+        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 + 50),
+                        static_cast<float>(m_window->getSize().y / 2)},
+        rtype::Vector2f{64, 64})),
       m_flag(t_flag) {
   m_bg_t = new rtype::Texture();
   m_bg_s = new rtype::Sprite();
@@ -22,6 +32,7 @@ SettingsState::SettingsState(StateMachine &t_machine,
   float scale_y = size_y / m_bg_t->getSize().y;
   m_bg_s->setTexture(m_bg_t, true);
   m_bg_s->setScale({scale_x, scale_y});
+  m_music_player.play(MusicID::MENU_THEME);
 }
 
 void SettingsState::pause() { std::cout << "MenuState Pause\n"; }
@@ -35,12 +46,26 @@ void SettingsState::update() {
                                 static_cast<float>(mouse_pos.y)};
     if (event.type == rtype::EventType::MouseMoved) {
       m_start_btn.is_hovered(mouse_pos_f);
+      m_vol_down.is_hovered(mouse_pos_f);
+      m_vol_up.is_hovered(mouse_pos_f);
     }
     if (m_mouse->isLeftMouseButtonPressed()) {
       if (m_start_btn.is_pressed(mouse_pos_f)) {
         std::cout << "startbtn pressed" << std::endl;
         m_next = StateMachine::build<MainState>(m_state_machine, m_window,
                                                 m_music_player, m_flag, true);
+      }
+      if (m_vol_down.is_pressed(mouse_pos_f)) {
+        if (m_music_player.getVolume() > 0) {
+          float tmp_vol = m_music_player.getVolume();
+          m_music_player.setVolume(tmp_vol - 5);
+        }
+      }
+      if (m_vol_up.is_pressed(mouse_pos_f)) {
+        if (m_music_player.getVolume() < 100) {
+          float tmp_vol = m_music_player.getVolume();
+          m_music_player.setVolume(tmp_vol + 5);
+        }
       }
     }
     switch (event.type) {
@@ -70,5 +95,7 @@ void SettingsState::draw() {
   m_window->clear();
   m_window->draw(m_bg_s);
   m_window->draw(m_start_btn.getSprite());
+  m_window->draw(m_vol_down.getSprite());
+  m_window->draw(m_vol_up.getSprite());
   m_window->display();
 }

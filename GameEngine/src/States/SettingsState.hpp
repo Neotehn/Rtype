@@ -10,6 +10,7 @@
 #include "../../../Game/Encapsulation/SFML/Sprite.hpp"
 
 #include "./MainState.hpp"
+#include "../MusicPlayer.hpp"
 #include "../Button.hpp"
 #include "../State.hpp"
 #include "../StateMachine.hpp"
@@ -28,6 +29,8 @@ class SettingsState final : public State {
   rtype::ITexture *m_bg_t;
   rtype::ISprite *m_bg_s;
   Button m_start_btn;
+  Button m_vol_up;
+  Button m_vol_down;
   std::size_t m_flag;
 };
 

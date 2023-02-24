@@ -1,8 +1,15 @@
-#include "./MainState.hpp"
+/*
+** EPITECH PROJECT, 2023
+** Rtype
+** File description:
+** LobbyState
+*/
 
-MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
-                     MusicPlayer &t_music_player, std::size_t t_flag,
-                     const bool t_replace)
+#include "LobbyState.hpp"
+
+LobbyState::LobbyState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
+                       MusicPlayer &t_music_player, std::size_t t_flag,
+                       const bool t_replace)
     : State(t_machine, t_window, t_music_player, t_replace),
       m_start_btn(Button(
         "./assets/startBtn.png",
@@ -12,11 +19,6 @@ MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
       m_settings_btn(
         Button("./assets/icons/gear.png",
                rtype::Vector2f{static_cast<float>(m_window->getSize().x - 100),
-                               static_cast<float>(m_window->getSize().y - 100)},
-               rtype::Vector2f{64, 64})),
-      m_exit_btn(
-        Button("./assets/icons/exitLeft.png",
-               rtype::Vector2f{static_cast<float>(m_window->getSize().x - 200),
                                static_cast<float>(m_window->getSize().y - 100)},
                rtype::Vector2f{64, 64})),
       m_flag(t_flag) {
@@ -31,14 +33,24 @@ MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
   float scale_y = size_y / m_bg_t->getSize().y;
   m_bg_s->setTexture(m_bg_t, true);
   m_bg_s->setScale({scale_x, scale_y});
+  m_font = new rtype::Font();
+  if (!m_font->loadFromFile("./assets/font/nasalization-rg.ttf")) {
+    throw std::runtime_error("Unable to load font.");
+  }
+  m_title = new rtype::Text();
+  m_title->setFont(m_font);
+  m_title->setString("LOBBY");
+  m_title->setCharacterSize(50);
+  m_title->setPosition(
+    {(size_x / 2) - (m_title->getLocalBounds().width / 2), 100});
   m_music_player.play(MusicID::MENU_THEME);
 }
 
-void MainState::pause() { std::cout << "MenuState Pause\n"; }
+void LobbyState::pause() { std::cout << "MenuState Pause\n"; }
 
-void MainState::resume() { std::cout << "MenuState resume\n"; }
+void LobbyState::resume() { std::cout << "MenuState resume\n"; }
 
-void MainState::update() {
+void LobbyState::update() {
   for (auto event = rtype::Event{}; m_window->pollEvent(event);) {
     rtype::Vector2i mouse_pos = m_mouse->getMousePosition(m_window);
     rtype::Vector2f mouse_pos_f{static_cast<float>(mouse_pos.x),
@@ -46,22 +58,17 @@ void MainState::update() {
     if (event.type == rtype::EventType::MouseMoved) {
       m_start_btn.is_hovered(mouse_pos_f);
       m_settings_btn.is_hovered(mouse_pos_f);
-      m_exit_btn.is_hovered(mouse_pos_f);
     }
     if (m_mouse->isLeftMouseButtonPressed()) {
       if (m_start_btn.is_pressed(mouse_pos_f)) {
         std::cout << "startbtn pressed" << std::endl;
-        m_next = StateMachine::build<LobbyState>(m_state_machine, m_window,
-                                                 m_music_player, m_flag, true);
+        m_next = StateMachine::build<GameState>(m_state_machine, m_window,
+                                                m_music_player, m_flag, true);
       }
       if (m_settings_btn.is_pressed(mouse_pos_f)) {
         std::cout << "settingsbtn pressed" << std::endl;
         m_next = StateMachine::build<SettingsState>(
           m_state_machine, m_window, m_music_player, m_flag, true);
-      }
-      if (m_exit_btn.is_pressed(mouse_pos_f)) {
-        std::cout << "exitbtn pressed" << std::endl;
-        m_state_machine.quit();
       }
     }
     switch (event.type) {
@@ -71,7 +78,8 @@ void MainState::update() {
       case rtype::EventType::KeyPressed:
         switch (event.key) {
           case rtype::EventKey::Escape:
-            m_state_machine.quit();
+            m_next = StateMachine::build<MainState>(
+              m_state_machine, m_window, m_music_player, m_flag, true);
             break;
           default:
             break;
@@ -83,11 +91,11 @@ void MainState::update() {
   }
 }
 
-void MainState::draw() {
+void LobbyState::draw() {
   m_window->clear();
   m_window->draw(m_bg_s);
+  m_window->draw(m_title);
   m_window->draw(m_start_btn.getSprite());
   m_window->draw(m_settings_btn.getSprite());
-  m_window->draw(m_exit_btn.getSprite());
   m_window->display();
 }
