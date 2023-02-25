@@ -59,7 +59,7 @@ GameState::initSystems(std::shared_ptr<EntityManager> entity_manager) {
       entity_manager, m_input_manager, m_port_number, m_is_running, m_sounds,
       m_graphic_loader));
     systems.push_back(std::make_shared<CreateObjectSystem>(
-      entity_manager, m_sounds, m_graphic_loader));
+      entity_manager, m_sounds, m_graphic_loader, level));
     systems.push_back(
       std::make_shared<MovementSystem>(entity_manager, nullptr));
     systems.push_back(

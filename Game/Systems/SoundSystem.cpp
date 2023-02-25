@@ -9,11 +9,7 @@ SoundSystem::SoundSystem(std::shared_ptr<EntityManager> t_em,
   m_music = m_graphic_loader->loadMusic();
 
   // init music
-  if (!m_music->openFromFile("../Client/assets/music/music2.ogg")) {
-    std::cout << "Error while loading music" << std::endl;
-  }
-  m_music->setVolume(50);
-  m_music->setLoop(true);
+  loadMusic(m_music);
   m_music->play();
 
   m_sounds = m_graphic_loader->loadSound();
