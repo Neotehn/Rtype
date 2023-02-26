@@ -2,6 +2,14 @@
 #include <string>
 #include <vector>
 
+AssetLoader assetLoader;
+int level = 0;
+
+void loadLevel(int t_level) {
+  level = t_level;
+  assetLoader.loadLevel(t_level);
+}
+
 EntityID initPlayer(std::shared_ptr<EntityManager> t_entity_manager,
                     UdpServer *t_serverCom,
                     rtype::IGraphicLoader *t_graphic_loader) {
@@ -69,32 +77,6 @@ Health initPlayerHealthBar(rtype::IGraphicLoader *t_graphic_loader) {
   return Health{bar_stats, bar_pos, body};
 }
 
-void initEnemy(std::shared_ptr<EntityManager> m_em,
-               rtype::IGraphicLoader *m_graphic_loader,
-               UdpServer *m_serverCom) {
-  EntityID enemy = m_em->createNewEntity();
-  SpriteECS sprite =
-    SpriteECS("./../Client/sprites/r-typesheet30a.gif", m_graphic_loader);
-  rtype::Vector2f enemy_pos = {800, float(rand() % 600 + 100)};
-  float velocity_direction = float(rand() % 3 - 1);
-
-  rtype::IRectangleShape *body = m_graphic_loader->loadRectangleShape();
-  body->setSize({30, 30});
-  body->setPosition({enemy_pos.x, enemy_pos.y});
-  body->setTexture(sprite.getTexture());
-  body->setTextureRect(rtype::IntRect{0, 0, 34, 34});
-
-  AnimationObj enemy_obj =
-    AnimationObj{"enemy", Pos{{-7, velocity_direction}, enemy_pos},
-                 AnimationTime{.current_animation_time = 0,
-                               .display_time = 1,
-                               .last_timer = 0},
-                 AnimationRect{.size = 34, .limit = 68}, body};
-  m_em->Assign<AnimationObj>(enemy, enemy_obj);
-  m_serverCom->addEvent(std::make_shared<Action>(CreateAction(
-    enemy, Action::ObjectType::ENEMY, enemy_pos, "", velocity_direction)));
-}
-
 void initBulletClient(EntityID t_id, rtype::Vector2f t_pos,
                       Action::ShootingType t_shooting_type,
                       std::shared_ptr<EntityManager> m_em,
@@ -126,24 +108,62 @@ void initBulletClient(EntityID t_id, rtype::Vector2f t_pos,
   m_em->Assign<Bullet>(bullet, displayable_bullet);
 }
 
+void initEnemy(std::shared_ptr<EntityManager> m_em,
+               rtype::IGraphicLoader *m_graphic_loader,
+               UdpServer *m_serverCom) {
+  Json::Value enemy_data = assetLoader.getEnemyData()[0];
+  int size = enemy_data["size"].asInt();
+  EntityID enemy = m_em->createNewEntity();
+  SpriteECS sprite = SpriteECS(enemy_data["path"].asString(), m_graphic_loader);
+  rtype::Vector2f enemy_pos = {800, float(rand() % 600 + 100)};
+  float velocity_direction = float(rand() % 3 - 1);
+
+  rtype::IRectangleShape *body = m_graphic_loader->loadRectangleShape();
+  body->setSize({30, 30});
+  body->setPosition({enemy_pos.x, enemy_pos.y});
+  body->setTexture(sprite.getTexture());
+  body->setFillColor(
+    rtype::Color{static_cast<unsigned char>(enemy_data["color"]["r"].asInt()),
+                 static_cast<unsigned char>(enemy_data["color"]["g"].asInt()),
+                 static_cast<unsigned char>(enemy_data["color"]["b"].asInt()),
+                 static_cast<unsigned char>(enemy_data["color"]["a"].asInt())});
+  body->setTextureRect(rtype::IntRect{0, 0, size, size});
+
+  AnimationObj enemy_obj = AnimationObj{
+    "enemy", Pos{{-7, velocity_direction}, enemy_pos},
+    AnimationTime{.current_animation_time = 0,
+                  .display_time = 1,
+                  .last_timer = 0},
+    AnimationRect{.size = size, .limit = enemy_data["limit"].asInt()}, body};
+  m_em->Assign<AnimationObj>(enemy, enemy_obj);
+  m_serverCom->addEvent(std::make_shared<Action>(CreateAction(
+    enemy, Action::ObjectType::ENEMY, enemy_pos, "", velocity_direction)));
+}
+
 void initEnemyClient(EntityID t_id, rtype::Vector2f t_pos, float t_velocity,
-                     int level, std::shared_ptr<EntityManager> m_em,
+                     std::shared_ptr<EntityManager> m_em,
                      rtype::IGraphicLoader *m_graphic_loader) {
+  Json::Value enemy_data = assetLoader.getEnemyData()[0];
+  int size = enemy_data["size"].asInt();
   EntityID enemy = m_em->createNewEntity(t_id);
-  SpriteECS sprite =
-    SpriteECS("./../Client/sprites/r-typesheet30a.gif", m_graphic_loader);
+  SpriteECS sprite = SpriteECS(enemy_data["path"].asString(), m_graphic_loader);
   rtype::IRectangleShape *body = m_graphic_loader->loadRectangleShape();
   body->setSize({30, 30});
   body->setPosition({t_pos.x, t_pos.y});
   body->setTexture(sprite.getTexture());
-  body->setTextureRect(rtype::IntRect{0, 0, 34, 34});
+  body->setTextureRect(rtype::IntRect{0, 0, size, size});
+  body->setFillColor(
+    rtype::Color{static_cast<unsigned char>(enemy_data["color"]["r"].asInt()),
+                 static_cast<unsigned char>(enemy_data["color"]["g"].asInt()),
+                 static_cast<unsigned char>(enemy_data["color"]["b"].asInt()),
+                 static_cast<unsigned char>(enemy_data["color"]["a"].asInt())});
 
-  AnimationObj enemy_obj =
-    AnimationObj{"enemy", Pos{{-7, t_velocity}, t_pos},
-                 AnimationTime{.current_animation_time = 0,
-                               .display_time = 0.1,
-                               .last_timer = 0},
-                 AnimationRect{.size = 34, .limit = 68}, body};
+  AnimationObj enemy_obj = AnimationObj{
+    "enemy", Pos{{-7, t_velocity}, t_pos},
+    AnimationTime{.current_animation_time = 0,
+                  .display_time = 0.1,
+                  .last_timer = 0},
+    AnimationRect{.size = size, .limit = enemy_data["limit"].asInt()}, body};
   m_em->Assign<AnimationObj>(enemy, enemy_obj);
 }
 
@@ -388,7 +408,7 @@ void initBombShoot(std::shared_ptr<Action> action,
 }
 
 void loadMusic(rtype::IMusic *m_music) {
-  if (!m_music->openFromFile("../Client/assets/music/music2.ogg")) {
+  if (!m_music->openFromFile(assetLoader.getMusicPath())) {
     std::cout << "Error while loading music" << std::endl;
   }
   m_music->setVolume(50);
@@ -397,24 +417,23 @@ void loadMusic(rtype::IMusic *m_music) {
 
 void initBackground(EntityManager &t_entity_manager,
                     rtype::IGraphicLoader *t_graphic_loader) {
-  // background layer 1
-  EntityID background1 = t_entity_manager.createNewEntity();
-  BackgroundLayer background_layer1 = BackgroundLayer{
-    SpriteECS("../Client/sprites/background/bg1.png", t_graphic_loader, {5, 5}),
-    rtype::Vector2f{0, 0}, 1, (-272 * 5)};
-  t_entity_manager.Assign<BackgroundLayer>(background1, background_layer1);
-
-  // background layer 2
-  EntityID background2 = t_entity_manager.createNewEntity();
-  BackgroundLayer background_layer2 = BackgroundLayer{
-    SpriteECS("../Client/sprites/background/bg2.png", t_graphic_loader, {4, 4}),
-    rtype::Vector2f{0, 160}, 2, (-272 * 10)};
-  t_entity_manager.Assign<BackgroundLayer>(background2, background_layer2);
-
-  // background layer 3
-  EntityID background3 = t_entity_manager.createNewEntity();
-  BackgroundLayer background_layer3 = BackgroundLayer{
-    SpriteECS("../Client/sprites/background/bg3.png", t_graphic_loader, {5, 5}),
-    rtype::Vector2f{0, 0}, 3, (-272 * 5)};
-  t_entity_manager.Assign<BackgroundLayer>(background3, background_layer3);
+  for (Json::Value background : assetLoader.getBackgroundData()) {
+    EntityID background_entity = t_entity_manager.createNewEntity();
+    BackgroundLayer background_layer = BackgroundLayer{
+      SpriteECS(
+        background["path"].asString(), t_graphic_loader,
+        {background["scale"]["x"].asFloat(),
+         background["scale"]["y"].asFloat()},
+        rtype::Color{
+          static_cast<unsigned char>(background["color"]["r"].asInt()),
+          static_cast<unsigned char>(background["color"]["g"].asInt()),
+          static_cast<unsigned char>(background["color"]["b"].asInt()),
+          static_cast<unsigned char>(background["color"]["a"].asInt())}),
+      {background["position"]["x"].asFloat(),
+       background["position"]["y"].asFloat()},
+      background["speed"].asFloat(),
+      background["limit"].asInt()};
+    t_entity_manager.Assign<BackgroundLayer>(background_entity,
+                                             background_layer);
+  }
 }

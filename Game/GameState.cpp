@@ -19,7 +19,7 @@ GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
 
     m_serverCom = new UdpServer(m_io_service, m_input_manager, m_is_running);
   }
-  m_music_player.play(MusicID::MISSION_THEME);
+  loadLevel(m_level);
   std::shared_ptr<EntityManager> entity_manager =
     std::make_shared<EntityManager>(initEntityManager());
   m_systems = initSystems(entity_manager);
@@ -59,7 +59,7 @@ GameState::initSystems(std::shared_ptr<EntityManager> entity_manager) {
       entity_manager, m_input_manager, m_port_number, m_is_running, m_sounds,
       m_graphic_loader));
     systems.push_back(std::make_shared<CreateObjectSystem>(
-      entity_manager, m_sounds, m_graphic_loader, level));
+      entity_manager, m_sounds, m_graphic_loader));
     systems.push_back(
       std::make_shared<MovementSystem>(entity_manager, nullptr));
     systems.push_back(

@@ -65,12 +65,14 @@ struct Health {
 class SpriteECS {
  public:
   SpriteECS(std::string t_sprite_path, rtype::IGraphicLoader *t_graphic_loader,
-            rtype::Vector2f t_scale = {1, 1}) {
+            rtype::Vector2f t_scale = {1, 1},
+            rtype::Color t_color = rtype::White) {
     m_sprite = t_graphic_loader->loadSprite();
     m_texture = t_graphic_loader->loadTexture();
     m_texture->loadFromFile(t_sprite_path);
     m_sprite->setTexture(m_texture);
     m_sprite->setScale({t_scale.x, t_scale.y});
+    m_sprite->setColor(t_color);
   }
 
   const rtype::ISprite *getSprite() const { return m_sprite; }

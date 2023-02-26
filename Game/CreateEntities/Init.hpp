@@ -7,6 +7,9 @@
 #include "../Encapsulation/IGraphicLoader.hpp"
 #include "../Encapsulation/IMusic.hpp"
 #include "../Encapsulation/IRectangleShape.hpp"
+#include "./AssetLoader.hpp"
+
+void loadLevel(int t_level);
 
 EntityID initPlayer(std::shared_ptr<EntityManager> t_entity_manager,
                     UdpServer *t_serverCom,
@@ -25,7 +28,7 @@ void initBulletClient(EntityID t_id, rtype::Vector2f t_pos,
 void initEnemy(std::shared_ptr<EntityManager> m_em,
                rtype::IGraphicLoader *m_graphic_loader, UdpServer *m_serverCom);
 void initEnemyClient(EntityID t_id, rtype::Vector2f t_pos, float t_velocity,
-                     int level, std::shared_ptr<EntityManager> m_em,
+                     std::shared_ptr<EntityManager> m_em,
                      rtype::IGraphicLoader *m_graphic_loader);
 
 void initExplosionClient(EntityID t_id, rtype::Vector2f t_pos,

@@ -3,8 +3,8 @@
 CreateObjectSystem::CreateObjectSystem(
   std::shared_ptr<EntityManager> t_em,
   std::vector<SoundSystem::SoundType> &t_sounds,
-  rtype::IGraphicLoader *t_graphic_loader, int &t_level)
-    : m_play_sounds(t_sounds), m_level(t_level) {
+  rtype::IGraphicLoader *t_graphic_loader)
+    : m_play_sounds(t_sounds) {
   m_em = t_em;
   m_graphic_loader = t_graphic_loader;
 }
@@ -36,7 +36,7 @@ void CreateObjectSystem::update() {
         velocity = action->getVelocity();
         std::cout << "Create enemy at pos " << pos.x << " " << pos.y << " "
                   << velocity << std::endl;
-        initEnemyClient(id, pos, velocity, m_level, m_em, m_graphic_loader);
+        initEnemyClient(id, pos, velocity, m_em, m_graphic_loader);
         break;
       case Action::ObjectType::EXPLOSION:
         m_play_sounds.push_back(SoundSystem::SoundType::explosion);
