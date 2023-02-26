@@ -10,7 +10,7 @@ class AssetLoader {
   AssetLoader() = default;
   ~AssetLoader() = default;
 
-  void loadLevel(int t_level);
+  bool loadLevel(int &t_level);
 
   Json::Value getBackgroundData();
   Json::Value getEnemyData();

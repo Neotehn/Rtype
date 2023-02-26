@@ -16,6 +16,8 @@ std::string Action::getTypeAsString() const {
   switch (m_type) {
     case ActionType::START:
       return "START";
+    case ActionType::RESTART:
+      return "RESTART";
     case ActionType::UP:
       return "UP";
     case ActionType::DOWN:
@@ -62,6 +64,7 @@ std::string Action::getCommand() const {
     case ActionType::DOWN:
     case ActionType::LEFT:
     case ActionType::RIGHT:
+    case ActionType::RESTART:
       return std::to_string(m_action_id) + ";" + type_string + ";" +
              std::to_string(m_id) + ";" + std::to_string(m_triggered_by_user) +
              ";";

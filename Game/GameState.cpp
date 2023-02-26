@@ -2,11 +2,15 @@
 
 GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
                      MusicPlayer &t_music_player, std::size_t t_flag,
-                     rtype::IGraphicLoader *t_graphic_loader,
+                     rtype::IGraphicLoader *t_graphic_loader, int *t_level,
                      const bool t_replace)
-    : State{t_machine, t_window, t_music_player, t_graphic_loader, t_replace} {
+    : State{t_machine,        t_window, t_music_player,
+            t_graphic_loader, t_level,  t_replace},
+      m_client_input_manager(t_level), m_input_manager(t_level) {
   m_is_running = true;
   m_graphic_loader = t_graphic_loader;
+  m_music = m_graphic_loader->loadMusic();
+  m_em = std::make_shared<EntityManager>();
   if (t_flag == client) {
     m_flag = CommunicationFlag::client;
     m_port_number = rand() % 15000 + 40001;
@@ -19,10 +23,9 @@ GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
 
     m_serverCom = new UdpServer(m_io_service, m_input_manager, m_is_running);
   }
-  loadLevel(m_level);
-  std::shared_ptr<EntityManager> entity_manager =
-    std::make_shared<EntityManager>(initEntityManager());
-  m_systems = initSystems(entity_manager);
+  loadLevel(m_level, m_em, m_graphic_loader, m_music,
+            m_flag == CommunicationFlag::client);
+  m_systems = initSystems();
 }
 
 GameState::~GameState() {
@@ -33,44 +36,33 @@ GameState::~GameState() {
   }
 }
 
-EntityManager GameState::initEntityManager() {
-  EntityManager entity_manager;
-  initBackground(entity_manager, m_graphic_loader);
-  return entity_manager;
-}
-
-std::vector<std::shared_ptr<ISystem>>
-GameState::initSystems(std::shared_ptr<EntityManager> entity_manager) {
+std::vector<std::shared_ptr<ISystem>> GameState::initSystems() {
   std::vector<std::shared_ptr<ISystem>> systems;
 
   if (m_flag == CommunicationFlag::server) {
-    systems.push_back(std::make_shared<CreatePlayerSystem>(
-      entity_manager, m_serverCom, m_graphic_loader));
+    systems.push_back(std::make_shared<CreatePlayerSystem>(m_em, m_serverCom,
+                                                           m_graphic_loader));
     systems.push_back(std::make_shared<RandomEnemyGeneratorSystem>(
-      entity_manager, m_serverCom, m_graphic_loader));
+      m_em, m_serverCom, m_graphic_loader));
+    systems.push_back(std::make_shared<CollisionSystem>(m_em, m_serverCom));
     systems.push_back(
-      std::make_shared<CollisionSystem>(entity_manager, m_serverCom));
-    systems.push_back(std::make_shared<ShootingSystem>(
-      entity_manager, m_serverCom, m_graphic_loader));
-    systems.push_back(
-      std::make_shared<MovementSystem>(entity_manager, m_serverCom));
+      std::make_shared<ShootingSystem>(m_em, m_serverCom, m_graphic_loader));
+    systems.push_back(std::make_shared<MovementSystem>(m_em, m_serverCom));
   } else {
-    systems.push_back(std::make_shared<DamageSystem>(
-      entity_manager, m_input_manager, m_port_number, m_is_running, m_sounds,
-      m_graphic_loader));
-    systems.push_back(std::make_shared<CreateObjectSystem>(
-      entity_manager, m_sounds, m_graphic_loader));
     systems.push_back(
-      std::make_shared<MovementSystem>(entity_manager, nullptr));
+      std::make_shared<DamageSystem>(m_em, m_input_manager, m_port_number,
+                                     m_is_running, m_sounds, m_graphic_loader));
     systems.push_back(
-      std::make_shared<AnimationSystem>(entity_manager, m_input_manager));
-    systems.push_back(std::make_shared<PowerUpSystem>(entity_manager, m_sounds,
-                                                      m_graphic_loader));
-    systems.push_back(std::make_shared<SoundSystem>(entity_manager, m_sounds,
-                                                    m_graphic_loader));
+      std::make_shared<CreateObjectSystem>(m_em, m_sounds, m_graphic_loader));
+    systems.push_back(std::make_shared<MovementSystem>(m_em, nullptr));
+    systems.push_back(std::make_shared<AnimationSystem>(m_em, m_input_manager));
+    systems.push_back(
+      std::make_shared<PowerUpSystem>(m_em, m_sounds, m_graphic_loader));
+    systems.push_back(
+      std::make_shared<SoundSystem>(m_em, m_sounds, m_music, m_graphic_loader));
   }
-  systems.push_back(std::make_shared<DisplaySystem>(entity_manager, m_window));
-  systems.push_back(std::make_shared<DestroySystem>(entity_manager));
+  systems.push_back(std::make_shared<DisplaySystem>(m_em, m_window));
+  systems.push_back(std::make_shared<DestroySystem>(m_em));
   return systems;
 }
 
@@ -105,12 +97,22 @@ void GameState::update() {
           m_client_input_manager.recordInputs(event);
       }
     }
+    EventQueue eq = m_input_manager.getInputsWithoutPop();
+    for (std::shared_ptr<Action> action : eq.getEventQueue()) {
+      Action::ActionType type = action->getType();
+      if (type == Action::ActionType::RESTART && !action->isTriggeredByUser()) {
+        *m_level = action->getId();
+        loadLevel(m_level, m_em, m_graphic_loader, m_music,
+                  (m_flag == CommunicationFlag::client));
+      }
+    }
     SystemData data = {.event_queue = m_input_manager.getInputs()};
     if (m_flag == CommunicationFlag::client && m_clientCom->m_flag) {
       EventQueue eq = m_client_input_manager.getInputsWithoutPop();
       for (std::shared_ptr<Action> action : eq.getEventQueue()) {
         Action::ActionType type = action->getType();
-        if ((type == Action::ActionType::UP ||
+        if ((type == Action::ActionType::RESTART ||
+             type == Action::ActionType::UP ||
              type == Action::ActionType::DOWN ||
              type == Action::ActionType::LEFT ||
              type == Action::ActionType::RIGHT ||
@@ -134,6 +136,7 @@ void GameState::update() {
       StateAction(Action::ActionType::END, m_port_number);
     m_clientCom->sendMessage(start_action.getCommand());
   }
+  m_music->stop();
   m_state_machine.quit();
 }
 

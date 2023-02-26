@@ -2,7 +2,8 @@
 
 #include <iostream>
 
-InputManager::InputManager() {
+InputManager::InputManager(int *t_level) {
+  m_level = t_level;
   //SetExitKey(KEY_CAPS_LOCK);
 }
 
@@ -49,6 +50,12 @@ void InputManager::recordInputs(const rtype::Event &t_event) {
       m_input_queue.addToQueueIfNotExist(
         std::make_shared<Action>(
           ShootAction(m_player_id, 1, Action::ShootingType::FIRE, true)),
+        Action::ActionType::SHOOT);
+      break;
+    case rtype::EventKey::U:
+      m_input_queue.addToQueueIfNotExist(
+        std::make_shared<Action>(
+          StateAction(Action::ActionType::RESTART, *m_level + 1, true)),
         Action::ActionType::SHOOT);
       break;
     default:

@@ -7,12 +7,13 @@
 #include "../Action/Action.hpp"
 #include "../Action/MovementAction.hpp"
 #include "../Action/ShootAction.hpp"
+#include "../Action/StateAction.hpp"
 #include "../../../Game/EventQueue.hpp"
 #include "../../../Game/Encapsulation/Event.hpp"
 
 class InputManager {
  public:
-  InputManager();
+  InputManager(int *t_level);
   ~InputManager(){};
 
   void recordInputs(const rtype::Event &t_event);
@@ -24,10 +25,7 @@ class InputManager {
   bool doesActionExist(std::shared_ptr<Action> t_action_id);
   bool isPlayerIdSet();
   void setPlayerId(EntityID t_player_id);
-  // TODO: encapsulate sf::Mouse
-  //  sf::Vector2i getMousePosition();
-  //  bool isMouseLeftClicked();
-  //  bool isMouseRightClicked();
+  int *m_level;
 
  private:
   EntityID m_player_id = 0;

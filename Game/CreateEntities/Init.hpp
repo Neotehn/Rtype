@@ -3,13 +3,16 @@
 
 #include "../../Server/Protocol/UdpServer.hpp"
 #include "../ECS/EntityManager.hpp"
+#include "../ECS/EntityViewer.hpp"
 #include "../Encapsulation/GraphicDataTypes.hpp"
 #include "../Encapsulation/IGraphicLoader.hpp"
 #include "../Encapsulation/IMusic.hpp"
 #include "../Encapsulation/IRectangleShape.hpp"
 #include "./AssetLoader.hpp"
 
-void loadLevel(int t_level);
+bool loadLevel(int *t_level, std::shared_ptr<EntityManager> t_entity_manager,
+               rtype::IGraphicLoader *t_graphic_loader, rtype::IMusic *t_music,
+               bool t_play_music = true);
 
 EntityID initPlayer(std::shared_ptr<EntityManager> t_entity_manager,
                     UdpServer *t_serverCom,
@@ -22,45 +25,46 @@ Health initPlayerHealthBar(rtype::IGraphicLoader *t_graphic_loader);
 
 void initBulletClient(EntityID t_id, rtype::Vector2f t_pos,
                       Action::ShootingType t_shooting_type,
-                      std::shared_ptr<EntityManager> m_em,
-                      rtype::IGraphicLoader *m_graphic_loader);
+                      std::shared_ptr<EntityManager> t_em,
+                      rtype::IGraphicLoader *t_graphic_loader);
 
-void initEnemy(std::shared_ptr<EntityManager> m_em,
-               rtype::IGraphicLoader *m_graphic_loader, UdpServer *m_serverCom);
+void initEnemy(std::shared_ptr<EntityManager> t_em,
+               rtype::IGraphicLoader *t_graphic_loader, UdpServer *t_serverCom);
 void initEnemyClient(EntityID t_id, rtype::Vector2f t_pos, float t_velocity,
-                     std::shared_ptr<EntityManager> m_em,
-                     rtype::IGraphicLoader *m_graphic_loader);
+                     std::shared_ptr<EntityManager> t_em,
+                     rtype::IGraphicLoader *t_graphic_loader);
 
 void initExplosionClient(EntityID t_id, rtype::Vector2f t_pos,
-                         std::shared_ptr<EntityManager> m_em,
-                         rtype::IGraphicLoader *m_graphic_loader);
+                         std::shared_ptr<EntityManager> t_em,
+                         rtype::IGraphicLoader *t_graphic_loader);
 
-void initPowerUp(std::shared_ptr<EntityManager> m_em,
-                 rtype::IGraphicLoader *m_graphic_loader,
-                 UdpServer *m_serverCom);
+void initPowerUp(std::shared_ptr<EntityManager> t_em,
+                 rtype::IGraphicLoader *t_graphic_loader,
+                 UdpServer *t_server_com);
 void initPowerUpClient(EntityID t_id, rtype::Vector2f t_pos,
-                       std::shared_ptr<EntityManager> m_em,
-                       rtype::IGraphicLoader *m_graphic_loader);
+                       std::shared_ptr<EntityManager> t_em,
+                       rtype::IGraphicLoader *t_graphic_loader);
 
 void initItemClient(EntityID t_id, rtype::ItemType t_item_type,
-                    rtype::Vector2f t_pos, std::shared_ptr<EntityManager> m_em,
-                    rtype::IGraphicLoader *m_graphic_loader);
+                    rtype::Vector2f t_pos, std::shared_ptr<EntityManager> t_em,
+                    rtype::IGraphicLoader *t_graphic_loader);
 
-void initShoot(std::shared_ptr<Action> action,
-               std::shared_ptr<EntityManager> m_em,
-               rtype::IGraphicLoader *m_graphic_loader, UdpServer *m_serverCom);
-void initFireShoot(std::shared_ptr<Action> action,
-                   std::shared_ptr<EntityManager> m_em,
-                   rtype::IGraphicLoader *m_graphic_loader,
-                   UdpServer *m_serverCom);
-void initBombShoot(std::shared_ptr<Action> action,
-                   std::shared_ptr<EntityManager> m_em,
-                   rtype::IGraphicLoader *m_graphic_loader,
-                   UdpServer *m_serverCom);
+void initShoot(std::shared_ptr<Action> t_action,
+               std::shared_ptr<EntityManager> t_em,
+               rtype::IGraphicLoader *t_graphic_loader,
+               UdpServer *t_server_com);
+void initFireShoot(std::shared_ptr<Action> t_action,
+                   std::shared_ptr<EntityManager> t_em,
+                   rtype::IGraphicLoader *t_graphic_loader,
+                   UdpServer *t_server_com);
+void initBombShoot(std::shared_ptr<Action> t_action,
+                   std::shared_ptr<EntityManager> t_em,
+                   rtype::IGraphicLoader *t_graphic_loader,
+                   UdpServer *t_server_com);
 
-void loadMusic(rtype::IMusic *m_music);
+void loadMusic(rtype::IMusic *t_music, bool t_play = true);
 
-void initBackground(EntityManager &t_entity_manager,
+void initBackground(std::shared_ptr<EntityManager> t_em,
                     rtype::IGraphicLoader *t_graphic_loader);
 
 #endif  //R_TYPE_CLIENT_INIT_HPP

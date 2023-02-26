@@ -11,13 +11,14 @@ extern int action_counter;
 class Action : public IAction {
  public:
   enum ActionType {
-    START,  // ACTION_ID;START;PORT_NB OR START;OWN_PLAYER_ID
-    UP,     // ACTION_ID;UP;ID;USER_TRIGGERED
-    DOWN,   // ACTION_ID;DOWN;ID;USER_TRIGGERED
-    LEFT,   // ACTION_ID;LEFT;ID;USER_TRIGGERED
-    RIGHT,  // ACTION_ID;RIGHT;ID;USER_TRIGGERED
-    POS,    // ACTION_ID;POS;ID;X;
-    SHOOT,  // ACTION_ID;SHOOT;ID;;USER_TRIGGERED;DAMAGE;TYPE
+    START,    // ACTION_ID;START;PORT_NB OR START;OWN_PLAYER_ID
+    RESTART,  // ACTION_ID;RESTART;LEVEL
+    UP,       // ACTION_ID;UP;ID;USER_TRIGGERED
+    DOWN,     // ACTION_ID;DOWN;ID;USER_TRIGGERED
+    LEFT,     // ACTION_ID;LEFT;ID;USER_TRIGGERED
+    RIGHT,    // ACTION_ID;RIGHT;ID;USER_TRIGGERED
+    POS,      // ACTION_ID;POS;ID;X;
+    SHOOT,    // ACTION_ID;SHOOT;ID;;USER_TRIGGERED;DAMAGE;TYPE
     // DAMAGE = amount of damage based on load time
     // TYPE = 1, 2, ...
     CREATE,  // ACTION_ID;CREATE;ID;TYPE;TYPE_DATA
@@ -84,6 +85,7 @@ class Action : public IAction {
   ActionType m_type;
   EntityID m_id;
 
+  int m_level = 1;
   bool m_triggered_by_user = false;
   EntityID m_collision_partner_id = 0;
   ObjectType m_object_type = ObjectType::ERROR_O;

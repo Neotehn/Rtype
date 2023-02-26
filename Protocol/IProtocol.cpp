@@ -82,6 +82,9 @@ std::shared_ptr<Action> IProtocol::getAction(std::string command) {
   if (action_type == "START") {
     return std::make_shared<Action>(
       StateAction(Action::ActionType::START, id, action_id));
+  } else if (action_type == "RESTART") {
+    return std::make_shared<Action>(
+      StateAction(Action::ActionType::RESTART, id, action_id));
   } else if (action_type == "UP") {
     return std::make_shared<Action>(
       MovementAction(Action::ActionType::UP, id, false, action_id));

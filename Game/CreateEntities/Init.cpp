@@ -3,11 +3,38 @@
 #include <vector>
 
 AssetLoader assetLoader;
-int level = 0;
+int level = 1;
 
-void loadLevel(int t_level) {
-  level = t_level;
-  assetLoader.loadLevel(t_level);
+bool loadLevel(int *t_level, std::shared_ptr<EntityManager> t_em,
+               rtype::IGraphicLoader *t_graphic_loader, rtype::IMusic *t_music,
+               bool t_play_music) {
+  for (EntityID ent : EntityViewer<Bullet>(*t_em.get())) {
+    t_em->destroyEntity(ent);
+  }
+  for (EntityID ent : EntityViewer<AnimationObj>(*t_em.get())) {
+    t_em->destroyEntity(ent);
+  }
+  for (EntityID ent : EntityViewer<SpinningItem>(*t_em.get())) {
+    t_em->destroyEntity(ent);
+  }
+
+  if (!assetLoader.loadLevel(*t_level)) {
+    if (*t_level != 1) {
+      *t_level = 1;
+      level = 1;
+      loadLevel(t_level, t_em, t_graphic_loader, t_music);
+    }
+    return false;
+  }
+
+  level = *t_level;
+  for (EntityID ent : EntityViewer<BackgroundLayer>(*t_em.get())) {
+    t_em->destroyEntity(ent);
+  }
+  t_music->stop();
+  loadMusic(t_music, t_play_music);
+  initBackground(t_em, t_graphic_loader);
+  return true;
 }
 
 EntityID initPlayer(std::shared_ptr<EntityManager> t_entity_manager,
@@ -79,46 +106,46 @@ Health initPlayerHealthBar(rtype::IGraphicLoader *t_graphic_loader) {
 
 void initBulletClient(EntityID t_id, rtype::Vector2f t_pos,
                       Action::ShootingType t_shooting_type,
-                      std::shared_ptr<EntityManager> m_em,
-                      rtype::IGraphicLoader *m_graphic_loader) {
-  EntityID bullet = m_em->createNewEntity(t_id);
+                      std::shared_ptr<EntityManager> t_em,
+                      rtype::IGraphicLoader *t_graphic_loader) {
+  EntityID bullet = t_em->createNewEntity(t_id);
 
-  rtype::IRectangleShape *bullet_body = m_graphic_loader->loadRectangleShape();
+  rtype::IRectangleShape *bullet_body = t_graphic_loader->loadRectangleShape();
   bullet_body->setSize({20, 20});
   bullet_body->setPosition({t_pos.x, t_pos.y});
 
   switch (t_shooting_type) {
     case Action::ShootingType::NORMAL:
       bullet_body->setTexture(
-        SpriteECS("./../Client/sprites/shoot2.png", m_graphic_loader)
+        SpriteECS("./../Client/sprites/shoot2.png", t_graphic_loader)
           .getTexture());
       break;
     case Action::ShootingType::FIRE:
       bullet_body->setTexture(
-        SpriteECS("./../Client/sprites/shoot3.png", m_graphic_loader)
+        SpriteECS("./../Client/sprites/shoot3.png", t_graphic_loader)
           .getTexture());
       break;
     case Action::ShootingType::BOMB:
       bullet_body->setTexture(
-        SpriteECS("./../Client/sprites/shoot4.png", m_graphic_loader)
+        SpriteECS("./../Client/sprites/shoot4.png", t_graphic_loader)
           .getTexture());
       break;
   }
   Bullet displayable_bullet = Bullet{bullet_body, 10.0, t_pos};
-  m_em->Assign<Bullet>(bullet, displayable_bullet);
+  t_em->Assign<Bullet>(bullet, displayable_bullet);
 }
 
-void initEnemy(std::shared_ptr<EntityManager> m_em,
-               rtype::IGraphicLoader *m_graphic_loader,
-               UdpServer *m_serverCom) {
+void initEnemy(std::shared_ptr<EntityManager> t_em,
+               rtype::IGraphicLoader *t_graphic_loader,
+               UdpServer *t_server_com) {
   Json::Value enemy_data = assetLoader.getEnemyData()[0];
   int size = enemy_data["size"].asInt();
-  EntityID enemy = m_em->createNewEntity();
-  SpriteECS sprite = SpriteECS(enemy_data["path"].asString(), m_graphic_loader);
+  EntityID enemy = t_em->createNewEntity();
+  SpriteECS sprite = SpriteECS(enemy_data["path"].asString(), t_graphic_loader);
   rtype::Vector2f enemy_pos = {800, float(rand() % 600 + 100)};
   float velocity_direction = float(rand() % 3 - 1);
 
-  rtype::IRectangleShape *body = m_graphic_loader->loadRectangleShape();
+  rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
   body->setSize({30, 30});
   body->setPosition({enemy_pos.x, enemy_pos.y});
   body->setTexture(sprite.getTexture());
@@ -135,19 +162,19 @@ void initEnemy(std::shared_ptr<EntityManager> m_em,
                   .display_time = 1,
                   .last_timer = 0},
     AnimationRect{.size = size, .limit = enemy_data["limit"].asInt()}, body};
-  m_em->Assign<AnimationObj>(enemy, enemy_obj);
-  m_serverCom->addEvent(std::make_shared<Action>(CreateAction(
+  t_em->Assign<AnimationObj>(enemy, enemy_obj);
+  t_server_com->addEvent(std::make_shared<Action>(CreateAction(
     enemy, Action::ObjectType::ENEMY, enemy_pos, "", velocity_direction)));
 }
 
 void initEnemyClient(EntityID t_id, rtype::Vector2f t_pos, float t_velocity,
-                     std::shared_ptr<EntityManager> m_em,
-                     rtype::IGraphicLoader *m_graphic_loader) {
+                     std::shared_ptr<EntityManager> t_em,
+                     rtype::IGraphicLoader *t_graphic_loader) {
   Json::Value enemy_data = assetLoader.getEnemyData()[0];
   int size = enemy_data["size"].asInt();
-  EntityID enemy = m_em->createNewEntity(t_id);
-  SpriteECS sprite = SpriteECS(enemy_data["path"].asString(), m_graphic_loader);
-  rtype::IRectangleShape *body = m_graphic_loader->loadRectangleShape();
+  EntityID enemy = t_em->createNewEntity(t_id);
+  SpriteECS sprite = SpriteECS(enemy_data["path"].asString(), t_graphic_loader);
+  rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
   body->setSize({30, 30});
   body->setPosition({t_pos.x, t_pos.y});
   body->setTexture(sprite.getTexture());
@@ -164,16 +191,16 @@ void initEnemyClient(EntityID t_id, rtype::Vector2f t_pos, float t_velocity,
                   .display_time = 0.1,
                   .last_timer = 0},
     AnimationRect{.size = size, .limit = enemy_data["limit"].asInt()}, body};
-  m_em->Assign<AnimationObj>(enemy, enemy_obj);
+  t_em->Assign<AnimationObj>(enemy, enemy_obj);
 }
 
 void initExplosionClient(EntityID t_id, rtype::Vector2f t_pos,
-                         std::shared_ptr<EntityManager> m_em,
-                         rtype::IGraphicLoader *m_graphic_loader) {
-  EntityID explosion = m_em->createNewEntity(t_id);
+                         std::shared_ptr<EntityManager> t_em,
+                         rtype::IGraphicLoader *t_graphic_loader) {
+  EntityID explosion = t_em->createNewEntity(t_id);
   SpriteECS sprite =
-    SpriteECS("./../Client/sprites/explosion/Explosion.png", m_graphic_loader);
-  rtype::IRectangleShape *body = m_graphic_loader->loadRectangleShape();
+    SpriteECS("./../Client/sprites/explosion/Explosion.png", t_graphic_loader);
+  rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
   body->setSize({50, 50});
   body->setPosition({t_pos.x, t_pos.y});
   body->setTexture(sprite.getTexture());
@@ -185,18 +212,18 @@ void initExplosionClient(EntityID t_id, rtype::Vector2f t_pos,
                                .display_time = 0.06,
                                .last_timer = 0},
                  AnimationRect{.size = 96, .limit = 1056}, body};
-  m_em->Assign<AnimationObj>(explosion, explosion_obj);
+  t_em->Assign<AnimationObj>(explosion, explosion_obj);
 }
 
-void createCoin(std::shared_ptr<EntityManager> m_em,
-                rtype::IGraphicLoader *m_graphic_loader,
-                UdpServer *m_serverCom) {
-  EntityID powerup = m_em->createNewEntity();
+void createCoin(std::shared_ptr<EntityManager> t_em,
+                rtype::IGraphicLoader *t_graphic_loader,
+                UdpServer *t_server_com) {
+  EntityID powerup = t_em->createNewEntity();
   SpriteECS sprite =
-    SpriteECS("./../Client/sprites/powerup/coin.png", m_graphic_loader);
+    SpriteECS("./../Client/sprites/powerup/coin.png", t_graphic_loader);
   rtype::Vector2f powerup_pos = {800, float(rand() % 600 + 100)};
 
-  rtype::IRectangleShape *body = m_graphic_loader->loadRectangleShape();
+  rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
   body->setSize({30, 30});
   body->setPosition({powerup_pos.x, powerup_pos.y});
   body->setTexture(sprite.getTexture());
@@ -208,21 +235,21 @@ void createCoin(std::shared_ptr<EntityManager> m_em,
                                .display_time = 0.1,
                                .last_timer = 0},
                  AnimationRect{.size = 84, .limit = 420}, body};
-  m_em->Assign<AnimationObj>(powerup, powerup_obj);
+  t_em->Assign<AnimationObj>(powerup, powerup_obj);
 
-  m_serverCom->addEvent(std::make_shared<Action>(
+  t_server_com->addEvent(std::make_shared<Action>(
     CreateAction(powerup, Action::ObjectType::POWER_UP, powerup_pos, "", 0)));
 }
 
 void createItem(std::string t_path, rtype::ItemType t_type, int t_value,
-                std::shared_ptr<EntityManager> m_em,
-                rtype::IGraphicLoader *m_graphic_loader,
-                UdpServer *m_serverCom) {
-  EntityID powerup = m_em->createNewEntity();
-  SpriteECS sprite = SpriteECS(t_path, m_graphic_loader);
+                std::shared_ptr<EntityManager> t_em,
+                rtype::IGraphicLoader *t_graphic_loader,
+                UdpServer *t_serverCom) {
+  EntityID powerup = t_em->createNewEntity();
+  SpriteECS sprite = SpriteECS(t_path, t_graphic_loader);
   rtype::Vector2f powerup_pos = {800, float(rand() % 600 + 100)};
 
-  rtype::IRectangleShape *body = m_graphic_loader->loadRectangleShape();
+  rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
   body->setSize({30, 30});
   body->setPosition({powerup_pos.x, powerup_pos.y});
   body->setTexture(sprite.getTexture());
@@ -236,44 +263,44 @@ void createItem(std::string t_path, rtype::ItemType t_type, int t_value,
                                          .display_time = 0.1,
                                          .last_timer = 0},
                            body};
-  m_em->Assign<SpinningItem>(powerup, item_obj);
+  t_em->Assign<SpinningItem>(powerup, item_obj);
 
-  m_serverCom->addEvent(std::make_shared<Action>(
+  t_serverCom->addEvent(std::make_shared<Action>(
     CreateAction(powerup, Action::ObjectType::ITEM, powerup_pos, "", t_type)));
 }
 
-void initPowerUp(std::shared_ptr<EntityManager> m_em,
-                 rtype::IGraphicLoader *m_graphic_loader,
-                 UdpServer *m_serverCom) {
+void initPowerUp(std::shared_ptr<EntityManager> t_em,
+                 rtype::IGraphicLoader *t_graphic_loader,
+                 UdpServer *t_server_com) {
   int random_powerup = rand() % 5;
   if (random_powerup == 0) {
-    createCoin(m_em, m_graphic_loader, m_serverCom);
+    createCoin(t_em, t_graphic_loader, t_server_com);
   } else if (random_powerup == 1) {
     createItem("../Client/sprites/powerup/life_item.png",
-               rtype::ItemType::LIFE_ITEM, 1, m_em, m_graphic_loader,
-               m_serverCom);
+               rtype::ItemType::LIFE_ITEM, 1, t_em, t_graphic_loader,
+               t_server_com);
   } else if (random_powerup == 2) {
     createItem("../Client/sprites/powerup/speed_item.png",
-               rtype::ItemType::SPEED_ITEM, 3, m_em, m_graphic_loader,
-               m_serverCom);
+               rtype::ItemType::SPEED_ITEM, 3, t_em, t_graphic_loader,
+               t_server_com);
   } else if (random_powerup == 3) {
     createItem("../Client/sprites/powerup/bomb_item.png",
-               rtype::ItemType::BOMB_ITEM, 5, m_em, m_graphic_loader,
-               m_serverCom);
+               rtype::ItemType::BOMB_ITEM, 5, t_em, t_graphic_loader,
+               t_server_com);
   } else {
     createItem("../Client/sprites/powerup/fire_item.png",
-               rtype::ItemType::FIRE_ITEM, 5, m_em, m_graphic_loader,
-               m_serverCom);
+               rtype::ItemType::FIRE_ITEM, 5, t_em, t_graphic_loader,
+               t_server_com);
   }
 }
 
 void initPowerUpClient(EntityID t_id, rtype::Vector2f t_pos,
-                       std::shared_ptr<EntityManager> m_em,
-                       rtype::IGraphicLoader *m_graphic_loader) {
-  EntityID powerup = m_em->createNewEntity(t_id);
+                       std::shared_ptr<EntityManager> t_em,
+                       rtype::IGraphicLoader *t_graphic_loader) {
+  EntityID powerup = t_em->createNewEntity(t_id);
   SpriteECS sprite =
-    SpriteECS("./../Client/sprites/powerup/coin.png", m_graphic_loader);
-  rtype::IRectangleShape *body = m_graphic_loader->loadRectangleShape();
+    SpriteECS("./../Client/sprites/powerup/coin.png", t_graphic_loader);
+  rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
   body->setSize({30, 30});
   body->setPosition({t_pos.x, t_pos.y});
   body->setTexture(sprite.getTexture());
@@ -285,12 +312,12 @@ void initPowerUpClient(EntityID t_id, rtype::Vector2f t_pos,
                                .display_time = 0.1,
                                .last_timer = 0},
                  AnimationRect{.size = 84, .limit = 420}, body};
-  m_em->Assign<AnimationObj>(powerup, power_up);
+  t_em->Assign<AnimationObj>(powerup, power_up);
 }
 
 void initItemClient(EntityID t_id, rtype::ItemType t_item_type,
-                    rtype::Vector2f t_pos, std::shared_ptr<EntityManager> m_em,
-                    rtype::IGraphicLoader *m_graphic_loader) {
+                    rtype::Vector2f t_pos, std::shared_ptr<EntityManager> t_em,
+                    rtype::IGraphicLoader *t_graphic_loader) {
   std::string path = "";
   int value = 0;
   switch (t_item_type) {
@@ -313,12 +340,12 @@ void initItemClient(EntityID t_id, rtype::ItemType t_item_type,
     default:
       break;
   }
-  EntityID item = m_em->createNewEntity(t_id);
-  SpriteECS item_sprite = SpriteECS(path, m_graphic_loader);
+  EntityID item = t_em->createNewEntity(t_id);
+  SpriteECS item_sprite = SpriteECS(path, t_graphic_loader);
 
   Pos player_pos = Pos{rtype::Vector2f{-7, 0}, t_pos};
 
-  rtype::IRectangleShape *body = m_graphic_loader->loadRectangleShape();
+  rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
   body->setSize({40, 40});
   body->setOrigin({20, 20});
   body->setPosition({player_pos.position.x, player_pos.position.y});
@@ -333,92 +360,93 @@ void initItemClient(EntityID t_id, rtype::ItemType t_item_type,
                                          .display_time = 0.06,
                                          .last_timer = 0},
                            body};
-  m_em->Assign<SpinningItem>(item, item_obj);
+  t_em->Assign<SpinningItem>(item, item_obj);
 }
 
-void initShoot(std::shared_ptr<Action> action,
-               std::shared_ptr<EntityManager> m_em,
-               rtype::IGraphicLoader *m_graphic_loader,
-               UdpServer *m_serverCom) {
-  Player *player = (*m_em.get()).Get<Player>(action->getId());
-  EntityID bullet = m_em->createNewEntity();
+void initShoot(std::shared_ptr<Action> t_action,
+               std::shared_ptr<EntityManager> t_em,
+               rtype::IGraphicLoader *t_graphic_loader,
+               UdpServer *t_server_com) {
+  Player *player = (*t_em.get()).Get<Player>(t_action->getId());
+  EntityID bullet = t_em->createNewEntity();
   SpriteECS sprite =
-    SpriteECS("./../Client/sprites/shoot2.png", m_graphic_loader);
+    SpriteECS("./../Client/sprites/shoot2.png", t_graphic_loader);
   rtype::Vector2f bullet_pos = {player->position.position.x - 20,
                                 player->position.position.y +
                                   player->body->getSize().y / 2 - 10};
-  rtype::IRectangleShape *bullet_body = m_graphic_loader->loadRectangleShape();
+  rtype::IRectangleShape *bullet_body = t_graphic_loader->loadRectangleShape();
 
   bullet_body->setSize({20, 20});
   bullet_body->setPosition({bullet_pos.x, bullet_pos.y});
   bullet_body->setTexture(sprite.getTexture());
 
-  m_em->Assign<Bullet>(bullet, Bullet{bullet_body, 10.0, bullet_pos});
-  m_serverCom->addEvent(std::make_shared<Action>(
+  t_em->Assign<Bullet>(bullet, Bullet{bullet_body, 10.0, bullet_pos});
+  t_server_com->addEvent(std::make_shared<Action>(
     CreateAction(bullet, Action::ObjectType::BULLET, bullet_pos,
                  std::to_string(Action::ShootingType::NORMAL))));
 }
 
 // TODO: replace by actual fire shoot
-void initFireShoot(std::shared_ptr<Action> action,
-                   std::shared_ptr<EntityManager> m_em,
-                   rtype::IGraphicLoader *m_graphic_loader,
-                   UdpServer *m_serverCom) {
-  Player *player = (*m_em.get()).Get<Player>(action->getId());
-  EntityID bullet = m_em->createNewEntity();
+void initFireShoot(std::shared_ptr<Action> t_action,
+                   std::shared_ptr<EntityManager> t_em,
+                   rtype::IGraphicLoader *t_graphic_loader,
+                   UdpServer *t_server_com) {
+  Player *player = (*t_em.get()).Get<Player>(t_action->getId());
+  EntityID bullet = t_em->createNewEntity();
   SpriteECS sprite =
-    SpriteECS("./../Client/sprites/shoot3.png", m_graphic_loader);
+    SpriteECS("./../Client/sprites/shoot3.png", t_graphic_loader);
   rtype::Vector2f bullet_pos = {player->position.position.x - 20,
                                 player->position.position.y +
                                   player->body->getSize().y / 2 - 10};
-  rtype::IRectangleShape *bullet_body = m_graphic_loader->loadRectangleShape();
+  rtype::IRectangleShape *bullet_body = t_graphic_loader->loadRectangleShape();
 
   bullet_body->setSize({20, 20});
   bullet_body->setPosition({bullet_pos.x, bullet_pos.y});
   bullet_body->setTexture(sprite.getTexture());
 
-  m_em->Assign<Bullet>(bullet, Bullet{bullet_body, 10.0, bullet_pos});
-  m_serverCom->addEvent(std::make_shared<Action>(
+  t_em->Assign<Bullet>(bullet, Bullet{bullet_body, 10.0, bullet_pos});
+  t_server_com->addEvent(std::make_shared<Action>(
     CreateAction(bullet, Action::ObjectType::BULLET, bullet_pos,
                  std::to_string(Action::ShootingType::FIRE))));
 }
 
 // TODO: replace by actual bomb shoot
-void initBombShoot(std::shared_ptr<Action> action,
-                   std::shared_ptr<EntityManager> m_em,
-                   rtype::IGraphicLoader *m_graphic_loader,
-                   UdpServer *m_serverCom) {
-  Player *player = (*m_em.get()).Get<Player>(action->getId());
-  EntityID bullet = m_em->createNewEntity();
+void initBombShoot(std::shared_ptr<Action> t_action,
+                   std::shared_ptr<EntityManager> t_em,
+                   rtype::IGraphicLoader *t_graphic_loader,
+                   UdpServer *t_server_com) {
+  Player *player = (*t_em.get()).Get<Player>(t_action->getId());
+  EntityID bullet = t_em->createNewEntity();
   SpriteECS sprite =
-    SpriteECS("./../Client/sprites/shoot4.png", m_graphic_loader);
+    SpriteECS("./../Client/sprites/shoot4.png", t_graphic_loader);
   rtype::Vector2f bullet_pos = {player->position.position.x - 20,
                                 player->position.position.y +
                                   player->body->getSize().y / 2 - 10};
-  rtype::IRectangleShape *bullet_body = m_graphic_loader->loadRectangleShape();
+  rtype::IRectangleShape *bullet_body = t_graphic_loader->loadRectangleShape();
 
   bullet_body->setSize({20, 20});
   bullet_body->setPosition({bullet_pos.x, bullet_pos.y});
   bullet_body->setTexture(sprite.getTexture());
 
-  m_em->Assign<Bullet>(bullet, Bullet{bullet_body, 10.0, bullet_pos});
-  m_serverCom->addEvent(std::make_shared<Action>(
+  t_em->Assign<Bullet>(bullet, Bullet{bullet_body, 10.0, bullet_pos});
+  t_server_com->addEvent(std::make_shared<Action>(
     CreateAction(bullet, Action::ObjectType::BULLET, bullet_pos,
                  std::to_string(Action::ShootingType::BOMB))));
 }
 
-void loadMusic(rtype::IMusic *m_music) {
-  if (!m_music->openFromFile(assetLoader.getMusicPath())) {
+void loadMusic(rtype::IMusic *t_music, bool t_play) {
+  if (!t_music->openFromFile(assetLoader.getMusicPath())) {
     std::cout << "Error while loading music" << std::endl;
   }
-  m_music->setVolume(50);
-  m_music->setLoop(true);
+  t_music->setVolume(50);
+  t_music->setLoop(true);
+  if (t_play) t_music->play(level - 1);
 }
 
-void initBackground(EntityManager &t_entity_manager,
+void initBackground(std::shared_ptr<EntityManager> t_entity_manager,
                     rtype::IGraphicLoader *t_graphic_loader) {
   for (Json::Value background : assetLoader.getBackgroundData()) {
-    EntityID background_entity = t_entity_manager.createNewEntity();
+    EntityID background_entity = t_entity_manager->createNewEntity();
     BackgroundLayer background_layer = BackgroundLayer{
       SpriteECS(
         background["path"].asString(), t_graphic_loader,
@@ -433,7 +461,7 @@ void initBackground(EntityManager &t_entity_manager,
        background["position"]["y"].asFloat()},
       background["speed"].asFloat(),
       background["limit"].asInt()};
-    t_entity_manager.Assign<BackgroundLayer>(background_entity,
-                                             background_layer);
+    t_entity_manager->Assign<BackgroundLayer>(background_entity,
+                                              background_layer);
   }
 }

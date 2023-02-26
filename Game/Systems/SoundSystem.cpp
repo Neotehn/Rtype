@@ -2,15 +2,14 @@
 
 SoundSystem::SoundSystem(std::shared_ptr<EntityManager> t_em,
                          std::vector<SoundType> &t_sounds,
+                         rtype::IMusic *t_music,
                          rtype::IGraphicLoader *t_graphic_loader)
     : m_play_sounds(t_sounds) {
   m_em = t_em;
   m_graphic_loader = t_graphic_loader;
-  m_music = m_graphic_loader->loadMusic();
+  m_music = t_music;
 
   // init music
-  loadMusic(m_music);
-  m_music->play();
 
   m_sounds = m_graphic_loader->loadSound();
   // init sounds - according to SoundType order

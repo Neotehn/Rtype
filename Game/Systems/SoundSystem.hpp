@@ -12,7 +12,7 @@ class SoundSystem : public ISystem {
  public:
   enum SoundType { shoot, explosion, power_up, death, won };
   SoundSystem(std::shared_ptr<EntityManager> t_em,
-              std::vector<SoundType> &t_sounds,
+              std::vector<SoundType> &t_sounds, rtype::IMusic *t_music,
               rtype::IGraphicLoader *t_graphic_loader);
   ~SoundSystem();
 

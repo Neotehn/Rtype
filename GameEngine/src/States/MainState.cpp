@@ -2,9 +2,10 @@
 
 MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
                      MusicPlayer &t_music_player, std::size_t t_flag,
-                     rtype::IGraphicLoader *t_graphic_loader,
+                     rtype::IGraphicLoader *t_graphic_loader, int *t_level,
                      const bool t_replace)
-    : State(t_machine, t_window, t_music_player, t_graphic_loader, t_replace),
+    : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level,
+            t_replace),
       m_start_btn(Button(
         "./assets/startBtn.png",
         rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 135),
@@ -47,16 +48,15 @@ void MainState::update() {
       if (m_start_btn.is_pressed(mouse_pos_f)) {
         std::cout << "startbtn pressed" << std::endl;
         m_music_player.stop();
-        m_next = StateMachine::build<GameState>(m_state_machine, m_window,
-                                                m_music_player, m_flag,
-                                                m_graphic_loader, true);
+        m_next = StateMachine::build<GameState>(
+          m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
+          m_level, true);
       }
       if (m_settings_btn.is_pressed(mouse_pos_f)) {
         std::cout << "settingsbtn pressed" << std::endl;
-        m_music_player.stop();
-        m_next = StateMachine::build<SettingsState>(m_state_machine, m_window,
-                                                    m_music_player, m_flag,
-                                                    m_graphic_loader, true);
+        m_next = StateMachine::build<SettingsState>(
+          m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
+          m_level, true);
       }
     }
     switch (event.type) {

@@ -1,6 +1,6 @@
 #include "AssetLoader.hpp"
 
-void AssetLoader::loadLevel(int t_level) {
+bool AssetLoader::loadLevel(int &t_level) {
   std::string path =
     "../Game/CreateEntities/levels/level" + std::to_string(t_level) + ".json";
   Json::Value level_data;
@@ -8,30 +8,32 @@ void AssetLoader::loadLevel(int t_level) {
   try {
     std::ifstream level_file(path, std::ifstream::binary);
     if (level_file.fail()) {
-      std::cout << "Could not load level" << std::endl;
-      return;
+      std::cout << "Could not load level " << std::to_string(t_level)
+                << std::endl;
+      return false;
     }
     level_file >> level_data;
     if (level_file.is_open()) level_file.close();
   } catch (std::exception &e) {
     std::cout << "Could not load level: " << e.what() << std::endl;
-    return;
+    return false;
   }
 
   if (level_data.empty()) {
     std::cout << "Could not load level data" << std::endl;
-    return;
+    return false;
   } else if (level_data["backgrounds"].empty()) {
     std::cout << "Could not load backgrounds" << std::endl;
-    return;
+    return false;
   } else if (level_data["enemies"].empty()) {
     std::cout << "Could not load enemies" << std::endl;
-    return;
+    return false;
   } else if (level_data["music"].empty()) {
     std::cout << "Could not load music" << std::endl;
-    return;
+    return false;
   }
   m_level_data = level_data;
+  return true;
 }
 
 Json::Value AssetLoader::getBackgroundData() {
