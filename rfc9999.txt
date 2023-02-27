@@ -72,7 +72,7 @@ RFC9999                     R-Type Protocol                   March 2023
 
     3.1. Commands
 
-        Every command has a simmilar structure:
+        Every command must follow following structure:
 
             int ACTION_ID;
             ActionType ACTION_TYPE,
