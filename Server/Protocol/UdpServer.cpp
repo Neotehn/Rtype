@@ -42,6 +42,7 @@ void UdpServer::receiveClient() {
 }
 
 bool UdpServer::doesAlreadyExist(std::shared_ptr<Action> t_action) {
+  std::cout << t_action->getType() << std::endl;
   if (t_action->getType() == Action::ActionType::CONNECT) {
     int id = t_action->getId();
     std::cout << std::to_string(id) << std::endl;
@@ -92,7 +93,7 @@ void UdpServer::addEvent(std::shared_ptr<Action> event) {
 }
 
 bool UdpServer::isUpdated(std::shared_ptr<Action> t_event) {
-  if (t_event->getType() == Action::ActionType::START) {
+  if (t_event->getType() == Action::ActionType::CONNECT) {
     for (int id : m_client_ports) {
       if (t_event->getId() == id) { return false; }
     }
@@ -104,7 +105,7 @@ void UdpServer::sendEvents() {
   EventQueue eq = m_send_event_manager.getInputs();
   for (std::shared_ptr<Action> event : eq.getEventQueue()) {
     if (!isUpdated(event)) {
-      std::cout << "add start event again" << std::endl;
+      std::cout << "add connect event again" << std::endl;
       m_client_ids.push_back(m_client_ids.size() + 1);
       event->setClientId(m_client_ids.size());
       m_input_manager.addActionsToQueue(event);
@@ -116,7 +117,14 @@ void UdpServer::sendEvents() {
         event->getType() != Action::ActionType::DOWN &&
         event->getType() != Action::ActionType::LEFT &&
         event->getType() != Action::ActionType::RIGHT) {
-      if (event->getType() == Action::ActionType::START) {
+      if (event->getType() == Action::ActionType::CONNECT) {
+        std::cout << event->getCommand() << std::endl;
+        for (int i = 0; i < m_endpoints.size(); i++) {
+          if (event->getClientId() - 1 == i) {
+            sendMessage(event->getCommand(), m_endpoints[i]);
+          }
+        }
+      } else if (event->getType() == Action::ActionType::START) {
         for (int i = 0; i < m_endpoints.size(); i++) {
           if (event->getClientId() - 1 == i) {
             sendMessage(event->getCommand(), m_endpoints[i]);

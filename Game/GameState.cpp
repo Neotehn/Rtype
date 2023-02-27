@@ -151,21 +151,23 @@ void GameState::update() {
             boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
             StateAction connect_action =
               StateAction(Action::ActionType::CONNECT, m_port_number);
+            std::cout << connect_action.getCommand() << std::endl;
             m_clientCom->sendMessage(connect_action.getCommand());
             std::cout << "waiting on Server Connection" << std::endl;
           }
           if (m_start_btn.is_pressed(mouse_pos_f)) {
-            std::cout << "Connecting to Server ..." << std::endl;
             boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
             StateAction start_action =
               StateAction(Action::ActionType::START, m_port_number);
             m_clientCom->sendMessage(start_action.getCommand());
-            std::cout << "waiting on Server Connection" << std::endl;
+            std::cout << "Starting game" << std::endl;
           }
         }
         if (event1.type == rtype::EventType::Closed) { m_is_running = false; }
       }
-      std::cout << "my id: " << m_clientCom->m_id << std::endl;
+      if (m_clientCom->m_id != 0) {
+        std::cout << "My ID: " << m_clientCom->m_id << std::endl;
+      }
       m_window->clear();
       m_window->draw(m_bg_s);
       m_window->draw(m_title);
