@@ -112,6 +112,11 @@ void GameState::update() {
       for (std::shared_ptr<Action> action : eq.getEventQueue()) {
         Action::ActionType type = action->getType();
         if ((type == Action::ActionType::RESTART ||
+             type == Action::ActionType::SHOOT) &&
+            action->isTriggeredByUser()) {
+          m_client_input_manager.removeEvent(action->getActionId());
+        }
+        if ((type == Action::ActionType::RESTART ||
              type == Action::ActionType::UP ||
              type == Action::ActionType::DOWN ||
              type == Action::ActionType::LEFT ||

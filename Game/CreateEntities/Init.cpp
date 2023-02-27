@@ -4,6 +4,7 @@
 
 AssetLoader assetLoader;
 int level = 1;
+std::vector<EntityID> background_entities;
 
 bool loadLevel(int *t_level, std::shared_ptr<EntityManager> t_em,
                rtype::IGraphicLoader *t_graphic_loader, rtype::IMusic *t_music,
@@ -28,9 +29,6 @@ bool loadLevel(int *t_level, std::shared_ptr<EntityManager> t_em,
   }
 
   level = *t_level;
-  for (EntityID ent : EntityViewer<BackgroundLayer>(*t_em.get())) {
-    t_em->destroyEntity(ent);
-  }
   t_music->stop();
   loadMusic(t_music, t_play_music);
   initBackground(t_em, t_graphic_loader);
@@ -445,8 +443,15 @@ void loadMusic(rtype::IMusic *t_music, bool t_play) {
 
 void initBackground(std::shared_ptr<EntityManager> t_entity_manager,
                     rtype::IGraphicLoader *t_graphic_loader) {
+  int index = 0;
   for (Json::Value background : assetLoader.getBackgroundData()) {
-    EntityID background_entity = t_entity_manager->createNewEntity();
+    EntityID background_entity;
+    if (index < background_entities.size()) {
+      background_entity = background_entities[index];
+    } else {
+      background_entity = t_entity_manager->createNewEntity();
+      background_entities.push_back(background_entity);
+    }
     BackgroundLayer background_layer = BackgroundLayer{
       SpriteECS(
         background["path"].asString(), t_graphic_loader,
@@ -463,5 +468,6 @@ void initBackground(std::shared_ptr<EntityManager> t_entity_manager,
       background["limit"].asInt()};
     t_entity_manager->Assign<BackgroundLayer>(background_entity,
                                               background_layer);
+    index++;
   }
 }

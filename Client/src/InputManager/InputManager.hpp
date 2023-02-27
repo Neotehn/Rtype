@@ -17,8 +17,11 @@ class InputManager {
   ~InputManager(){};
 
   void recordInputs(const rtype::Event &t_event);
+  void recordKeyPressedInputs(const rtype::Event &t_event);
+  void recordKeyReleasedInputs(const rtype::Event &t_event);
   void addActionsToQueue(std::shared_ptr<Action> t_action);
   void popInputs();
+  void removeEvent(int t_action_id);
 
   EventQueue getInputs();
   EventQueue getInputsWithoutPop();

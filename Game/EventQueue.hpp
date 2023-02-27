@@ -24,6 +24,7 @@ class EventQueue {
   void setEventQueue(std::vector<std::shared_ptr<Action>> t_eventQueue);
   bool checkIfKeyPressed(Action::ActionType t_actionType);
   std::vector<std::shared_ptr<Action>> getAllOfType(Action::ActionType t_type);
+  void removeEvent(int t_action_id);
 
   rtype::Vector2f getLatestPos(EntityID t_id);
 
