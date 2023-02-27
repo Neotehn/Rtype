@@ -24,7 +24,8 @@ class StateMachine {
   static std::unique_ptr<T>
   build(StateMachine &t_machine, rtype::IRenderWindow *t_window,
         MusicPlayer &t_music_playerbool, std::size_t t_flag,
-        rtype::IGraphicLoader *t_graphic_loader, bool t_replace = true);
+        rtype::IGraphicLoader *t_graphic_loader, int *t_level,
+        bool t_replace = true);
 
  private:
   bool m_running;
@@ -36,12 +37,13 @@ template<typename T>
 std::unique_ptr<T>
 StateMachine::build(StateMachine &t_machine, rtype::IRenderWindow *t_window,
                     MusicPlayer &t_music_player, std::size_t t_flag,
-                    rtype::IGraphicLoader *t_graphic_loader, bool t_replace) {
+                    rtype::IGraphicLoader *t_graphic_loader, int *t_level,
+                    bool t_replace) {
   auto new_state = std::unique_ptr<T>{nullptr};
 
   try {
     new_state = std::make_unique<T>(t_machine, t_window, t_music_player, t_flag,
-                                    t_graphic_loader, t_replace);
+                                    t_graphic_loader, t_level, t_replace);
   } catch (std::runtime_error &exception) {
     std::cout << "Failed to create new State\n";
     std::cout << exception.what() << std::endl;

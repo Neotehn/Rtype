@@ -25,6 +25,11 @@ void PowerUpSystem::update() {
         increaseHealth(action);
         m_play_sounds.push_back(SoundSystem::SoundType::power_up);
         break;
+      case Action::IncreaseType::KILLS:
+        player = (*m_em.get()).Get<Player>(action->getId());
+        player->kills += 1;
+        player->exp += action->getIncreaseValue();
+        break;
       case Action::IncreaseType::FIRE_SHOT:
         player = (*m_em.get()).Get<Player>(action->getId());
         player->fire_shot += action->getIncreaseValue();

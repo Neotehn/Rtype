@@ -19,7 +19,7 @@ void ShootingSystem::update() {
        m_event_queue.getAllOfType(Action::ActionType::SHOOT)) {
     switch (action->getShootType()) {
       case Action::ShootingType::NORMAL:
-        shoot(action);
+        initShoot(action, m_em, m_graphic_loader, m_serverCom);
         break;
       case Action::ShootingType::FIRE:
         shootFire(action);
@@ -33,26 +33,6 @@ void ShootingSystem::update() {
   }
 }
 
-void ShootingSystem::shoot(std::shared_ptr<Action> action) {
-  Player *player = (*m_em.get()).Get<Player>(action->getId());
-  EntityID bullet = m_em->createNewEntity();
-  SpriteECS sprite =
-    SpriteECS("./../Client/sprites/shoot2.png", m_graphic_loader);
-  rtype::Vector2f bullet_pos = {player->position.position.x - 20,
-                                player->position.position.y +
-                                  player->body->getSize().y / 2 - 10};
-  rtype::IRectangleShape *bullet_body = m_graphic_loader->loadRectangleShape();
-
-  bullet_body->setSize({20, 20});
-  bullet_body->setPosition({bullet_pos.x, bullet_pos.y});
-  bullet_body->setTexture(sprite.getTexture());
-
-  m_em->Assign<Bullet>(bullet, Bullet{bullet_body, 10.0, bullet_pos});
-  m_serverCom->addEvent(std::make_shared<Action>(
-    CreateAction(bullet, Action::ObjectType::BULLET, bullet_pos,
-                 std::to_string(Action::ShootingType::NORMAL))));
-}
-
 void ShootingSystem::shootFire(std::shared_ptr<Action> action) {
   Player *player = (*m_em.get()).Get<Player>(action->getId());
 
@@ -60,23 +40,7 @@ void ShootingSystem::shootFire(std::shared_ptr<Action> action) {
   player->fire_shot -= 1;
   if (player->fire_shot < 0) player->fire_shot = 0;
 
-  // TODO: replace by actual fire shoot
-  EntityID bullet = m_em->createNewEntity();
-  SpriteECS sprite =
-    SpriteECS("./../Client/sprites/shoot3.png", m_graphic_loader);
-  rtype::Vector2f bullet_pos = {player->position.position.x - 20,
-                                player->position.position.y +
-                                  player->body->getSize().y / 2 - 10};
-  rtype::IRectangleShape *bullet_body = m_graphic_loader->loadRectangleShape();
-
-  bullet_body->setSize({20, 20});
-  bullet_body->setPosition({bullet_pos.x, bullet_pos.y});
-  bullet_body->setTexture(sprite.getTexture());
-
-  m_em->Assign<Bullet>(bullet, Bullet{bullet_body, 10.0, bullet_pos});
-  m_serverCom->addEvent(std::make_shared<Action>(
-    CreateAction(bullet, Action::ObjectType::BULLET, bullet_pos,
-                 std::to_string(Action::ShootingType::FIRE))));
+  initFireShoot(action, m_em, m_graphic_loader, m_serverCom);
 }
 
 void ShootingSystem::shootBomb(std::shared_ptr<Action> action) {
@@ -86,21 +50,5 @@ void ShootingSystem::shootBomb(std::shared_ptr<Action> action) {
   player->bomb_shot -= 1;
   if (player->bomb_shot < 0) player->bomb_shot = 0;
 
-  // TODO: replace by actual bomb shoot
-  EntityID bullet = m_em->createNewEntity();
-  SpriteECS sprite =
-    SpriteECS("./../Client/sprites/shoot4.png", m_graphic_loader);
-  rtype::Vector2f bullet_pos = {player->position.position.x - 20,
-                                player->position.position.y +
-                                  player->body->getSize().y / 2 - 10};
-  rtype::IRectangleShape *bullet_body = m_graphic_loader->loadRectangleShape();
-
-  bullet_body->setSize({20, 20});
-  bullet_body->setPosition({bullet_pos.x, bullet_pos.y});
-  bullet_body->setTexture(sprite.getTexture());
-
-  m_em->Assign<Bullet>(bullet, Bullet{bullet_body, 10.0, bullet_pos});
-  m_serverCom->addEvent(std::make_shared<Action>(
-    CreateAction(bullet, Action::ObjectType::BULLET, bullet_pos,
-                 std::to_string(Action::ShootingType::BOMB))));
+  initBombShoot(action, m_em, m_graphic_loader, m_serverCom);
 }

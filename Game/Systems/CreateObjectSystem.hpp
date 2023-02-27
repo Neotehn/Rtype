@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 
+#include "../CreateEntities/Init.hpp"
 #include "../ECS/ISystem.hpp"
 #include "../ECS/DataTypesECS.hpp"
 #include "./AnimationSystem.hpp"
@@ -24,17 +25,6 @@ class CreateObjectSystem : public ISystem {
   EventQueue m_event_queue;
   std::vector<SoundSystem::SoundType> &m_play_sounds;
   rtype::IGraphicLoader *m_graphic_loader;
-
-  void createPlayer(EntityID t_id, std::string t_sprite_path,
-                    rtype::Vector2f t_pos);
-  Health initPlayerHealthBar(EntityID t_player_id);
-  void createBullet(EntityID t_id, rtype::Vector2f t_pos,
-                    Action::ShootingType t_shooting_type);
-  void createEnemy(EntityID t_id, rtype::Vector2f t_pos, float velocity);
-  void createExplosion(EntityID t_id, rtype::Vector2f t_pos);
-  void createPowerUp(EntityID t_id, rtype::Vector2f t_pos);
-  void createItem(EntityID t_id, rtype::ItemType t_item_type,
-                  rtype::Vector2f t_pos);
 };
 
 #endif  //R_TYPE_CLIENT_CREATEOBJECTSYSTEM_HPP

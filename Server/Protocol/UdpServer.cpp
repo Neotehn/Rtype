@@ -4,7 +4,8 @@ UdpServer::UdpServer(boost::asio::io_service &t_io_service,
                      InputManager &t_input_manager, bool &t_is_running)
     : m_io_service(t_io_service), m_input_manager(t_input_manager),
       m_socket(t_io_service, udp::endpoint(udp::v4(), 50000)),
-      m_is_running(t_is_running) {
+      m_is_running(t_is_running),
+      m_send_event_manager(t_input_manager.m_level) {
   m_flag = GameMode::none;
   receiveClient();
 
