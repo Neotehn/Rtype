@@ -35,8 +35,8 @@ class LobbyState final : public State {
  private:
   rtype::ITexture *m_bg_t;
   rtype::ISprite *m_bg_s;
+  Button m_home_btn;
   Button m_start_btn;
-  Button m_settings_btn;
   std::size_t m_flag;
   rtype::IFont *m_font;
   rtype::IText *m_title;
@@ -44,6 +44,14 @@ class LobbyState final : public State {
   Button m_player_two;
   Button m_player_three;
   Button m_player_four;
+  rtype::ITexture *m_player_one_t;
+  rtype::ITexture *m_player_two_t;
+  rtype::ITexture *m_player_three_t;
+  rtype::ITexture *m_player_four_t;
+  rtype::ISprite *m_player_one_s;
+  rtype::ISprite *m_player_two_s;
+  rtype::ISprite *m_player_three_s;
+  rtype::ISprite *m_player_four_s;
 };
 
 #endif /* !LOBBYSTATE_HPP_ */

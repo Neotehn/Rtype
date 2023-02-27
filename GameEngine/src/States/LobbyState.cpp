@@ -12,16 +12,16 @@ LobbyState::LobbyState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
                        rtype::IGraphicLoader *t_graphic_loader,
                        const bool t_replace)
     : State(t_machine, t_window, t_music_player, t_graphic_loader, t_replace),
-      m_start_btn(Button(
+      m_home_btn(Button(
         "./assets/icons/home.png",
         rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 32),
                         static_cast<float>(m_window->getSize().y - 100)},
         rtype::Vector2f{64, 64}, t_graphic_loader)),
-      m_settings_btn(
-        Button("./assets/icons/gear.png",
-               rtype::Vector2f{static_cast<float>(m_window->getSize().x - 100),
-                               static_cast<float>(m_window->getSize().y - 100)},
-               rtype::Vector2f{64, 64}, t_graphic_loader)),
+      m_start_btn(Button(
+        "./assets/startBtn.png",
+        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 135),
+                        static_cast<float>(m_window->getSize().y - 230)},
+        rtype::Vector2f{270, 130}, t_graphic_loader)),
       m_player_one(Button(
         "./assets/icons/gamepad1.png",
         rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 150),
@@ -48,6 +48,43 @@ LobbyState::LobbyState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
   if (!m_bg_t->loadFromFile("./assets/menubg.jpg")) {
     throw std::runtime_error("Unable to load image.");
   }
+  m_player_one_t = m_graphic_loader->loadTexture();
+  m_player_one_s = m_graphic_loader->loadSprite();
+  if (!m_player_one_t->loadFromFile("./assets/icons/gamepad1.png")) {
+    throw std::runtime_error("Unable to load image.");
+  }
+  m_player_one_s->setTexture(m_player_one_t, true);
+  m_player_one_s->setPosition(
+    rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 150),
+                    static_cast<float>(m_window->getSize().y / 2 - 150)});
+
+  m_player_two_t = m_graphic_loader->loadTexture();
+  m_player_two_s = m_graphic_loader->loadSprite();
+  if (!m_player_two_t->loadFromFile("./assets/icons/gamepad2.png")) {
+    throw std::runtime_error("Unable to load image.");
+  }
+  m_player_two_s->setTexture(m_player_two_t, true);
+  m_player_two_s->setPosition(
+    rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 + 50),
+                    static_cast<float>(m_window->getSize().y / 2 - 150)});
+  m_player_three_t = m_graphic_loader->loadTexture();
+  m_player_three_s = m_graphic_loader->loadSprite();
+  if (!m_player_three_t->loadFromFile("./assets/icons/gamepad3.png")) {
+    throw std::runtime_error("Unable to load image.");
+  }
+  m_player_three_s->setTexture(m_player_three_t, true);
+  m_player_three_s->setPosition(
+    rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 150),
+                    static_cast<float>(m_window->getSize().y / 2 + 50)});
+  m_player_four_t = m_graphic_loader->loadTexture();
+  m_player_four_s = m_graphic_loader->loadSprite();
+  if (!m_player_four_t->loadFromFile("./assets/icons/gamepad4.png")) {
+    throw std::runtime_error("Unable to load image.");
+  }
+  m_player_four_s->setTexture(m_player_four_t, true);
+  m_player_four_s->setPosition(
+    rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 + 50),
+                    static_cast<float>(m_window->getSize().y / 2 + 50)});
   float size_x = m_window->getSize().x;
   float size_y = m_window->getSize().y;
   float scale_x = size_x / m_bg_t->getSize().x;
@@ -77,25 +114,22 @@ void LobbyState::update() {
     rtype::Vector2f mouse_pos_f{static_cast<float>(mouse_pos.x),
                                 static_cast<float>(mouse_pos.y)};
     if (event.type == rtype::EventType::MouseMoved) {
+      m_home_btn.is_hovered(mouse_pos_f);
       m_start_btn.is_hovered(mouse_pos_f);
-      m_settings_btn.is_hovered(mouse_pos_f);
       m_player_one.is_hovered(mouse_pos_f);
       m_player_two.is_hovered(mouse_pos_f);
       m_player_three.is_hovered(mouse_pos_f);
       m_player_four.is_hovered(mouse_pos_f);
     }
     if (m_mouse->isLeftMouseButtonPressed()) {
-      if (m_start_btn.is_pressed(mouse_pos_f)) {
-        std::cout << "startbtn pressed" << std::endl;
+      if (m_home_btn.is_pressed(mouse_pos_f)) {
+        std::cout << "homebtn pressed" << std::endl;
         m_next = StateMachine::build<MainState>(m_state_machine, m_window,
                                                 m_music_player, m_flag,
                                                 m_graphic_loader, true);
       }
-      if (m_settings_btn.is_pressed(mouse_pos_f)) {
-        std::cout << "settingsbtn pressed" << std::endl;
-        m_next = StateMachine::build<SettingsState>(m_state_machine, m_window,
-                                                    m_music_player, m_flag,
-                                                    m_graphic_loader, true);
+      if (m_start_btn.is_pressed(mouse_pos_f)) {
+        std::cout << "startbtn pressed" << std::endl;
       }
       if (m_player_one.is_pressed(mouse_pos_f)) {
         std::cout << "m_player_one pressed" << std::endl;
@@ -147,11 +181,15 @@ void LobbyState::draw() {
   m_window->clear();
   m_window->draw(m_bg_s);
   m_window->draw(m_title);
+  // m_window->draw(m_player_one_s);
+  // m_window->draw(m_player_two_s);
+  // m_window->draw(m_player_three_s);
+  // m_window->draw(m_player_four_s);
+  m_window->draw(m_home_btn.getSprite());
   m_window->draw(m_start_btn.getSprite());
-  m_window->draw(m_settings_btn.getSprite());
-  m_window->draw(m_player_one.getSprite());
-  m_window->draw(m_player_two.getSprite());
-  m_window->draw(m_player_three.getSprite());
-  m_window->draw(m_player_four.getSprite());
+  // m_window->draw(m_player_one.getSprite());
+  // m_window->draw(m_player_two.getSprite());
+  // m_window->draw(m_player_three.getSprite());
+  // m_window->draw(m_player_four.getSprite());
   m_window->display();
 }
