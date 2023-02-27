@@ -63,6 +63,17 @@ class GameState final : public State {
   EntityManager initEntityManager();
   std::vector<std::shared_ptr<ISystem>>
     initSystems(std::shared_ptr<EntityManager>);
+
+  rtype::ITexture *m_bg_t;
+  rtype::ISprite *m_bg_s;
+  Button m_home_btn;
+  Button m_start_btn;
+  rtype::IFont *m_font;
+  rtype::IText *m_title;
+  rtype::ITexture *m_player_one_t;
+  rtype::ITexture *m_player_two_t;
+  rtype::ISprite *m_player_one_s;
+  rtype::ISprite *m_player_two_s;
 };
 
 #endif /* !GAMESTATE_HPP_ */

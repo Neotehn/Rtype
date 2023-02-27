@@ -42,7 +42,7 @@ void UdpServer::receiveClient() {
 }
 
 bool UdpServer::doesAlreadyExist(std::shared_ptr<Action> t_action) {
-  if (t_action->getType() == Action::ActionType::START) {
+  if (t_action->getType() == Action::ActionType::CONNECT) {
     int id = t_action->getId();
     std::cout << std::to_string(id) << std::endl;
 

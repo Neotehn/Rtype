@@ -4,10 +4,60 @@ GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
                      MusicPlayer &t_music_player, std::size_t t_flag,
                      rtype::IGraphicLoader *t_graphic_loader,
                      const bool t_replace)
-    : State{t_machine, t_window, t_music_player, t_graphic_loader, t_replace} {
+    : State{t_machine, t_window, t_music_player, t_graphic_loader, t_replace},
+      m_home_btn(Button(
+        "./assets/icons/home.png",
+        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 32),
+                        static_cast<float>(m_window->getSize().y - 100)},
+        rtype::Vector2f{64, 64}, t_graphic_loader)),
+      m_start_btn(Button(
+        "./assets/startBtn.png",
+        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 135),
+                        static_cast<float>(m_window->getSize().y - 230)},
+        rtype::Vector2f{270, 130}, t_graphic_loader)) {
   m_is_running = true;
   m_graphic_loader = t_graphic_loader;
   if (t_flag == client) {
+    m_bg_t = m_graphic_loader->loadTexture();
+    m_bg_s = m_graphic_loader->loadSprite();
+    if (!m_bg_t->loadFromFile("./assets/menubg.jpg")) {
+      throw std::runtime_error("Unable to load image.");
+    }
+    m_player_one_t = m_graphic_loader->loadTexture();
+    m_player_one_s = m_graphic_loader->loadSprite();
+    if (!m_player_one_t->loadFromFile("./assets/icons/gamepad1.png")) {
+      throw std::runtime_error("Unable to load image.");
+    }
+    m_player_one_s->setTexture(m_player_one_t, true);
+    m_player_one_s->setPosition(
+      rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 150),
+                      static_cast<float>(m_window->getSize().y / 2 - 150)});
+
+    m_player_two_t = m_graphic_loader->loadTexture();
+    m_player_two_s = m_graphic_loader->loadSprite();
+    if (!m_player_two_t->loadFromFile("./assets/icons/gamepad2.png")) {
+      throw std::runtime_error("Unable to load image.");
+    }
+    m_player_two_s->setTexture(m_player_two_t, true);
+    m_player_two_s->setPosition(
+      rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 + 50),
+                      static_cast<float>(m_window->getSize().y / 2 - 150)});
+    float size_x = m_window->getSize().x;
+    float size_y = m_window->getSize().y;
+    float scale_x = size_x / m_bg_t->getSize().x;
+    float scale_y = size_y / m_bg_t->getSize().y;
+    m_bg_s->setTexture(m_bg_t, true);
+    m_bg_s->setScale({scale_x, scale_y});
+    m_font = m_graphic_loader->loadFont();
+    if (!m_font->loadFromFile("./assets/font/nasalization-rg.ttf")) {
+      throw std::runtime_error("Unable to load font.");
+    }
+    m_title = m_graphic_loader->loadText();
+    m_title->setFont(m_font);
+    m_title->setString("LOBBY");
+    m_title->setCharacterSize(50);
+    m_title->setPosition(
+      {(size_x / 2) - (m_title->getLocalBounds().width / 2), 100});
     m_flag = CommunicationFlag::client;
     m_port_number = rand() % 15000 + 40001;
 
@@ -86,13 +136,42 @@ void GameState::update() {
       boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
     }
     while (m_flag == CommunicationFlag::client &&
-           m_clientCom->m_flag != m_clientCom->connected) {
-      std::cout << "Connecting to Server ..." << std::endl;
-      boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
-      StateAction start_action =
-        StateAction(Action::ActionType::START, m_port_number);
-      m_clientCom->sendMessage(start_action.getCommand());
-      std::cout << "waiting on Server Connection" << std::endl;
+           m_clientCom->m_flag != m_clientCom->connected && m_is_running) {
+      rtype::Vector2i mouse_pos = m_mouse->getMousePosition(m_window);
+      rtype::Vector2f mouse_pos_f{static_cast<float>(mouse_pos.x),
+                                  static_cast<float>(mouse_pos.y)};
+      for (auto event1 = rtype::Event{}; m_window->pollEvent(event1);) {
+        if (event1.type == rtype::EventType::MouseMoved) {
+          m_start_btn.is_hovered(mouse_pos_f);
+          m_home_btn.is_hovered(mouse_pos_f);
+        }
+        if (m_mouse->isLeftMouseButtonPressed()) {
+          if (m_home_btn.is_pressed(mouse_pos_f)) {
+            std::cout << "Connecting to Server ..." << std::endl;
+            boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
+            StateAction connect_action =
+              StateAction(Action::ActionType::CONNECT, m_port_number);
+            m_clientCom->sendMessage(connect_action.getCommand());
+            std::cout << "waiting on Server Connection" << std::endl;
+          }
+          if (m_start_btn.is_pressed(mouse_pos_f)) {
+            std::cout << "Connecting to Server ..." << std::endl;
+            boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
+            StateAction start_action =
+              StateAction(Action::ActionType::START, m_port_number);
+            m_clientCom->sendMessage(start_action.getCommand());
+            std::cout << "waiting on Server Connection" << std::endl;
+          }
+        }
+        if (event1.type == rtype::EventType::Closed) { m_is_running = false; }
+      }
+      std::cout << "my id: " << m_clientCom->m_id << std::endl;
+      m_window->clear();
+      m_window->draw(m_bg_s);
+      m_window->draw(m_title);
+      m_window->draw(m_start_btn.getSprite());
+      m_window->draw(m_home_btn.getSprite());
+      m_window->display();
     }
     rtype::Event event;
     if (m_window->isOpen()) {

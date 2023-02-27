@@ -14,6 +14,8 @@ Action::~Action() {}
 
 std::string Action::getTypeAsString() const {
   switch (m_type) {
+    case ActionType::CONNECT:
+      return "CONNECT";
     case ActionType::START:
       return "START";
     case ActionType::UP:
@@ -53,6 +55,9 @@ std::string Action::getCommand() const {
   std::string data = "";
 
   switch (m_type) {
+    case ActionType::CONNECT:
+      return std::to_string(m_action_id) + ";" + type_string + ";" +
+             std::to_string(m_id) + ";" + std::to_string(m_client_id) + ";";
     case ActionType::START:
       return std::to_string(m_action_id) + ";" + type_string + ";" +
              std::to_string(m_id) + ";" + std::to_string(m_client_id) + ";";

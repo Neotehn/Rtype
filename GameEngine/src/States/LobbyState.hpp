@@ -40,10 +40,6 @@ class LobbyState final : public State {
   std::size_t m_flag;
   rtype::IFont *m_font;
   rtype::IText *m_title;
-  Button m_player_one;
-  Button m_player_two;
-  Button m_player_three;
-  Button m_player_four;
   rtype::ITexture *m_player_one_t;
   rtype::ITexture *m_player_two_t;
   rtype::ITexture *m_player_three_t;

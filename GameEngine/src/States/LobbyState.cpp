@@ -22,26 +22,6 @@ LobbyState::LobbyState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
         rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 135),
                         static_cast<float>(m_window->getSize().y - 230)},
         rtype::Vector2f{270, 130}, t_graphic_loader)),
-      m_player_one(Button(
-        "./assets/icons/gamepad1.png",
-        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 150),
-                        static_cast<float>(m_window->getSize().y / 2 - 150)},
-        rtype::Vector2f{100, 100}, t_graphic_loader)),
-      m_player_two(Button(
-        "./assets/icons/gamepad2.png",
-        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 + 50),
-                        static_cast<float>(m_window->getSize().y / 2 - 150)},
-        rtype::Vector2f{100, 100}, t_graphic_loader)),
-      m_player_three(Button(
-        "./assets/icons/gamepad3.png",
-        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 150),
-                        static_cast<float>(m_window->getSize().y / 2 + 50)},
-        rtype::Vector2f{100, 100}, t_graphic_loader)),
-      m_player_four(Button(
-        "./assets/icons/gamepad4.png",
-        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 + 50),
-                        static_cast<float>(m_window->getSize().y / 2 + 50)},
-        rtype::Vector2f{100, 100}, t_graphic_loader)),
       m_flag(t_flag) {
   m_bg_t = m_graphic_loader->loadTexture();
   m_bg_s = m_graphic_loader->loadSprite();
@@ -116,10 +96,6 @@ void LobbyState::update() {
     if (event.type == rtype::EventType::MouseMoved) {
       m_home_btn.is_hovered(mouse_pos_f);
       m_start_btn.is_hovered(mouse_pos_f);
-      m_player_one.is_hovered(mouse_pos_f);
-      m_player_two.is_hovered(mouse_pos_f);
-      m_player_three.is_hovered(mouse_pos_f);
-      m_player_four.is_hovered(mouse_pos_f);
     }
     if (m_mouse->isLeftMouseButtonPressed()) {
       if (m_home_btn.is_pressed(mouse_pos_f)) {
@@ -130,27 +106,6 @@ void LobbyState::update() {
       }
       if (m_start_btn.is_pressed(mouse_pos_f)) {
         std::cout << "startbtn pressed" << std::endl;
-      }
-      if (m_player_one.is_pressed(mouse_pos_f)) {
-        std::cout << "m_player_one pressed" << std::endl;
-        m_next = StateMachine::build<GameState>(m_state_machine, m_window,
-                                                m_music_player, m_flag,
-                                                m_graphic_loader, true);
-      }
-      if (m_player_two.is_pressed(mouse_pos_f)) {
-        std::cout << "m_player_two pressed" << std::endl;
-        m_next = StateMachine::build<GameState>(m_state_machine, m_window,
-                                                m_music_player, m_flag,
-                                                m_graphic_loader, true);
-      }
-      if (m_player_three.is_pressed(mouse_pos_f)) {
-        std::cout << "m_player_three pressed" << std::endl;
-        m_next = StateMachine::build<GameState>(m_state_machine, m_window,
-                                                m_music_player, m_flag,
-                                                m_graphic_loader, true);
-      }
-      if (m_player_four.is_pressed(mouse_pos_f)) {
-        std::cout << "m_player_four pressed" << std::endl;
         m_next = StateMachine::build<GameState>(m_state_machine, m_window,
                                                 m_music_player, m_flag,
                                                 m_graphic_loader, true);
@@ -187,9 +142,5 @@ void LobbyState::draw() {
   // m_window->draw(m_player_four_s);
   m_window->draw(m_home_btn.getSprite());
   m_window->draw(m_start_btn.getSprite());
-  // m_window->draw(m_player_one.getSprite());
-  // m_window->draw(m_player_two.getSprite());
-  // m_window->draw(m_player_three.getSprite());
-  // m_window->draw(m_player_four.getSprite());
   m_window->display();
 }

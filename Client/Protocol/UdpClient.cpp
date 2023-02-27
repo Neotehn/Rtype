@@ -39,7 +39,7 @@ void UdpClient::receiveClient() {
 
 void UdpClient::setPlayerId(std::shared_ptr<Action> t_action) {
   if (!m_client_input_manager.isPlayerIdSet()) {
-    if (t_action->getType() == Action::ActionType::START) {
+    if (t_action->getType() == Action::ActionType::CONNECT) {
       m_client_input_manager.setPlayerId(t_action->getId());
       m_id = t_action->getClientId();
       std::cout << "id: " << std::to_string(t_action->getClientId())
