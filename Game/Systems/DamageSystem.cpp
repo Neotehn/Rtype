@@ -16,6 +16,7 @@ void DamageSystem::update() {
   for (std::shared_ptr<Action> action :
        m_event_queue.getAllOfType(Action::ActionType::DAMAGE)) {
     for (EntityID player_id : EntityViewer<Player>(*m_em.get())) {
+      if (player_id != action->getCollisionPartnerId()) { continue; }
       Player *player = (*m_em.get()).Get<Player>(player_id);
       int current_health = player->health.healthbar.getHealth();
       int damage = action->getShootDamage();

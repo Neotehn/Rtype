@@ -43,7 +43,7 @@ void CollisionSystem::playerAnimationCollision(Player *t_player,
         m_serverCom->addEvent(
           std::make_shared<Action>(DestroyAction(enemy_ent)));
         m_serverCom->addEvent(
-          std::make_shared<Action>(DamageAction(enemy_ent, 1)));
+          std::make_shared<Action>(DamageAction(enemy_ent, 1, t_player_ent)));
         m_em->destroyEntity(enemy_ent);
       } else if (enemy->type == "powerup") {
         t_player->coins += 1;

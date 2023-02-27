@@ -82,7 +82,8 @@ std::string Action::getCommand() const {
              std::to_string(m_value) + ";";
     case ActionType::DAMAGE:
       return std::to_string(m_action_id) + ";DAMAGE;" + std::to_string(m_id) +
-             ";" + std::to_string(m_damage) + ";";
+             ";" + std::to_string(m_damage) + ";" +
+             std::to_string(m_collision_partner_id) + ";";
     case ActionType::CREATE:
       data =
         std::to_string(m_position.x) + ";" + std::to_string(m_position.y) + ";";

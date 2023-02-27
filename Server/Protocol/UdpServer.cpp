@@ -8,6 +8,8 @@ UdpServer::UdpServer(boost::asio::io_service &t_io_service,
   m_flag = GameMode::none;
   receiveClient();
   m_player_id_count = 0;
+  m_start_time = std::chrono::system_clock::now();
+  m_time_went_by = std::chrono::system_clock::now();
 
   m_thread = boost::thread([&t_io_service]() { t_io_service.run(); });
 }
@@ -129,4 +131,14 @@ void UdpServer::sendEvents() {
       }
     }
   }
+}
+
+float UdpServer::getTimeDiff() {
+  m_time_went_by = std::chrono::system_clock::now();
+  std::chrono::duration<double> elapsed_seconds = m_time_went_by - m_start_time;
+  return elapsed_seconds.count();
+}
+void UdpServer::resetTime() {
+  m_time_went_by = std::chrono::system_clock::now();
+  m_start_time = std::chrono::system_clock::now();
 }

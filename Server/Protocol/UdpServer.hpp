@@ -18,6 +18,8 @@
 #include <boost/asio.hpp>
 #include <boost/thread.hpp>
 
+#include <math.h>
+
 #include "../../Protocol/IProtocol.hpp"
 #include "../../Client/src/InputManager/InputManager.hpp"
 #include "./UdpSession.hpp"
@@ -41,6 +43,9 @@ class UdpServer : public IProtocol {
   int getPlayerIdCount() const;
   void setPlayerIdCount(int t_new_player_id_count);
 
+  float getTimeDiff();
+  void resetTime();
+
   enum GameMode { none, single, coop, end };
   GameMode m_flag;
   std::vector<int> m_client_ids;
@@ -57,6 +62,8 @@ class UdpServer : public IProtocol {
   InputManager m_send_event_manager;
   bool &m_is_running;
   int m_player_id_count;
+  std::chrono::system_clock::time_point m_start_time;
+  std::chrono::system_clock::time_point m_time_went_by;
 
   bool doesAlreadyExist(std::shared_ptr<Action> t_action);
   bool isUpdated(std::shared_ptr<Action> t_event);

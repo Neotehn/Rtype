@@ -73,6 +73,8 @@ void MovementSystem::updatePlayer(EntityID t_ent) {
   int up = 0;
   int down = 0;
   int pos = 0;
+  float time_diff = 0;
+  float time_to_send = 0.10;
 
   if (m_clientCom != nullptr && player->player_id != m_clientCom->m_id) {
     for (int i = 0; i < m_event_queue.getEventQueue().size(); i++) {
@@ -86,6 +88,8 @@ void MovementSystem::updatePlayer(EntityID t_ent) {
       player->position.position = m_event_queue.getLatestPos(t_ent);
       player->body->setPosition(
         {player->position.position.x, player->position.position.y});
+      player->health.body->setPosition(
+        {player->position.position.x - 180, player->position.position.y - 70});
     }
     return;
   }
@@ -127,9 +131,22 @@ void MovementSystem::updatePlayer(EntityID t_ent) {
 
   if (player->position.velocity.x != 0 || player->position.velocity.y != 0)
     player->position.velocity *= 0.99f;
-  if (m_serverCom != nullptr && direction != rtype::Vector2f{0, 0}) {
-    m_serverCom->addEvent(
-      std::make_shared<Action>(PosAction(t_ent, player->position.position)));
+  if (m_serverCom != nullptr) {
+    time_diff = m_serverCom->getTimeDiff();
+    if (time_diff > 0.1) {
+      m_serverCom->resetTime();
+
+      for (EntityID ent : EntityViewer<Player>(*m_em.get())) {
+        player = (*m_em.get()).Get<Player>(ent);
+        m_serverCom->addEvent(
+          std::make_shared<Action>(PosAction(ent, player->position.position)));
+      }
+      return;
+    }
+    if (direction != rtype::Vector2f{0, 0}) {
+      m_serverCom->addEvent(
+        std::make_shared<Action>(PosAction(t_ent, player->position.position)));
+    }
   }
 }
 

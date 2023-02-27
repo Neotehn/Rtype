@@ -119,7 +119,9 @@ std::shared_ptr<Action> IProtocol::getAction(std::string command) {
     return std::make_shared<Action>(DestroyAction(id, action_id));
   } else if (action_type == "DAMAGE") {
     int damage = std::stoi(commands[3]);
-    return std::make_shared<Action>(DamageAction(id, damage, action_id));
+    EntityID player_id = std::stoull(commands[4]);
+    return std::make_shared<Action>(
+      DamageAction(id, damage, action_id, player_id));
   } else if (action_type == "END") {
     return std::make_shared<Action>(
       StateAction(Action::ActionType::END, id, action_id));
