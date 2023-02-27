@@ -20,7 +20,10 @@ Core::Core(std::size_t t_flag) {
                                      t_flag, m_graphic_loader, level, true));
 }
 
-Core::~Core() {}
+Core::~Core() {
+  delete m_window;
+  delete m_graphic_loader;
+}
 
 void Core::run() {
   while (m_state_machine.running()) {

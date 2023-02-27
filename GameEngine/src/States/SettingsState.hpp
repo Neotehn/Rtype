@@ -18,6 +18,7 @@ class SettingsState final : public State {
                 MusicPlayer &t_music_player, std::size_t t_flag,
                 rtype::IGraphicLoader *t_graphic_loader, int *t_level,
                 bool t_replace = true);
+  ~SettingsState();
   void pause() override;
   void resume() override;
   void update() override;

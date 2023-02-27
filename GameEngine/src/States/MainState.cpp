@@ -31,6 +31,11 @@ MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
   m_music_player.play(MusicID::MENU_THEME);
 }
 
+MainState::~MainState() {
+  delete m_bg_t;
+  delete m_bg_s;
+}
+
 void MainState::pause() { std::cout << "MenuState Pause\n"; }
 
 void MainState::resume() { std::cout << "MenuState resume\n"; }

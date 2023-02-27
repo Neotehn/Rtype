@@ -2,12 +2,10 @@
 
 SoundSystem::SoundSystem(std::shared_ptr<EntityManager> t_em,
                          std::vector<SoundType> &t_sounds,
-                         rtype::IMusic *t_music,
                          rtype::IGraphicLoader *t_graphic_loader)
     : m_play_sounds(t_sounds) {
   m_em = t_em;
   m_graphic_loader = t_graphic_loader;
-  m_music = t_music;
 
   // init music
 
@@ -21,7 +19,6 @@ SoundSystem::SoundSystem(std::shared_ptr<EntityManager> t_em,
 }
 
 SoundSystem::~SoundSystem() {
-  delete m_music;
   delete m_sounds;
 }
 

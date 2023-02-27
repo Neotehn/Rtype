@@ -34,6 +34,7 @@ GameState::~GameState() {
   } else {
     delete m_clientCom;
   }
+  if (m_music) { delete m_music; }
 }
 
 std::vector<std::shared_ptr<ISystem>> GameState::initSystems() {
@@ -59,7 +60,7 @@ std::vector<std::shared_ptr<ISystem>> GameState::initSystems() {
     systems.push_back(
       std::make_shared<PowerUpSystem>(m_em, m_sounds, m_graphic_loader));
     systems.push_back(
-      std::make_shared<SoundSystem>(m_em, m_sounds, m_music, m_graphic_loader));
+      std::make_shared<SoundSystem>(m_em, m_sounds, m_graphic_loader));
   }
   systems.push_back(std::make_shared<DisplaySystem>(m_em, m_window));
   systems.push_back(std::make_shared<DestroySystem>(m_em));
