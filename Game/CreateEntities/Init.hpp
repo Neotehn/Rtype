@@ -26,7 +26,8 @@ Health initPlayerHealthBar(rtype::IGraphicLoader *t_graphic_loader);
 void initBulletClient(EntityID t_id, rtype::Vector2f t_pos,
                       Action::ShootingType t_shooting_type,
                       std::shared_ptr<EntityManager> t_em,
-                      rtype::IGraphicLoader *t_graphic_loader);
+                      rtype::IGraphicLoader *t_graphic_loader,
+                      EntityID t_owner_id);
 
 void initEnemy(std::shared_ptr<EntityManager> t_em,
                rtype::IGraphicLoader *t_graphic_loader, UdpServer *t_serverCom);

@@ -113,12 +113,16 @@ struct Player {
   int fire_shot = 5;  //TODO reset to 0, 5 only for testing purposes
   int bomb_shot = 5;  //TODO reset to 0, 5 only for testing purposes
   int coins = 0;
+  int exp = 0;
+  int kills = 0;
+  float damage_factor = 1;
 };
 
 struct Bullet {
   rtype::IRectangleShape *body;
   float speed;
   rtype::Vector2f pos;
+  EntityID owner = 0;
 };
 
 struct AnimationObj {
@@ -127,6 +131,7 @@ struct AnimationObj {
   AnimationTime time;
   AnimationRect rect;
   rtype::IRectangleShape *body;
+  int kill_value = 5;
 };
 
 namespace rtype {

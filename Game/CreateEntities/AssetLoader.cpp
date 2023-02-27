@@ -40,6 +40,10 @@ Json::Value AssetLoader::getBackgroundData() {
   return m_level_data["backgrounds"];
 }
 
+float AssetLoader::getBackgroundSpeed() {
+  return m_level_data["background_speed"].asFloat();
+}
+
 Json::Value AssetLoader::getEnemyData() { return m_level_data["enemies"]; }
 
 std::string AssetLoader::getMusicPath() {

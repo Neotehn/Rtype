@@ -58,6 +58,7 @@
       }
     }
   ],
+  "background_speed": 1.8,
   "music": "../Client/assets/music/money.ogg",
   "enemies": [
     {

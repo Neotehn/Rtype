@@ -9,6 +9,7 @@ Core::Core(std::size_t t_flag) {
     static_cast<rtype::Style>(rtype::Style::Titlebar | rtype::Style::Close));
   m_window->setFramerateLimit(60);
   int *level = new int(1);
+  srand(time(nullptr));
 
   if (t_flag == 1)
     m_state_machine.run(

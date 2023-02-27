@@ -41,11 +41,15 @@ class EntityManager {
     return m_entities.back().id;
   }
   void destroyEntity(EntityID t_id) {
-    EntityID newID =
-      createEntityId(EntityIndex(-1), getEntityVersion(t_id) + 1);
-    m_entities[getEntityIndex(t_id)].id = newID;
-    m_entities[getEntityIndex(t_id)].mask.reset();
-    m_free_entities.push_back(getEntityIndex(t_id));
+    try {
+      EntityID newID =
+        createEntityId(EntityIndex(-1), getEntityVersion(t_id) + 1);
+      m_entities[getEntityIndex(t_id)].id = newID;
+      m_entities[getEntityIndex(t_id)].mask.reset();
+      m_free_entities.push_back(getEntityIndex(t_id));
+    } catch (std::exception &e) {
+      std::cout << "Error destroying entity: " << e.what() << std::endl;
+    }
   }
 
   template<typename T>

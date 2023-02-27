@@ -58,6 +58,7 @@
       }
     }
   ],
+  "background_speed": 1,
   "music": "../Client/assets/music/music1.ogg",
   "enemies": [
     {

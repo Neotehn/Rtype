@@ -92,6 +92,10 @@ std::string Action::getCommand() const {
       if (m_item_type != 0) {
         data += std::to_string(float(m_item_type)) + ";";
       }
+      if (m_collision_partner_id != 0) {
+        data += std::to_string(m_collision_partner_id) + ";";
+      }
+      if (m_damage != 0) { data += std::to_string(m_damage) + ";"; }
       std::cout << std::to_string(m_velocity) << std::endl;
 
       return std::to_string(m_action_id) + ";CREATE;" + std::to_string(m_id) +

@@ -13,6 +13,7 @@ class AssetLoader {
   bool loadLevel(int &t_level);
 
   Json::Value getBackgroundData();
+  float getBackgroundSpeed();
   Json::Value getEnemyData();
   std::string getMusicPath();
 

@@ -28,6 +28,14 @@ bool loadLevel(int *t_level, std::shared_ptr<EntityManager> t_em,
     return false;
   }
 
+  for (EntityID ent : EntityViewer<Player>(*t_em.get())) {
+    Player *player = (*t_em.get()).Get<Player>(ent);
+    player->damage_factor += 0.3;
+    player->speed += 0.2;
+    player->exp += 10 * player->kills;
+    player->kills = 0;
+  }
+
   level = *t_level;
   t_music->stop();
   loadMusic(t_music, t_play_music);
@@ -105,7 +113,8 @@ Health initPlayerHealthBar(rtype::IGraphicLoader *t_graphic_loader) {
 void initBulletClient(EntityID t_id, rtype::Vector2f t_pos,
                       Action::ShootingType t_shooting_type,
                       std::shared_ptr<EntityManager> t_em,
-                      rtype::IGraphicLoader *t_graphic_loader) {
+                      rtype::IGraphicLoader *t_graphic_loader,
+                      EntityID t_owner_id) {
   EntityID bullet = t_em->createNewEntity(t_id);
 
   rtype::IRectangleShape *bullet_body = t_graphic_loader->loadRectangleShape();
@@ -129,7 +138,9 @@ void initBulletClient(EntityID t_id, rtype::Vector2f t_pos,
           .getTexture());
       break;
   }
-  Bullet displayable_bullet = Bullet{bullet_body, 10.0, t_pos};
+  std::cout << "create bullet for player " << std::to_string(t_owner_id)
+            << std::endl;
+  Bullet displayable_bullet = Bullet{bullet_body, 10.0, t_pos, t_owner_id};
   t_em->Assign<Bullet>(bullet, displayable_bullet);
 }
 
@@ -378,10 +389,13 @@ void initShoot(std::shared_ptr<Action> t_action,
   bullet_body->setPosition({bullet_pos.x, bullet_pos.y});
   bullet_body->setTexture(sprite.getTexture());
 
-  t_em->Assign<Bullet>(bullet, Bullet{bullet_body, 10.0, bullet_pos});
-  t_server_com->addEvent(std::make_shared<Action>(
-    CreateAction(bullet, Action::ObjectType::BULLET, bullet_pos,
-                 std::to_string(Action::ShootingType::NORMAL))));
+  std::cout << "init bullet with owner id: "
+            << std::to_string(t_action->getId()) << std::endl;
+  t_em->Assign<Bullet>(
+    bullet, Bullet{bullet_body, 10.0, bullet_pos, t_action->getId()});
+  t_server_com->addEvent(std::make_shared<Action>(CreateAction(
+    bullet, Action::ObjectType::BULLET, bullet_pos, t_action->getId(),
+    player->damage_factor, std::to_string(Action::ShootingType::NORMAL))));
 }
 
 // TODO: replace by actual fire shoot
@@ -402,10 +416,11 @@ void initFireShoot(std::shared_ptr<Action> t_action,
   bullet_body->setPosition({bullet_pos.x, bullet_pos.y});
   bullet_body->setTexture(sprite.getTexture());
 
-  t_em->Assign<Bullet>(bullet, Bullet{bullet_body, 10.0, bullet_pos});
-  t_server_com->addEvent(std::make_shared<Action>(
-    CreateAction(bullet, Action::ObjectType::BULLET, bullet_pos,
-                 std::to_string(Action::ShootingType::FIRE))));
+  t_em->Assign<Bullet>(
+    bullet, Bullet{bullet_body, 10.0, bullet_pos, t_action->getId()});
+  t_server_com->addEvent(std::make_shared<Action>(CreateAction(
+    bullet, Action::ObjectType::BULLET, bullet_pos, t_action->getId(),
+    player->damage_factor, std::to_string(Action::ShootingType::FIRE))));
 }
 
 // TODO: replace by actual bomb shoot
@@ -426,10 +441,11 @@ void initBombShoot(std::shared_ptr<Action> t_action,
   bullet_body->setPosition({bullet_pos.x, bullet_pos.y});
   bullet_body->setTexture(sprite.getTexture());
 
-  t_em->Assign<Bullet>(bullet, Bullet{bullet_body, 10.0, bullet_pos});
-  t_server_com->addEvent(std::make_shared<Action>(
-    CreateAction(bullet, Action::ObjectType::BULLET, bullet_pos,
-                 std::to_string(Action::ShootingType::BOMB))));
+  t_em->Assign<Bullet>(
+    bullet, Bullet{bullet_body, 10.0, bullet_pos, t_action->getId()});
+  t_server_com->addEvent(std::make_shared<Action>(CreateAction(
+    bullet, Action::ObjectType::BULLET, bullet_pos, t_action->getId(),
+    player->damage_factor, std::to_string(Action::ShootingType::BOMB))));
 }
 
 void loadMusic(rtype::IMusic *t_music, bool t_play) {
@@ -464,7 +480,7 @@ void initBackground(std::shared_ptr<EntityManager> t_entity_manager,
           static_cast<unsigned char>(background["color"]["a"].asInt())}),
       {background["position"]["x"].asFloat(),
        background["position"]["y"].asFloat()},
-      background["speed"].asFloat(),
+      background["speed"].asFloat() * assetLoader.getBackgroundSpeed(),
       background["limit"].asInt()};
     t_entity_manager->Assign<BackgroundLayer>(background_entity,
                                               background_layer);

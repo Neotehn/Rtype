@@ -9,6 +9,8 @@ IProtocol::getCreateAction(std::vector<std::string> commands, int action_id,
   std::string sprite_path;
   float velocity = 0;
   Action::ShootingType shooting_type;
+  EntityID owner_id;
+  float damage;
   if (type == Action::ObjectType::PLAYER) {
     sprite_path = commands[6];
     return std::make_shared<Action>(
@@ -20,8 +22,11 @@ IProtocol::getCreateAction(std::vector<std::string> commands, int action_id,
       id, CreateAction::ENEMY, rtype::Vector2f{x, y}, "", action_id, velocity));
   } else if (type == Action::ObjectType::BULLET) {
     shooting_type = Action::ShootingType(std::stoi(commands[6]));
-    return std::make_shared<Action>(CreateAction(
-      id, CreateAction::BULLET, rtype::Vector2f{x, y}, shooting_type));
+    owner_id = std::stoull(commands[7]);
+    damage = std::stof(commands[8]);
+    return std::make_shared<Action>(
+      CreateAction(id, CreateAction::BULLET, rtype::Vector2f{x, y}, owner_id,
+                   damage, shooting_type));
   } else if (type == Action::ObjectType::EXPLOSION) {
     return std::make_shared<Action>(CreateAction(id, CreateAction::EXPLOSION,
                                                  rtype::Vector2f{x, y}, "",
@@ -65,6 +70,9 @@ IProtocol::getIncreaseAction(std::vector<std::string> commands, int action_id,
   } else if (type == Action::IncreaseType::COINS) {
     return std::make_shared<Action>(
       IncreaseAction(id, IncreaseAction::COINS, value, action_id));
+  } else if (type == Action::IncreaseType::KILLS) {
+    return std::make_shared<Action>(
+      IncreaseAction(id, IncreaseAction::KILLS, value, action_id));
   } else {
     return std::make_shared<Action>(VoidAction(id, 0));
   }

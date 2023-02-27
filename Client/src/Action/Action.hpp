@@ -25,7 +25,7 @@ class Action : public IAction {
     // TYPE = PLAYER, ENEMY, BULLET, EXPLOSION, POWER_UP, ITEM
     // PLAYER_DATA: X;Y;SPRITE_PATH
     // ENEMY_DATA:  X;Y;VELOCITY
-    // BULLET_DATA: X;Y;SHOOTING_TYPE
+    // BULLET_DATA: X;Y;SHOOTING_TYPE;OWNER_ID
     // EXPLOSION_DATA: X;Y
     // POWER_UP_DATA: X;Y
     // ITEM:  X;Y;ITEM_TYPE
@@ -48,6 +48,7 @@ class Action : public IAction {
     SHIELD,
     BOMB_SHOT,
     COINS,
+    KILLS,
     ERROR_I
   };
 
@@ -93,7 +94,7 @@ class Action : public IAction {
   std::string m_sprite_path;
   IncreaseType m_increase_type = IncreaseType::ERROR_I;
   int m_value = 0;
-  int m_damage = 0;
+  float m_damage = 0;
   ShootingType m_shoot_type = ShootingType::NORMAL;
   float m_velocity = -2;
   int m_item_type = 0;

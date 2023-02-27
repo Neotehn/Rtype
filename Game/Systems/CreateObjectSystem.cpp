@@ -30,7 +30,7 @@ void CreateObjectSystem::update() {
       case Action::ObjectType::BULLET:
         m_play_sounds.push_back(SoundSystem::SoundType::shoot);
         initBulletClient(id, pos, action->getShootType(), m_em,
-                         m_graphic_loader);
+                         m_graphic_loader, action->getCollisionPartnerId());
         break;
       case Action::ObjectType::ENEMY:
         velocity = action->getVelocity();
