@@ -26,7 +26,7 @@ class CreateObjectSystem : public ISystem {
   rtype::IGraphicLoader *m_graphic_loader;
 
   void createPlayer(EntityID t_id, std::string t_sprite_path,
-                    rtype::Vector2f t_pos);
+                    rtype::Vector2f t_pos, int t_player_id);
   Health initPlayerHealthBar(EntityID t_player_id);
   void createBullet(EntityID t_id, rtype::Vector2f t_pos,
                     Action::ShootingType t_shooting_type);

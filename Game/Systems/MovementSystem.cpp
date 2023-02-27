@@ -26,6 +26,14 @@ MovementSystem::MovementSystem(std::shared_ptr<EntityManager> t_em,
                                UdpServer *t_serverCom) {
   m_em = t_em;
   m_serverCom = t_serverCom;
+  m_clientCom = nullptr;
+}
+
+MovementSystem::MovementSystem(std::shared_ptr<EntityManager> t_em,
+                               UdpServer *t_serverCom, UdpClient *t_clientCom) {
+  m_em = t_em;
+  m_clientCom = t_clientCom;
+  m_serverCom = t_serverCom;
 }
 
 MovementSystem::~MovementSystem() {}
@@ -60,19 +68,50 @@ void MovementSystem::update() {
 
 void MovementSystem::updatePlayer(EntityID t_ent) {
   Player *player = (*m_em.get()).Get<Player>(t_ent);
+  int left = 0;
+  int right = 0;
+  int up = 0;
+  int down = 0;
+  int pos = 0;
+
+  if (m_clientCom != nullptr && player->player_id != m_clientCom->m_id) {
+    for (int i = 0; i < m_event_queue.getEventQueue().size(); i++) {
+      Action::ActionType action =
+        m_event_queue.getEventQueue()[i].get()->getType();
+      if (m_event_queue.getEventQueue()[i].get()->getId() == t_ent) {
+        if (action == Action::ActionType::POS) { pos = 1; }
+      }
+    }
+    if (pos) {
+      player->position.position = m_event_queue.getLatestPos(t_ent);
+      player->body->setPosition(
+        {player->position.position.x, player->position.position.y});
+    }
+    return;
+  }
+  for (int i = 0; i < m_event_queue.getEventQueue().size(); i++) {
+    Action::ActionType action =
+      m_event_queue.getEventQueue()[i].get()->getType();
+    if (m_event_queue.getEventQueue()[i].get()->getId() == t_ent) {
+      if (action == Action::ActionType::LEFT) {
+        left = 1;
+      } else if (action == Action::ActionType::UP) {
+        up = 1;
+      } else if (action == Action::ActionType::DOWN) {
+        down = 1;
+      } else if (action == Action::ActionType::RIGHT) {
+        right = 1;
+      } else if (action == Action::ActionType::POS) {
+        pos = 1;
+      }
+    }
+  }
   rtype::Vector2f direction = {0, 0};
-  if (m_event_queue.checkIfKeyPressed(Action::ActionType::LEFT)) {
-    direction.x = -1;
-  }
-  if (m_event_queue.checkIfKeyPressed(Action::ActionType::RIGHT)) {
-    direction.x = 1;
-  }
-  if (m_event_queue.checkIfKeyPressed(Action::ActionType::UP)) {
-    direction.y = -1;
-  }
-  if (m_event_queue.checkIfKeyPressed(Action::ActionType::DOWN)) {
-    direction.y = 1;
-  }
+
+  if (left) { direction.x = -1; }
+  if (right) { direction.x = 1; }
+  if (up) { direction.y = -1; }
+  if (down) { direction.y = 1; }
   if (direction.x != 0 || direction.y != 0) {
     player->position.velocity = direction * player->speed;
   }
@@ -80,9 +119,7 @@ void MovementSystem::updatePlayer(EntityID t_ent) {
   keepPlayerInsideScreen(
     player->position.position,
     {player->body->getSize().x, player->body->getSize().y});
-  if (m_event_queue.checkIfKeyPressed(Action::ActionType::POS)) {
-    player->position.position = m_event_queue.getLatestPos(t_ent);
-  }
+  if (pos) { player->position.position = m_event_queue.getLatestPos(t_ent); }
   player->body->setPosition(
     {player->position.position.x, player->position.position.y});
   player->health.body->setPosition(
