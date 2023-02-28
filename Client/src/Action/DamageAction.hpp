@@ -8,7 +8,8 @@
 class DamageAction : public Action {
  public:
   DamageAction(EntityID t_id, int t_damage, EntityID t_player_id);
-  DamageAction(EntityID t_id, int t_damage, int t_action_id, EntityID t_player_id);
+  DamageAction(EntityID t_id, int t_damage, int t_action_id,
+               EntityID t_player_id);
 
   ~DamageAction() = default;
 };
