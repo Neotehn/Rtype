@@ -23,6 +23,7 @@ class AnimationSystem : public ISystem {
   Timer m_timer;
   InputManager &m_input_manager;
 
+  void generalAnimation(EntityID t_ent, AnimationObj *anim);
   void animateAnimationObj();
   void animateSpinningItem();
 };

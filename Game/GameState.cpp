@@ -104,7 +104,7 @@ void GameState::update() {
       if (type == Action::ActionType::RESTART && !action->isTriggeredByUser()) {
         *m_level = action->getId();
         loadLevel(m_level, m_em, m_graphic_loader, m_music,
-                  (m_flag == CommunicationFlag::client));
+                  (m_flag == CommunicationFlag::client), m_serverCom);
       }
     }
     SystemData data = {.event_queue = m_input_manager.getInputs()};

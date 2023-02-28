@@ -34,18 +34,7 @@ void CollisionSystem::playerAnimationCollision(Player *t_player,
     bool collision = t_player->body->intersects(enemy->body->getGlobalBounds());
 
     if (collision) {
-      if (enemy->type == "enemy") {
-        m_serverCom->addEvent(
-          std::make_shared<Action>(CollisionAction(t_player_ent, enemy_ent)));
-        m_serverCom->addEvent(std::make_shared<Action>(
-          CreateAction(createExplosion(), Action::ObjectType::EXPLOSION,
-                       enemy->position.position, "")));
-        m_serverCom->addEvent(
-          std::make_shared<Action>(DestroyAction(enemy_ent)));
-        m_serverCom->addEvent(
-          std::make_shared<Action>(DamageAction(enemy_ent, 1, t_player_ent)));
-        m_em->destroyEntity(enemy_ent);
-      } else if (enemy->type == "powerup") {
+      if (enemy->type == "powerup") {
         t_player->coins += 1;
         m_serverCom->addEvent(std::make_shared<Action>(
           IncreaseAction(t_player_ent, Action::IncreaseType::COINS, 1)));
@@ -53,6 +42,24 @@ void CollisionSystem::playerAnimationCollision(Player *t_player,
           std::make_shared<Action>(DestroyAction(enemy_ent)));
         m_em->destroyEntity(enemy_ent);
       }
+    }
+  }
+
+  for (EntityID enemy_ent : EntityViewer<Enemy>(*m_em.get())) {
+    Enemy *enemy = (*m_em.get()).Get<Enemy>(enemy_ent);
+    bool collision =
+      t_player->body->intersects(enemy->obj->body->getGlobalBounds());
+
+    if (collision) {
+      m_serverCom->addEvent(
+        std::make_shared<Action>(CollisionAction(t_player_ent, enemy_ent)));
+      m_serverCom->addEvent(std::make_shared<Action>(
+        CreateAction(createExplosion(), Action::ObjectType::EXPLOSION,
+                     enemy->obj->position.position, "")));
+      m_serverCom->addEvent(std::make_shared<Action>(DestroyAction(enemy_ent)));
+      m_serverCom->addEvent(
+        std::make_shared<Action>(DamageAction(enemy_ent, 1, t_player_ent)));
+      m_em->destroyEntity(enemy_ent);
     }
   }
 }
@@ -102,22 +109,32 @@ void CollisionSystem::playerItemCollision(Player *t_player,
 }
 
 void CollisionSystem::bulletEnemyCollision() {
-  for (EntityID enemy_ent : EntityViewer<AnimationObj>(*m_em.get())) {
-    AnimationObj *enemy = (*m_em.get()).Get<AnimationObj>(enemy_ent);
+  for (EntityID enemy_ent : EntityViewer<Enemy>(*m_em.get())) {
+    Enemy *enemy = (*m_em.get()).Get<Enemy>(enemy_ent);
 
-    if (enemy->type != "enemy") { continue; }
     for (EntityID bullet_ent : EntityViewer<Bullet>(*m_em.get())) {
       Bullet *bullet = (*m_em.get()).Get<Bullet>(bullet_ent);
 
-      bool collision = enemy->body->intersects(bullet->body->getGlobalBounds());
+      bool collision =
+        enemy->obj->body->intersects(bullet->body->getGlobalBounds());
       if (collision) {
-        m_serverCom->addEvent(std::make_shared<Action>(IncreaseAction(
-          bullet->owner, Action::IncreaseType::KILLS, enemy->kill_value)));
-        m_serverCom->addEvent(
-          std::make_shared<Action>(DestroyAction(enemy_ent)));
-        m_serverCom->addEvent(
-          std::make_shared<Action>(DestroyAction(bullet_ent)));
-        m_em->destroyEntity(enemy_ent);
+        enemy->health.cur_health -= bullet->damage;
+        if (enemy->health.cur_health <= 0) {
+          enemy->health.cur_health = 0;
+          m_serverCom->addEvent(std::make_shared<Action>(
+            IncreaseAction(bullet->owner, Action::IncreaseType::KILLS,
+                           enemy->obj->kill_value)));
+          m_serverCom->addEvent(
+            std::make_shared<Action>(DestroyAction(enemy_ent)));
+          m_serverCom->addEvent(
+            std::make_shared<Action>(DestroyAction(bullet_ent)));
+          m_em->destroyEntity(enemy_ent);
+        } else {
+          m_serverCom->addEvent(std::make_shared<Action>(
+            DamageAction(enemy_ent, bullet->damage, enemy_ent)));
+          m_serverCom->addEvent(
+            std::make_shared<Action>(DestroyAction(bullet_ent)));
+        }
         m_em->destroyEntity(bullet_ent);
         break;
       }

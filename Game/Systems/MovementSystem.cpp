@@ -58,6 +58,18 @@ void MovementSystem::update() {
     anim->body->setPosition(
       {anim->position.position.x, anim->position.position.y});
   }
+  for (EntityID ent : EntityViewer<Enemy>(*m_em.get())) {
+    Enemy *enem = (*m_em.get()).Get<Enemy>(ent);
+    enem->obj->position.position += enem->obj->position.velocity;
+    enem->obj->body->setPosition(
+      {enem->obj->position.position.x, enem->obj->position.position.y});
+    enem->health.left_health->setPosition(
+      {enem->obj->position.position.x - 40,
+       enem->obj->position.position.y - 40});
+    enem->health.missing_health->setPosition(
+      {enem->obj->position.position.x - 40,
+       enem->obj->position.position.y - 40});
+  }
   for (EntityID ent : EntityViewer<SpinningItem>(*m_em.get())) {
     SpinningItem *anim = (*m_em.get()).Get<SpinningItem>(ent);
     anim->position.position += anim->position.velocity;

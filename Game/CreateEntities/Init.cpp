@@ -8,11 +8,14 @@ std::vector<EntityID> background_entities;
 
 bool loadLevel(int *t_level, std::shared_ptr<EntityManager> t_em,
                rtype::IGraphicLoader *t_graphic_loader, rtype::IMusic *t_music,
-               bool t_play_music) {
+               bool t_play_music, UdpServer *t_server_com) {
   for (EntityID ent : EntityViewer<Bullet>(*t_em.get())) {
     t_em->destroyEntity(ent);
   }
   for (EntityID ent : EntityViewer<AnimationObj>(*t_em.get())) {
+    t_em->destroyEntity(ent);
+  }
+  for (EntityID ent : EntityViewer<Enemy>(*t_em.get())) {
     t_em->destroyEntity(ent);
   }
   for (EntityID ent : EntityViewer<SpinningItem>(*t_em.get())) {
@@ -40,6 +43,9 @@ bool loadLevel(int *t_level, std::shared_ptr<EntityManager> t_em,
   t_music->stop();
   loadMusic(t_music, t_play_music);
   initBackground(t_em, t_graphic_loader);
+  if (level == 2 && t_server_com) {
+    initPayWall(t_em, t_graphic_loader, t_server_com);
+  }
   return true;
 }
 
@@ -116,7 +122,7 @@ Health initPlayerHealthBar(rtype::IGraphicLoader *t_graphic_loader) {
 }
 
 void initBulletClient(EntityID t_id, rtype::Vector2f t_pos,
-                      Action::ShootingType t_shooting_type,
+                      std::shared_ptr<Action> t_action,
                       std::shared_ptr<EntityManager> t_em,
                       rtype::IGraphicLoader *t_graphic_loader,
                       EntityID t_owner_id) {
@@ -126,7 +132,7 @@ void initBulletClient(EntityID t_id, rtype::Vector2f t_pos,
   bullet_body->setSize({20, 20});
   bullet_body->setPosition({t_pos.x, t_pos.y});
 
-  switch (t_shooting_type) {
+  switch (t_action->getShootType()) {
     case Action::ShootingType::NORMAL:
       bullet_body->setTexture(
         SpriteECS("./../Client/sprites/shoot2.png", t_graphic_loader)
@@ -145,22 +151,46 @@ void initBulletClient(EntityID t_id, rtype::Vector2f t_pos,
   }
   std::cout << "create bullet for player " << std::to_string(t_owner_id)
             << std::endl;
-  Bullet displayable_bullet = Bullet{bullet_body, 10.0, t_pos, t_owner_id};
+  Bullet displayable_bullet =
+    Bullet{bullet_body, 10.0, t_pos, t_owner_id,
+           static_cast<float>(t_action->getShootDamage())};
   t_em->Assign<Bullet>(bullet, displayable_bullet);
+}
+
+DynamicHealthBar initEnemyHealth(rtype::IGraphicLoader *t_graphic_loader,
+                                 rtype::Vector2f t_pos,
+                                 rtype::Vector2f t_offset, int t_max_health) {
+  rtype::IRectangleShape *missing_health =
+    t_graphic_loader->loadRectangleShape();
+  Pos bar_pos = Pos{rtype::Vector2f{0, 0}, t_pos};
+  missing_health->setPosition(
+    {bar_pos.position.x + t_offset.x, bar_pos.position.y + t_offset.y});
+  missing_health->setSize({100, 15});
+  missing_health->setFillColor(rtype::Red);
+
+  rtype::IRectangleShape *health_bar = t_graphic_loader->loadRectangleShape();
+  health_bar->setPosition(
+    {bar_pos.position.x + t_offset.x, bar_pos.position.y + t_offset.y});
+  health_bar->setSize({100, 15});
+  health_bar->setFillColor(rtype::Green);
+  DynamicHealthBar health = DynamicHealthBar{
+    missing_health, health_bar, t_max_health, t_max_health, bar_pos};
+  return health;
 }
 
 void initEnemy(std::shared_ptr<EntityManager> t_em,
                rtype::IGraphicLoader *t_graphic_loader,
                UdpServer *t_server_com) {
   Json::Value enemy_data = assetLoader.getEnemyData()[0];
-  int size = enemy_data["size"].asInt();
+  rtype::Vector2i size = {enemy_data["size"]["x"].asInt(),
+                          enemy_data["size"]["y"].asInt()};
   EntityID enemy = t_em->createNewEntity();
   SpriteECS sprite = SpriteECS(enemy_data["path"].asString(), t_graphic_loader);
   rtype::Vector2f enemy_pos = {800, float(rand() % 600 + 100)};
   float velocity_direction = float(rand() % 3 - 1);
 
   rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
-  body->setSize({30, 30});
+  body->setSize({33, 33});
   body->setPosition({enemy_pos.x, enemy_pos.y});
   body->setTexture(sprite.getTexture());
   body->setFillColor(
@@ -168,15 +198,17 @@ void initEnemy(std::shared_ptr<EntityManager> t_em,
                  static_cast<unsigned char>(enemy_data["color"]["g"].asInt()),
                  static_cast<unsigned char>(enemy_data["color"]["b"].asInt()),
                  static_cast<unsigned char>(enemy_data["color"]["a"].asInt())});
-  body->setTextureRect(rtype::IntRect{0, 0, size, size});
+  body->setTextureRect(rtype::IntRect{0, 0, size.x, size.y});
 
-  AnimationObj enemy_obj = AnimationObj{
+  AnimationObj *enemy_obj = new AnimationObj{
     "enemy", Pos{{-7, velocity_direction}, enemy_pos},
     AnimationTime{.current_animation_time = 0,
                   .display_time = 1,
                   .last_timer = 0},
-    AnimationRect{.size = size, .limit = enemy_data["limit"].asInt()}, body};
-  t_em->Assign<AnimationObj>(enemy, enemy_obj);
+    AnimationRect{.size = size.x, .limit = enemy_data["limit"].asInt()}, body};
+  t_em->Assign<Enemy>(
+    enemy,
+    {enemy_obj, initEnemyHealth(t_graphic_loader, enemy_pos, {-40, -40}, 2)});
   t_server_com->addEvent(std::make_shared<Action>(CreateAction(
     enemy, Action::ObjectType::ENEMY, enemy_pos, "", velocity_direction)));
 }
@@ -185,27 +217,30 @@ void initEnemyClient(EntityID t_id, rtype::Vector2f t_pos, float t_velocity,
                      std::shared_ptr<EntityManager> t_em,
                      rtype::IGraphicLoader *t_graphic_loader) {
   Json::Value enemy_data = assetLoader.getEnemyData()[0];
-  int size = enemy_data["size"].asInt();
+  rtype::Vector2i size = {enemy_data["size"]["x"].asInt(),
+                          enemy_data["size"]["y"].asInt()};
   EntityID enemy = t_em->createNewEntity(t_id);
   SpriteECS sprite = SpriteECS(enemy_data["path"].asString(), t_graphic_loader);
   rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
-  body->setSize({30, 30});
+  body->setSize({33, 33});
   body->setPosition({t_pos.x, t_pos.y});
   body->setTexture(sprite.getTexture());
-  body->setTextureRect(rtype::IntRect{0, 0, size, size});
+  body->setTextureRect(rtype::IntRect{0, 0, size.x, size.y});
   body->setFillColor(
     rtype::Color{static_cast<unsigned char>(enemy_data["color"]["r"].asInt()),
                  static_cast<unsigned char>(enemy_data["color"]["g"].asInt()),
                  static_cast<unsigned char>(enemy_data["color"]["b"].asInt()),
                  static_cast<unsigned char>(enemy_data["color"]["a"].asInt())});
 
-  AnimationObj enemy_obj = AnimationObj{
+  AnimationObj *enemy_obj = new AnimationObj{
     "enemy", Pos{{-7, t_velocity}, t_pos},
     AnimationTime{.current_animation_time = 0,
                   .display_time = 0.1,
                   .last_timer = 0},
-    AnimationRect{.size = size, .limit = enemy_data["limit"].asInt()}, body};
-  t_em->Assign<AnimationObj>(enemy, enemy_obj);
+    AnimationRect{.size = size.x, .limit = enemy_data["limit"].asInt()}, body};
+  t_em->Assign<Enemy>(
+    enemy,
+    {enemy_obj, initEnemyHealth(t_graphic_loader, t_pos, {-40, -40}, 2)});
 }
 
 void initExplosionClient(EntityID t_id, rtype::Vector2f t_pos,
@@ -393,14 +428,16 @@ void initShoot(std::shared_ptr<Action> t_action,
   bullet_body->setSize({20, 20});
   bullet_body->setPosition({bullet_pos.x, bullet_pos.y});
   bullet_body->setTexture(sprite.getTexture());
+  float bullet_damage = 1;
 
   std::cout << "init bullet with owner id: "
             << std::to_string(t_action->getId()) << std::endl;
-  t_em->Assign<Bullet>(
-    bullet, Bullet{bullet_body, 10.0, bullet_pos, t_action->getId()});
-  t_server_com->addEvent(std::make_shared<Action>(CreateAction(
-    bullet, Action::ObjectType::BULLET, bullet_pos, t_action->getId(),
-    player->damage_factor, std::to_string(Action::ShootingType::NORMAL))));
+  t_em->Assign<Bullet>(bullet, Bullet{bullet_body, 10.0, bullet_pos,
+                                      t_action->getId(), bullet_damage});
+  t_server_com->addEvent(std::make_shared<Action>(
+    CreateAction(bullet, Action::ObjectType::BULLET, bullet_pos,
+                 t_action->getId(), player->damage_factor * bullet_damage,
+                 std::to_string(Action::ShootingType::NORMAL))));
 }
 
 // TODO: replace by actual fire shoot
@@ -420,12 +457,14 @@ void initFireShoot(std::shared_ptr<Action> t_action,
   bullet_body->setSize({20, 20});
   bullet_body->setPosition({bullet_pos.x, bullet_pos.y});
   bullet_body->setTexture(sprite.getTexture());
+  float bullet_damage = 3;
 
-  t_em->Assign<Bullet>(
-    bullet, Bullet{bullet_body, 10.0, bullet_pos, t_action->getId()});
-  t_server_com->addEvent(std::make_shared<Action>(CreateAction(
-    bullet, Action::ObjectType::BULLET, bullet_pos, t_action->getId(),
-    player->damage_factor, std::to_string(Action::ShootingType::FIRE))));
+  t_em->Assign<Bullet>(bullet, Bullet{bullet_body, 10.0, bullet_pos,
+                                      t_action->getId(), bullet_damage});
+  t_server_com->addEvent(std::make_shared<Action>(
+    CreateAction(bullet, Action::ObjectType::BULLET, bullet_pos,
+                 t_action->getId(), player->damage_factor * bullet_damage,
+                 std::to_string(Action::ShootingType::FIRE))));
 }
 
 // TODO: replace by actual bomb shoot
@@ -445,12 +484,14 @@ void initBombShoot(std::shared_ptr<Action> t_action,
   bullet_body->setSize({20, 20});
   bullet_body->setPosition({bullet_pos.x, bullet_pos.y});
   bullet_body->setTexture(sprite.getTexture());
+  float bullet_damage = 5;
 
-  t_em->Assign<Bullet>(
-    bullet, Bullet{bullet_body, 10.0, bullet_pos, t_action->getId()});
-  t_server_com->addEvent(std::make_shared<Action>(CreateAction(
-    bullet, Action::ObjectType::BULLET, bullet_pos, t_action->getId(),
-    player->damage_factor, std::to_string(Action::ShootingType::BOMB))));
+  t_em->Assign<Bullet>(bullet, Bullet{bullet_body, 10.0, bullet_pos,
+                                      t_action->getId(), bullet_damage});
+  t_server_com->addEvent(std::make_shared<Action>(
+    CreateAction(bullet, Action::ObjectType::BULLET, bullet_pos,
+                 t_action->getId(), player->damage_factor * bullet_damage,
+                 std::to_string(Action::ShootingType::BOMB))));
 }
 
 void loadMusic(rtype::IMusic *t_music, bool t_play) {
@@ -491,4 +532,83 @@ void initBackground(std::shared_ptr<EntityManager> t_entity_manager,
                                               background_layer);
     index++;
   }
+}
+
+void initPayWall(std::shared_ptr<EntityManager> t_em,
+                 rtype::IGraphicLoader *t_graphic_loader,
+                 UdpServer *t_server_com) {
+  Json::Value enemy_data_list = assetLoader.getEnemyData();
+  if (enemy_data_list.size() < 2) {
+    std::cout << "Error while loading enemy data" << std::endl;
+    return;
+  }
+  Json::Value enemy_data = enemy_data_list[1];
+  rtype::Vector2i size = {enemy_data["size"]["x"].asInt(),
+                          enemy_data["size"]["y"].asInt()};
+  EntityID enemy = t_em->createNewEntity();
+  SpriteECS sprite = SpriteECS(enemy_data["path"].asString(), t_graphic_loader);
+  rtype::Vector2f enemy_pos = {800, 0};
+  float velocity_direction = 0;
+
+  rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
+  body->setSize({60, 1600});
+  body->setPosition({enemy_pos.x, enemy_pos.y});
+  body->setTexture(sprite.getTexture());
+  body->setFillColor(
+    rtype::Color{static_cast<unsigned char>(enemy_data["color"]["r"].asInt()),
+                 static_cast<unsigned char>(enemy_data["color"]["g"].asInt()),
+                 static_cast<unsigned char>(enemy_data["color"]["b"].asInt()),
+                 static_cast<unsigned char>(enemy_data["color"]["a"].asInt())});
+  body->setTextureRect(rtype::IntRect{0, 0, size.x, size.y});
+
+  AnimationObj *enemy_obj = new AnimationObj{
+    "paywall", Pos{{-1, velocity_direction}, enemy_pos},
+    AnimationTime{.current_animation_time = 0,
+                  .display_time = 1,
+                  .last_timer = 0},
+    AnimationRect{.size = size.x, .limit = enemy_data["limit"].asInt()}, body};
+
+  t_em->Assign<Enemy>(
+    enemy,
+    {enemy_obj, initEnemyHealth(t_graphic_loader, enemy_pos, {40, 40}, 100)});
+  t_server_com->addEvent(std::make_shared<Action>(CreateAction(
+    enemy, Action::ObjectType::PAYWALL, enemy_pos, "", velocity_direction)));
+}
+
+void initPayWallClient(EntityID t_id, std::shared_ptr<EntityManager> t_em,
+                       rtype::IGraphicLoader *t_graphic_loader) {
+  Json::Value enemy_data_list = assetLoader.getEnemyData();
+  if (enemy_data_list.size() < 2) {
+    std::cout << "Error while loading enemy data" << std::endl;
+    return;
+  }
+  Json::Value enemy_data = enemy_data_list[1];
+  rtype::Vector2i size = {enemy_data["size"]["x"].asInt(),
+                          enemy_data["size"]["y"].asInt()};
+  EntityID enemy = t_em->createNewEntity(t_id);
+  SpriteECS sprite = SpriteECS(enemy_data["path"].asString(), t_graphic_loader);
+  rtype::Vector2f enemy_pos = {800, 200};
+  float velocity_direction = 0;
+
+  rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
+  body->setSize({60, 1600});
+  body->setPosition({enemy_pos.x, enemy_pos.y});
+  body->setTexture(sprite.getTexture());
+  body->setFillColor(
+    rtype::Color{static_cast<unsigned char>(enemy_data["color"]["r"].asInt()),
+                 static_cast<unsigned char>(enemy_data["color"]["g"].asInt()),
+                 static_cast<unsigned char>(enemy_data["color"]["b"].asInt()),
+                 static_cast<unsigned char>(enemy_data["color"]["a"].asInt())});
+  body->setTextureRect(rtype::IntRect{0, 0, size.x, size.y});
+
+  AnimationObj *enemy_obj = new AnimationObj{
+    "paywall", Pos{{-1, velocity_direction}, enemy_pos},
+    AnimationTime{.current_animation_time = 0,
+                  .display_time = 1,
+                  .last_timer = 0},
+    AnimationRect{.size = size.x, .limit = enemy_data["limit"].asInt()}, body};
+
+  t_em->Assign<Enemy>(
+    enemy,
+    {enemy_obj, initEnemyHealth(t_graphic_loader, enemy_pos, {40, -40}, 100)});
 }

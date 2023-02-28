@@ -40,6 +40,20 @@ void DamageSystem::update() {
 
       player->health.body->setTexture(health_new_bar.getTexture());
     }
+    for (EntityID enemy_id : EntityViewer<Enemy>(*m_em.get())) {
+      if (enemy_id != action->getCollisionPartnerId()) { continue; }
+      Enemy *enemy = (*m_em.get()).Get<Enemy>(enemy_id);
+      enemy->health.cur_health -= action->getShootDamage();
+
+      if (enemy->health.cur_health <= 0) {
+        std::cout << "Enemy died :)" << std::endl;
+        m_play_sounds.push_back(SoundSystem::SoundType::death);
+      }
+      float x_size =
+        (float(enemy->health.cur_health) / float(enemy->health.max_health)) *
+        100.0;
+      enemy->health.left_health->setSize({x_size, 15});
+    }
   }
 }
 

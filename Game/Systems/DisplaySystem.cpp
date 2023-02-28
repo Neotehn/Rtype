@@ -27,6 +27,12 @@ void DisplaySystem::update() {
     AnimationObj *anim = (*m_em.get()).Get<AnimationObj>(ent);
     m_window->draw(anim->body);
   }
+  for (EntityID ent : EntityViewer<Enemy>(*m_em.get())) {
+    Enemy *enem = (*m_em.get()).Get<Enemy>(ent);
+    m_window->draw(enem->obj->body);
+    m_window->draw(enem->health.missing_health);
+    m_window->draw(enem->health.left_health);
+  }
   for (EntityID ent : EntityViewer<SpinningItem>(*m_em.get())) {
     SpinningItem *item = (*m_em.get()).Get<SpinningItem>(ent);
     m_window->draw(item->body);

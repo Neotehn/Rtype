@@ -124,6 +124,7 @@ struct Bullet {
   float speed;
   rtype::Vector2f pos;
   EntityID owner = 0;
+  float damage = 1;
 };
 
 struct AnimationObj {
@@ -133,6 +134,19 @@ struct AnimationObj {
   AnimationRect rect;
   rtype::IRectangleShape *body;
   int kill_value = 5;
+};
+
+struct DynamicHealthBar {
+  rtype::IRectangleShape *missing_health;
+  rtype::IRectangleShape *left_health;
+  int cur_health;
+  int max_health;
+  Pos position;
+};
+
+struct Enemy {
+  AnimationObj *obj;
+  DynamicHealthBar health;
 };
 
 namespace rtype {
