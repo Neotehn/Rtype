@@ -113,7 +113,7 @@ void CreateLobbyState::update() {
         m_next = StateMachine::build<GameState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, true);
-      }
+      }  // currently lobby is just set between main and game
     }
     switch (event.type) {
       case rtype::EventType::Closed:

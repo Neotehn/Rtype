@@ -100,15 +100,9 @@ void GameState::update() {
       std::cout << "waiting on Client Connection" << std::endl;
       boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
     }
-    while (m_flag == CommunicationFlag::client &&
-           m_clientCom->m_flag != m_clientCom->connected && m_is_running) {
-      rtype::Vector2i mouse_pos = m_mouse->getMousePosition(
-        m_window);  // if wanted to revert to original remove everything except l.146 - 151
-      rtype::Vector2f mouse_pos_f{static_cast<float>(mouse_pos.x),
-                                  static_cast<float>(mouse_pos.y)};
-      for (auto event1 = rtype::Event{}; m_window->pollEvent(event1);) {
-        if (event1.type == rtype::EventType::Closed) { m_is_running = false; }
-      }
+    while (  // if wanted to revert to original remove everything except l.112 - 115
+      m_flag == CommunicationFlag::client &&
+      m_clientCom->m_flag != m_clientCom->connected && m_is_running) {
       std::cout << "Connecting to Server ..." << std::endl;
       boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
       StateAction start_action =
