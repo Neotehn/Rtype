@@ -12,10 +12,10 @@ class ShootingSystem : public ISystem {
  public:
   ShootingSystem(std::shared_ptr<EntityManager> t_em, UdpServer *t_serverCom,
                  rtype::IGraphicLoader *t_graphic_loader);
-  ~ShootingSystem();
+  ~ShootingSystem() = default;
 
-  void update();
-  void updateData(SystemData &t_data);
+  void update() override;
+  void updateData(SystemData &t_data) override;
 
  private:
   EventQueue m_event_queue;

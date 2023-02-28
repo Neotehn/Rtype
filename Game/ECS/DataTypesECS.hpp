@@ -142,6 +142,7 @@ struct DynamicHealthBar {
   int cur_health;
   int max_health;
   Pos position;
+  rtype::Vector2f offset;
 };
 
 struct Enemy {

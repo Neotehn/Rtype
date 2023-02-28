@@ -123,7 +123,7 @@ void GameState::update() {
              type == Action::ActionType::LEFT ||
              type == Action::ActionType::RIGHT ||
              type == Action::ActionType::SHOOT) &&
-            action.get()->isTriggeredByUser())
+            action->isTriggeredByUser())
           m_clientCom->sendMessage(action->getCommand());
       }
     }

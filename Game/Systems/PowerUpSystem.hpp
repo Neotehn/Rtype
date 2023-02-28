@@ -11,10 +11,10 @@ class PowerUpSystem : public ISystem {
   PowerUpSystem(std::shared_ptr<EntityManager> t_em,
                 std::vector<SoundSystem::SoundType> &t_sounds,
                 rtype::IGraphicLoader *t_graphic_loader);
-  ~PowerUpSystem();
+  ~PowerUpSystem() = default;
 
-  void update();
-  void updateData(SystemData &t_data);
+  void update() override;
+  void updateData(SystemData &t_data) override;
 
  private:
   EventQueue m_event_queue;

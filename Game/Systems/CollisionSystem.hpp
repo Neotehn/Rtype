@@ -10,10 +10,10 @@
 class CollisionSystem : public ISystem {
  public:
   CollisionSystem(std::shared_ptr<EntityManager> t_em, UdpServer *t_serverCom);
-  ~CollisionSystem();
+  ~CollisionSystem() = default;
 
-  void update();
-  void updateData(SystemData &t_data);
+  void update() override;
+  void updateData(SystemData &t_data) override;
 
  private:
   std::shared_ptr<EntityManager> m_em;

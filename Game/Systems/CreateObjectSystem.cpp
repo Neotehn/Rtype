@@ -9,8 +9,6 @@ CreateObjectSystem::CreateObjectSystem(
   m_graphic_loader = t_graphic_loader;
 }
 
-CreateObjectSystem::~CreateObjectSystem() {}
-
 void CreateObjectSystem::updateData(SystemData &t_data) {
   m_event_queue = t_data.event_queue;
 }
@@ -21,7 +19,7 @@ void CreateObjectSystem::update() {
     Action::ObjectType type = action->getCreateType();
     EntityID id = action->getId();
     rtype::Vector2f pos = action->getCreatePosition();
-    float velocity = 0;
+    float velocity;
     int player_id = action->getClientId();
     switch (type) {
       case Action::ObjectType::PLAYER:

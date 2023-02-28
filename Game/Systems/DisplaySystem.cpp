@@ -6,8 +6,6 @@ DisplaySystem::DisplaySystem(std::shared_ptr<EntityManager> t_em,
   m_window = t_window;
 }
 
-DisplaySystem::~DisplaySystem() {}
-
 void DisplaySystem::update() {
   m_window->clear();
   for (EntityID ent : EntityViewer<BackgroundLayer>(*m_em.get())) {

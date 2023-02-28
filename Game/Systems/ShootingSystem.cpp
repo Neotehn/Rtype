@@ -8,8 +8,6 @@ ShootingSystem::ShootingSystem(std::shared_ptr<EntityManager> t_em,
   m_graphic_loader = t_graphic_loader;
 }
 
-ShootingSystem::~ShootingSystem() {}
-
 void ShootingSystem::updateData(SystemData &t_data) {
   m_event_queue = t_data.event_queue;
 }
@@ -34,7 +32,7 @@ void ShootingSystem::update() {
 }
 
 void ShootingSystem::shootFire(std::shared_ptr<Action> action) {
-  Player *player = (*m_em.get()).Get<Player>(action->getId());
+  Player *player = (*m_em).Get<Player>(action->getId());
 
   if (player->fire_shot == 0) return;
   player->fire_shot -= 1;
@@ -44,7 +42,7 @@ void ShootingSystem::shootFire(std::shared_ptr<Action> action) {
 }
 
 void ShootingSystem::shootBomb(std::shared_ptr<Action> action) {
-  Player *player = (*m_em.get()).Get<Player>(action->getId());
+  Player *player = (*m_em).Get<Player>(action->getId());
 
   if (player->bomb_shot == 0) return;
   player->bomb_shot -= 1;

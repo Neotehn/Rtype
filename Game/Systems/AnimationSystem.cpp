@@ -8,8 +8,6 @@ AnimationSystem::AnimationSystem(std::shared_ptr<EntityManager> t_em,
   m_timer.startTimer();
 }
 
-AnimationSystem::~AnimationSystem() {}
-
 void AnimationSystem::updateData(SystemData &t_data) {}
 
 void AnimationSystem::update() {
@@ -53,8 +51,8 @@ void AnimationSystem::animateAnimationObj() {
 }
 
 void AnimationSystem::animateSpinningItem() {
-  for (EntityID ent : EntityViewer<SpinningItem>(*m_em.get())) {
-    SpinningItem *item = (*m_em.get()).Get<SpinningItem>(ent);
+  for (EntityID ent : EntityViewer<SpinningItem>(*m_em)) {
+    SpinningItem *item = (*m_em).Get<SpinningItem>(ent);
 
     if (item->time.last_timer == 0) {
       item->time.last_timer = m_timer.returnTime();
