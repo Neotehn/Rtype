@@ -31,11 +31,15 @@ class Action : public IAction {
     // ITEM:  X;Y;ITEM_TYPE
     INCREASE,  // ACTION_ID;INCREASE;ID;TYPE;VALUE
     // TYPE = LIFE, SPEED, SHOOTING_SPEED
-    COLLISION,  // ACTION_ID;COLLISION;ID1;ID2
-    DAMAGE,     // ACTION_ID;DAMAGE;ID1;DMG
-    DESTROY,    // ACTION_ID;DESTROY;ID1
-    DEAD,       // ACTION_ID;DEAD;ID
-    END,        // ACTION_ID;END; OR END;PORT_NB
+    COLLISION,          // ACTION_ID;COLLISION;ID1;ID2
+    DAMAGE,             // ACTION_ID;DAMAGE;ID1;DMG
+    DESTROY,            // ACTION_ID;DESTROY;ID1
+    DEAD,               // ACTION_ID;DEAD;ID
+    END,                // ACTION_ID;END; OR END;PORT_NB
+    JOINLOBBY,          // ACTION_ID;LOBBY_IP;LOBBY_ID;PLAYERNAME
+    CREATELOBBY,        // ACTION_ID;LOBBY_IP;PLAYERNAME
+    JOINSUCCESSFULL,    // ACTION_ID;
+    CREATESUCCESSFULL,  // ACTION_ID;
     ERROR,
   };
   enum ShootingType { NORMAL, FIRE, BOMB };
@@ -84,6 +88,15 @@ class Action : public IAction {
   int getClientId() const;
   void setClientId(int t_client_id);
 
+  void setLobbyId(int t_lobby_id);
+  int getLobbyId() const;
+
+  void setPlayerName(std::string t_player_name);
+  std::string getPlayerName() const;
+
+  void setLobbyIp(std::string t_lobby_ip);
+  std::string getLobbyIp() const;
+
  protected:
   int m_action_id;
   ActionType m_type;
@@ -102,6 +115,9 @@ class Action : public IAction {
   float m_velocity = -2;
   int m_item_type = 0;
   int m_client_id = 0;
+  std::string m_player_name = "";
+  std::string m_lobby_ip = "";
+  int m_lobby_id = 0;
 };
 
 #endif  //R_TYPE_CLIENT_ACTION_HPP
