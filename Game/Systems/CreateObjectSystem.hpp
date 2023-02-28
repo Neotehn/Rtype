@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 
+#include "../CreateEntities/Init.hpp"
 #include "../ECS/ISystem.hpp"
 #include "../ECS/DataTypesECS.hpp"
 #include "./AnimationSystem.hpp"

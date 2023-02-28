@@ -3,6 +3,7 @@
 
 #include <memory>
 
+#include "../CreateEntities/Init.hpp"
 #include "../ECS/ISystem.hpp"
 #include "../Encapsulation/IMusic.hpp"
 #include "../Encapsulation/ISounds.hpp"
@@ -19,7 +20,6 @@ class SoundSystem : public ISystem {
   virtual void updateData(SystemData &t_data);
 
  private:
-  rtype::IMusic *m_music;
   rtype::ISounds *m_sounds;
   rtype::IGraphicLoader *m_graphic_loader;
 

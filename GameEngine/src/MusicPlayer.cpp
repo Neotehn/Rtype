@@ -1,6 +1,6 @@
 #include "./MusicPlayer.hpp"
 
-MusicPlayer::MusicPlayer() : m_volume(100.f) {}
+MusicPlayer::MusicPlayer() : m_volume(50.f) {}
 
 MusicPlayer::~MusicPlayer() { delete m_music; }
 

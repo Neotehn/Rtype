@@ -3,6 +3,7 @@
 
 #include <memory>
 
+#include "../CreateEntities/Init.hpp"
 #include "../ECS/ISystem.hpp"
 #include "../../Client/src/Action/Action.hpp"
 #include "../../Server/Protocol/UdpServer.hpp"
@@ -21,7 +22,6 @@ class ShootingSystem : public ISystem {
   UdpServer *m_serverCom;
   rtype::IGraphicLoader *m_graphic_loader;
 
-  void shoot(std::shared_ptr<Action> action);
   void shootFire(std::shared_ptr<Action> action);
   void shootBomb(std::shared_ptr<Action> action);
 };

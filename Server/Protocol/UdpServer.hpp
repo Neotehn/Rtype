@@ -7,6 +7,9 @@
 #include <sstream>
 #include <chrono>
 #include <thread>
+#include <sstream>
+#include <chrono>
+#include <thread>
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 #include <boost/array.hpp>
@@ -17,6 +20,8 @@
 #include <boost/make_shared.hpp>
 #include <boost/asio.hpp>
 #include <boost/thread.hpp>
+
+#include <math.h>
 
 #include "../../Protocol/IProtocol.hpp"
 #include "../../Client/src/InputManager/InputManager.hpp"
@@ -31,6 +36,7 @@ class UdpServer : public IProtocol {
             InputManager &t_input_manager, bool &t_is_running);
   ~UdpServer();
   void sendMessage(const std::string &, udp::endpoint t_client);
+  void sendMessage(const std::string &, udp::endpoint t_client);
   void receiveClient();
   void handleReceive(const boost::system::error_code &error, std::size_t size);
   void handleSend(std::string t_msg, const boost::system::error_code &t_error,
@@ -41,12 +47,17 @@ class UdpServer : public IProtocol {
   int getPlayerIdCount() const;
   void setPlayerIdCount(int t_new_player_id_count);
 
+  float getTimeDiff();
+  void resetTime();
+
   enum GameMode { none, single, coop, end };
   GameMode m_flag;
+  std::vector<int> m_client_ids;
   std::vector<int> m_client_ids;
 
  private:
   std::vector<int> m_client_ports;
+  std::vector<udp::endpoint> m_endpoints;
   std::vector<udp::endpoint> m_endpoints;
   boost::thread m_thread;
   udp::socket m_socket;
@@ -57,6 +68,8 @@ class UdpServer : public IProtocol {
   InputManager m_send_event_manager;
   bool &m_is_running;
   int m_player_id_count;
+  std::chrono::system_clock::time_point m_start_time;
+  std::chrono::system_clock::time_point m_time_went_by;
 
   bool doesAlreadyExist(std::shared_ptr<Action> t_action);
   bool isUpdated(std::shared_ptr<Action> t_event);

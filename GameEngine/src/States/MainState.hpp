@@ -21,7 +21,9 @@ class MainState final : public State {
  public:
   MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
             MusicPlayer &t_music_player, std::size_t t_flag,
-            rtype::IGraphicLoader *t_graphic_loader, bool t_replace = true);
+            rtype::IGraphicLoader *t_graphic_loader, int *t_level,
+            bool t_replace = true);
+  ~MainState();
   void pause() override;
   void resume() override;
   void update() override;
@@ -38,6 +40,7 @@ class MainState final : public State {
   rtype::IFont *m_font;
   rtype::IText *m_title;
   std::size_t m_flag;
+  bool m_start_pressed;
 };
 
 #endif  //!MAINSTATE_HPP_

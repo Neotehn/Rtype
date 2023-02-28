@@ -11,7 +11,7 @@ if (NOT Boost_FOUND)
             GIT_TAG boost-1.81.0
             )
     FetchContent_MakeAvailable(Boost)
-endif()
+endif ()
 
 message("Installed!")
 find_package(Boost 1.81.0 COMPONENTS system thread REQUIRED)

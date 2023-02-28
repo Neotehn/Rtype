@@ -25,25 +25,30 @@ void CreateObjectSystem::update() {
     int player_id = action->getClientId();
     switch (type) {
       case Action::ObjectType::PLAYER:
-        createPlayer(id, action->getCreateSpritePath(), pos, player_id);
+        initPlayerClient(id, action->getCreateSpritePath(), pos, m_em,
+                         m_graphic_loader, player_id);
         break;
       case Action::ObjectType::BULLET:
-        createBullet(id, pos, action->getShootType());
+        m_play_sounds.push_back(SoundSystem::SoundType::shoot);
+        initBulletClient(id, pos, action->getShootType(), m_em,
+                         m_graphic_loader, action->getCollisionPartnerId());
         break;
       case Action::ObjectType::ENEMY:
         velocity = action->getVelocity();
         std::cout << "Create enemy at pos " << pos.x << " " << pos.y << " "
                   << velocity << std::endl;
-        createEnemy(id, pos, velocity);
+        initEnemyClient(id, pos, velocity, m_em, m_graphic_loader);
         break;
       case Action::ObjectType::EXPLOSION:
-        createExplosion(id, pos);
+        m_play_sounds.push_back(SoundSystem::SoundType::explosion);
+        initExplosionClient(id, pos, m_em, m_graphic_loader);
         break;
       case Action::ObjectType::POWER_UP:
-        createPowerUp(id, pos);
+        initPowerUpClient(id, pos, m_em, m_graphic_loader);
         break;
       case Action::ObjectType::ITEM:
-        createItem(id, rtype::ItemType(action->getItemType()), pos);
+        initItemClient(id, rtype::ItemType(action->getItemType()), pos, m_em,
+                       m_graphic_loader);
       default:
         break;
     }

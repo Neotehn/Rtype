@@ -4,8 +4,9 @@ SettingsState::SettingsState(StateMachine &t_machine,
                              rtype::IRenderWindow *t_window,
                              MusicPlayer &t_music_player, std::size_t t_flag,
                              rtype::IGraphicLoader *t_graphic_loader,
-                             const bool t_replace)
-    : State(t_machine, t_window, t_music_player, t_graphic_loader, t_replace),
+                             int *t_level, const bool t_replace)
+    : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level,
+            t_replace),
       m_start_btn(Button(
         "./assets/icons/home.png",
         rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 32),
@@ -53,6 +54,16 @@ SettingsState::SettingsState(StateMachine &t_machine,
   m_music_player.play(MusicID::MENU_THEME);
 }
 
+SettingsState::~SettingsState() {
+  delete m_bg_t;
+  delete m_bg_s;
+}
+
+SettingsState::~SettingsState() {
+  delete m_bg_t;
+  delete m_bg_s;
+}
+
 void SettingsState::pause() { std::cout << "MenuState Pause\n"; }
 
 void SettingsState::resume() { std::cout << "MenuState resume\n"; }
@@ -70,9 +81,21 @@ void SettingsState::update() {
     if (m_mouse->isLeftMouseButtonPressed()) {
       if (m_start_btn.is_pressed(mouse_pos_f)) {
         std::cout << "startbtn pressed" << std::endl;
-        m_next = StateMachine::build<MainState>(m_state_machine, m_window,
-                                                m_music_player, m_flag,
-                                                m_graphic_loader, true);
+        m_next = StateMachine::build<MainState>(
+          m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
+          m_level, true);
+      }
+      if (m_vol_down.is_pressed(mouse_pos_f)) {
+        if (m_music_player.getVolume() > 0) {
+          float tmp_vol = m_music_player.getVolume();
+          m_music_player.setVolume(tmp_vol - 5);
+        }
+      }
+      if (m_vol_up.is_pressed(mouse_pos_f)) {
+        if (m_music_player.getVolume() < 100) {
+          float tmp_vol = m_music_player.getVolume();
+          m_music_player.setVolume(tmp_vol + 5);
+        }
       }
       if (m_vol_down.is_pressed(mouse_pos_f)) {
         if (m_music_player.getVolume() > 0) {
@@ -94,9 +117,9 @@ void SettingsState::update() {
       case rtype::EventType::KeyPressed:
         switch (event.key) {
           case rtype::EventKey::Space:
-            m_next = StateMachine::build<MainState>(m_state_machine, m_window,
-                                                    m_music_player, m_flag,
-                                                    m_graphic_loader, true);
+            m_next = StateMachine::build<MainState>(
+              m_state_machine, m_window, m_music_player, m_flag,
+              m_graphic_loader, m_level, true);
             break;
           case rtype::EventKey::Escape:
             m_state_machine.quit();
