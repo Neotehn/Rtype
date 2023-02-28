@@ -58,12 +58,6 @@ SettingsState::~SettingsState() {
   delete m_bg_t;
   delete m_bg_s;
 }
-
-SettingsState::~SettingsState() {
-  delete m_bg_t;
-  delete m_bg_s;
-}
-
 void SettingsState::pause() { std::cout << "MenuState Pause\n"; }
 
 void SettingsState::resume() { std::cout << "MenuState resume\n"; }

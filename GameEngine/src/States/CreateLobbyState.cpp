@@ -12,8 +12,9 @@ CreateLobbyState::CreateLobbyState(StateMachine &t_machine,
                                    MusicPlayer &t_music_player,
                                    std::size_t t_flag,
                                    rtype::IGraphicLoader *t_graphic_loader,
-                                   const bool t_replace)
-    : State(t_machine, t_window, t_music_player, t_graphic_loader, t_replace),
+                                   int *t_level, const bool t_replace)
+    : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level,
+            t_replace),
       m_home_btn(Button(
         "./assets/icons/home.png",
         rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 32),
@@ -103,15 +104,15 @@ void CreateLobbyState::update() {
     if (m_mouse->isLeftMouseButtonPressed()) {
       if (m_home_btn.is_pressed(mouse_pos_f)) {
         std::cout << "homebtn pressed" << std::endl;
-        m_next = StateMachine::build<MainState>(m_state_machine, m_window,
-                                                m_music_player, m_flag,
-                                                m_graphic_loader, true);
+        m_next = StateMachine::build<MainState>(
+          m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
+          m_level, true);
       }
       if (m_start_btn.is_pressed(mouse_pos_f)) {  // start game if pressed
         std::cout << "startbtn pressed" << std::endl;
-        m_next = StateMachine::build<GameState>(m_state_machine, m_window,
-                                                m_music_player, m_flag,
-                                                m_graphic_loader, true);
+        m_next = StateMachine::build<GameState>(
+          m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
+          m_level, true);
       }
     }
     switch (event.type) {
@@ -121,9 +122,9 @@ void CreateLobbyState::update() {
       case rtype::EventType::KeyPressed:
         switch (event.key) {
           case rtype::EventKey::Escape:
-            m_next = StateMachine::build<MainState>(m_state_machine, m_window,
-                                                    m_music_player, m_flag,
-                                                    m_graphic_loader, true);
+            m_next = StateMachine::build<MainState>(
+              m_state_machine, m_window, m_music_player, m_flag,
+              m_graphic_loader, m_level, true);
             break;
           default:
             break;

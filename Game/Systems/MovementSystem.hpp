@@ -24,10 +24,8 @@ class MovementSystem : public ISystem {
   EventQueue m_event_queue;
   UdpServer *m_serverCom;
   UdpClient *m_clientCom;
-  UdpClient *m_clientCom;
 
   void updatePlayer(EntityID t_ent);
-  void updatePlayerClient(EntityID t_ent);
   void updatePlayerClient(EntityID t_ent);
   void updateBackground(EntityID t_ent);
   void updateBullets(EntityID t_ent);

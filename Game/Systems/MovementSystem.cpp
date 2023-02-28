@@ -34,14 +34,6 @@ MovementSystem::MovementSystem(std::shared_ptr<EntityManager> t_em,
   m_em = t_em;
   m_clientCom = t_clientCom;
   m_serverCom = t_serverCom;
-  m_clientCom = nullptr;
-}
-
-MovementSystem::MovementSystem(std::shared_ptr<EntityManager> t_em,
-                               UdpServer *t_serverCom, UdpClient *t_clientCom) {
-  m_em = t_em;
-  m_clientCom = t_clientCom;
-  m_serverCom = t_serverCom;
 }
 
 MovementSystem::~MovementSystem() {}
@@ -131,7 +123,6 @@ void MovementSystem::updatePlayer(EntityID t_ent) {
   keepPlayerInsideScreen(
     player->position.position,
     {player->body->getSize().x, player->body->getSize().y});
-  if (pos) { player->position.position = m_event_queue.getLatestPos(t_ent); }
   if (pos) { player->position.position = m_event_queue.getLatestPos(t_ent); }
   player->body->setPosition(
     {player->position.position.x, player->position.position.y});
