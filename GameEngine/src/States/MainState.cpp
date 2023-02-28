@@ -21,16 +21,6 @@ MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
                rtype::Vector2f{static_cast<float>(m_window->getSize().x - 200),
                                static_cast<float>(m_window->getSize().y - 100)},
                rtype::Vector2f{64, 64}, t_graphic_loader)),
-      m_create_btn(Button(
-        "./assets/createlobbybtn.png",
-        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 65),
-                        static_cast<float>(m_window->getSize().y / 2 - 100)},
-        rtype::Vector2f{130, 50}, t_graphic_loader)),
-      m_join_btn(Button(
-        "./assets/joinlobbybtn.png",
-        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 65),
-                        static_cast<float>(m_window->getSize().y / 2)},
-        rtype::Vector2f{130, 50}, t_graphic_loader)),
       m_flag(t_flag) {
   m_bg_t = m_graphic_loader->loadTexture();
   m_bg_s = m_graphic_loader->loadSprite();
@@ -75,8 +65,6 @@ void MainState::update() {
       m_start_btn.is_hovered(mouse_pos_f);
       m_settings_btn.is_hovered(mouse_pos_f);
       m_exit_btn.is_hovered(mouse_pos_f);
-      m_create_btn.is_hovered(mouse_pos_f);
-      m_join_btn.is_hovered(mouse_pos_f);
     }
     if (m_mouse->isLeftMouseButtonPressed()) {
       if (m_start_btn.is_pressed(mouse_pos_f)) {
@@ -100,18 +88,6 @@ void MainState::update() {
       if (m_exit_btn.is_pressed(mouse_pos_f)) {
         std::cout << "exitbtn pressed" << std::endl;
         m_state_machine.quit();
-      }
-      if (m_create_btn.is_pressed(mouse_pos_f)) {
-        std::cout << "create lobby" << std::endl;
-        m_next = StateMachine::build<CreateLobbyState>(
-          m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, true);
-      }
-      if (m_join_btn.is_pressed(mouse_pos_f)) {
-        std::cout << "join lobby" << std::endl;
-        m_next = StateMachine::build<JoinLobbyState>(
-          m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, true);
       }
     }
     switch (event.type) {
@@ -137,8 +113,6 @@ void MainState::draw() {
   m_window->clear();
   m_window->draw(m_bg_s);
   m_window->draw(m_title);
-  m_window->draw(m_create_btn.getSprite());
-  m_window->draw(m_join_btn.getSprite());
   m_window->draw(m_start_btn.getSprite());
   m_window->draw(m_settings_btn.getSprite());
   m_window->draw(m_exit_btn.getSprite());

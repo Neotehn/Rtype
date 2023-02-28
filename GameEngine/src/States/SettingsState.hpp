@@ -36,6 +36,7 @@ class SettingsState final : public State {
   rtype::IFont *m_font;
   rtype::IText *m_title;
   rtype::IText *m_vol_txt;
+  rtype::IText *m_vol_digit;
 
   std::size_t m_flag;
 };

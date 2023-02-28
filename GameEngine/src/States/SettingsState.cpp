@@ -14,12 +14,12 @@ SettingsState::SettingsState(StateMachine &t_machine,
         rtype::Vector2f{64, 64}, t_graphic_loader)),
       m_vol_up(Button(
         "./assets/icons/plus.png",
-        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 81.5),
+        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 91.5),
                         static_cast<float>(m_window->getSize().y / 2)},
         rtype::Vector2f{64, 64}, t_graphic_loader)),
       m_vol_down(Button(
         "./assets/icons/minus.png",
-        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 + 17.5),
+        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 + 27.5),
                         static_cast<float>(m_window->getSize().y / 2)},
         rtype::Vector2f{64, 64}, t_graphic_loader)),
       m_flag(t_flag) {
@@ -51,6 +51,14 @@ SettingsState::SettingsState(StateMachine &t_machine,
   m_vol_txt->setPosition(
     {(size_x / 2) - (m_vol_txt->getLocalBounds().width / 2),
      (size_y / 2) - 50});
+  m_vol_digit = m_graphic_loader->loadText();
+  m_vol_digit->setFont(m_font);
+  m_vol_digit->setString(
+    std::to_string(static_cast<int>(m_music_player.getVolume())));
+  m_vol_digit->setCharacterSize(35);
+  m_vol_digit->setPosition(
+    {(size_x / 2) - (m_vol_digit->getLocalBounds().width / 2),
+     static_cast<float>((size_y / 2) + 14.5)});
   m_music_player.play(MusicID::MENU_THEME);
 }
 
@@ -83,24 +91,24 @@ void SettingsState::update() {
         if (m_music_player.getVolume() > 0) {
           float tmp_vol = m_music_player.getVolume();
           m_music_player.setVolume(tmp_vol - 5);
+          m_vol_digit->setString(std::to_string(static_cast<int>(tmp_vol - 5)));
+          m_vol_digit->setPosition(
+            {(m_window->getSize().x / 2) -
+               (m_vol_digit->getLocalBounds().width / 2),
+             static_cast<float>(
+               (static_cast<float>(m_window->getSize().y) / 2) + 14.5)});
         }
       }
       if (m_vol_up.is_pressed(mouse_pos_f)) {
         if (m_music_player.getVolume() < 100) {
           float tmp_vol = m_music_player.getVolume();
           m_music_player.setVolume(tmp_vol + 5);
-        }
-      }
-      if (m_vol_down.is_pressed(mouse_pos_f)) {
-        if (m_music_player.getVolume() > 0) {
-          float tmp_vol = m_music_player.getVolume();
-          m_music_player.setVolume(tmp_vol - 5);
-        }
-      }
-      if (m_vol_up.is_pressed(mouse_pos_f)) {
-        if (m_music_player.getVolume() < 100) {
-          float tmp_vol = m_music_player.getVolume();
-          m_music_player.setVolume(tmp_vol + 5);
+          m_vol_digit->setString(std::to_string(static_cast<int>(tmp_vol + 5)));
+          m_vol_digit->setPosition(
+            {(m_window->getSize().x / 2) -
+               (m_vol_digit->getLocalBounds().width / 2),
+             static_cast<float>(
+               (static_cast<float>(m_window->getSize().y) / 2) + 14.5)});
         }
       }
     }
@@ -133,6 +141,7 @@ void SettingsState::draw() {
   m_window->draw(m_bg_s);
   m_window->draw(m_title);
   m_window->draw(m_vol_txt);
+  m_window->draw(m_vol_digit);
   m_window->draw(m_start_btn.getSprite());
   m_window->draw(m_vol_down.getSprite());
   m_window->draw(m_vol_up.getSprite());
