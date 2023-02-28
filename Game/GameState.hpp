@@ -64,6 +64,11 @@ class GameState final : public State {
   std::vector<SoundSystem::SoundType> m_sounds;
 
   std::vector<std::shared_ptr<ISystem>> initSystems();
+
+  rtype::ITexture *m_bg_t;
+  rtype::ISprite *m_bg_s;
+  rtype::IFont *m_font;
+  rtype::IText *m_title;
 };
 
 #endif /* !GAMESTATE_HPP_ */

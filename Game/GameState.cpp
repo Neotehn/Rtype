@@ -12,6 +12,28 @@ GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
   m_music = m_graphic_loader->loadMusic();
   m_em = std::make_shared<EntityManager>();
   if (t_flag == client) {
+    m_bg_t = m_graphic_loader->loadTexture();
+    m_bg_s = m_graphic_loader->loadSprite();
+    if (!m_bg_t->loadFromFile("./assets/menubg.jpg")) {
+      throw std::runtime_error("Unable to load image.");
+    }
+    float size_x = m_window->getSize().x;
+    float size_y = m_window->getSize().y;
+    float scale_x = size_x / m_bg_t->getSize().x;
+    float scale_y = size_y / m_bg_t->getSize().y;
+    m_bg_s->setTexture(m_bg_t, true);
+    m_bg_s->setScale({scale_x, scale_y});
+    m_font = m_graphic_loader->loadFont();
+    if (!m_font->loadFromFile("./assets/font/nasalization-rg.ttf")) {
+      throw std::runtime_error("Unable to load font.");
+    }
+    m_title = m_graphic_loader->loadText();
+    m_title->setFont(m_font);
+    m_title->setString("LOADING...");
+    m_title->setCharacterSize(50);
+    m_title->setPosition(
+      {(size_x / 2) - (m_title->getLocalBounds().width / 2),
+       (size_y / 2) - (m_title->getLocalBounds().height / 2)});
     m_flag = CommunicationFlag::client;
     m_port_number = rand() % 15000 + 40001;
     m_clientCom =
@@ -78,14 +100,19 @@ void GameState::update() {
       std::cout << "waiting on Client Connection" << std::endl;
       boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
     }
-    while (m_flag == CommunicationFlag::client &&
-           m_clientCom->m_flag != m_clientCom->connected) {
+    while (  // if wanted to revert to original remove everything except l.112 - 115
+      m_flag == CommunicationFlag::client &&
+      m_clientCom->m_flag != m_clientCom->connected && m_is_running) {
       std::cout << "Connecting to Server ..." << std::endl;
       boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
       StateAction start_action =
         StateAction(Action::ActionType::START, m_port_number);
       m_clientCom->sendMessage(start_action.getCommand());
       std::cout << "waiting on Server Connection" << std::endl;
+      m_window->clear();
+      m_window->draw(m_bg_s);
+      m_window->draw(m_title);
+      m_window->display();
     }
     rtype::Event event;
     if (m_window->isOpen()) {

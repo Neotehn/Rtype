@@ -39,6 +39,7 @@ set(CLIENT_HPP ../Game/ECS/ComponentPool.hpp
         ../Game/Systems/PowerUpSystem.hpp
         ../Game/Systems/SoundSystem.hpp
         ../Game/Encapsulation/Event.hpp
+        ../Game/Encapsulation/IFont.hpp
         ../Game/Encapsulation/GraphicDataTypes.hpp
         ../Game/Encapsulation/IGraphic.hpp
         ../Game/Encapsulation/IMusic.hpp
@@ -46,12 +47,15 @@ set(CLIENT_HPP ../Game/ECS/ComponentPool.hpp
         ../Game/Encapsulation/IRenderWindow.hpp
         ../Game/Encapsulation/ISounds.hpp
         ../Game/Encapsulation/ISprite.hpp
+        ../Game/Encapsulation/IText.hpp
         ../Game/Encapsulation/ITexture.hpp
         ../Game/Encapsulation/SFML/Music.hpp
         ../Game/Encapsulation/SFML/RectangleShape.hpp
         ../Game/Encapsulation/SFML/RenderWindow.hpp
         ../Game/Encapsulation/SFML/Sounds.hpp
         ../Game/Encapsulation/SFML/Sprite.hpp
+        ../Game/Encapsulation/SFML/Font.hpp
+        ../Game/Encapsulation/SFML/Text.hpp
         ../Game/Encapsulation/SFML/Texture.hpp
         ../GameEngine/src/Button.hpp
         ../GameEngine/src/Core.hpp
@@ -62,6 +66,8 @@ set(CLIENT_HPP ../Game/ECS/ComponentPool.hpp
         ../Game/GameState.hpp
         ../GameEngine/src/States/MainState.hpp
         ../GameEngine/src/States/SettingsState.hpp
+        ../GameEngine/src/States/JoinLobbyState.hpp
+        ../GameEngine/src/States/CreateLobbyState.hpp
         ../Game/Encapsulation/IMouse.hpp
         ../Game/Encapsulation/SFML/Mouse.hpp
         ../Game/Systems/CreatePlayerSystem.hpp
@@ -103,6 +109,8 @@ set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         ../Game/Encapsulation/SFML/RenderWindow.cpp
         ../Game/Encapsulation/SFML/Sounds.cpp
         ../Game/Encapsulation/SFML/Sprite.cpp
+        ../Game/Encapsulation/SFML/Text.cpp
+        ../Game/Encapsulation/SFML/Font.cpp
         ../Game/Encapsulation/SFML/Texture.cpp
         ../Game/Encapsulation/SFML/RectangleShape.cpp
         ../GameEngine/src/Button.cpp
@@ -114,6 +122,8 @@ set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         ../Game/GameState.cpp
         ../GameEngine/src/States/MainState.cpp
         ../GameEngine/src/States/SettingsState.cpp
+        ../GameEngine/src/States/JoinLobbyState.cpp
+        ../GameEngine/src/States/CreateLobbyState.cpp
         ../Game/Encapsulation/SFML/Mouse.cpp
         ../Game/Systems/CreatePlayerSystem.cpp
         ../Game/Encapsulation/SFML/GraphicLoader.cpp
@@ -124,6 +134,8 @@ FetchContent_Declare(SFML
         GIT_REPOSITORY https://github.com/SFML/SFML.git
         GIT_TAG 2.6.x)
 FetchContent_MakeAvailable(SFML)
+
+find_package(Boost 1.81.0 COMPONENTS chrono system thread REQUIRED)
 
 if (NOT Boost_FOUND)
     message("Boost not found--> downloading and building")
