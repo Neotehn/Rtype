@@ -69,7 +69,7 @@ void Textbox::setSelected(bool t_sel) {
   if (!t_sel) {
     std::string t = m_text.str();
     std::string new_t = "";
-    for (int i = 0; i < t.length() - 1; i++) {
+    for (int i = 0; i < t.length(); i++) {
       new_t += t[i];
     }
     m_textbox->setString(new_t);

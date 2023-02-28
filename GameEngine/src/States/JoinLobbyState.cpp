@@ -85,9 +85,10 @@ JoinLobbyState::JoinLobbyState(StateMachine &t_machine,
   m_title->setPosition(
     {(size_x / 2) - (m_title->getLocalBounds().width / 2), 100});
   m_music_player.play(MusicID::MENU_THEME);
-  m_textbox.setPosition(
-    rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 250),
-                    static_cast<float>(m_window->getSize().y / 2 + 50)});
+  m_textbox.setPosition(rtype::Vector2f{
+    static_cast<float>(m_window->getSize().x / 2 -
+                       m_textbox.getText()->getLocalBounds().width / 2),
+    static_cast<float>(m_window->getSize().y / 2 - 200)});
   // call protocol to join lobby
 }
 
@@ -124,10 +125,11 @@ void JoinLobbyState::update() {
         break;
       case rtype::EventType::KeyPressed:
         switch (event.key) {
+          case rtype::EventKey::Enter:
+            m_textbox.setSelected(true);
+            break;
           case rtype::EventKey::Escape:
-            m_next = StateMachine::build<MainState>(
-              m_state_machine, m_window, m_music_player, m_flag,
-              m_graphic_loader, m_level, true);
+            m_textbox.setSelected(false);
             break;
           default:
             break;
@@ -135,6 +137,10 @@ void JoinLobbyState::update() {
         break;
       case rtype::EventType::TextEntered:
         m_textbox.typedOn(event);
+        m_textbox.setPosition(rtype::Vector2f{
+          static_cast<float>(m_window->getSize().x / 2 -
+                             m_textbox.getText()->getLocalBounds().width / 2),
+          static_cast<float>(m_window->getSize().y / 2 - 200)});
         break;
       default:
         break;
