@@ -62,7 +62,6 @@ void UdpClient::handleReceive(const boost::system::error_code &t_error,
     } catch (std::exception &e) {
       std::cout << "Error: " << e.what() << std::endl;
     }
-    std::cout << "hello" << std::endl;
     EventQueue eq = m_client_input_manager.getInputs();
     for (std::shared_ptr<Action> action : eq.getEventQueue()) {
       m_input_manager.addActionsToQueue(action);

@@ -29,6 +29,7 @@ MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
   m_bg_s->setTexture(m_bg_t, true);
   m_bg_s->setScale({scale_x, scale_y});
   m_music_player.play(MusicID::MENU_THEME);
+  m_start_pressed = false;
 }
 
 MainState::~MainState() {
@@ -50,12 +51,13 @@ void MainState::update() {
       m_settings_btn.is_hovered(mouse_pos_f);
     }
     if (m_mouse->isLeftMouseButtonPressed()) {
-      if (m_start_btn.is_pressed(mouse_pos_f)) {
+      if (m_start_btn.is_pressed(mouse_pos_f) && !m_start_pressed) {
         std::cout << "startbtn pressed" << std::endl;
         m_music_player.stop();
         m_next = StateMachine::build<GameState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, true);
+        m_start_pressed = true;
       }
       if (m_settings_btn.is_pressed(mouse_pos_f)) {
         std::cout << "settingsbtn pressed" << std::endl;

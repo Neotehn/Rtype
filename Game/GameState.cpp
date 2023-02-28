@@ -14,7 +14,6 @@ GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
   if (t_flag == client) {
     m_flag = CommunicationFlag::client;
     m_port_number = rand() % 15000 + 40001;
-
     m_clientCom =
       new UdpClient(m_io_service, "localhost", "50000", m_port_number,
                     m_input_manager, m_client_input_manager);

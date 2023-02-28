@@ -31,6 +31,7 @@ class MainState final : public State {
   Button m_start_btn;
   Button m_settings_btn;
   std::size_t m_flag;
+  bool m_start_pressed;
 };
 
 #endif  //!MAINSTATE_HPP_
