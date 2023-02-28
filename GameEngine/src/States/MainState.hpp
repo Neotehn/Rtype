@@ -9,7 +9,8 @@
 #include "../../../Game/Encapsulation/IText.hpp"
 
 #include "../Button.hpp"
-#include "./LobbyState.hpp"
+#include "./CreateLobbyState.hpp"
+#include "./JoinLobbyState.hpp"
 #include "../MusicPlayer.hpp"
 #include "../State.hpp"
 #include "../StateMachine.hpp"
@@ -32,6 +33,8 @@ class MainState final : public State {
   Button m_start_btn;
   Button m_settings_btn;
   Button m_exit_btn;
+  Button m_join_btn;
+  Button m_create_btn;
   rtype::IFont *m_font;
   rtype::IText *m_title;
   std::size_t m_flag;

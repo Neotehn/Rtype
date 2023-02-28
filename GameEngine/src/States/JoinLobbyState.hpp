@@ -2,11 +2,11 @@
 ** EPITECH PROJECT, 2023
 ** Rtype
 ** File description:
-** LobbyState
+** JoinLobbyState
 */
 
-#ifndef LOBBYSTATE_HPP_
-#define LOBBYSTATE_HPP_
+#ifndef JOINLOBBYSTATE_HPP_
+#define JOINLOBBYSTATE_HPP_
 
 #include <iostream>
 
@@ -19,14 +19,14 @@
 #include "../MusicPlayer.hpp"
 #include "../State.hpp"
 #include "../StateMachine.hpp"
-#include "./SettingsState.hpp"
 #include "../../../Game/GameState.hpp"
 
-class LobbyState final : public State {
+class JoinLobbyState final : public State {
  public:
-  LobbyState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
-             MusicPlayer &t_music_player, std::size_t t_flag,
-             rtype::IGraphicLoader *t_graphic_loader, bool t_replace = true);
+  JoinLobbyState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
+                 MusicPlayer &t_music_player, std::size_t t_flag,
+                 rtype::IGraphicLoader *t_graphic_loader,
+                 bool t_replace = true);
   void pause() override;
   void resume() override;
   void update() override;
@@ -50,4 +50,4 @@ class LobbyState final : public State {
   rtype::ISprite *m_player_four_s;
 };
 
-#endif /* !LOBBYSTATE_HPP_ */
+#endif /* !JOINLOBBYSTATE_HPP_ */

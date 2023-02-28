@@ -5,12 +5,14 @@
 ** LobbyState
 */
 
-#include "LobbyState.hpp"
+#include "CreateLobbyState.hpp"
 
-LobbyState::LobbyState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
-                       MusicPlayer &t_music_player, std::size_t t_flag,
-                       rtype::IGraphicLoader *t_graphic_loader,
-                       const bool t_replace)
+CreateLobbyState::CreateLobbyState(StateMachine &t_machine,
+                                   rtype::IRenderWindow *t_window,
+                                   MusicPlayer &t_music_player,
+                                   std::size_t t_flag,
+                                   rtype::IGraphicLoader *t_graphic_loader,
+                                   const bool t_replace)
     : State(t_machine, t_window, t_music_player, t_graphic_loader, t_replace),
       m_home_btn(Button(
         "./assets/icons/home.png",
@@ -77,18 +79,19 @@ LobbyState::LobbyState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
   }
   m_title = m_graphic_loader->loadText();
   m_title->setFont(m_font);
-  m_title->setString("LOBBY");
+  m_title->setString("CREATE LOBBY");
   m_title->setCharacterSize(50);
   m_title->setPosition(
     {(size_x / 2) - (m_title->getLocalBounds().width / 2), 100});
   m_music_player.play(MusicID::MENU_THEME);
+  // call protocol for creating lobby
 }
 
-void LobbyState::pause() { std::cout << "MenuState Pause\n"; }
+void CreateLobbyState::pause() { std::cout << "MenuState Pause\n"; }
 
-void LobbyState::resume() { std::cout << "MenuState resume\n"; }
+void CreateLobbyState::resume() { std::cout << "MenuState resume\n"; }
 
-void LobbyState::update() {
+void CreateLobbyState::update() {
   for (auto event = rtype::Event{}; m_window->pollEvent(event);) {
     rtype::Vector2i mouse_pos = m_mouse->getMousePosition(m_window);
     rtype::Vector2f mouse_pos_f{static_cast<float>(mouse_pos.x),
@@ -104,7 +107,7 @@ void LobbyState::update() {
                                                 m_music_player, m_flag,
                                                 m_graphic_loader, true);
       }
-      if (m_start_btn.is_pressed(mouse_pos_f)) {
+      if (m_start_btn.is_pressed(mouse_pos_f)) {  // start game if pressed
         std::cout << "startbtn pressed" << std::endl;
         m_next = StateMachine::build<GameState>(m_state_machine, m_window,
                                                 m_music_player, m_flag,
@@ -132,11 +135,11 @@ void LobbyState::update() {
   }
 }
 
-void LobbyState::draw() {
+void CreateLobbyState::draw() {
   m_window->clear();
   m_window->draw(m_bg_s);
   m_window->draw(m_title);
-  // m_window->draw(m_player_one_s);
+  // m_window->draw(m_player_one_s); could add if statement to show icon depending on how many players are connected
   // m_window->draw(m_player_two_s);
   // m_window->draw(m_player_three_s);
   // m_window->draw(m_player_four_s);
