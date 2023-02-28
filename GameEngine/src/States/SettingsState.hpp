@@ -2,6 +2,7 @@
 #define SETTINGSSTATE_HPP_
 
 #include <iostream>
+#include <fstream>
 
 #include "../../../Game/Encapsulation/IRenderWindow.hpp"
 #include "../../../Game/Encapsulation/ITexture.hpp"

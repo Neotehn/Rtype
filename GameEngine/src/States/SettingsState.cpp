@@ -97,6 +97,9 @@ void SettingsState::update() {
                (m_vol_digit->getLocalBounds().width / 2),
              static_cast<float>(
                (static_cast<float>(m_window->getSize().y) / 2) + 14.5)});
+          std::ofstream file_set("./assets/files/settings.txt");
+          file_set << "vol:" + std::to_string(static_cast<int>(tmp_vol - 5));
+          file_set.close();
         }
       }
       if (m_vol_up.is_pressed(mouse_pos_f)) {
@@ -109,6 +112,9 @@ void SettingsState::update() {
                (m_vol_digit->getLocalBounds().width / 2),
              static_cast<float>(
                (static_cast<float>(m_window->getSize().y) / 2) + 14.5)});
+          std::ofstream file_set("./assets/files/settings.txt");
+          file_set << "vol:" + std::to_string(static_cast<int>(tmp_vol + 5));
+          file_set.close();
         }
       }
     }

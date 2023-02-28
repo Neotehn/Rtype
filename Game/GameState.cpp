@@ -103,6 +103,9 @@ void GameState::update() {
     while (  // if wanted to revert to original remove everything except l.112 - 115
       m_flag == CommunicationFlag::client &&
       m_clientCom->m_flag != m_clientCom->connected && m_is_running) {
+      for (auto event = rtype::Event{}; m_window->pollEvent(event);) {
+        if (event.type == rtype::EventType::Closed) { m_is_running = false; }
+      }
       std::cout << "Connecting to Server ..." << std::endl;
       boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
       StateAction start_action =

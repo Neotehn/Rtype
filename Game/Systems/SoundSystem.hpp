@@ -1,6 +1,8 @@
 #ifndef R_TYPE_CLIENT_SOUNDSYSTEM_HPP
 #define R_TYPE_CLIENT_SOUNDSYSTEM_HPP
 
+#include <fstream>
+#include <iostream>
 #include <memory>
 
 #include "../CreateEntities/Init.hpp"
