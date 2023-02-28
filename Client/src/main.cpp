@@ -1,7 +1,12 @@
-#include "../../GameEngine/inc/Core.hpp"
+#include "../../GameEngine/src/Core.hpp"
 
-int main() {
-  Core app = Core();
-  app.run();
+int counter;
+
+int action_counter;
+
+int main(int ac, char *av[]) {
+  if (std::stoi(av[1]) == 1) { action_counter = 1000; }
+  Core core(std::stoi(av[1]));
+  core.run();
   return 0;
 }

@@ -17,7 +17,17 @@ class EntityManager {
   EntityManager() {}
   ~EntityManager() {}
 
-  EntityID createNewEntity() {
+  EntityID createNewEntity(EntityID t_id = 0) {
+    if (t_id != 0) {
+      if (getEntityVersion(t_id) != 0) {
+        m_free_entities.back();
+        m_free_entities.pop_back();
+        m_entities[getEntityIndex(t_id)].id = t_id;
+        return m_entities[getEntityIndex(t_id)].id;
+      }
+      m_entities.push_back({t_id, ComponentMask()});
+      return m_entities.back().id;
+    }
     if (!m_free_entities.empty()) {
       EntityIndex newIndex = m_free_entities.back();
       m_free_entities.pop_back();
@@ -31,11 +41,15 @@ class EntityManager {
     return m_entities.back().id;
   }
   void destroyEntity(EntityID t_id) {
-    EntityID newID =
-      createEntityId(EntityIndex(-1), getEntityVersion(t_id) + 1);
-    m_entities[getEntityIndex(t_id)].id = newID;
-    m_entities[getEntityIndex(t_id)].mask.reset();
-    m_free_entities.push_back(getEntityIndex(t_id));
+    try {
+      EntityID newID =
+        createEntityId(EntityIndex(-1), getEntityVersion(t_id) + 1);
+      m_entities[getEntityIndex(t_id)].id = newID;
+      m_entities[getEntityIndex(t_id)].mask.reset();
+      m_free_entities.push_back(getEntityIndex(t_id));
+    } catch (std::exception &e) {
+      std::cout << "Error destroying entity: " << e.what() << std::endl;
+    }
   }
 
   template<typename T>

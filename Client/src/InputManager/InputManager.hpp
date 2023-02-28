@@ -1,32 +1,38 @@
-/*
-** EPITECH PROJECT, 2022
-** .
-** File description:
-** .
-*/
 #ifndef CLIENT_SRC_INPUTMANAGER_INPUTMANAGER_HPP_
 #define CLIENT_SRC_INPUTMANAGER_INPUTMANAGER_HPP_
 
-#include <SFML/Graphics.hpp>
+#include <memory>
+#include <vector>
+
+#include "../Action/Action.hpp"
+#include "../Action/MovementAction.hpp"
+#include "../Action/ShootAction.hpp"
+#include "../Action/StateAction.hpp"
 #include "../../../Game/EventQueue.hpp"
+#include "../../../Game/Encapsulation/Event.hpp"
 
 class InputManager {
  public:
-  InputManager();
+  InputManager(int *t_level);
   ~InputManager(){};
 
-  // Get input
-  int recordInput();
-  void recordInputs(const sf::Event &t_event);
+  void recordInputs(const rtype::Event &t_event);
+  void recordKeyPressedInputs(const rtype::Event &t_event);
+  void recordKeyReleasedInputs(const rtype::Event &t_event);
+  void addActionsToQueue(std::shared_ptr<Action> t_action);
   void popInputs();
+  void removeEvent(int t_action_id);
 
   EventQueue getInputs();
-  sf::Vector2i getMousePosition();
-  bool isMouseLeftClicked();
-  bool isMouseRightClicked();
+  EventQueue getInputsWithoutPop();
+  bool doesActionExist(std::shared_ptr<Action> t_action_id);
+  bool isPlayerIdSet();
+  void setPlayerId(EntityID t_player_id);
+  int *m_level;
 
  private:
-  std::vector<int> m_input_queue;
+  EntityID m_player_id = 0;
+  EventQueue m_input_queue;
 };
 
 #endif  // CLIENT_SRC_INPUTMANAGER_INPUTMANAGER_HPP_
