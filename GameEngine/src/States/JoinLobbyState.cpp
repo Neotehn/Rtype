@@ -15,7 +15,7 @@ JoinLobbyState::JoinLobbyState(StateMachine &t_machine,
     : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level,
             t_replace),
       m_home_btn(Button(
-        "./assets/icons/home.png",
+        "./assets/icons/white/home.png",
         rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 32),
                         static_cast<float>(m_window->getSize().y - 100)},
         rtype::Vector2f{64, 64}, t_graphic_loader)),
@@ -24,6 +24,7 @@ JoinLobbyState::JoinLobbyState(StateMachine &t_machine,
         rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 135),
                         static_cast<float>(m_window->getSize().y - 230)},
         rtype::Vector2f{270, 130}, t_graphic_loader)),
+      m_textbox(Textbox(35, rtype::Black, true, t_graphic_loader)),
       m_flag(t_flag) {
   m_bg_t = m_graphic_loader->loadTexture();
   m_bg_s = m_graphic_loader->loadSprite();
@@ -32,7 +33,7 @@ JoinLobbyState::JoinLobbyState(StateMachine &t_machine,
   }
   m_player_one_t = m_graphic_loader->loadTexture();
   m_player_one_s = m_graphic_loader->loadSprite();
-  if (!m_player_one_t->loadFromFile("./assets/icons/gamepad1.png")) {
+  if (!m_player_one_t->loadFromFile("./assets/icons/white/gamepad1.png")) {
     throw std::runtime_error("Unable to load image.");
   }
   m_player_one_s->setTexture(m_player_one_t, true);
@@ -42,7 +43,7 @@ JoinLobbyState::JoinLobbyState(StateMachine &t_machine,
 
   m_player_two_t = m_graphic_loader->loadTexture();
   m_player_two_s = m_graphic_loader->loadSprite();
-  if (!m_player_two_t->loadFromFile("./assets/icons/gamepad2.png")) {
+  if (!m_player_two_t->loadFromFile("./assets/icons/white/gamepad2.png")) {
     throw std::runtime_error("Unable to load image.");
   }
   m_player_two_s->setTexture(m_player_two_t, true);
@@ -51,7 +52,7 @@ JoinLobbyState::JoinLobbyState(StateMachine &t_machine,
                     static_cast<float>(m_window->getSize().y / 2 - 150)});
   m_player_three_t = m_graphic_loader->loadTexture();
   m_player_three_s = m_graphic_loader->loadSprite();
-  if (!m_player_three_t->loadFromFile("./assets/icons/gamepad3.png")) {
+  if (!m_player_three_t->loadFromFile("./assets/icons/white/gamepad3.png")) {
     throw std::runtime_error("Unable to load image.");
   }
   m_player_three_s->setTexture(m_player_three_t, true);
@@ -60,7 +61,7 @@ JoinLobbyState::JoinLobbyState(StateMachine &t_machine,
                     static_cast<float>(m_window->getSize().y / 2 + 50)});
   m_player_four_t = m_graphic_loader->loadTexture();
   m_player_four_s = m_graphic_loader->loadSprite();
-  if (!m_player_four_t->loadFromFile("./assets/icons/gamepad4.png")) {
+  if (!m_player_four_t->loadFromFile("./assets/icons/white/gamepad4.png")) {
     throw std::runtime_error("Unable to load image.");
   }
   m_player_four_s->setTexture(m_player_four_t, true);
@@ -84,6 +85,9 @@ JoinLobbyState::JoinLobbyState(StateMachine &t_machine,
   m_title->setPosition(
     {(size_x / 2) - (m_title->getLocalBounds().width / 2), 100});
   m_music_player.play(MusicID::MENU_THEME);
+  m_textbox.setPosition(
+    rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 250),
+                    static_cast<float>(m_window->getSize().y / 2 + 50)});
   // call protocol to join lobby
 }
 
@@ -98,7 +102,7 @@ void JoinLobbyState::update() {
                                 static_cast<float>(mouse_pos.y)};
     if (event.type == rtype::EventType::MouseMoved) {
       m_home_btn.is_hovered(mouse_pos_f);
-      m_start_btn.is_hovered(mouse_pos_f);
+      // m_start_btn.is_hovered(mouse_pos_f);
     }
     if (m_mouse->isLeftMouseButtonPressed()) {
       if (m_home_btn.is_pressed(mouse_pos_f)) {
@@ -107,12 +111,12 @@ void JoinLobbyState::update() {
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, true);
       }
-      if (m_start_btn.is_pressed(mouse_pos_f)) {  // start game if pressed
-        std::cout << "startbtn pressed" << std::endl;
-        m_next = StateMachine::build<GameState>(
-          m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, true);
-      }
+      // if (m_start_btn.is_pressed(mouse_pos_f)) {  // start game if pressed
+      //   std::cout << "startbtn pressed" << std::endl;
+      //   m_next = StateMachine::build<GameState>(
+      //     m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
+      //     m_level, true);
+      // }
     }
     switch (event.type) {
       case rtype::EventType::Closed:
@@ -129,6 +133,9 @@ void JoinLobbyState::update() {
             break;
         }
         break;
+      case rtype::EventType::TextEntered:
+        m_textbox.typedOn(event);
+        break;
       default:
         break;
     }
@@ -144,6 +151,7 @@ void JoinLobbyState::draw() {
   // m_window->draw(m_player_three_s);
   // m_window->draw(m_player_four_s);
   m_window->draw(m_home_btn.getSprite());
-  m_window->draw(m_start_btn.getSprite());
+  m_window->draw(m_textbox.getText());
+  // m_window->draw(m_start_btn.getSprite());
   m_window->display();
 }

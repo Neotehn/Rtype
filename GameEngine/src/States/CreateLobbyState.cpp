@@ -16,7 +16,7 @@ CreateLobbyState::CreateLobbyState(StateMachine &t_machine,
     : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level,
             t_replace),
       m_home_btn(Button(
-        "./assets/icons/home.png",
+        "./assets/icons/white/home.png",
         rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 32),
                         static_cast<float>(m_window->getSize().y - 100)},
         rtype::Vector2f{64, 64}, t_graphic_loader)),
@@ -33,7 +33,7 @@ CreateLobbyState::CreateLobbyState(StateMachine &t_machine,
   }
   m_player_one_t = m_graphic_loader->loadTexture();
   m_player_one_s = m_graphic_loader->loadSprite();
-  if (!m_player_one_t->loadFromFile("./assets/icons/gamepad1.png")) {
+  if (!m_player_one_t->loadFromFile("./assets/icons/white/gamepad1.png")) {
     throw std::runtime_error("Unable to load image.");
   }
   m_player_one_s->setTexture(m_player_one_t, true);
@@ -43,7 +43,7 @@ CreateLobbyState::CreateLobbyState(StateMachine &t_machine,
 
   m_player_two_t = m_graphic_loader->loadTexture();
   m_player_two_s = m_graphic_loader->loadSprite();
-  if (!m_player_two_t->loadFromFile("./assets/icons/gamepad2.png")) {
+  if (!m_player_two_t->loadFromFile("./assets/icons/white/gamepad2.png")) {
     throw std::runtime_error("Unable to load image.");
   }
   m_player_two_s->setTexture(m_player_two_t, true);
@@ -52,7 +52,7 @@ CreateLobbyState::CreateLobbyState(StateMachine &t_machine,
                     static_cast<float>(m_window->getSize().y / 2 - 150)});
   m_player_three_t = m_graphic_loader->loadTexture();
   m_player_three_s = m_graphic_loader->loadSprite();
-  if (!m_player_three_t->loadFromFile("./assets/icons/gamepad3.png")) {
+  if (!m_player_three_t->loadFromFile("./assets/icons/white/gamepad3.png")) {
     throw std::runtime_error("Unable to load image.");
   }
   m_player_three_s->setTexture(m_player_three_t, true);
@@ -61,7 +61,7 @@ CreateLobbyState::CreateLobbyState(StateMachine &t_machine,
                     static_cast<float>(m_window->getSize().y / 2 + 50)});
   m_player_four_t = m_graphic_loader->loadTexture();
   m_player_four_s = m_graphic_loader->loadSprite();
-  if (!m_player_four_t->loadFromFile("./assets/icons/gamepad4.png")) {
+  if (!m_player_four_t->loadFromFile("./assets/icons/white/gamepad4.png")) {
     throw std::runtime_error("Unable to load image.");
   }
   m_player_four_s->setTexture(m_player_four_t, true);
@@ -140,7 +140,8 @@ void CreateLobbyState::draw() {
   m_window->clear();
   m_window->draw(m_bg_s);
   m_window->draw(m_title);
-  // m_window->draw(m_player_one_s); could add if statement to show icon depending on how many players are connected
+  m_window->draw(m_player_one_s);
+  // could add if statement to show icon depending on how many players are connected
   // m_window->draw(m_player_two_s);
   // m_window->draw(m_player_three_s);
   // m_window->draw(m_player_four_s);

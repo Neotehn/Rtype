@@ -19,6 +19,7 @@
 #include "../MusicPlayer.hpp"
 #include "../State.hpp"
 #include "../StateMachine.hpp"
+#include "../Textbox.hpp"
 #include "../../../Game/GameState.hpp"
 
 class JoinLobbyState final : public State {
@@ -48,6 +49,7 @@ class JoinLobbyState final : public State {
   rtype::ISprite *m_player_two_s;
   rtype::ISprite *m_player_three_s;
   rtype::ISprite *m_player_four_s;
+  Textbox m_textbox;
 };
 
 #endif /* !JOINLOBBYSTATE_HPP_ */

@@ -58,6 +58,7 @@ set(CLIENT_HPP ../Game/ECS/ComponentPool.hpp
         ../Game/Encapsulation/SFML/Text.hpp
         ../Game/Encapsulation/SFML/Texture.hpp
         ../GameEngine/src/Button.hpp
+        ../GameEngine/src/Textbox.hpp
         ../GameEngine/src/Core.hpp
         ../GameEngine/src/MusicPlayer.hpp
         ../GameEngine/src/Sprite.hpp
@@ -114,6 +115,7 @@ set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         ../Game/Encapsulation/SFML/Texture.cpp
         ../Game/Encapsulation/SFML/RectangleShape.cpp
         ../GameEngine/src/Button.cpp
+        ../GameEngine/src/Textbox.cpp
         ../GameEngine/src/Core.cpp
         ../GameEngine/src/MusicPlayer.cpp
         ../GameEngine/src/Sprite.cpp
