@@ -56,6 +56,8 @@ std::string Action::getCommand() const {
 
   switch (m_type) {
     case ActionType::START:
+      return std::to_string(m_action_id) + ";" + type_string + ";" +
+             std::to_string(m_id) + ";" + std::to_string(m_client_id) + ";";
     case ActionType::DEAD:
     case ActionType::END:
       return std::to_string(m_action_id) + ";" + type_string + ";" +
@@ -83,7 +85,8 @@ std::string Action::getCommand() const {
              std::to_string(m_value) + ";";
     case ActionType::DAMAGE:
       return std::to_string(m_action_id) + ";DAMAGE;" + std::to_string(m_id) +
-             ";" + std::to_string(m_damage) + ";";
+             ";" + std::to_string(m_damage) + ";" +
+             std::to_string(m_collision_partner_id) + ";";
     case ActionType::CREATE:
       data =
         std::to_string(m_position.x) + ";" + std::to_string(m_position.y) + ";";
@@ -92,6 +95,7 @@ std::string Action::getCommand() const {
       if (m_item_type != 0) {
         data += std::to_string(float(m_item_type)) + ";";
       }
+      if (m_client_id != 0) { data += std::to_string(m_client_id) + ";"; }
       if (m_collision_partner_id != 0) {
         data += std::to_string(m_collision_partner_id) + ";";
       }
@@ -141,3 +145,7 @@ float Action::getVelocity() const { return m_velocity; }
 int Action::getItemType() const { return m_item_type; }
 
 void Action::setPlayerId(EntityID t_id) { m_id = t_id; }
+
+int Action::getClientId() const { return m_client_id; }
+
+void Action::setClientId(int t_client_id) { m_client_id = t_client_id; }

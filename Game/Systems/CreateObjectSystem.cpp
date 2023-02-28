@@ -22,10 +22,11 @@ void CreateObjectSystem::update() {
     EntityID id = action->getId();
     rtype::Vector2f pos = action->getCreatePosition();
     float velocity = 0;
+    int player_id = action->getClientId();
     switch (type) {
       case Action::ObjectType::PLAYER:
         initPlayerClient(id, action->getCreateSpritePath(), pos, m_em,
-                         m_graphic_loader);
+                         m_graphic_loader, player_id);
         break;
       case Action::ObjectType::BULLET:
         m_play_sounds.push_back(SoundSystem::SoundType::shoot);

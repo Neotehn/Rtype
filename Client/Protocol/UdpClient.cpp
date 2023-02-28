@@ -10,6 +10,7 @@ UdpClient::UdpClient(boost::asio::io_service &t_io_service,
       m_input_manager(t_input_manager),
       m_client_input_manager(t_client_input_manager) {
   m_flag = ConnectState::none;
+  m_id = 0;
   receiveClient();
   m_thread = boost::thread([&t_io_service]() { t_io_service.run(); });
 }
@@ -40,6 +41,9 @@ void UdpClient::setPlayerId(std::shared_ptr<Action> t_action) {
   if (!m_client_input_manager.isPlayerIdSet()) {
     if (t_action->getType() == Action::ActionType::START) {
       m_client_input_manager.setPlayerId(t_action->getId());
+      m_id = t_action->getClientId();
+      std::cout << "id: " << std::to_string(t_action->getClientId())
+                << std::endl;
     }
   }
 }
@@ -58,7 +62,6 @@ void UdpClient::handleReceive(const boost::system::error_code &t_error,
     } catch (std::exception &e) {
       std::cout << "Error: " << e.what() << std::endl;
     }
-
     EventQueue eq = m_client_input_manager.getInputs();
     for (std::shared_ptr<Action> action : eq.getEventQueue()) {
       m_input_manager.addActionsToQueue(action);

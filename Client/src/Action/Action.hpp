@@ -81,6 +81,9 @@ class Action : public IAction {
 
   void setPlayerId(EntityID t_id);
 
+  int getClientId() const;
+  void setClientId(int t_client_id);
+
  protected:
   int m_action_id;
   ActionType m_type;
@@ -98,6 +101,7 @@ class Action : public IAction {
   ShootingType m_shoot_type = ShootingType::NORMAL;
   float m_velocity = -2;
   int m_item_type = 0;
+  int m_client_id = 0;
 };
 
 #endif  //R_TYPE_CLIENT_ACTION_HPP

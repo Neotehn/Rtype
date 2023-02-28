@@ -49,7 +49,8 @@ void EventQueue::clear() { m_eventQueue.clear(); }
 rtype::Vector2f EventQueue::getLatestPos(EntityID t_id) {
   rtype::Vector2f pos = {0, 0};
   for (std::shared_ptr<Action> event : m_eventQueue) {
-    if (event.get()->getType() == Action::ActionType::POS) {
+    if (event.get()->getType() == Action::ActionType::POS &&
+        event.get()->getId() == t_id) {
       pos = event.get()->getCreatePosition();
     }
   }

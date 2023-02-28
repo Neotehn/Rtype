@@ -8,6 +8,9 @@ UdpServer::UdpServer(boost::asio::io_service &t_io_service,
       m_send_event_manager(t_input_manager.m_level) {
   m_flag = GameMode::none;
   receiveClient();
+  m_player_id_count = 0;
+  m_start_time = std::chrono::system_clock::now();
+  m_time_went_by = std::chrono::system_clock::now();
 
   m_thread = boost::thread([&t_io_service]() { t_io_service.run(); });
 }
@@ -17,9 +20,15 @@ UdpServer::~UdpServer() {
   m_io_service.stop();
 }
 
-void UdpServer::sendMessage(const std::string &t_msg) {
+int UdpServer::getPlayerIdCount() const { return m_player_id_count; }
+
+void UdpServer::setPlayerIdCount(int t_new_player_id_count) {
+  m_player_id_count = t_new_player_id_count;
+}
+
+void UdpServer::sendMessage(const std::string &t_msg, udp::endpoint t_client) {
   std::cout << t_msg << std::endl;
-  m_socket.send_to(boost::asio::buffer(t_msg, t_msg.size()), m_remoteEndpoint);
+  m_socket.send_to(boost::asio::buffer(t_msg, t_msg.size()), t_client);
 }
 
 void UdpServer::handleSend(std::string t_msg,
@@ -38,6 +47,7 @@ void UdpServer::receiveClient() {
 bool UdpServer::doesAlreadyExist(std::shared_ptr<Action> t_action) {
   if (t_action->getType() == Action::ActionType::START) {
     int id = t_action->getId();
+    std::cout << std::to_string(id) << std::endl;
 
     for (int registered_id : m_client_ports) {
       if (registered_id == id) { return true; }
@@ -45,6 +55,8 @@ bool UdpServer::doesAlreadyExist(std::shared_ptr<Action> t_action) {
     std::cout << "register new client port: " << std::to_string(id)
               << std::endl;
     m_client_ports.push_back(id);
+    udp::endpoint tmp(udp::v4(), id);
+    m_endpoints.push_back(tmp);
   }
   return false;
 }
@@ -61,8 +73,12 @@ void UdpServer::handleReceive(const boost::system::error_code &t_error,
       m_send_event_manager.addActionsToQueue(action);
     }
 
-    if (action->getType() != Action::ActionType::END) {
-      m_flag = GameMode::single;
+    if (action->getType() != Action::ActionType::END &&
+        m_client_ports.size() != 2) {
+      receiveClient();
+    } else if (m_client_ports.size() == 2) {
+      std::cout << m_endpoints.size() << std::endl;
+      m_flag = GameMode::coop;
       receiveClient();
     } else {
       m_flag = GameMode::end;
@@ -92,6 +108,8 @@ void UdpServer::sendEvents() {
   for (std::shared_ptr<Action> event : eq.getEventQueue()) {
     if (!isUpdated(event)) {
       std::cout << "add start event again" << std::endl;
+      m_client_ids.push_back(m_client_ids.size() + 1);
+      event->setClientId(m_client_ids.size());
       m_input_manager.addActionsToQueue(event);
       m_send_event_manager.addActionsToQueue(event);
       continue;
@@ -101,7 +119,27 @@ void UdpServer::sendEvents() {
         event->getType() != Action::ActionType::DOWN &&
         event->getType() != Action::ActionType::LEFT &&
         event->getType() != Action::ActionType::RIGHT) {
-      sendMessage(event->getCommand());
+      if (event->getType() == Action::ActionType::START) {
+        for (int i = 0; i < m_endpoints.size(); i++) {
+          if (event->getClientId() - 1 == i) {
+            sendMessage(event->getCommand(), m_endpoints[i]);
+          }
+        }
+      } else {
+        for (udp::endpoint client : m_endpoints) {
+          sendMessage(event->getCommand(), client);
+        }
+      }
     }
   }
+}
+
+float UdpServer::getTimeDiff() {
+  m_time_went_by = std::chrono::system_clock::now();
+  std::chrono::duration<double> elapsed_seconds = m_time_went_by - m_start_time;
+  return elapsed_seconds.count();
+}
+void UdpServer::resetTime() {
+  m_time_went_by = std::chrono::system_clock::now();
+  m_start_time = std::chrono::system_clock::now();
 }

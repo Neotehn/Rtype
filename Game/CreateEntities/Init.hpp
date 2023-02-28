@@ -20,7 +20,7 @@ EntityID initPlayer(std::shared_ptr<EntityManager> t_entity_manager,
 void initPlayerClient(EntityID t_id, std::string t_sprite_path,
                       rtype::Vector2f t_pos,
                       std::shared_ptr<EntityManager> t_entity_manager,
-                      rtype::IGraphicLoader *t_graphic_loader);
+                      rtype::IGraphicLoader *t_graphic_loader, int t_player_id);
 Health initPlayerHealthBar(rtype::IGraphicLoader *t_graphic_loader);
 
 void initBulletClient(EntityID t_id, rtype::Vector2f t_pos,

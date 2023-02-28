@@ -14,7 +14,6 @@ GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
   if (t_flag == client) {
     m_flag = CommunicationFlag::client;
     m_port_number = rand() % 15000 + 40001;
-
     m_clientCom =
       new UdpClient(m_io_service, "localhost", "50000", m_port_number,
                     m_input_manager, m_client_input_manager);
@@ -55,7 +54,8 @@ std::vector<std::shared_ptr<ISystem>> GameState::initSystems() {
                                      m_is_running, m_sounds, m_graphic_loader));
     systems.push_back(
       std::make_shared<CreateObjectSystem>(m_em, m_sounds, m_graphic_loader));
-    systems.push_back(std::make_shared<MovementSystem>(m_em, nullptr));
+    systems.push_back(
+      std::make_shared<MovementSystem>(m_em, nullptr, m_clientCom));
     systems.push_back(std::make_shared<AnimationSystem>(m_em, m_input_manager));
     systems.push_back(
       std::make_shared<PowerUpSystem>(m_em, m_sounds, m_graphic_loader));
@@ -74,7 +74,7 @@ void GameState::resume() { std::cout << "GameState Resume\n"; }
 void GameState::update() {
   while (m_is_running) {
     while (m_flag == CommunicationFlag::server &&
-           m_serverCom->m_flag != m_serverCom->single) {
+           m_serverCom->m_flag != m_serverCom->coop) {
       std::cout << "waiting on Client Connection" << std::endl;
       boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
     }
@@ -127,7 +127,7 @@ void GameState::update() {
           m_clientCom->sendMessage(action->getCommand());
       }
     }
-    if (m_flag == CommunicationFlag::server && m_serverCom->m_flag) {
+    if (m_flag == CommunicationFlag::server && m_serverCom->m_flag == 2) {
       m_serverCom->sendEvents();
     }
     for (std::shared_ptr<ISystem> system : m_systems) {
