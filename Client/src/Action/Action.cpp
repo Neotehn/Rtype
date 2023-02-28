@@ -16,6 +16,8 @@ std::string Action::getTypeAsString() const {
   switch (m_type) {
     case ActionType::START:
       return "START";
+    case ActionType::RESTART:
+      return "RESTART";
     case ActionType::UP:
       return "UP";
     case ActionType::DOWN:
@@ -64,6 +66,7 @@ std::string Action::getCommand() const {
     case ActionType::DOWN:
     case ActionType::LEFT:
     case ActionType::RIGHT:
+    case ActionType::RESTART:
       return std::to_string(m_action_id) + ";" + type_string + ";" +
              std::to_string(m_id) + ";" + std::to_string(m_triggered_by_user) +
              ";";
@@ -93,6 +96,10 @@ std::string Action::getCommand() const {
         data += std::to_string(float(m_item_type)) + ";";
       }
       if (m_client_id != 0) { data += std::to_string(m_client_id) + ";"; }
+      if (m_collision_partner_id != 0) {
+        data += std::to_string(m_collision_partner_id) + ";";
+      }
+      if (m_damage != 0) { data += std::to_string(m_damage) + ";"; }
       std::cout << std::to_string(m_velocity) << std::endl;
 
       return std::to_string(m_action_id) + ";CREATE;" + std::to_string(m_id) +

@@ -62,3 +62,11 @@ void EventQueue::dump() {
     std::cout << event->getTypeAsString() << std::endl;
   }
 }
+
+void EventQueue::removeEvent(int t_action_id) {
+  for (int i = 0; i < m_eventQueue.size(); i++) {
+    if (m_eventQueue[i].get()->getActionId() == t_action_id) {
+      m_eventQueue.erase(m_eventQueue.begin() + i);
+    }
+  }
+}

@@ -38,6 +38,7 @@ class GameState final : public State {
  public:
   GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
             MusicPlayer &t_music_player, std::size_t t_flag,
+            rtype::IGraphicLoader *t_graphic_loader, int *t_level,
             bool t_replace = true);
   ~GameState();
 
@@ -58,11 +59,11 @@ class GameState final : public State {
   UdpServer *m_serverCom = nullptr;
   std::vector<std::shared_ptr<ISystem>> m_systems;
   bool m_is_running;
+  rtype::IMusic *m_music;
+  std::shared_ptr<EntityManager> m_em;
   std::vector<SoundSystem::SoundType> m_sounds;
 
-  EntityManager initEntityManager();
-  std::vector<std::shared_ptr<ISystem>>
-    initSystems(std::shared_ptr<EntityManager>);
+  std::vector<std::shared_ptr<ISystem>> initSystems();
 };
 
 #endif /* !GAMESTATE_HPP_ */

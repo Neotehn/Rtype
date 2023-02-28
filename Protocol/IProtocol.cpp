@@ -10,6 +10,8 @@ IProtocol::getCreateAction(std::vector<std::string> commands, int action_id,
   float velocity = 0;
   int player_id = 0;
   Action::ShootingType shooting_type;
+  EntityID owner_id;
+  float damage;
   if (type == Action::ObjectType::PLAYER) {
     sprite_path = commands[6];
     player_id = std::stoi(commands[7]);
@@ -22,8 +24,11 @@ IProtocol::getCreateAction(std::vector<std::string> commands, int action_id,
       id, CreateAction::ENEMY, rtype::Vector2f{x, y}, "", action_id, velocity));
   } else if (type == Action::ObjectType::BULLET) {
     shooting_type = Action::ShootingType(std::stoi(commands[6]));
-    return std::make_shared<Action>(CreateAction(
-      id, CreateAction::BULLET, rtype::Vector2f{x, y}, shooting_type));
+    owner_id = std::stoull(commands[7]);
+    damage = std::stof(commands[8]);
+    return std::make_shared<Action>(
+      CreateAction(id, CreateAction::BULLET, rtype::Vector2f{x, y}, owner_id,
+                   damage, shooting_type));
   } else if (type == Action::ObjectType::EXPLOSION) {
     return std::make_shared<Action>(CreateAction(id, CreateAction::EXPLOSION,
                                                  rtype::Vector2f{x, y}, "",
@@ -67,6 +72,9 @@ IProtocol::getIncreaseAction(std::vector<std::string> commands, int action_id,
   } else if (type == Action::IncreaseType::COINS) {
     return std::make_shared<Action>(
       IncreaseAction(id, IncreaseAction::COINS, value, action_id));
+  } else if (type == Action::IncreaseType::KILLS) {
+    return std::make_shared<Action>(
+      IncreaseAction(id, IncreaseAction::KILLS, value, action_id));
   } else {
     return std::make_shared<Action>(VoidAction(id, 0));
   }
@@ -85,6 +93,9 @@ std::shared_ptr<Action> IProtocol::getAction(std::string command) {
     int player_id = std::stoi(commands[3]);
     return std::make_shared<Action>(
       StateAction(Action::ActionType::START, id, action_id, player_id));
+  } else if (action_type == "RESTART") {
+    return std::make_shared<Action>(
+      StateAction(Action::ActionType::RESTART, id, action_id));
   } else if (action_type == "UP") {
     return std::make_shared<Action>(
       MovementAction(Action::ActionType::UP, id, false, action_id));

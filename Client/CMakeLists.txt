@@ -64,7 +64,10 @@ set(CLIENT_HPP ../Game/ECS/ComponentPool.hpp
         ../GameEngine/src/States/SettingsState.hpp
         ../Game/Encapsulation/IMouse.hpp
         ../Game/Encapsulation/SFML/Mouse.hpp
-        ../Game/Systems/CreatePlayerSystem.hpp)
+        ../Game/Systems/CreatePlayerSystem.hpp
+        ../Game/Encapsulation/IGraphicLoader.hpp
+        ../Game/Encapsulation/SFML/GraphicLoader.hpp
+        ../Game/CreateEntities/AssetLoader.hpp)
 
 set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         src/InputManager/InputManager.cpp
@@ -112,7 +115,9 @@ set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         ../GameEngine/src/States/MainState.cpp
         ../GameEngine/src/States/SettingsState.cpp
         ../Game/Encapsulation/SFML/Mouse.cpp
-        ../Game/Systems/CreatePlayerSystem.cpp)
+        ../Game/Systems/CreatePlayerSystem.cpp
+        ../Game/Encapsulation/SFML/GraphicLoader.cpp
+        ../Game/CreateEntities/AssetLoader.cpp)
 
 include(FetchContent)
 FetchContent_Declare(SFML
@@ -130,13 +135,15 @@ if (NOT Boost_FOUND)
     FetchContent_MakeAvailable(Boost)
 endif()
 
+find_package(jsoncpp REQUIRED)
+
 find_package(Boost 1.69.0 COMPONENTS chrono system thread REQUIRED)
 
 find_package(OpenGL REQUIRED OPTIONAL_COMPONENTS OpenGL)
 include_directories(${OPENGL_INCLUDE_DIR})
 add_executable(r-type_client ${CLIENT_SRC} ${CLIENT_HPP})
 
-target_link_libraries(r-type_client sfml-graphics sfml-audio
+target_link_libraries(r-type_client sfml-graphics sfml-audio jsoncpp_lib
         ${OPENGL_LIBRARIES} ${Boost_SYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY} ${Boost_CHRONO_LIBRARY})
 target_link_directories(r-type_client PUBLIC ${Boost_LIBRARY_DIRS})
 

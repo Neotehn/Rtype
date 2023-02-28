@@ -6,7 +6,7 @@
 #include "../../Game/Encapsulation/GraphicDataTypes.hpp"
 #include "../../Game/Encapsulation/IRenderWindow.hpp"
 #include "../../Game/Encapsulation/IMouse.hpp"
-#include "../../Game/Encapsulation/SFML/Mouse.hpp"
+#include "../../Game/Encapsulation/IGraphicLoader.hpp"
 #include "./MusicPlayer.hpp"
 
 class StateMachine;
@@ -14,7 +14,8 @@ class StateMachine;
 class State {
  public:
   State(StateMachine &t_machine, rtype::IRenderWindow *t_window,
-        MusicPlayer &t_music_player, bool t_replace = true);
+        MusicPlayer &t_music_player, rtype::IGraphicLoader *t_graphic_loader,
+        int *t_level, bool t_replace = true);
 
   virtual ~State() = default;
 
@@ -37,6 +38,8 @@ class State {
   MusicPlayer &m_music_player;
   bool m_replace;
   std::unique_ptr<State> m_next;
+  rtype::IGraphicLoader *m_graphic_loader;
+  int *m_level;
 };
 
 #endif  // !STATE_HPP_

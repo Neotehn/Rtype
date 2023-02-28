@@ -2,21 +2,23 @@
 
 MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
                      MusicPlayer &t_music_player, std::size_t t_flag,
+                     rtype::IGraphicLoader *t_graphic_loader, int *t_level,
                      const bool t_replace)
-    : State(t_machine, t_window, t_music_player, t_replace),
+    : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level,
+            t_replace),
       m_start_btn(Button(
         "./assets/startBtn.png",
         rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 135),
                         static_cast<float>(m_window->getSize().y / 2 - 65)},
-        rtype::Vector2f{270, 130})),
+        rtype::Vector2f{270, 130}, t_graphic_loader)),
       m_settings_btn(
         Button("./assets/gear.png",
                rtype::Vector2f{static_cast<float>(m_window->getSize().x - 100),
                                static_cast<float>(m_window->getSize().y - 100)},
-               rtype::Vector2f{64, 64})),
+               rtype::Vector2f{64, 64}, t_graphic_loader)),
       m_flag(t_flag) {
-  m_bg_t = new rtype::Texture();
-  m_bg_s = new rtype::Sprite();
+  m_bg_t = m_graphic_loader->loadTexture();
+  m_bg_s = m_graphic_loader->loadSprite();
   if (!m_bg_t->loadFromFile("./assets/menubg.jpg")) {
     throw std::runtime_error("Unable to load image.");
   }
@@ -27,6 +29,11 @@ MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
   m_bg_s->setTexture(m_bg_t, true);
   m_bg_s->setScale({scale_x, scale_y});
   m_music_player.play(MusicID::MENU_THEME);
+}
+
+MainState::~MainState() {
+  delete m_bg_t;
+  delete m_bg_s;
 }
 
 void MainState::pause() { std::cout << "MenuState Pause\n"; }
@@ -45,13 +52,16 @@ void MainState::update() {
     if (m_mouse->isLeftMouseButtonPressed()) {
       if (m_start_btn.is_pressed(mouse_pos_f)) {
         std::cout << "startbtn pressed" << std::endl;
-        m_next = StateMachine::build<GameState>(m_state_machine, m_window,
-                                                m_music_player, m_flag, true);
+        m_music_player.stop();
+        m_next = StateMachine::build<GameState>(
+          m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
+          m_level, true);
       }
       if (m_settings_btn.is_pressed(mouse_pos_f)) {
         std::cout << "settingsbtn pressed" << std::endl;
         m_next = StateMachine::build<SettingsState>(
-          m_state_machine, m_window, m_music_player, m_flag, true);
+          m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
+          m_level, true);
       }
     }
     switch (event.type) {

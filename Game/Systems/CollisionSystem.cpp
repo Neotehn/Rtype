@@ -111,6 +111,8 @@ void CollisionSystem::bulletEnemyCollision() {
 
       bool collision = enemy->body->intersects(bullet->body->getGlobalBounds());
       if (collision) {
+        m_serverCom->addEvent(std::make_shared<Action>(IncreaseAction(
+          bullet->owner, Action::IncreaseType::KILLS, enemy->kill_value)));
         m_serverCom->addEvent(
           std::make_shared<Action>(DestroyAction(enemy_ent)));
         m_serverCom->addEvent(
