@@ -80,7 +80,7 @@ void MainState::update() {
     }
     if (m_mouse->isLeftMouseButtonPressed()) {
       if (m_start_btn.is_pressed(mouse_pos_f)) {
-        std::cout << "enter lobby" << std::endl;
+        std::cout << "start game" << std::endl;
         m_next = StateMachine::build<GameState>(m_state_machine, m_window,
                                                 m_music_player, m_flag,
                                                 m_graphic_loader, true);
@@ -94,18 +94,6 @@ void MainState::update() {
       if (m_exit_btn.is_pressed(mouse_pos_f)) {
         std::cout << "exitbtn pressed" << std::endl;
         m_state_machine.quit();
-      }
-      if (m_create_btn.is_pressed(mouse_pos_f)) {
-        std::cout << "create lobby" << std::endl;
-        m_next = StateMachine::build<CreateLobbyState>(
-          m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          true);
-      }
-      if (m_join_btn.is_pressed(mouse_pos_f)) {
-        std::cout << "join lobby" << std::endl;
-        m_next = StateMachine::build<JoinLobbyState>(m_state_machine, m_window,
-                                                     m_music_player, m_flag,
-                                                     m_graphic_loader, true);
       }
       if (m_exit_btn.is_pressed(mouse_pos_f)) {
         std::cout << "exitbtn pressed" << std::endl;
