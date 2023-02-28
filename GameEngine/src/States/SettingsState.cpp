@@ -7,11 +7,21 @@ SettingsState::SettingsState(StateMachine &t_machine,
                              int *t_level, const bool t_replace)
     : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level,
             t_replace),
-      m_start_btn(
-        Button("./assets/startBtn.png",
-               rtype::Vector2f{static_cast<float>(m_window->getSize().x - 320),
-                               static_cast<float>(m_window->getSize().y - 180)},
-               rtype::Vector2f{270, 130}, t_graphic_loader)),
+      m_start_btn(Button(
+        "./assets/icons/home.png",
+        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 32),
+                        static_cast<float>(m_window->getSize().y - 100)},
+        rtype::Vector2f{64, 64}, t_graphic_loader)),
+      m_vol_up(Button(
+        "./assets/icons/plus.png",
+        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 81.5),
+                        static_cast<float>(m_window->getSize().y / 2)},
+        rtype::Vector2f{64, 64}, t_graphic_loader)),
+      m_vol_down(Button(
+        "./assets/icons/minus.png",
+        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 + 17.5),
+                        static_cast<float>(m_window->getSize().y / 2)},
+        rtype::Vector2f{64, 64}, t_graphic_loader)),
       m_flag(t_flag) {
   m_bg_t = m_graphic_loader->loadTexture();
   m_bg_s = m_graphic_loader->loadSprite();
@@ -24,13 +34,30 @@ SettingsState::SettingsState(StateMachine &t_machine,
   float scale_y = size_y / m_bg_t->getSize().y;
   m_bg_s->setTexture(m_bg_t, true);
   m_bg_s->setScale({scale_x, scale_y});
+  m_font = m_graphic_loader->loadFont();
+  if (!m_font->loadFromFile("./assets/font/nasalization-rg.ttf")) {
+    throw std::runtime_error("Unable to load font.");
+  }
+  m_title = m_graphic_loader->loadText();
+  m_title->setFont(m_font);
+  m_title->setString("SETTINGS");
+  m_title->setCharacterSize(50);
+  m_title->setPosition(
+    {(size_x / 2) - (m_title->getLocalBounds().width / 2), 100});
+  m_vol_txt = m_graphic_loader->loadText();
+  m_vol_txt->setFont(m_font);
+  m_vol_txt->setString("VOLUME");
+  m_vol_txt->setCharacterSize(35);
+  m_vol_txt->setPosition(
+    {(size_x / 2) - (m_vol_txt->getLocalBounds().width / 2),
+     (size_y / 2) - 50});
+  m_music_player.play(MusicID::MENU_THEME);
 }
 
 SettingsState::~SettingsState() {
   delete m_bg_t;
   delete m_bg_s;
 }
-
 void SettingsState::pause() { std::cout << "MenuState Pause\n"; }
 
 void SettingsState::resume() { std::cout << "MenuState resume\n"; }
@@ -42,6 +69,8 @@ void SettingsState::update() {
                                 static_cast<float>(mouse_pos.y)};
     if (event.type == rtype::EventType::MouseMoved) {
       m_start_btn.is_hovered(mouse_pos_f);
+      m_vol_down.is_hovered(mouse_pos_f);
+      m_vol_up.is_hovered(mouse_pos_f);
     }
     if (m_mouse->isLeftMouseButtonPressed()) {
       if (m_start_btn.is_pressed(mouse_pos_f)) {
@@ -49,6 +78,30 @@ void SettingsState::update() {
         m_next = StateMachine::build<MainState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, true);
+      }
+      if (m_vol_down.is_pressed(mouse_pos_f)) {
+        if (m_music_player.getVolume() > 0) {
+          float tmp_vol = m_music_player.getVolume();
+          m_music_player.setVolume(tmp_vol - 5);
+        }
+      }
+      if (m_vol_up.is_pressed(mouse_pos_f)) {
+        if (m_music_player.getVolume() < 100) {
+          float tmp_vol = m_music_player.getVolume();
+          m_music_player.setVolume(tmp_vol + 5);
+        }
+      }
+      if (m_vol_down.is_pressed(mouse_pos_f)) {
+        if (m_music_player.getVolume() > 0) {
+          float tmp_vol = m_music_player.getVolume();
+          m_music_player.setVolume(tmp_vol - 5);
+        }
+      }
+      if (m_vol_up.is_pressed(mouse_pos_f)) {
+        if (m_music_player.getVolume() < 100) {
+          float tmp_vol = m_music_player.getVolume();
+          m_music_player.setVolume(tmp_vol + 5);
+        }
       }
     }
     switch (event.type) {
@@ -78,6 +131,10 @@ void SettingsState::update() {
 void SettingsState::draw() {
   m_window->clear();
   m_window->draw(m_bg_s);
+  m_window->draw(m_title);
+  m_window->draw(m_vol_txt);
   m_window->draw(m_start_btn.getSprite());
+  m_window->draw(m_vol_down.getSprite());
+  m_window->draw(m_vol_up.getSprite());
   m_window->display();
 }
