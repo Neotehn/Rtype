@@ -12,7 +12,8 @@
 class MovementSystem : public ISystem {
  public:
   MovementSystem(std::shared_ptr<EntityManager> t_em, UdpServer *t_serverCom);
-  MovementSystem(std::shared_ptr<EntityManager> t_em, UdpServer *t_serverCom, UdpClient *t_clientCom);
+  MovementSystem(std::shared_ptr<EntityManager> t_em, UdpServer *t_serverCom,
+                 UdpClient *t_clientCom);
   ~MovementSystem();
 
   void update();
