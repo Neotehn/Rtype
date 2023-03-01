@@ -1,6 +1,6 @@
 #include "./Core.hpp"
 
-Core::Core(std::size_t t_flag) {
+Core::Core(std::size_t t_flag, std::string t_ip) {
   m_graphic_loader = new rtype::GraphicLoader();
   m_music_player.init(m_graphic_loader);
   m_window = m_graphic_loader->loadRenderWindow();
@@ -12,13 +12,13 @@ Core::Core(std::size_t t_flag) {
   srand(time(nullptr));
 
   if (t_flag == 1)
-    m_state_machine.run(
-      StateMachine::build<MainState>(m_state_machine, m_window, m_music_player,
-                                     t_flag, m_graphic_loader, level, true));
+    m_state_machine.run(StateMachine::build<MainState>(
+      m_state_machine, m_window, m_music_player, t_flag, m_graphic_loader,
+      level, true, t_ip));
   else
-    m_state_machine.run(
-      StateMachine::build<GameState>(m_state_machine, m_window, m_music_player,
-                                     t_flag, m_graphic_loader, level, true));
+    m_state_machine.run(StateMachine::build<GameState>(
+      m_state_machine, m_window, m_music_player, t_flag, m_graphic_loader,
+      level, true, t_ip));
 }
 
 Core::~Core() {

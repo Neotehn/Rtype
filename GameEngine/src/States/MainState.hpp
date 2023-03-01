@@ -22,7 +22,7 @@ class MainState final : public State {
   MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
             MusicPlayer &t_music_player, std::size_t t_flag,
             rtype::IGraphicLoader *t_graphic_loader, int *t_level,
-            bool t_replace = true);
+            bool t_replace = true, std::string t_ip = "");
   ~MainState();
   void pause() override;
   void resume() override;

@@ -3,9 +3,9 @@
 GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
                      MusicPlayer &t_music_player, std::size_t t_flag,
                      rtype::IGraphicLoader *t_graphic_loader, int *t_level,
-                     const bool t_replace)
-    : State{t_machine,        t_window, t_music_player,
-            t_graphic_loader, t_level,  t_replace},
+                     const bool t_replace, std::string t_ip)
+    : State{t_machine, t_window, t_music_player, t_graphic_loader, t_level,
+            t_replace, t_ip},
       m_client_input_manager(t_level), m_input_manager(t_level) {
   m_is_running = true;
   m_graphic_loader = t_graphic_loader;
@@ -36,13 +36,13 @@ GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
        (size_y / 2) - (m_title->getLocalBounds().height / 2)});
     m_flag = CommunicationFlag::client;
     m_port_number = rand() % 15000 + 40001;
-    m_clientCom =
-      new UdpClient(m_io_service, "localhost", "50000", m_port_number,
-                    m_input_manager, m_client_input_manager);
+    m_clientCom = new UdpClient(m_io_service, m_ip, "50000", m_port_number,
+                                m_input_manager, m_client_input_manager);
   } else {
     m_flag = CommunicationFlag::server;
 
-    m_serverCom = new UdpServer(m_io_service, m_input_manager, m_is_running);
+    m_serverCom =
+      new UdpServer(m_io_service, m_input_manager, m_is_running, m_ip);
   }
   loadLevel(m_level, m_em, m_graphic_loader, m_music,
             m_flag == CommunicationFlag::client);

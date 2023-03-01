@@ -4,9 +4,9 @@ SettingsState::SettingsState(StateMachine &t_machine,
                              rtype::IRenderWindow *t_window,
                              MusicPlayer &t_music_player, std::size_t t_flag,
                              rtype::IGraphicLoader *t_graphic_loader,
-                             int *t_level, const bool t_replace)
+                             int *t_level, const bool t_replace, std::string t_ip)
     : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level,
-            t_replace),
+            t_replace, t_ip),
       m_start_btn(Button(
         "./assets/icons/white/home.png",
         rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 32),

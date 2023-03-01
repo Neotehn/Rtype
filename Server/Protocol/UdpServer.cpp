@@ -1,9 +1,12 @@
 #include "./UdpServer.hpp"
 
 UdpServer::UdpServer(boost::asio::io_service &t_io_service,
-                     InputManager &t_input_manager, bool &t_is_running)
+                     InputManager &t_input_manager, bool &t_is_running,
+                     std::string t_ip)
     : m_io_service(t_io_service), m_input_manager(t_input_manager),
-      m_socket(t_io_service, udp::endpoint(udp::v4(), 50000)),
+      m_socket(
+        t_io_service,
+        udp::endpoint(boost::asio::ip::address::from_string(t_ip), 50000)),
       m_is_running(t_is_running),
       m_send_event_manager(t_input_manager.m_level) {
   m_flag = GameMode::none;

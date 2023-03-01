@@ -30,7 +30,8 @@ using boost::system::error_code;
 class UdpServer : public IProtocol {
  public:
   UdpServer(boost::asio::io_service &t_io_service,
-            InputManager &t_input_manager, bool &t_is_running);
+            InputManager &t_input_manager, bool &t_is_running,
+            std::string t_ip);
   ~UdpServer();
   void sendMessage(const std::string &, udp::endpoint t_client);
   void receiveClient();

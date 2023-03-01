@@ -3,9 +3,9 @@
 MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
                      MusicPlayer &t_music_player, std::size_t t_flag,
                      rtype::IGraphicLoader *t_graphic_loader, int *t_level,
-                     const bool t_replace)
+                     const bool t_replace, std::string t_ip)
     : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level,
-            t_replace),
+            t_replace, t_ip),
       m_start_btn(Button(
         "./assets/startBtn.png",
         rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 135),
@@ -84,7 +84,7 @@ void MainState::update() {
         m_music_player.stop();
         m_next = StateMachine::build<GameState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, true);
+          m_level, true, m_ip);
         m_start_pressed = true;
       }
       if (m_settings_btn.is_pressed(mouse_pos_f)) {
