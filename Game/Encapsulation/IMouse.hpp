@@ -10,6 +10,10 @@ namespace rtype {
     virtual ~IMouse() = default;
 
     virtual bool isLeftMouseButtonPressed() const = 0;
+    virtual bool isRightMouseButtonPressed() const = 0;
+    virtual bool isMouseXButton1Pressed() const = 0;
+    virtual bool isMouseXButton2Pressed() const = 0;
+    virtual bool isMouseMiddleButtonPressed() const = 0;
     virtual rtype::Vector2i
     getMousePosition(rtype::IRenderWindow *m_window) const = 0;
   };

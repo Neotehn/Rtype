@@ -17,6 +17,8 @@
 #include <boost/make_shared.hpp>
 #include <boost/asio.hpp>
 #include <boost/thread.hpp>
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
 
 #include <math.h>
 
