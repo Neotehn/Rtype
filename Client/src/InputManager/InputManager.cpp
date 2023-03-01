@@ -57,6 +57,12 @@ void InputManager::recordKeyReleasedInputs(const rtype::Event &t_event) {
           ShootAction(m_player_id, 1, Action::ShootingType::NORMAL, true)),
         Action::ActionType::SHOOT);
       break;
+    case rtype::EventKey::B:
+      m_input_queue.addToQueueIfNotExist(
+        std::make_shared<Action>(
+          ShootAction(m_player_id, 1, Action::ShootingType::COIN, true)),
+        Action::ActionType::SHOOT);
+      break;
     case rtype::EventKey::M:
       m_input_queue.addToQueueIfNotExist(
         std::make_shared<Action>(

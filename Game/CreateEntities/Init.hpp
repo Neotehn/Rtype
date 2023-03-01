@@ -45,6 +45,9 @@ void initExplosionClient(EntityID t_id, rtype::Vector2f t_pos,
                          std::shared_ptr<EntityManager> t_em,
                          rtype::IGraphicLoader *t_graphic_loader);
 
+void createCoin(std::shared_ptr<EntityManager> t_em,
+                rtype::IGraphicLoader *t_graphic_loader,
+                UdpServer *t_server_com);
 void initPowerUp(std::shared_ptr<EntityManager> t_em,
                  rtype::IGraphicLoader *t_graphic_loader,
                  UdpServer *t_server_com);
@@ -60,6 +63,10 @@ void initShoot(std::shared_ptr<Action> t_action,
                std::shared_ptr<EntityManager> t_em,
                rtype::IGraphicLoader *t_graphic_loader,
                UdpServer *t_server_com);
+void initCoinShoot(std::shared_ptr<Action> t_action,
+                   std::shared_ptr<EntityManager> t_em,
+                   rtype::IGraphicLoader *t_graphic_loader,
+                   UdpServer *t_server_com);
 void initFireShoot(std::shared_ptr<Action> t_action,
                    std::shared_ptr<EntityManager> t_em,
                    rtype::IGraphicLoader *t_graphic_loader,

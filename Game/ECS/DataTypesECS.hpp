@@ -111,8 +111,9 @@ struct Player {
   Health health;
   float speed;
   int player_id;
-  int fire_shot = 5;  //TODO reset to 0, 5 only for testing purposes
-  int bomb_shot = 5;  //TODO reset to 0, 5 only for testing purposes
+  int fire_shot = 0;
+  int bomb_shot = 0;
+  int coin_shot = 0;
   int coins = 0;
   int exp = 0;
   int kills = 0;

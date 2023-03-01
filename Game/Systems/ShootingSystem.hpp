@@ -22,8 +22,9 @@ class ShootingSystem : public ISystem {
   UdpServer *m_serverCom;
   rtype::IGraphicLoader *m_graphic_loader;
 
-  void shootFire(std::shared_ptr<Action> action);
-  void shootBomb(std::shared_ptr<Action> action);
+  void shootMoney(std::shared_ptr<Action> t_action);
+  void shootFire(std::shared_ptr<Action> t_action);
+  void shootBomb(std::shared_ptr<Action> t_action);
 };
 
 #endif  // CLIENT_SRC_SYSTEMS_SHOOTINGSYSTEM_HPP_

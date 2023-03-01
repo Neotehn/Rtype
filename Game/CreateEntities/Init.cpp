@@ -132,12 +132,20 @@ void initBulletClient(EntityID t_id, rtype::Vector2f t_pos,
   rtype::IRectangleShape *bullet_body = t_graphic_loader->loadRectangleShape();
   bullet_body->setSize({20, 20});
   bullet_body->setPosition({t_pos.x, t_pos.y});
+  float speed = 10;
 
   switch (t_action->getShootType()) {
     case Action::ShootingType::NORMAL:
       bullet_body->setTexture(
         SpriteECS("./../Client/sprites/shoot2.png", t_graphic_loader)
           .getTexture());
+      break;
+    case Action::ShootingType::COIN:
+      bullet_body->setTexture(
+        SpriteECS("./../Client/sprites/dollarPaul.png", t_graphic_loader)
+          .getTexture());
+      //      speed = 6.0;
+      bullet_body->setSize({40, 25});
       break;
     case Action::ShootingType::FIRE:
       bullet_body->setTexture(
@@ -152,7 +160,7 @@ void initBulletClient(EntityID t_id, rtype::Vector2f t_pos,
   }
   std::cout << "create bullet for player " << std::to_string(t_owner_id)
             << std::endl;
-  Bullet displayable_bullet = {bullet_body, 10.0, t_pos, t_owner_id,
+  Bullet displayable_bullet = {bullet_body, speed, t_pos, t_owner_id,
                                static_cast<float>(t_action->getShootDamage())};
   t_em->Assign<Bullet>(bullet, displayable_bullet);
 }
@@ -322,9 +330,11 @@ void createItem(std::string t_path, rtype::ItemType t_type, int t_value,
 void initPowerUp(std::shared_ptr<EntityManager> t_em,
                  rtype::IGraphicLoader *t_graphic_loader,
                  UdpServer *t_server_com) {
-  int random_powerup = rand() % 5;
+  int random_powerup = rand() % 4;
   if (random_powerup == 0) {
-    createCoin(t_em, t_graphic_loader, t_server_com);
+    createItem("../Client/sprites/powerup/fire_item.png",
+               rtype::ItemType::FIRE_ITEM, 5, t_em, t_graphic_loader,
+               t_server_com);
   } else if (random_powerup == 1) {
     createItem("../Client/sprites/powerup/life_item.png",
                rtype::ItemType::LIFE_ITEM, 1, t_em, t_graphic_loader,
@@ -333,13 +343,9 @@ void initPowerUp(std::shared_ptr<EntityManager> t_em,
     createItem("../Client/sprites/powerup/speed_item.png",
                rtype::ItemType::SPEED_ITEM, 3, t_em, t_graphic_loader,
                t_server_com);
-  } else if (random_powerup == 3) {
+  } else {
     createItem("../Client/sprites/powerup/bomb_item.png",
                rtype::ItemType::BOMB_ITEM, 5, t_em, t_graphic_loader,
-               t_server_com);
-  } else {
-    createItem("../Client/sprites/powerup/fire_item.png",
-               rtype::ItemType::FIRE_ITEM, 5, t_em, t_graphic_loader,
                t_server_com);
   }
 }
@@ -439,6 +445,32 @@ void initShoot(std::shared_ptr<Action> t_action,
     CreateAction(bullet, Action::ObjectType::BULLET, bullet_pos,
                  t_action->getId(), player->damage_factor * bullet_damage,
                  std::to_string(Action::ShootingType::NORMAL))));
+}
+
+void initCoinShoot(std::shared_ptr<Action> t_action,
+                   std::shared_ptr<EntityManager> t_em,
+                   rtype::IGraphicLoader *t_graphic_loader,
+                   UdpServer *t_server_com) {
+  Player *player = (*t_em).Get<Player>(t_action->getId());
+  EntityID bullet = t_em->createNewEntity();
+  SpriteECS sprite =
+    SpriteECS("./../Client/sprites/dollarPaul.png", t_graphic_loader);
+  rtype::Vector2f bullet_pos = {player->position.position.x - 20,
+                                player->position.position.y +
+                                  player->body->getSize().y / 2 - 10};
+  rtype::IRectangleShape *bullet_body = t_graphic_loader->loadRectangleShape();
+
+  bullet_body->setSize({40, 25});
+  bullet_body->setPosition({bullet_pos.x, bullet_pos.y});
+  bullet_body->setTexture(sprite.getTexture());
+  float bullet_damage = 6;
+
+  t_em->Assign<Bullet>(bullet, Bullet{bullet_body, 10.0, bullet_pos,
+                                      t_action->getId(), bullet_damage});
+  t_server_com->addEvent(std::make_shared<Action>(
+    CreateAction(bullet, Action::ObjectType::BULLET, bullet_pos,
+                 t_action->getId(), player->damage_factor * bullet_damage,
+                 std::to_string(Action::ShootingType::COIN))));
 }
 
 // TODO: replace by actual fire shoot

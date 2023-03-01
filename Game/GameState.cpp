@@ -72,6 +72,33 @@ void GameState::pause() { std::cout << "GameState Pause\n"; }
 
 void GameState::resume() { std::cout << "GameState Resume\n"; }
 
+void GameState::manageLevels() {
+  if (*m_level == 1) {
+    int total_coins = 0;
+    for (EntityID ent : EntityViewer<Player>(*m_em)) {
+      Player *player = (*m_em).Get<Player>(ent);
+      total_coins += player->coins;
+    }
+    if (total_coins < 400) return;
+    *m_level += 1;
+    loadLevel(m_level, m_em, m_graphic_loader, m_music,
+              (m_flag == CommunicationFlag::client), m_serverCom);
+  } else if (*m_level == 2) {
+    bool paywaal_is_alive = false;
+    for (EntityID ent : EntityViewer<Enemy>(*m_em)) {
+      Enemy *enem = (*m_em).Get<Enemy>(ent);
+      if (enem->obj->type == "paywall") {
+        paywaal_is_alive = true;
+        break;
+      }
+    }
+    if (paywaal_is_alive) return;
+    *m_level += 1;
+    loadLevel(m_level, m_em, m_graphic_loader, m_music,
+              (m_flag == CommunicationFlag::client), m_serverCom);
+  }
+}
+
 void GameState::update() {
   while (m_is_running) {
     while (m_flag == CommunicationFlag::server &&
@@ -108,6 +135,7 @@ void GameState::update() {
                   (m_flag == CommunicationFlag::client), m_serverCom);
       }
     }
+    manageLevels();
     SystemData data = {.event_queue = m_input_manager.getInputs()};
     if (m_flag == CommunicationFlag::client && m_clientCom->m_flag) {
       EventQueue eq = m_client_input_manager.getInputsWithoutPop();

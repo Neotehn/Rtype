@@ -37,7 +37,7 @@ void CollisionSystem::playerAnimationCollision(Player *t_player,
       if (enemy->type == "powerup") {
         t_player->coins += 1;
         m_serverCom->addEvent(std::make_shared<Action>(
-          IncreaseAction(t_player_ent, Action::IncreaseType::COINS, 1)));
+          IncreaseAction(t_player_ent, Action::IncreaseType::COINS, 10)));
         m_serverCom->addEvent(
           std::make_shared<Action>(DestroyAction(enemy_ent)));
         m_em->destroyEntity(enemy_ent);
@@ -136,7 +136,9 @@ void CollisionSystem::bulletEnemyCollision() {
       bool collision =
         enemy->obj->body->intersects(bullet->body->getGlobalBounds());
       if (collision) {
+        if (enemy->obj->type == "paywall" && bullet->damage < 6) continue;
         if (enemy->obj->type == "paywall") {
+          bullet->damage = 2;
           protectionBulletStream(enemy, bullet->damage);
         }
         enemy->health.cur_health -= bullet->damage;

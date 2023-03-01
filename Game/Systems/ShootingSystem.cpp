@@ -22,6 +22,9 @@ void ShootingSystem::update() {
         case Action::ShootingType::NORMAL:
           initShoot(action, m_em, m_graphic_loader, m_serverCom);
           break;
+        case Action::ShootingType::COIN:
+          shootMoney(action);
+          break;
         case Action::ShootingType::FIRE:
           shootFire(action);
           break;
@@ -35,23 +38,32 @@ void ShootingSystem::update() {
   }
 }
 
-void ShootingSystem::shootFire(std::shared_ptr<Action> action) {
-  //  nope, loop for player
-  Player *player = (*m_em).Get<Player>(action->getId());
+void ShootingSystem::shootMoney(std::shared_ptr<Action> t_action) {
+  Player *player = (*m_em).Get<Player>(t_action->getId());
+
+  if (player->coin_shot == 0) return;
+  player->coin_shot -= 1;
+  if (player->coin_shot < 0) player->coin_shot = 0;
+
+  initCoinShoot(t_action, m_em, m_graphic_loader, m_serverCom);
+}
+
+void ShootingSystem::shootFire(std::shared_ptr<Action> t_action) {
+  Player *player = (*m_em).Get<Player>(t_action->getId());
 
   if (player->fire_shot == 0) return;
   player->fire_shot -= 1;
   if (player->fire_shot < 0) player->fire_shot = 0;
 
-  initFireShoot(action, m_em, m_graphic_loader, m_serverCom);
+  initFireShoot(t_action, m_em, m_graphic_loader, m_serverCom);
 }
 
-void ShootingSystem::shootBomb(std::shared_ptr<Action> action) {
-  Player *player = (*m_em).Get<Player>(action->getId());
+void ShootingSystem::shootBomb(std::shared_ptr<Action> t_action) {
+  Player *player = (*m_em).Get<Player>(t_action->getId());
 
   if (player->bomb_shot == 0) return;
   player->bomb_shot -= 1;
   if (player->bomb_shot < 0) player->bomb_shot = 0;
 
-  initBombShoot(action, m_em, m_graphic_loader, m_serverCom);
+  initBombShoot(t_action, m_em, m_graphic_loader, m_serverCom);
 }

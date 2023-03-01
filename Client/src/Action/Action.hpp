@@ -38,7 +38,7 @@ class Action : public IAction {
     END,        // ACTION_ID;END; OR END;PORT_NB
     ERROR,
   };
-  enum ShootingType { NORMAL, FIRE, BOMB };
+  enum ShootingType { NORMAL, FIRE, BOMB, COIN };
   enum ObjectType {
     PLAYER,
     ENEMY,
