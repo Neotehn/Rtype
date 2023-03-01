@@ -1,5 +1,6 @@
 #include "IntroState.hpp"
 
+
 IntroState::IntroState(StateMachine &t_machine,
                              rtype::IRenderWindow *t_window,
                              MusicPlayer &t_music_player, std::size_t t_flag,
@@ -40,12 +41,34 @@ IntroState::IntroState(StateMachine &t_machine,
   m_spaceship_s->setPosition({size_x / 2 - 100, size_y / 2 - 100});
   m_spaceship_s->setTexture(m_spaceship_t, true);
   m_music_player.play(MusicID::MENU_THEME);
+  loadTextureAndSpritesForFlyingObj();
+}
+
+void IntroState::loadTextureAndSpritesForFlyingObj() {
+  for (int i = 0; i < 4; i++) {
+    rtype::ITexture *texture = m_graphic_loader->loadTexture();
+    rtype::ISprite *sprite = m_graphic_loader->loadSprite();
+    if (!texture->loadFromFile("./sprites/dollarPaul.png")) {
+      throw std::runtime_error("Unable to load image.");
+    }
+//get random number between -500 and 0
+
+    float r = rand() % 3000 - 3000;
+    sprite->setScale({0.2, 0.2});
+    sprite->setPosition({r, static_cast<float>(100 * i)});
+    sprite->setTexture(texture, true);
+    m_flying_obj_t.push_back(texture);
+    m_flying_obj_s.push_back(sprite);
+  }
 }
 
 IntroState::~IntroState() {
   delete m_bg_t;
   delete m_bg_s;
   delete m_spaceship_t;
+  delete m_spaceship_s;
+  m_flying_obj_t.clear();
+  m_flying_obj_s.clear();
 }
 
 void IntroState::pause() { std::cout << "MenuState Pause\n"; }
@@ -54,6 +77,7 @@ void IntroState::resume() { std::cout << "MenuState resume\n"; }
 
 void IntroState::update() {
   animateAndMoveShip();
+  animateAndMoveFlyingObj();
   for (auto event = rtype::Event{}; m_window->pollEvent(event);) {
     rtype::Vector2i mouse_pos = m_mouse->getMousePosition(m_window);
     rtype::Vector2f mouse_pos_f{static_cast<float>(mouse_pos.x),
@@ -97,6 +121,9 @@ void IntroState::draw() {
   m_window->clear();
   m_window->draw(m_start_btn.getSprite());
   m_window->draw(m_spaceship_s);
+  for (auto &sprite : m_flying_obj_s) {
+    m_window->draw(sprite);
+  }
   m_window->display();
 }
 
@@ -133,3 +160,28 @@ void IntroState::animateAndMoveShip() {
   // Zurücksetzen der Position
   m_spaceship_s->move(m_spaceMovement);
 }
+
+void IntroState::animateAndMoveFlyingObj() {
+  for (auto &sprite : m_flying_obj_s) {
+    sprite->move({1, 0});
+  }
+  checkCollisionWithFlyingObjects();
+}
+
+bool intersect(const rtype::FloatRect& r1, const rtype::FloatRect& r2) {
+  return r1.left < r2.left + r2.width && r1.left + r1.width > r2.left &&
+         r1.top < r2.top + r2.height && r1.top + r1.height > r2.top;
+}
+
+void IntroState::checkCollisionWithFlyingObjects() {
+  auto it = m_flying_obj_s.begin();
+  while (it != m_flying_obj_s.end()) {
+    if (intersect(m_spaceship_s->getGlobalBounds(), (*it)->getGlobalBounds())) {
+      it = m_flying_obj_s.erase(it);
+      //ToDo: play sound here!!
+    } else {
+      ++it;
+    }
+  }
+}
+

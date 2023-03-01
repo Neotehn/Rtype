@@ -22,7 +22,10 @@ class IntroState final : public State {
   void update() override;
   void draw() override;
   void animateAndMoveShip();
+  void animateAndMoveFlyingObj();
   void checkCollisionAngle(rtype::Vector2f collisionNormal);
+  void checkCollisionWithFlyingObjects();
+  void loadTextureAndSpritesForFlyingObj();
 
  private:
   rtype::ITexture *m_bg_t;
@@ -32,6 +35,8 @@ class IntroState final : public State {
   rtype::ITexture *m_spaceship_t;
   rtype::ISprite *m_spaceship_s;
   rtype::Vector2f m_spaceMovement;
+  std::vector<rtype::ITexture*> m_flying_obj_t;
+  std::vector<rtype::ISprite*> m_flying_obj_s;
 };
 
 #endif  //RTYPE_INTROSTATE_HPP
