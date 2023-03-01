@@ -41,6 +41,7 @@ class JoinLobbyState final : public State {
   std::size_t m_flag;
   rtype::IFont *m_font;
   rtype::IText *m_title;
+  rtype::IText *m_instructions;
   rtype::ITexture *m_player_one_t;
   rtype::ITexture *m_player_two_t;
   rtype::ITexture *m_player_three_t;

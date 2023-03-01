@@ -84,11 +84,19 @@ JoinLobbyState::JoinLobbyState(StateMachine &t_machine,
   m_title->setCharacterSize(50);
   m_title->setPosition(
     {(size_x / 2) - (m_title->getLocalBounds().width / 2), 100});
+  m_instructions = m_graphic_loader->loadText();
+  m_instructions->setFont(m_font);
+  m_instructions->setString("Please enter lobby code:");
+  m_instructions->setCharacterSize(35);
+  m_instructions->setPosition(
+    {(size_x / 2) - (m_instructions->getLocalBounds().width / 2),
+     static_cast<float>(m_window->getSize().y / 2 - 200)});
   m_music_player.play(MusicID::MENU_THEME);
+  m_textbox.setLimit(true, 10);
   m_textbox.setPosition(rtype::Vector2f{
     static_cast<float>(m_window->getSize().x / 2 -
                        m_textbox.getText()->getLocalBounds().width / 2),
-    static_cast<float>(m_window->getSize().y / 2 - 200)});
+    static_cast<float>(m_window->getSize().y / 2 - 100)});
   // call protocol to join lobby
 }
 
@@ -140,7 +148,7 @@ void JoinLobbyState::update() {
         m_textbox.setPosition(rtype::Vector2f{
           static_cast<float>(m_window->getSize().x / 2 -
                              m_textbox.getText()->getLocalBounds().width / 2),
-          static_cast<float>(m_window->getSize().y / 2 - 200)});
+          static_cast<float>(m_window->getSize().y / 2 - 100)});
         break;
       default:
         break;
@@ -152,6 +160,7 @@ void JoinLobbyState::draw() {
   m_window->clear();
   m_window->draw(m_bg_s);
   m_window->draw(m_title);
+  m_window->draw(m_instructions);
   // m_window->draw(m_player_one_s); could add if statement to show icon depending on how many players are connected
   // m_window->draw(m_player_two_s);
   // m_window->draw(m_player_three_s);
