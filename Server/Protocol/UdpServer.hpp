@@ -23,6 +23,7 @@
 #include "../../Protocol/IProtocol.hpp"
 #include "../../Client/src/InputManager/InputManager.hpp"
 #include "./UdpSession.hpp"
+#include "../src/Logger.hpp"
 
 using boost::asio::ip::udp;
 using boost::system::error_code;
@@ -60,6 +61,7 @@ class UdpServer : public IProtocol {
   boost::asio::io_service &m_io_service;
   InputManager &m_input_manager;
   InputManager m_send_event_manager;
+  Logger m_logger;
   bool &m_is_running;
   int m_player_id_count;
   std::chrono::system_clock::time_point m_start_time;

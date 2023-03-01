@@ -67,7 +67,8 @@ set(CLIENT_HPP ../Game/ECS/ComponentPool.hpp
         ../Game/Systems/CreatePlayerSystem.hpp
         ../Game/Encapsulation/IGraphicLoader.hpp
         ../Game/Encapsulation/SFML/GraphicLoader.hpp
-        ../Game/CreateEntities/AssetLoader.hpp)
+        ../Game/CreateEntities/AssetLoader.hpp
+        ../Server/src/Logger.hpp)
 
 set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         src/InputManager/InputManager.cpp
@@ -116,7 +117,8 @@ set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         ../Game/Encapsulation/SFML/Mouse.cpp
         ../Game/Systems/CreatePlayerSystem.cpp
         ../Game/Encapsulation/SFML/GraphicLoader.cpp
-        ../Game/CreateEntities/AssetLoader.cpp)
+        ../Game/CreateEntities/AssetLoader.cpp
+        ../Server/src/Logger.cpp)
 
 include(FetchContent)
 FetchContent_Declare(SFML
