@@ -73,29 +73,68 @@ void GameState::pause() { std::cout << "GameState Pause\n"; }
 void GameState::resume() { std::cout << "GameState Resume\n"; }
 
 void GameState::manageLevels() {
-  if (*m_level == 1) {
+  if (*m_level == 2) {
+    if (m_flag == CommunicationFlag::server && m_will_reload) {
+      m_will_reload = false;
+      *m_level += 1;
+      m_level_two_enemy_created = false;
+      loadLevel(m_level, m_em, m_graphic_loader, m_music,
+                (m_flag == CommunicationFlag::client), m_serverCom);
+      std::cout << "finished level 2" << std::endl;
+      return;
+    }
+    if (!m_level_two_enemy_created) {
+      for (EntityID ent : EntityViewer<Enemy>(*m_em)) {
+        Enemy *enem = (*m_em).Get<Enemy>(ent);
+        if (enem->obj->type == "paywall") {
+          m_level_two_enemy_created = true;
+          break;
+        }
+      }
+    }
+    if (!m_level_two_enemy_created) return;
+    bool paywall_exists = false;
+    for (EntityID ent : EntityViewer<Enemy>(*m_em)) {
+      Enemy *enem = (*m_em).Get<Enemy>(ent);
+      if (enem->obj->type == "paywall") {
+        paywall_exists = true;
+        break;
+      }
+    }
+    if (paywall_exists) return;
+    if (m_flag == CommunicationFlag::server) {
+      m_will_reload = true;
+    } else {
+      *m_level += 1;
+      m_level_two_enemy_created = false;
+      loadLevel(m_level, m_em, m_graphic_loader, m_music,
+                (m_flag == CommunicationFlag::client), m_serverCom);
+      std::cout << "finished level 2" << std::endl;
+    }
+  } else if (*m_level == 1) {
+    if (m_flag == CommunicationFlag::server && m_will_reload) {
+      m_will_reload = false;
+      *m_level += 1;
+      loadLevel(m_level, m_em, m_graphic_loader, m_music,
+                (m_flag == CommunicationFlag::client), m_serverCom);
+      std::cout << "finished level 1" << std::endl;
+      return;
+    }
     int total_coins = 0;
     for (EntityID ent : EntityViewer<Player>(*m_em)) {
       Player *player = (*m_em).Get<Player>(ent);
       total_coins += player->coins;
     }
     if (total_coins < 400) return;
-    *m_level += 1;
-    loadLevel(m_level, m_em, m_graphic_loader, m_music,
-              (m_flag == CommunicationFlag::client), m_serverCom);
-  } else if (*m_level == 2) {
-    bool paywaal_is_alive = false;
-    for (EntityID ent : EntityViewer<Enemy>(*m_em)) {
-      Enemy *enem = (*m_em).Get<Enemy>(ent);
-      if (enem->obj->type == "paywall") {
-        paywaal_is_alive = true;
-        break;
-      }
+    if (m_flag == CommunicationFlag::server) {
+      m_will_reload = true;
+    } else {
+      *m_level += 1;
+
+      loadLevel(m_level, m_em, m_graphic_loader, m_music,
+                (m_flag == CommunicationFlag::client), m_serverCom);
+      std::cout << "finished level 1" << std::endl;
     }
-    if (paywaal_is_alive) return;
-    *m_level += 1;
-    loadLevel(m_level, m_em, m_graphic_loader, m_music,
-              (m_flag == CommunicationFlag::client), m_serverCom);
   }
 }
 
