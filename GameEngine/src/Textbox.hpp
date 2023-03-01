@@ -34,6 +34,7 @@ class Textbox {
   void setSelected(bool t_sel);
   rtype::IText *getText();
   void typedOn(rtype::Event t_input);
+  int getLength();
 
  private:
   rtype::IFont *m_font;

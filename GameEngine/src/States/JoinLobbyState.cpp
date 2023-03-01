@@ -25,6 +25,11 @@ JoinLobbyState::JoinLobbyState(StateMachine &t_machine,
                         static_cast<float>(m_window->getSize().y - 230)},
         rtype::Vector2f{270, 130}, t_graphic_loader)),
       m_textbox(Textbox(35, rtype::Black, true, t_graphic_loader)),
+      m_join_btn(Button(
+        "./assets/icons/white/buttonStart.png",
+        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 100),
+                        static_cast<float>(m_window->getSize().y / 2 + 100)},
+        rtype::Vector2f{200, 200}, t_graphic_loader)),
       m_flag(t_flag) {
   m_bg_t = m_graphic_loader->loadTexture();
   m_bg_s = m_graphic_loader->loadSprite();
@@ -111,12 +116,19 @@ void JoinLobbyState::update() {
                                 static_cast<float>(mouse_pos.y)};
     if (event.type == rtype::EventType::MouseMoved) {
       m_home_btn.is_hovered(mouse_pos_f);
+      m_join_btn.is_hovered(mouse_pos_f);
       // m_start_btn.is_hovered(mouse_pos_f);
     }
     if (m_mouse->isLeftMouseButtonPressed()) {
       if (m_home_btn.is_pressed(mouse_pos_f)) {
         std::cout << "homebtn pressed" << std::endl;
         m_next = StateMachine::build<MainState>(
+          m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
+          m_level, true);
+      }
+      if (m_join_btn.is_pressed(mouse_pos_f)) {  // start game if pressed
+        std::cout << "joinbtn pressed" << std::endl;
+        m_next = StateMachine::build<GameState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, true);
       }
@@ -167,6 +179,7 @@ void JoinLobbyState::draw() {
   // m_window->draw(m_player_four_s);
   m_window->draw(m_home_btn.getSprite());
   m_window->draw(m_textbox.getText());
+  if (m_textbox.getLength() == 10) { m_window->draw(m_join_btn.getSprite()); }
   // m_window->draw(m_start_btn.getSprite());
   m_window->display();
 }

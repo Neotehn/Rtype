@@ -35,9 +35,9 @@ void Textbox::inputLogic(int t_char_typed) {
       t_char_typed != ESCAPE_KEY) {
     m_text << static_cast<char>(t_char_typed);
   } else if (t_char_typed == DELETE_KEY) {
-    if (m_text.str().length() > 0) { deleteLastChar(); }
+    if (m_text.str().length() + 1 > 0) { deleteLastChar(); }
   }
-  m_textbox->setString(m_text.str() + "_");
+  m_textbox->setString(m_text.str());
 }
 
 void Textbox::deleteLastChar() {
@@ -83,15 +83,25 @@ void Textbox::typedOn(rtype::Event t_input) {
     int char_typed = t_input.key;
     if (char_typed < 128) {
       if (m_has_limit) {
-        if (m_text.str().length() <= m_limit) {
+        std::cout << "limit: " << m_limit << std::endl;
+        std::cout << "len: " << m_text.str().length() << std::endl;
+        if (m_text.str().length() + 1 < m_limit) {
           inputLogic(char_typed);
-        } else if (m_text.str().length() > m_limit &&
+          m_textbox->setString(m_text.str() + "_");
+        } else if (m_text.str().length() + 1 == m_limit) {
+          inputLogic(char_typed);
+          m_textbox->setString(m_text.str());
+        } else if (m_text.str().length() + 1 > m_limit &&
                    char_typed == DELETE_KEY) {
           deleteLastChar();
+          m_textbox->setString(m_text.str() + "_");
         }
       } else {
         inputLogic(char_typed);
+        m_textbox->setString(m_text.str() + "_");
       }
     }
   }
 }
+
+int Textbox::getLength() { return m_text.str().length(); }

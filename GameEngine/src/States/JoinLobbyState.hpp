@@ -38,6 +38,7 @@ class JoinLobbyState final : public State {
   rtype::ISprite *m_bg_s;
   Button m_home_btn;
   Button m_start_btn;
+  Button m_join_btn;
   std::size_t m_flag;
   rtype::IFont *m_font;
   rtype::IText *m_title;
