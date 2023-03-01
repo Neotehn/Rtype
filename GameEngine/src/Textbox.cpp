@@ -14,11 +14,8 @@ Textbox::Textbox(int t_size, rtype::Color t_color, bool t_sel,
   m_textbox = m_graphic_loader->loadText();
   m_font = m_graphic_loader->loadFont();
   m_textbox->setCharacterSize(t_size);
-  std::cout << "set char size\n";
   m_textbox->setColor(t_color);
-  std::cout << "set color\n";
   m_is_selected = t_sel;
-  std::cout << "set selected\n";
   if (!m_font->loadFromFile("./assets/font/nasalization-rg.ttf")) {
     throw std::runtime_error("Unable to load font.");
   }
@@ -83,8 +80,6 @@ void Textbox::typedOn(rtype::Event t_input) {
     int char_typed = t_input.key;
     if (char_typed < 128) {
       if (m_has_limit) {
-        std::cout << "limit: " << m_limit << std::endl;
-        std::cout << "len: " << m_text.str().length() << std::endl;
         if (m_text.str().length() + 1 < m_limit) {
           inputLogic(char_typed);
           m_textbox->setString(m_text.str() + "_");
