@@ -15,23 +15,28 @@ void ShootingSystem::updateData(SystemData &t_data) {
 void ShootingSystem::update() {
   for (std::shared_ptr<Action> action :
        m_event_queue.getAllOfType(Action::ActionType::SHOOT)) {
-    switch (action->getShootType()) {
-      case Action::ShootingType::NORMAL:
-        initShoot(action, m_em, m_graphic_loader, m_serverCom);
-        break;
-      case Action::ShootingType::FIRE:
-        shootFire(action);
-        break;
-      case Action::ShootingType::BOMB:
-        shootBomb(action);
-        break;
-      default:
-        break;
+    for (EntityID ent : EntityViewer<Player>(*m_em)) {
+      if (ent != action->getId()) continue;
+
+      switch (action->getShootType()) {
+        case Action::ShootingType::NORMAL:
+          initShoot(action, m_em, m_graphic_loader, m_serverCom);
+          break;
+        case Action::ShootingType::FIRE:
+          shootFire(action);
+          break;
+        case Action::ShootingType::BOMB:
+          shootBomb(action);
+          break;
+        default:
+          break;
+      }
     }
   }
 }
 
 void ShootingSystem::shootFire(std::shared_ptr<Action> action) {
+  //  nope, loop for player
   Player *player = (*m_em).Get<Player>(action->getId());
 
   if (player->fire_shot == 0) return;
