@@ -7,6 +7,7 @@
 #include "./States/MainState.hpp"
 #include "./MusicPlayer.hpp"
 #include "./StateMachine.hpp"
+#include "./States/IntroState.hpp"
 
 class Core {
  public:

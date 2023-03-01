@@ -11,6 +11,7 @@
 #include "../State.hpp"
 #include "../StateMachine.hpp"
 #include "./SettingsState.hpp"
+#include "IntroState.hpp"
 #include "../../../Game/GameState.hpp"
 
 class MainState final : public State {

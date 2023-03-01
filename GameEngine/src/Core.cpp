@@ -13,7 +13,7 @@ Core::Core(std::size_t t_flag) {
 
   if (t_flag == 1)
     m_state_machine.run(
-      StateMachine::build<MainState>(m_state_machine, m_window, m_music_player,
+      StateMachine::build<IntroState>(m_state_machine, m_window, m_music_player,
                                      t_flag, m_graphic_loader, level, true));
   else
     m_state_machine.run(
