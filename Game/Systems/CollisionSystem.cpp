@@ -35,7 +35,8 @@ void CollisionSystem::playerAnimationCollision(Player *t_player,
 
     if (collision) {
       if (enemy->type == "powerup") {
-        t_player->coins += 10;
+        t_player->coins += 1;
+        t_player->coin_shot += 10;
         m_serverCom->addEvent(std::make_shared<Action>(
           IncreaseAction(t_player_ent, Action::IncreaseType::COINS, 10)));
         m_serverCom->addEvent(

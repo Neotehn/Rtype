@@ -125,7 +125,7 @@ void GameState::manageLevels() {
       Player *player = (*m_em).Get<Player>(ent);
       total_coins += player->coins;
     }
-    if (total_coins < 400) return;
+    if (total_coins < 40) return;
     if (m_flag == CommunicationFlag::server) {
       m_will_reload = true;
     } else {

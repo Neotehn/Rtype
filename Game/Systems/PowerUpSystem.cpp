@@ -39,7 +39,8 @@ void PowerUpSystem::update() {
           player->speed += action->getIncreaseValue();
           break;
         case Action::IncreaseType::COINS:
-          player->coins += action->getIncreaseValue();
+          player->coins += 1;
+          player->coin_shot += action->getIncreaseValue();
           break;
         default:
           break;
