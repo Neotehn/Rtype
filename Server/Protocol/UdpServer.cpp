@@ -117,21 +117,15 @@ void UdpServer::sendEvents() {
       m_send_event_manager.addActionsToQueue(event);
       continue;
     }
-    if (event->getType() != Action::ActionType::SHOOT &&
-        event->getType() != Action::ActionType::UP &&
-        event->getType() != Action::ActionType::DOWN &&
-        event->getType() != Action::ActionType::LEFT &&
-        event->getType() != Action::ActionType::RIGHT) {
-      if (event->getType() == Action::ActionType::START) {
-        for (int i = 0; i < m_endpoints.size(); i++) {
-          if (event->getClientId() - 1 == i) {
-            sendMessage(event->getCommand(), m_endpoints[i]);
-          }
+    if (event->getType() == Action::ActionType::START) {
+      for (int i = 0; i < m_endpoints.size(); i++) {
+        if (event->getClientId() - 1 == i) {
+          sendMessage(event->getCommand(), m_endpoints[i]);
         }
-      } else {
-        for (udp::endpoint client : m_endpoints) {
-          sendMessage(event->getCommand(), client);
-        }
+      }
+    } else {
+      for (udp::endpoint client : m_endpoints) {
+        sendMessage(event->getCommand(), client);
       }
     }
   }
