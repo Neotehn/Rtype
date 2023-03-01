@@ -10,6 +10,7 @@
 enum MusicID {
   MENU_THEME,
   MISSION_THEME,
+  MONEY_SOUND,
 };
 
 class MusicPlayer {
@@ -17,6 +18,7 @@ class MusicPlayer {
   MusicPlayer();
   ~MusicPlayer();
   void init(rtype::IGraphicLoader *t_graphic_loader);
+  void init(rtype::IGraphicLoader *t_graphic_loader, bool t_loop);
   void play(MusicID t_theme);
   void stop();
   void setPaused(bool t_paused);

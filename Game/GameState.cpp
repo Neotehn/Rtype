@@ -4,7 +4,7 @@ GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
                      MusicPlayer &t_music_player, std::size_t t_flag,
                      rtype::IGraphicLoader *t_graphic_loader, int *t_level,
                      const bool t_replace)
-    : State{t_machine,        t_window, t_music_player,
+    : State{t_machine, t_window, t_music_player,
             t_graphic_loader, t_level,  t_replace},
       m_client_input_manager(t_level), m_input_manager(t_level) {
   m_is_running = true;

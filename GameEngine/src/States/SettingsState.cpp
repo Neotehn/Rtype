@@ -5,7 +5,7 @@ SettingsState::SettingsState(StateMachine &t_machine,
                              MusicPlayer &t_music_player, std::size_t t_flag,
                              rtype::IGraphicLoader *t_graphic_loader,
                              int *t_level, const bool t_replace)
-    : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level,
+    : State(t_machine, t_window, t_music_player ,t_graphic_loader, t_level,
             t_replace),
       m_start_btn(
         Button("./assets/startBtn.png",

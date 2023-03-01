@@ -3,7 +3,8 @@
 
 IntroState::IntroState(StateMachine &t_machine,
                              rtype::IRenderWindow *t_window,
-                             MusicPlayer &t_music_player, std::size_t t_flag,
+                             MusicPlayer &t_music_player,
+                              std::size_t t_flag,
                              rtype::IGraphicLoader *t_graphic_loader,
                              int *t_level, const bool t_replace)
     : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level,
@@ -42,6 +43,7 @@ IntroState::IntroState(StateMachine &t_machine,
   m_spaceship_s->setTexture(m_spaceship_t, true);
   m_music_player.play(MusicID::MENU_THEME);
   loadTextureAndSpritesForFlyingObj();
+  m_sound_manager.init(m_graphic_loader, false);
 }
 
 void IntroState::loadTextureAndSpritesForFlyingObj() {
@@ -89,7 +91,7 @@ void IntroState::update() {
       if (m_start_btn.is_pressed(mouse_pos_f)) {
         std::cout << "startbtn pressed" << std::endl;
         m_next = StateMachine::build<MainState>(
-          m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
+          m_state_machine, m_window, m_music_player,  m_flag, m_graphic_loader,
           m_level, true);
       }
     }
@@ -178,7 +180,7 @@ void IntroState::checkCollisionWithFlyingObjects() {
   while (it != m_flying_obj_s.end()) {
     if (intersect(m_spaceship_s->getGlobalBounds(), (*it)->getGlobalBounds())) {
       it = m_flying_obj_s.erase(it);
-      //ToDo: play sound here!!
+      m_sound_manager.play(MusicID::MONEY_SOUND);
     } else {
       ++it;
     }
