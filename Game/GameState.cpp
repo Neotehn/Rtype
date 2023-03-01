@@ -94,8 +94,9 @@ void GameState::update() {
           m_is_running = false;
           std::cout << "yes close pls" << std::endl;
         }
-        if (m_flag == CommunicationFlag::client)
-          m_client_input_manager.recordInputs(event);
+        if (m_flag == CommunicationFlag::client) {
+          m_client_input_manager.recordInputs(event, m_mouse, m_window);
+        }
       }
     }
     EventQueue eq = m_input_manager.getInputsWithoutPop();
