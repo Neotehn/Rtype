@@ -110,7 +110,11 @@ void InputManager::recordMouseButtonReleasedInputs(const rtype::Event &t_event,
       std::make_shared<Action>(
         ShootAction(m_player_id, 1, Action::ShootingType::FIRE, true)),
       Action::ActionType::SHOOT);
-  } else if (t_mouse->isMouseXButton2Pressed()) {
+  } else if (t_mouse->isMouseXButton1Pressed()) {
+    m_input_queue.addToQueueIfNotExist(
+      std::make_shared<Action>(
+        ShootAction(m_player_id, 1, Action::ShootingType::COIN, true)),
+      Action::ActionType::SHOOT);
   }
 }
 
