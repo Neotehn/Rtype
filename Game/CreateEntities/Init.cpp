@@ -179,14 +179,15 @@ DynamicHealthBar initEnemyHealth(rtype::IGraphicLoader *t_graphic_loader,
 }
 
 void initEnemy(std::shared_ptr<EntityManager> t_em,
-               rtype::IGraphicLoader *t_graphic_loader,
-               UdpServer *t_server_com) {
+               rtype::IGraphicLoader *t_graphic_loader, UdpServer *t_server_com,
+               rtype::Vector2f t_pos, int t_health) {
   Json::Value enemy_data = assetLoader.getEnemyData()[0];
   rtype::Vector2i size = {enemy_data["size"]["x"].asInt(),
                           enemy_data["size"]["y"].asInt()};
   EntityID enemy = t_em->createNewEntity();
   SpriteECS sprite = SpriteECS(enemy_data["path"].asString(), t_graphic_loader);
   rtype::Vector2f enemy_pos = {800, float(rand() % 600 + 100)};
+  if (t_pos != rtype::Vector2f{0, 0}) { enemy_pos = t_pos; }
   float velocity_direction = (rand() % 3 - 1);
 
   rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
@@ -206,9 +207,9 @@ void initEnemy(std::shared_ptr<EntityManager> t_em,
                   .display_time = 1,
                   .last_timer = 0},
     AnimationRect{.size = size.x, .limit = enemy_data["limit"].asInt()}, body};
-  t_em->Assign<Enemy>(
-    enemy,
-    {enemy_obj, initEnemyHealth(t_graphic_loader, enemy_pos, {-40, -40}, 2)});
+  t_em->Assign<Enemy>(enemy,
+                      {enemy_obj, initEnemyHealth(t_graphic_loader, enemy_pos,
+                                                  {-40, -40}, t_health)});
   t_server_com->addEvent(std::make_shared<Action>(CreateAction(
     enemy, Action::ObjectType::ENEMY, enemy_pos, "", velocity_direction)));
 }
@@ -570,7 +571,7 @@ void initPayWall(std::shared_ptr<EntityManager> t_em,
 
   t_em->Assign<Enemy>(
     enemy,
-    {enemy_obj, initEnemyHealth(t_graphic_loader, enemy_pos, {0, 400}, 1000)});
+    {enemy_obj, initEnemyHealth(t_graphic_loader, enemy_pos, {0, 400}, 800)});
   t_server_com->addEvent(std::make_shared<Action>(CreateAction(
     enemy, Action::ObjectType::PAYWALL, enemy_pos, "", velocity_direction)));
 }
@@ -609,5 +610,5 @@ void initPayWallClient(EntityID t_id, std::shared_ptr<EntityManager> t_em,
 
   t_em->Assign<Enemy>(
     enemy,
-    {enemy_obj, initEnemyHealth(t_graphic_loader, enemy_pos, {0, 400}, 1000)});
+    {enemy_obj, initEnemyHealth(t_graphic_loader, enemy_pos, {0, 400}, 800)});
 }

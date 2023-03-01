@@ -44,7 +44,8 @@ std::vector<std::shared_ptr<ISystem>> GameState::initSystems() {
                                                            m_graphic_loader));
     systems.push_back(std::make_shared<RandomEnemyGeneratorSystem>(
       m_em, m_serverCom, m_graphic_loader));
-    systems.push_back(std::make_shared<CollisionSystem>(m_em, m_serverCom));
+    systems.push_back(
+      std::make_shared<CollisionSystem>(m_em, m_serverCom, m_graphic_loader));
     systems.push_back(
       std::make_shared<ShootingSystem>(m_em, m_serverCom, m_graphic_loader));
     systems.push_back(std::make_shared<MovementSystem>(m_em, m_serverCom));

@@ -2,9 +2,11 @@
 #include <memory>
 
 CollisionSystem::CollisionSystem(std::shared_ptr<EntityManager> t_em,
-                                 UdpServer *t_serverCom) {
+                                 UdpServer *t_serverCom,
+                                 rtype::IGraphicLoader *t_graphic_loader) {
   m_em = t_em;
   m_serverCom = t_serverCom;
+  m_graphic_loader = t_graphic_loader;
 }
 
 void CollisionSystem::updateData(SystemData &t_data) {}
@@ -112,6 +114,18 @@ void CollisionSystem::playerItemCollision(Player *t_player,
   }
 }
 
+void CollisionSystem::protectionBulletStream(Enemy *t_enemy, int t_damage) {
+  for (int nb = 0; nb < t_enemy->health.max_health; nb += 100) {
+    if (t_enemy->health.cur_health > nb &&
+        t_enemy->health.cur_health - t_damage <= nb) {
+      for (float i = (700 - nb); i <= (100 + nb); i += 200) {
+        initEnemy(m_em, m_graphic_loader, m_serverCom,
+                  {t_enemy->obj->position.position.x, i}, 1);
+      }
+    }
+  }
+}
+
 void CollisionSystem::bulletEnemyCollision() {
   for (EntityID enemy_ent : EntityViewer<Enemy>(*m_em)) {
     Enemy *enemy = (*m_em).Get<Enemy>(enemy_ent);
@@ -122,6 +136,9 @@ void CollisionSystem::bulletEnemyCollision() {
       bool collision =
         enemy->obj->body->intersects(bullet->body->getGlobalBounds());
       if (collision) {
+        if (enemy->obj->type == "paywall") {
+          protectionBulletStream(enemy, bullet->damage);
+        }
         enemy->health.cur_health -= bullet->damage;
         if (enemy->health.cur_health <= 0) {
           enemy->health.cur_health = 0;

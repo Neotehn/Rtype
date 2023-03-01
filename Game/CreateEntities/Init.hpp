@@ -30,7 +30,8 @@ void initBulletClient(EntityID t_id, rtype::Vector2f t_pos,
                       EntityID t_owner_id);
 
 void initEnemy(std::shared_ptr<EntityManager> t_em,
-               rtype::IGraphicLoader *t_graphic_loader, UdpServer *t_serverCom);
+               rtype::IGraphicLoader *t_graphic_loader, UdpServer *t_serverCom,
+               rtype::Vector2f t_pos = rtype::Vector2f{0, 0}, int t_health = 2);
 void initEnemyClient(EntityID t_id, rtype::Vector2f t_pos, float t_velocity,
                      std::shared_ptr<EntityManager> t_em,
                      rtype::IGraphicLoader *t_graphic_loader);
