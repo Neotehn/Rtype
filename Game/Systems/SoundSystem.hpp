@@ -24,7 +24,7 @@ class SoundSystem : public ISystem {
  private:
   rtype::ISounds *m_sounds;
   rtype::IGraphicLoader *m_graphic_loader;
-
+  float m_vol;
   std::vector<SoundType> &m_play_sounds;
 };
 

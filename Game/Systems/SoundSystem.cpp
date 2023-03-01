@@ -20,21 +20,20 @@ SoundSystem::SoundSystem(std::shared_ptr<EntityManager> t_em,
   m_em = t_em;
   m_graphic_loader = t_graphic_loader;
 
-  // std::ifstream file_read("./assets/files/settings.txt");
-  // std::string settxt((std::istreambuf_iterator<char>(file_read)),
-  //                    std::istreambuf_iterator<char>());
-  // std::vector<std::string> v = splitstr2(settxt, ":");
-
+  std::ifstream file_read("./assets/files/settings.txt");
+  std::string settxt((std::istreambuf_iterator<char>(file_read)),
+                     std::istreambuf_iterator<char>());
+  std::vector<std::string> v = splitstr2(settxt, ":");
   // // init music
-
+  m_vol = atof(v[1].c_str());
   m_sounds = m_graphic_loader->loadSound();
-  // m_sounds->setVolume(atof(v[1].c_str()));
   // init sounds - according to SoundType order
   m_sounds->addSoundFromFile("../Client/assets/sounds/shoot.wav");
   m_sounds->addSoundFromFile("../Client/assets/sounds/explosion.wav");
   m_sounds->addSoundFromFile("../Client/assets/sounds/powerup.ogg");
   m_sounds->addSoundFromFile("../Client/assets/sounds/death.wav");
   m_sounds->addSoundFromFile("../Client/assets/sounds/win.wav");
+  m_sounds->setVolume(atof(v[1].c_str()));
 }
 
 SoundSystem::~SoundSystem() { delete m_sounds; }
@@ -43,6 +42,7 @@ void SoundSystem::updateData(SystemData &t_data) {}
 
 void SoundSystem::update() {
   for (SoundType sound : m_play_sounds) {
+    m_sounds->setVolume(sound, m_vol);
     m_sounds->play(sound);
   }
   m_play_sounds.clear();

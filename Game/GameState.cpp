@@ -46,6 +46,7 @@ GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
   }
   loadLevel(m_level, m_em, m_graphic_loader, m_music,
             m_flag == CommunicationFlag::client);
+  m_music->setVolume(m_music_player.getVolume());
   m_systems = initSystems();
 }
 
@@ -135,6 +136,7 @@ void GameState::update() {
         *m_level = action->getId();
         loadLevel(m_level, m_em, m_graphic_loader, m_music,
                   (m_flag == CommunicationFlag::client));
+        m_music->setVolume(m_music_player.getVolume());
       }
     }
     SystemData data = {.event_queue = m_input_manager.getInputs()};
