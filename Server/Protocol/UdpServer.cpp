@@ -7,6 +7,7 @@ UdpServer::UdpServer(boost::asio::io_service &t_io_service,
       m_is_running(t_is_running),
       m_send_event_manager(t_input_manager.m_level) {
   m_flag = GameMode::none;
+  m_logger.writeLog(Logger::Threatlevel::LOG, "Constructor");
   receiveClient();
   m_player_id_count = 0;
   m_start_time = std::chrono::system_clock::now();
@@ -67,6 +68,8 @@ void UdpServer::handleReceive(const boost::system::error_code &t_error,
     std::string msg =
       std::string(m_recvBuffer.begin(), m_recvBuffer.begin() + t_size);
     std::cout << "Received: '" << msg << "' (" << t_error.message() << ")\n";
+    m_logger.writeLog(Logger::Threatlevel::LOG,
+                      "Received: '" + msg + "' (" + t_error.message() + ")");
     std::shared_ptr<Action> action = getAction(msg);
     if (!doesAlreadyExist(action)) {
       m_input_manager.addActionsToQueue(action);

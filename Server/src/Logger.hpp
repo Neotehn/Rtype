@@ -12,9 +12,12 @@ class Logger {
   Logger();
   ~Logger();
   void writeLog(Threatlevel t_threat_level, std::string t_message);
+  void openFile();
+  void closeFile();
 
  private:
   std::ofstream m_file;
+  std::string m_file_name;
 };
 
 #endif  //R_TYPE_SERVER_LOGGER_HPP
