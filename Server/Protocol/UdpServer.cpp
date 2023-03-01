@@ -6,10 +6,11 @@ UdpServer::UdpServer(boost::asio::io_service &t_io_service,
     : m_io_service(t_io_service), m_input_manager(t_input_manager),
       m_socket(
         t_io_service,
-        udp::endpoint(boost::asio::ip::address::from_string(t_ip), 50000)),
+        udp::endpoint(boost::asio::ip::address::from_string(t_ip), 55555)),
       m_is_running(t_is_running),
       m_send_event_manager(t_input_manager.m_level) {
   m_flag = GameMode::none;
+  m_socket.set_option(boost::asio::socket_base::broadcast(true));
   receiveClient();
   m_player_id_count = 0;
   m_start_time = std::chrono::system_clock::now();

@@ -6,12 +6,11 @@ UdpClient::UdpClient(boost::asio::io_service &t_io_service,
                      InputManager &t_input_manager,
                      InputManager &t_client_input_manager)
     : m_io_service(t_io_service),
-      m_remoteEndpoint(boost::asio::ip::address::from_string(t_host),
+      m_remoteEndpoint(boost::asio::ip::address::from_string("172.18.139.102"),
                        stoi(t_port)),
-      m_socket(
-        t_io_service,
-        udp::endpoint(boost::asio::ip::address::from_string("10.116.120.182"),
-                      t_ownPort)),
+      m_socket(t_io_service,
+               udp::endpoint(boost::asio::ip::address::from_string(t_host),
+                             t_ownPort)),
       m_input_manager(t_input_manager),
       m_client_input_manager(t_client_input_manager) {
   m_flag = ConnectState::none;

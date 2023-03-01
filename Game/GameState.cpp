@@ -36,7 +36,8 @@ GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
        (size_y / 2) - (m_title->getLocalBounds().height / 2)});
     m_flag = CommunicationFlag::client;
     m_port_number = rand() % 15000 + 40001;
-    m_clientCom = new UdpClient(m_io_service, m_ip, "50000", m_port_number,
+    std::cout << m_ip << std::endl;
+    m_clientCom = new UdpClient(m_io_service, m_ip, "55555", m_port_number,
                                 m_input_manager, m_client_input_manager);
   } else {
     m_flag = CommunicationFlag::server;
