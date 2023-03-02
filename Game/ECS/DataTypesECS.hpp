@@ -111,8 +111,9 @@ struct Player {
   Health health;
   float speed;
   int player_id;
-  int fire_shot = 5;  //TODO reset to 0, 5 only for testing purposes
-  int bomb_shot = 5;  //TODO reset to 0, 5 only for testing purposes
+  int fire_shot = 0;
+  int bomb_shot = 0;
+  int coin_shot = 0;
   int coins = 0;
   int exp = 0;
   int kills = 0;
@@ -124,6 +125,7 @@ struct Bullet {
   float speed;
   rtype::Vector2f pos;
   EntityID owner = 0;
+  float damage = 1;
 };
 
 struct AnimationObj {
@@ -133,6 +135,20 @@ struct AnimationObj {
   AnimationRect rect;
   rtype::IRectangleShape *body;
   int kill_value = 5;
+};
+
+struct DynamicHealthBar {
+  rtype::IRectangleShape *missing_health;
+  rtype::IRectangleShape *left_health;
+  int cur_health;
+  int max_health;
+  Pos position;
+  rtype::Vector2f offset;
+};
+
+struct Enemy {
+  AnimationObj *obj;
+  DynamicHealthBar health;
 };
 
 namespace rtype {

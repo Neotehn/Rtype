@@ -24,8 +24,7 @@ Core::Core(std::size_t t_flag, std::string t_ip, int *t_level) {
 }
 
 Core::~Core() {
-  delete m_window;
-  delete m_graphic_loader;
+  if (m_graphic_loader) delete m_graphic_loader;
 }
 
 void Core::run() {

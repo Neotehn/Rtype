@@ -44,8 +44,17 @@ class Action : public IAction {
     CREATESUCCESSFULL,  // ACTION_ID;
     ERROR,
   };
-  enum ShootingType { NORMAL, FIRE, BOMB };
-  enum ObjectType { PLAYER, ENEMY, BULLET, EXPLOSION, POWER_UP, ITEM, ERROR_O };
+  enum ShootingType { NORMAL, FIRE, BOMB, COIN };
+  enum ObjectType {
+    PLAYER,
+    ENEMY,
+    PAYWALL,
+    BULLET,
+    EXPLOSION,
+    POWER_UP,
+    ITEM,
+    ERROR_O
+  };
   enum IncreaseType {
     SPEED,
     FIRE_SHOT,

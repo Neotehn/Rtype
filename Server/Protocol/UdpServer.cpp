@@ -10,6 +10,7 @@ UdpServer::UdpServer(boost::asio::io_service &t_io_service,
       m_is_running(t_is_running),
       m_send_event_manager(t_input_manager.m_level) {
   m_flag = GameMode::none;
+  m_logger.writeLog(Logger::Threatlevel::LOG, "Constructor");
   receiveClient();
   m_player_id_count = 0;
   m_start_time = std::chrono::system_clock::now();
@@ -136,6 +137,8 @@ void UdpServer::handleReceive(const boost::system::error_code &t_error,
     std::string msg =
       std::string(m_recvBuffer.begin(), m_recvBuffer.begin() + t_size);
     std::cout << "Received: '" << msg << "' (" << t_error.message() << ")\n";
+    m_logger.writeLog(Logger::Threatlevel::LOG,
+                      "Received: '" + msg + "' (" + t_error.message() + ")");
     std::shared_ptr<Action> action = getAction(msg);
     if (checkAndLobbyHandling(action)) {
       receiveClient();
@@ -187,21 +190,15 @@ void UdpServer::sendEvents() {
       m_send_event_manager.addActionsToQueue(event);
       continue;
     }
-    if (event->getType() != Action::ActionType::SHOOT &&
-        event->getType() != Action::ActionType::UP &&
-        event->getType() != Action::ActionType::DOWN &&
-        event->getType() != Action::ActionType::LEFT &&
-        event->getType() != Action::ActionType::RIGHT) {
-      if (event->getType() == Action::ActionType::START) {
-        for (int i = 0; i < m_endpoints.size(); i++) {
-          if (event->getClientId() - 1 == i) {
-            sendMessage(event->getCommand(), m_endpoints[i]);
-          }
+    if (event->getType() == Action::ActionType::START) {
+      for (int i = 0; i < m_endpoints.size(); i++) {
+        if (event->getClientId() - 1 == i) {
+          sendMessage(event->getCommand(), m_endpoints[i]);
         }
-      } else {
-        for (udp::endpoint client : m_endpoints) {
-          sendMessage(event->getCommand(), client);
-        }
+      }
+    } else {
+      for (udp::endpoint client : m_endpoints) {
+        sendMessage(event->getCommand(), client);
       }
     }
   }

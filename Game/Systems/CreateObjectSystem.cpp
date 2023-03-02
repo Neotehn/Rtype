@@ -9,8 +9,6 @@ CreateObjectSystem::CreateObjectSystem(
   m_graphic_loader = t_graphic_loader;
 }
 
-CreateObjectSystem::~CreateObjectSystem() {}
-
 void CreateObjectSystem::updateData(SystemData &t_data) {
   m_event_queue = t_data.event_queue;
 }
@@ -21,7 +19,7 @@ void CreateObjectSystem::update() {
     Action::ObjectType type = action->getCreateType();
     EntityID id = action->getId();
     rtype::Vector2f pos = action->getCreatePosition();
-    float velocity = 0;
+    float velocity;
     int player_id = action->getClientId();
     switch (type) {
       case Action::ObjectType::PLAYER:
@@ -30,14 +28,17 @@ void CreateObjectSystem::update() {
         break;
       case Action::ObjectType::BULLET:
         m_play_sounds.push_back(SoundSystem::SoundType::shoot);
-        initBulletClient(id, pos, action->getShootType(), m_em,
-                         m_graphic_loader, action->getCollisionPartnerId());
+        initBulletClient(id, pos, action, m_em, m_graphic_loader,
+                         action->getCollisionPartnerId());
         break;
       case Action::ObjectType::ENEMY:
         velocity = action->getVelocity();
         std::cout << "Create enemy at pos " << pos.x << " " << pos.y << " "
                   << velocity << std::endl;
         initEnemyClient(id, pos, velocity, m_em, m_graphic_loader);
+        break;
+      case Action::ObjectType::PAYWALL:
+        initPayWallClient(id, m_em, m_graphic_loader);
         break;
       case Action::ObjectType::EXPLOSION:
         m_play_sounds.push_back(SoundSystem::SoundType::explosion);
