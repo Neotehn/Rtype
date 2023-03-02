@@ -9,29 +9,29 @@ MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
             t_replace, t_ip, t_clientCom),
       m_start_btn(Button(
         "./assets/startBtn.png",
-        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 135),
+        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 65),
                         static_cast<float>(m_window->getSize().y / 2 + 150)},
-        rtype::Vector2f{270, 130}, t_graphic_loader)),
+        rtype::Vector2f{130, 50}, t_graphic_loader, false)),
       m_settings_btn(
         Button("./assets/icons/white/gear.png",
                rtype::Vector2f{static_cast<float>(m_window->getSize().x - 100),
                                static_cast<float>(m_window->getSize().y - 100)},
-               rtype::Vector2f{64, 64}, t_graphic_loader)),
+               rtype::Vector2f{64, 64}, t_graphic_loader, true)),
       m_exit_btn(
         Button("./assets/icons/white/exit.png",
                rtype::Vector2f{static_cast<float>(m_window->getSize().x - 200),
                                static_cast<float>(m_window->getSize().y - 100)},
-               rtype::Vector2f{64, 64}, t_graphic_loader)),
+               rtype::Vector2f{64, 64}, t_graphic_loader, true)),
       m_create_btn(Button(
         "./assets/createlobbybtn.png",
         rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 65),
                         static_cast<float>(m_window->getSize().y / 2 - 100)},
-        rtype::Vector2f{130, 50}, t_graphic_loader)),
+        rtype::Vector2f{130, 50}, t_graphic_loader, false)),
       m_join_btn(Button(
         "./assets/joinlobbybtn.png",
         rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 65),
                         static_cast<float>(m_window->getSize().y / 2)},
-        rtype::Vector2f{130, 50}, t_graphic_loader)),
+        rtype::Vector2f{130, 50}, t_graphic_loader, false)),
       m_flag(t_flag) {
   m_bg_t = m_graphic_loader->loadTexture();
   m_bg_s = m_graphic_loader->loadSprite();
