@@ -20,12 +20,12 @@ CreateLobbyState::CreateLobbyState(StateMachine &t_machine,
         "./assets/icons/white/home.png",
         rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 32),
                         static_cast<float>(m_window->getSize().y - 100)},
-        rtype::Vector2f{64, 64}, t_graphic_loader)),
+        rtype::Vector2f{64, 64}, t_graphic_loader, true)),
       m_start_btn(Button(
         "./assets/startBtn.png",
-        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 135),
+        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 65),
                         static_cast<float>(m_window->getSize().y - 230)},
-        rtype::Vector2f{270, 130}, t_graphic_loader)),
+        rtype::Vector2f{130, 50}, t_graphic_loader, false)),
       m_flag(t_flag) {
   m_bg_t = m_graphic_loader->loadTexture();
   m_bg_s = m_graphic_loader->loadSprite();

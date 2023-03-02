@@ -12,17 +12,17 @@ SettingsState::SettingsState(StateMachine &t_machine,
         "./assets/icons/white/home.png",
         rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 32),
                         static_cast<float>(m_window->getSize().y - 100)},
-        rtype::Vector2f{64, 64}, t_graphic_loader)),
+        rtype::Vector2f{64, 64}, t_graphic_loader, true)),
       m_vol_up(Button(
         "./assets/icons/white/plus.png",
         rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 81.5),
                         static_cast<float>(m_window->getSize().y / 2)},
-        rtype::Vector2f{64, 64}, t_graphic_loader)),
+        rtype::Vector2f{64, 64}, t_graphic_loader, true)),
       m_vol_down(Button(
         "./assets/icons/white/minus.png",
         rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 + 17.5),
                         static_cast<float>(m_window->getSize().y / 2)},
-        rtype::Vector2f{64, 64}, t_graphic_loader)),
+        rtype::Vector2f{64, 64}, t_graphic_loader, true)),
       m_flag(t_flag) {
   m_bg_t = m_graphic_loader->loadTexture();
   m_bg_s = m_graphic_loader->loadSprite();
