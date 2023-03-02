@@ -39,7 +39,7 @@ CreateLobbyState::CreateLobbyState(StateMachine &t_machine,
   }
   m_player_one_s->setTexture(m_player_one_t, true);
   m_player_one_s->setPosition(
-    rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 150),
+    rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 150 - 50),
                     static_cast<float>(m_window->getSize().y / 2 - 150)});
 
   m_player_two_t = m_graphic_loader->loadTexture();
@@ -49,7 +49,7 @@ CreateLobbyState::CreateLobbyState(StateMachine &t_machine,
   }
   m_player_two_s->setTexture(m_player_two_t, true);
   m_player_two_s->setPosition(
-    rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 + 50),
+    rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 + 50 + 50),
                     static_cast<float>(m_window->getSize().y / 2 - 150)});
   m_player_three_t = m_graphic_loader->loadTexture();
   m_player_three_s = m_graphic_loader->loadSprite();
@@ -91,14 +91,16 @@ CreateLobbyState::CreateLobbyState(StateMachine &t_machine,
   m_player_one_text->setString("CREATE LOBBY");
   m_player_one_text->setCharacterSize(50);
   m_player_one_text->setPosition(
-    {(size_x / 2) - (m_player_one_text->getLocalBounds().width / 2), 500});
+    {(size_x / 2) - 50 - (m_player_one_text->getLocalBounds().width / 2), 350});
 
   m_player_two_text = m_graphic_loader->loadText();
   m_player_two_text->setFont(m_font);
   m_player_two_text->setString("CREATE LOBBY");
   m_player_two_text->setCharacterSize(50);
   m_player_two_text->setPosition(
-    {(size_x / 2) - (m_player_two_text->getLocalBounds().width / 2), 600});
+    {(size_x / 2) + 50 + (m_player_one_text->getLocalBounds().width / 2) -
+       (m_player_two_text->getLocalBounds().width / 2),
+     350});
 
   m_lobby_code_text = m_graphic_loader->loadText();
   m_lobby_code_text->setFont(m_font);

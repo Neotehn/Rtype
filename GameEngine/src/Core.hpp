@@ -25,8 +25,6 @@ class Core {
   UdpClient *m_clientCom = nullptr;
   std::size_t m_port_number;
   boost::asio::io_service m_io_service;
-  InputManager m_input_manager;
-  InputManager m_client_input_manager;
 };
 
 #endif  // !CORE_HPP_

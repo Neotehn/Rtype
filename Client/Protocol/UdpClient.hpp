@@ -19,9 +19,7 @@ using boost::asio::ip::udp;
 class UdpClient : public IProtocol {
  public:
   UdpClient(boost::asio::io_service &t_io_service, const std::string &t_host,
-            const std::string &t_port, const std::size_t &t_ownPort,
-            InputManager &t_input_manager,
-            InputManager &t_client_input_manager);
+            const std::string &t_port, const std::size_t &t_ownPort);
   ~UdpClient();
   void sendMessage(const std::string &);
   void receiveClient();
@@ -29,8 +27,8 @@ class UdpClient : public IProtocol {
   void handleSend(std::string t_msg, const boost::system::error_code &t_error,
                   std::size_t t_size);
   std::size_t getPortNumber() const;
-  void setInputManager(InputManager &t_input_manager);
-  void setClientInputManager(InputManager &t_client_input_manager);
+  void setInputManager(InputManager *t_input_manager);
+  void setClientInputManager(InputManager *t_client_input_manager);
   bool checkAndHandleLobbyJoining(std::shared_ptr<Action> t_action);
   enum ConnectState { none, connected };
   ConnectState m_flag;
@@ -44,8 +42,8 @@ class UdpClient : public IProtocol {
   udp::endpoint m_remoteEndpoint;
   std::array<char, 1024> m_recvBuffer;
   boost::asio::io_service &m_io_service;
-  InputManager &m_input_manager;
-  InputManager &m_client_input_manager;
+  InputManager *m_input_manager = nullptr;
+  InputManager *m_client_input_manager = nullptr;
   boost::thread m_thread;
   std::size_t m_port_number;
 

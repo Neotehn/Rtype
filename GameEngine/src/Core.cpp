@@ -1,7 +1,6 @@
 #include "./Core.hpp"
 
-Core::Core(std::size_t t_flag, std::string t_ip, int *t_level)
-    : m_client_input_manager(t_level), m_input_manager(t_level) {
+Core::Core(std::size_t t_flag, std::string t_ip, int *t_level) {
   m_graphic_loader = new rtype::GraphicLoader();
   m_music_player.init(m_graphic_loader);
   m_window = m_graphic_loader->loadRenderWindow();
@@ -14,8 +13,7 @@ Core::Core(std::size_t t_flag, std::string t_ip, int *t_level)
   if (t_flag == 1) {
     m_port_number = rand() % 15000 + 40001;
     std::cout << t_ip << std::endl;
-    m_clientCom = new UdpClient(m_io_service, t_ip, "55555", m_port_number,
-                                m_input_manager, m_client_input_manager);
+    m_clientCom = new UdpClient(m_io_service, t_ip, "55555", m_port_number);
     m_state_machine.run(StateMachine::build<MainState>(
       m_state_machine, m_window, m_music_player, t_flag, m_graphic_loader,
       t_level, true, t_ip, m_clientCom));

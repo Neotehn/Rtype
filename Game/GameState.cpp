@@ -36,8 +36,9 @@ GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
       {(size_x / 2) - (m_title->getLocalBounds().width / 2),
        (size_y / 2) - (m_title->getLocalBounds().height / 2)});
     m_flag = CommunicationFlag::client;
-    m_clientCom->setClientInputManager(m_client_input_manager);
-    m_clientCom->setInputManager(m_input_manager);
+    m_clientCom->setClientInputManager(&m_client_input_manager);
+    m_clientCom->setInputManager(&m_input_manager);
+    //client creation
   } else {
     m_flag = CommunicationFlag::server;
 
@@ -136,7 +137,6 @@ void GameState::update() {
       }
     }
     SystemData data = {.event_queue = m_input_manager.getInputs()};
-    data.event_queue.dump();
     if (m_flag == CommunicationFlag::client && m_clientCom->m_flag) {
       EventQueue eq = m_client_input_manager.getInputsWithoutPop();
       for (std::shared_ptr<Action> action : eq.getEventQueue()) {
