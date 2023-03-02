@@ -81,4 +81,9 @@ void loadMusic(rtype::IMusic *t_music, bool t_play = true);
 void initBackground(std::shared_ptr<EntityManager> t_em,
                     rtype::IGraphicLoader *t_graphic_loader);
 
+float initObstacle(std::shared_ptr<EntityManager> t_entity_manager,
+                   rtype::IGraphicLoader *t_graphic_loader,
+                   rtype::Vector2f t_pos, std::string t_sprite_path,
+                   int t_limit);
+
 #endif  //R_TYPE_CLIENT_INIT_HPP

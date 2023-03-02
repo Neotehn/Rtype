@@ -12,6 +12,10 @@ void DisplaySystem::update() {
     BackgroundLayer *background = (*m_em.get()).Get<BackgroundLayer>(ent);
     m_window->draw(background->sprite.getSprite());
   }
+  for (EntityID ent : EntityViewer<Obstacle>(*m_em.get())) {
+    Obstacle *obstacle = (*m_em.get()).Get<Obstacle>(ent);
+    m_window->draw(obstacle->body);
+  }
   for (EntityID ent : EntityViewer<Player>(*m_em.get())) {
     Player *player = (*m_em.get()).Get<Player>(ent);
     m_window->draw(player->body);

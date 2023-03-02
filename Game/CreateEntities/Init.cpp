@@ -10,6 +10,9 @@ std::vector<EntityID> background_entities;
 bool loadLevel(int *t_level, std::shared_ptr<EntityManager> t_em,
                rtype::IGraphicLoader *t_graphic_loader, rtype::IMusic *t_music,
                bool t_play_music, UdpServer *t_server_com) {
+  for (EntityID ent : EntityViewer<Obstacle>(*t_em)) {
+    t_em->destroyEntity(ent);
+  }
   for (EntityID ent : EntityViewer<Bullet>(*t_em)) {
     t_em->destroyEntity(ent);
   }
@@ -47,8 +50,51 @@ bool loadLevel(int *t_level, std::shared_ptr<EntityManager> t_em,
   if (level == 2 && t_server_com) {
     initPayWall(t_em, t_graphic_loader, t_server_com);
   }
+  initObstacle(t_em, t_graphic_loader, {800, 200},
+               "../Client/sprites/obstacles/bg1_upper.png", 400);
   return true;
 }
+
+void readMap() {
+  std::vector<std::vector<char>> t_map;
+  std::string map_path = assetLoader.getMapPath();
+  Json::Value obstacle_list = assetLoader.getObstacleData();
+
+  std::ifstream map_file(map_path);
+  std::string line;
+  while (map_file >> line) {
+    std::vector<char> row;
+    for (char c : line) {
+      row.push_back(c);
+    }
+    t_map.push_back(row);
+  }
+  map_file.close();
+}
+
+// returns x value where object ends
+float initObstacle(std::shared_ptr<EntityManager> t_entity_manager,
+                   rtype::IGraphicLoader *t_graphic_loader,
+                   rtype::Vector2f t_pos, std::string t_sprite_path,
+                   int t_limit) {
+  std::cout << "Creating Obstacle" << std::endl;
+  EntityID obstacle = t_entity_manager->createNewEntity();
+
+  SpriteECS obstacle_sprite = SpriteECS(t_sprite_path, t_graphic_loader);
+
+  Pos obstacle_pos = Pos{rtype::Vector2f{-3, 0}, t_pos};
+
+  rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
+  //  body->setSize({200, 200});
+  body->setPosition({t_pos.x, t_pos.y});
+  body->setTexture(obstacle_sprite.getTexture());
+
+  Obstacle obstacle_obj = Obstacle{obstacle_pos, body, t_limit};
+  t_entity_manager->Assign<Obstacle>(obstacle, obstacle_obj);
+  // TODO: return x value where object ends
+}
+
+void loadMap(std::vector<std::vector<char>> t_map) {}
 
 EntityID initPlayer(std::shared_ptr<EntityManager> t_entity_manager,
                     UdpServer *t_serverCom,

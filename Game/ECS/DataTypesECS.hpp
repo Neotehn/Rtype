@@ -128,6 +128,12 @@ struct Bullet {
   float damage = 1;
 };
 
+struct Obstacle {
+  Pos position;
+  rtype::IRectangleShape *body;
+  int limit;
+};
+
 struct AnimationObj {
   std::string type;
   Pos position;
