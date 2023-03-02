@@ -27,9 +27,9 @@ void MovementSystem::update() {
   }
   for (EntityID ent : EntityViewer<Obstacle>(*m_em)) {
     Obstacle *obstacle = (*m_em).Get<Obstacle>(ent);
-    obstacle->position.position.x -= obstacle->position.velocity.x;
+    obstacle->position.position.x += obstacle->position.velocity.x;
     if (obstacle->position.position.x <= obstacle->limit) {
-      obstacle->position.position.x = 0;
+      obstacle->position.position.x = obstacle->original_x;
     }
     obstacle->body->setPosition(obstacle->position.position);
   }

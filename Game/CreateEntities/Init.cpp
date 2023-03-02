@@ -50,13 +50,12 @@ bool loadLevel(int *t_level, std::shared_ptr<EntityManager> t_em,
   if (level == 2 && t_server_com) {
     initPayWall(t_em, t_graphic_loader, t_server_com);
   }
-  initObstacle(t_em, t_graphic_loader, {800, 200},
-               "../Client/sprites/obstacles/bg1_upper.png", 400);
+  loadMap(t_em, t_graphic_loader);
   return true;
 }
 
-void readMap() {
-  std::vector<std::vector<char>> t_map;
+std::vector<std::vector<char>> readMap() {
+  std::vector<std::vector<char>> map;
   std::string map_path = assetLoader.getMapPath();
   Json::Value obstacle_list = assetLoader.getObstacleData();
 
@@ -67,34 +66,81 @@ void readMap() {
     for (char c : line) {
       row.push_back(c);
     }
-    t_map.push_back(row);
+    map.push_back(row);
   }
   map_file.close();
+  return map;
 }
 
 // returns x value where object ends
-float initObstacle(std::shared_ptr<EntityManager> t_entity_manager,
-                   rtype::IGraphicLoader *t_graphic_loader,
-                   rtype::Vector2f t_pos, std::string t_sprite_path,
-                   int t_limit) {
-  std::cout << "Creating Obstacle" << std::endl;
+unsigned int initObstacle(std::shared_ptr<EntityManager> t_entity_manager,
+                          rtype::IGraphicLoader *t_graphic_loader,
+                          rtype::Vector2f t_pos, std::string t_sprite_path,
+                          int t_total_width) {
   EntityID obstacle = t_entity_manager->createNewEntity();
 
   SpriteECS obstacle_sprite = SpriteECS(t_sprite_path, t_graphic_loader);
+  rtype::ISprite *sprite =
+    const_cast<rtype::ISprite *>(obstacle_sprite.getSprite());
+  rtype::Vector2u size = sprite->getSize();
+  float scale = 2;
+
+  if (t_pos.y >= 400) { t_pos.y -= scale * size.y; }
 
   Pos obstacle_pos = Pos{rtype::Vector2f{-3, 0}, t_pos};
 
   rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
-  //  body->setSize({200, 200});
+  body->setSize({static_cast<float>(size.x), static_cast<float>(size.y)});
+  body->setScale({scale, scale});
   body->setPosition({t_pos.x, t_pos.y});
   body->setTexture(obstacle_sprite.getTexture());
 
-  Obstacle obstacle_obj = Obstacle{obstacle_pos, body, t_limit};
+  Obstacle obstacle_obj =
+    Obstacle{obstacle_pos, body, static_cast<float>(-t_total_width), 800};
   t_entity_manager->Assign<Obstacle>(obstacle, obstacle_obj);
-  // TODO: return x value where object ends
+  return size.x * scale;
 }
 
-void loadMap(std::vector<std::vector<char>> t_map) {}
+int getTotalObstacleWidth(rtype::IGraphicLoader *t_graphic_loader,
+                          Json::Value t_obstacle_list,
+                          std::vector<std::vector<char>> t_map) {
+  int total_width = 0;
+  for (int i = 0; i < t_map.size(); i++) {
+    for (int j = 0; j < t_map[i].size(); j++) {
+      int index = t_map[i][j] - 'a';
+      if (index < 0 || index >= t_obstacle_list.size()) { continue; }
+      Json::Value obstacle = t_obstacle_list[index];
+      SpriteECS obstacle_sprite =
+        SpriteECS(obstacle["upper"].asString(), t_graphic_loader);
+      rtype::ISprite *sprite =
+        const_cast<rtype::ISprite *>(obstacle_sprite.getSprite());
+      rtype::Vector2u size = sprite->getSize();
+      total_width += size.x;
+    }
+  }
+  return total_width * 2;  // 2 is scale on body
+}
+
+void loadMap(std::shared_ptr<EntityManager> t_entity_manager,
+             rtype::IGraphicLoader *t_graphic_loader) {
+  std::vector<std::vector<char>> map = readMap();
+  float x = 0;
+  Json::Value obstacle_list = assetLoader.getObstacleData();
+  int total_width = getTotalObstacleWidth(t_graphic_loader, obstacle_list, map);
+  total_width -= 800;
+
+  for (int i = 0; i < map.size(); i++) {
+    for (int j = 0; j < map[i].size(); j++) {
+      int index = map[i][j] - 'a';
+      if (index < 0 || index >= obstacle_list.size()) { continue; }
+      Json::Value obstacle = obstacle_list[index];
+      initObstacle(t_entity_manager, t_graphic_loader, {x, 0},
+                   obstacle["upper"].asString(), total_width);
+      x += initObstacle(t_entity_manager, t_graphic_loader, {x, 800},
+                        obstacle["lower"].asString(), total_width);
+    }
+  }
+}
 
 EntityID initPlayer(std::shared_ptr<EntityManager> t_entity_manager,
                     UdpServer *t_serverCom,

@@ -22,6 +22,7 @@ namespace rtype {
     virtual void move(const rtype::Vector2f &offset) = 0;
     virtual void rotate(float angle) = 0;
     virtual void scale(const rtype::Vector2f &factor) = 0;
+    virtual rtype::Vector2u getSize() const = 0;
     virtual const rtype::ITexture *getTexture() const = 0;
     virtual rtype::FloatRect getLocalBounds() const = 0;
     virtual rtype::FloatRect getGlobalBounds() const = 0;

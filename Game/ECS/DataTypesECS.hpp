@@ -131,7 +131,8 @@ struct Bullet {
 struct Obstacle {
   Pos position;
   rtype::IRectangleShape *body;
-  int limit;
+  float limit;
+  float original_x;
 };
 
 struct AnimationObj {
