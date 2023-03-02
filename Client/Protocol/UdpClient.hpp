@@ -28,9 +28,16 @@ class UdpClient : public IProtocol {
   void handleReceive(const boost::system::error_code &error, std::size_t size);
   void handleSend(std::string t_msg, const boost::system::error_code &t_error,
                   std::size_t t_size);
+  std::size_t getPortNumber() const;
+  void setInputManager(InputManager &t_input_manager);
+  void setClientInputManager(InputManager &t_client_input_manager);
+  bool checkAndHandleLobbyJoining(std::shared_ptr<Action> t_action);
   enum ConnectState { none, connected };
   ConnectState m_flag;
   int m_id;
+  std::string m_lobby_code;
+  std::vector<std::string> m_lobby_names;
+  bool m_lobby_successfull_connected;
 
  private:
   udp::socket m_socket;
@@ -40,6 +47,7 @@ class UdpClient : public IProtocol {
   InputManager &m_input_manager;
   InputManager &m_client_input_manager;
   boost::thread m_thread;
+  std::size_t m_port_number;
 
   void setPlayerId(std::shared_ptr<Action> t_action);
 };

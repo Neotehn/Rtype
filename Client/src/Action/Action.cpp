@@ -61,6 +61,7 @@ std::string Action::getTypeAsString() const {
 std::string Action::getCommand() const {
   std::string type_string = getTypeAsString();
   std::string data = "";
+  std::string names = "";
 
   switch (m_type) {
     case ActionType::START:
@@ -120,15 +121,24 @@ std::string Action::getCommand() const {
       return std::to_string(m_action_id) + ";DESTROY;" + std::to_string(m_id) +
              ";";
     case ActionType::CREATELOBBY:
-      return std::to_string(m_action_id) + ";CREATELOBBY;" + m_lobby_ip + ";" +
-             m_player_name + ";" + std::to_string(m_id) + ";";
+      return std::to_string(m_action_id) + ";CREATELOBBY;" +
+             std::to_string(m_id) + ";" + m_lobby_ip + ";" + m_player_name +
+             ";";
+    case ActionType::LEAVELOBBY:
+      return std::to_string(m_action_id) + ";LEAVELOBBY;" +
+             std::to_string(m_id) + ";" + m_lobby_ip + ";" + m_player_name +
+             ";";
     case ActionType::JOINLOBBY:
-      return std::to_string(m_action_id) + ";JOINLOBBY;" + m_lobby_ip + ";" +
-             std::to_string(m_lobby_id) + ";" + m_player_name + ";" +
-             std::to_string(m_id) + ";";
+      return std::to_string(m_action_id) + ";JOINLOBBY;" +
+             std::to_string(m_id) + ";" + m_lobby_ip + ";" + m_player_name +
+             ";";
     case ActionType::JOINSUCCESSFULL:
+      for (int i = 0; i < m_lobby_player_names.size(); i++) {
+        names += m_lobby_player_names[i];
+        names += ";";
+      }
       return std::to_string(m_action_id) + ";JOINSUCCESSFULL;" +
-             std::to_string(m_id) + ";";
+             std::to_string(m_id) + ";" + names;
     case ActionType::CREATESUCCESSFULL:
       return std::to_string(m_action_id) + ";CREATESUCCESSFULL;" +
              std::to_string(m_id) + ";";
@@ -184,3 +194,12 @@ std::string Action::getPlayerName() const { return m_player_name; }
 void Action::setLobbyIp(std::string t_lobby_ip) { m_lobby_ip = t_lobby_ip; }
 
 std::string Action::getLobbyIp() const { return m_lobby_ip; }
+
+void Action::setLobbyPlayerNames(
+  std::vector<std::string> t_lobby_player_names) {
+  m_lobby_player_names = t_lobby_player_names;
+}
+
+std::vector<std::string> Action::getLobbyPlayerNames() const {
+  return m_lobby_player_names;
+}

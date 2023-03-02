@@ -27,7 +27,8 @@ class CreateLobbyState final : public State {
   CreateLobbyState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
                    MusicPlayer &t_music_player, std::size_t t_flag,
                    rtype::IGraphicLoader *t_graphic_loader, int *t_level,
-                   bool t_replace = true, std::string t_ip = "");
+                   bool t_replace = true, std::string t_ip = "",
+                   UdpClient *t_clientCom = nullptr);
   void pause() override;
   void resume() override;
   void update() override;
@@ -41,6 +42,9 @@ class CreateLobbyState final : public State {
   std::size_t m_flag;
   rtype::IFont *m_font;
   rtype::IText *m_title;
+  rtype::IText *m_player_one_text;
+  rtype::IText *m_player_two_text;
+  rtype::IText *m_lobby_code_text;
   rtype::ITexture *m_player_one_t;
   rtype::ITexture *m_player_two_t;
   rtype::ITexture *m_player_three_t;

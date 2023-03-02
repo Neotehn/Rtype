@@ -18,6 +18,7 @@ void CreateObjectSystem::updateData(SystemData &t_data) {
 void CreateObjectSystem::update() {
   for (std::shared_ptr<Action> action :
        m_event_queue.getAllOfType(Action::ActionType::CREATE)) {
+    std::cout << "kapuut" << std::endl;
     Action::ObjectType type = action->getCreateType();
     EntityID id = action->getId();
     rtype::Vector2f pos = action->getCreatePosition();

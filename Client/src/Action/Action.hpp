@@ -2,6 +2,7 @@
 #define R_TYPE_CLIENT_ACTION_HPP
 
 #include <string>
+#include <vector>
 
 #include "./IAction.hpp"
 #include "../../../Game/Encapsulation/GraphicDataTypes.hpp"
@@ -38,6 +39,7 @@ class Action : public IAction {
     END,                // ACTION_ID;END; OR END;PORT_NB
     JOINLOBBY,          // ACTION_ID;LOBBY_IP;LOBBY_ID;PLAYERNAME
     CREATELOBBY,        // ACTION_ID;LOBBY_IP;PLAYERNAME
+    LEAVELOBBY,         // ACTION_ID;LOBBY_IP;PLAYERNAME
     JOINSUCCESSFULL,    // ACTION_ID;
     CREATESUCCESSFULL,  // ACTION_ID;
     ERROR,
@@ -97,6 +99,9 @@ class Action : public IAction {
   void setLobbyIp(std::string t_lobby_ip);
   std::string getLobbyIp() const;
 
+  void setLobbyPlayerNames(std::vector<std::string> t_lobby_player_names);
+  std::vector<std::string> getLobbyPlayerNames() const;
+
  protected:
   int m_action_id;
   ActionType m_type;
@@ -117,6 +122,7 @@ class Action : public IAction {
   int m_client_id = 0;
   std::string m_player_name = "";
   std::string m_lobby_ip = "";
+  std::vector<std::string> m_lobby_player_names;
   int m_lobby_id = 0;
 };
 

@@ -3,9 +3,10 @@
 MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
                      MusicPlayer &t_music_player, std::size_t t_flag,
                      rtype::IGraphicLoader *t_graphic_loader, int *t_level,
-                     const bool t_replace, std::string t_ip)
+                     const bool t_replace, std::string t_ip,
+                     UdpClient *t_clientCom)
     : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level,
-            t_replace, t_ip),
+            t_replace, t_ip, t_clientCom),
       m_start_btn(Button(
         "./assets/startBtn.png",
         rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 135),
@@ -81,17 +82,18 @@ void MainState::update() {
     if (m_mouse->isLeftMouseButtonPressed()) {
       if (m_start_btn.is_pressed(mouse_pos_f)) {
         std::cout << "startbtn pressed" << std::endl;
+        std::cout << m_title->getString() << std::endl;
         m_music_player.stop();
         m_next = StateMachine::build<GameState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, true, m_ip);
+          m_level, true, m_ip, m_clientCom);
         m_start_pressed = true;
       }
       if (m_settings_btn.is_pressed(mouse_pos_f)) {
         std::cout << "settingsbtn pressed" << std::endl;
         m_next = StateMachine::build<SettingsState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, true);
+          m_level, true, "", m_clientCom);
       }
       if (m_exit_btn.is_pressed(mouse_pos_f)) {
         std::cout << "exitbtn pressed" << std::endl;
@@ -102,16 +104,22 @@ void MainState::update() {
         m_state_machine.quit();
       }
       if (m_create_btn.is_pressed(mouse_pos_f)) {
+        std::string lobby_code = createLobbyCode();
+        CreateLobbyAction create_lobby_action = CreateLobbyAction(
+          Action::ActionType::CREATELOBBY, lobby_code, "Nutzer");
+        m_clientCom->sendMessage(create_lobby_action.getCommand());
+        m_clientCom->m_lobby_code = lobby_code;
+        m_clientCom->m_lobby_names.push_back("Nutzer");
         std::cout << "create lobby" << std::endl;
         m_next = StateMachine::build<CreateLobbyState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, true);
+          m_level, true, "", m_clientCom);
       }
       if (m_join_btn.is_pressed(mouse_pos_f)) {
         std::cout << "join lobby" << std::endl;
         m_next = StateMachine::build<JoinLobbyState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, true);
+          m_level, true, "", m_clientCom);
       }
     }
     switch (event.type) {
@@ -143,4 +151,17 @@ void MainState::draw() {
   m_window->draw(m_settings_btn.getSprite());
   m_window->draw(m_exit_btn.getSprite());
   m_window->display();
+}
+
+std::string MainState::createLobbyCode() {
+  auto randchar = []() -> char {
+    const char charset[] = "0123456789"
+                           "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                           "abcdefghijklmnopqrstuvwxyz";
+    const size_t max_index = (sizeof(charset) - 1);
+    return charset[rand() % max_index];
+  };
+  std::string str(10, 0);
+  std::generate_n(str.begin(), 10, randchar);
+  return str;
 }

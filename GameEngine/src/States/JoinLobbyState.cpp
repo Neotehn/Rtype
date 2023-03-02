@@ -11,9 +11,10 @@ JoinLobbyState::JoinLobbyState(StateMachine &t_machine,
                                rtype::IRenderWindow *t_window,
                                MusicPlayer &t_music_player, std::size_t t_flag,
                                rtype::IGraphicLoader *t_graphic_loader,
-                               int *t_level, const bool t_replace, std::string t_ip)
+                               int *t_level, const bool t_replace,
+                               std::string t_ip, UdpClient *t_clientCom)
     : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level,
-            t_replace, t_ip),
+            t_replace, t_ip, t_clientCom),
       m_home_btn(Button(
         "./assets/icons/white/home.png",
         rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 32),
@@ -102,6 +103,7 @@ JoinLobbyState::JoinLobbyState(StateMachine &t_machine,
     static_cast<float>(m_window->getSize().x / 2 -
                        m_textbox.getText()->getLocalBounds().width / 2),
     static_cast<float>(m_window->getSize().y / 2 - 100)});
+  m_is_pressed = false;
   // call protocol to join lobby
 }
 
@@ -122,22 +124,27 @@ void JoinLobbyState::update() {
     if (m_mouse->isLeftMouseButtonPressed()) {
       if (m_home_btn.is_pressed(mouse_pos_f)) {
         std::cout << "homebtn pressed" << std::endl;
+        m_clientCom->m_lobby_code = "";
         m_next = StateMachine::build<MainState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, true);
+          m_level, true, m_ip, m_clientCom);
       }
-      if (m_join_btn.is_pressed(mouse_pos_f)) {  // start game if pressed
+      if (m_join_btn.is_pressed(mouse_pos_f) &&
+          !m_is_pressed) {  // start game if pressed
         std::cout << "joinbtn pressed" << std::endl;
-        m_next = StateMachine::build<GameState>(
-          m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, true);
+        m_clientCom->m_lobby_code = m_textbox.getTextString();
+        std::cout << m_clientCom->m_lobby_code << std::endl;
+        JoinLobbyAction join_lobby_action = JoinLobbyAction(
+          Action::ActionType::JOINLOBBY, m_clientCom->m_lobby_code, "Nutzer");
+        m_clientCom->sendMessage(join_lobby_action.getCommand());
+        m_is_pressed = true;
       }
-      // if (m_start_btn.is_pressed(mouse_pos_f)) {  // start game if pressed
-      //   std::cout << "startbtn pressed" << std::endl;
-      //   m_next = StateMachine::build<GameState>(
-      //     m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-      //     m_level, true);
-      // }
+
+      if (m_clientCom->m_lobby_successfull_connected) {
+        m_next = StateMachine::build<CreateLobbyState>(
+          m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
+          m_level, true, m_ip, m_clientCom);
+      }
     }
     switch (event.type) {
       case rtype::EventType::Closed:

@@ -133,16 +133,7 @@ void MovementSystem::updatePlayer(EntityID t_ent) {
     player->position.velocity *= 0.99f;
   if (m_serverCom != nullptr) {
     time_diff = m_serverCom->getTimeDiff();
-    if (time_diff > 0.1) {
-      m_serverCom->resetTime();
 
-      for (EntityID ent : EntityViewer<Player>(*m_em.get())) {
-        player = (*m_em.get()).Get<Player>(ent);
-        m_serverCom->addEvent(
-          std::make_shared<Action>(PosAction(ent, player->position.position)));
-      }
-      return;
-    }
     if (direction != rtype::Vector2f{0, 0}) {
       m_serverCom->addEvent(
         std::make_shared<Action>(PosAction(t_ent, player->position.position)));

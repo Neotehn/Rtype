@@ -1,6 +1,7 @@
 #include "./Core.hpp"
 
-Core::Core(std::size_t t_flag, std::string t_ip) {
+Core::Core(std::size_t t_flag, std::string t_ip, int *t_level)
+    : m_client_input_manager(t_level), m_input_manager(t_level) {
   m_graphic_loader = new rtype::GraphicLoader();
   m_music_player.init(m_graphic_loader);
   m_window = m_graphic_loader->loadRenderWindow();
@@ -8,17 +9,20 @@ Core::Core(std::size_t t_flag, std::string t_ip) {
     800, 800, t_flag == 0 ? "R-Type Server" : "R-Type Client",
     static_cast<rtype::Style>(rtype::Style::Titlebar | rtype::Style::Close));
   m_window->setFramerateLimit(60);
-  int *level = new int(1);
   srand(time(nullptr));
 
-  if (t_flag == 1)
+  if (t_flag == 1) {
+    m_port_number = rand() % 15000 + 40001;
+    std::cout << t_ip << std::endl;
+    m_clientCom = new UdpClient(m_io_service, t_ip, "55555", m_port_number,
+                                m_input_manager, m_client_input_manager);
     m_state_machine.run(StateMachine::build<MainState>(
       m_state_machine, m_window, m_music_player, t_flag, m_graphic_loader,
-      level, true, t_ip));
-  else
+      t_level, true, t_ip, m_clientCom));
+  } else
     m_state_machine.run(StateMachine::build<GameState>(
       m_state_machine, m_window, m_music_player, t_flag, m_graphic_loader,
-      level, true, t_ip));
+      t_level, true, t_ip));
 }
 
 Core::~Core() {

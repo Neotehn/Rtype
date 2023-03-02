@@ -3,9 +3,10 @@
 GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
                      MusicPlayer &t_music_player, std::size_t t_flag,
                      rtype::IGraphicLoader *t_graphic_loader, int *t_level,
-                     const bool t_replace, std::string t_ip)
-    : State{t_machine, t_window, t_music_player, t_graphic_loader, t_level,
-            t_replace, t_ip},
+                     const bool t_replace, std::string t_ip,
+                     UdpClient *t_clientCom)
+    : State{t_machine, t_window,  t_music_player, t_graphic_loader,
+            t_level,   t_replace, t_ip,           t_clientCom},
       m_client_input_manager(t_level), m_input_manager(t_level) {
   m_is_running = true;
   m_graphic_loader = t_graphic_loader;
@@ -35,10 +36,8 @@ GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
       {(size_x / 2) - (m_title->getLocalBounds().width / 2),
        (size_y / 2) - (m_title->getLocalBounds().height / 2)});
     m_flag = CommunicationFlag::client;
-    m_port_number = rand() % 15000 + 40001;
-    std::cout << m_ip << std::endl;
-    m_clientCom = new UdpClient(m_io_service, m_ip, "55555", m_port_number,
-                                m_input_manager, m_client_input_manager);
+    m_clientCom->setClientInputManager(m_client_input_manager);
+    m_clientCom->setInputManager(m_input_manager);
   } else {
     m_flag = CommunicationFlag::server;
 
@@ -72,9 +71,9 @@ std::vector<std::shared_ptr<ISystem>> GameState::initSystems() {
       std::make_shared<ShootingSystem>(m_em, m_serverCom, m_graphic_loader));
     systems.push_back(std::make_shared<MovementSystem>(m_em, m_serverCom));
   } else {
-    systems.push_back(
-      std::make_shared<DamageSystem>(m_em, m_input_manager, m_port_number,
-                                     m_is_running, m_sounds, m_graphic_loader));
+    systems.push_back(std::make_shared<DamageSystem>(
+      m_em, m_input_manager, m_clientCom->getPortNumber(), m_is_running,
+      m_sounds, m_graphic_loader));
     systems.push_back(
       std::make_shared<CreateObjectSystem>(m_em, m_sounds, m_graphic_loader));
     systems.push_back(
@@ -107,7 +106,7 @@ void GameState::update() {
       std::cout << "Connecting to Server ..." << std::endl;
       boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
       StateAction start_action =
-        StateAction(Action::ActionType::START, m_port_number);
+        StateAction(Action::ActionType::START, m_clientCom->getPortNumber());
       m_clientCom->sendMessage(start_action.getCommand());
       std::cout << "waiting on Server Connection" << std::endl;
       m_window->clear();
@@ -122,8 +121,9 @@ void GameState::update() {
           m_is_running = false;
           std::cout << "yes close pls" << std::endl;
         }
-        if (m_flag == CommunicationFlag::client)
+        if (m_flag == CommunicationFlag::client) {
           m_client_input_manager.recordInputs(event);
+        }
       }
     }
     EventQueue eq = m_input_manager.getInputsWithoutPop();
@@ -136,6 +136,7 @@ void GameState::update() {
       }
     }
     SystemData data = {.event_queue = m_input_manager.getInputs()};
+    data.event_queue.dump();
     if (m_flag == CommunicationFlag::client && m_clientCom->m_flag) {
       EventQueue eq = m_client_input_manager.getInputsWithoutPop();
       for (std::shared_ptr<Action> action : eq.getEventQueue()) {

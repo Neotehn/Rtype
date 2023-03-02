@@ -10,7 +10,6 @@ UdpServer::UdpServer(boost::asio::io_service &t_io_service,
       m_is_running(t_is_running),
       m_send_event_manager(t_input_manager.m_level) {
   m_flag = GameMode::none;
-  m_socket.set_option(boost::asio::socket_base::broadcast(true));
   receiveClient();
   m_player_id_count = 0;
   m_start_time = std::chrono::system_clock::now();
@@ -65,6 +64,72 @@ bool UdpServer::doesAlreadyExist(std::shared_ptr<Action> t_action) {
   return false;
 }
 
+bool UdpServer::checkAndLobbyHandling(std::shared_ptr<Action> t_action) {
+  if (t_action->getType() == Action::ActionType::CREATELOBBY) {
+    std::vector<std::string> player_names;
+    player_names.push_back(t_action->getPlayerName());
+    Lobby new_lobby{t_action->getLobbyIp(),
+                    1,
+                    player_names,
+                    {m_remoteEndpoint}};
+    m_lobbys.push_back(new_lobby);
+    return true;
+  } else if (t_action->getType() == Action::ActionType::LEAVELOBBY) {
+    std::string lobby_ip = t_action->getLobbyIp();
+    std::string username = t_action->getPlayerName();
+
+    for (int i = 0; i < m_lobbys.size(); i++) {
+      if (lobby_ip == m_lobbys[i].m_lobby_code) {
+        for (int x = 0; x < m_lobbys[i].m_endpoints.size(); x++) {
+          LeaveLobbyAction leave_lobby_action = LeaveLobbyAction(
+            Action::ActionType::LEAVELOBBY, lobby_ip, username);
+          sendMessage(leave_lobby_action.getCommand(),
+                      m_lobbys[i].m_endpoints[x]);
+          if (m_remoteEndpoint == m_lobbys[i].m_endpoints[x]) {
+            m_lobbys[i].m_endpoints.erase(m_lobbys[i].m_endpoints.begin() + x);
+          }
+        }
+        if (m_lobbys[i].m_player_count == 1 ||
+            m_lobbys[i].m_player_count == 0) {
+          m_lobbys.erase(m_lobbys.begin() + i);
+        } else {
+          m_lobbys[i].m_player_count -= 1;
+          for (int x = 0; x < m_lobbys[i].m_player_names.size(); x++) {
+            if (username == m_lobbys[i].m_player_names[x]) {
+              m_lobbys[i].m_player_names.erase(
+                m_lobbys[i].m_player_names.begin() + x);
+            }
+          }
+        }
+        break;
+      }
+    }
+    return true;
+  } else if (t_action->getType() == Action::ActionType::JOINLOBBY) {
+    std::string lobby_ip = t_action->getLobbyIp();
+    std::string username = t_action->getPlayerName();
+
+    for (int i = 0; i < m_lobbys.size(); i++) {
+      std::cout << m_lobbys[i].m_lobby_code << std::endl;
+      if (lobby_ip == m_lobbys[i].m_lobby_code) {
+        m_lobbys[i].m_player_count += 1;
+        m_lobbys[i].m_player_names.push_back(username);
+        m_lobbys[i].m_endpoints.push_back(m_remoteEndpoint);
+
+        for (int x = 0; x < m_lobbys[i].m_endpoints.size(); x++) {
+          JoinSuccessfullAction join_lobby_action = JoinSuccessfullAction(
+            Action::ActionType::JOINSUCCESSFULL, m_lobbys[i].m_player_names);
+          sendMessage(join_lobby_action.getCommand(),
+                      m_lobbys[i].m_endpoints[x]);
+        }
+        break;
+      }
+    }
+    return true;
+  }
+  return false;
+}
+
 void UdpServer::handleReceive(const boost::system::error_code &t_error,
                               std::size_t t_size) {
   if (!t_error) {
@@ -72,6 +137,10 @@ void UdpServer::handleReceive(const boost::system::error_code &t_error,
       std::string(m_recvBuffer.begin(), m_recvBuffer.begin() + t_size);
     std::cout << "Received: '" << msg << "' (" << t_error.message() << ")\n";
     std::shared_ptr<Action> action = getAction(msg);
+    if (checkAndLobbyHandling(action)) {
+      receiveClient();
+      return;
+    };
     if (!doesAlreadyExist(action)) {
       m_input_manager.addActionsToQueue(action);
       m_send_event_manager.addActionsToQueue(action);

@@ -29,6 +29,10 @@ set(CLIENT_HPP ../Game/ECS/ComponentPool.hpp
         src/Action/CollisionAction.hpp
         src/Action/DamageAction.hpp
         src/Action/DestroyAction.hpp
+        src/Action/CreateLobbyAction.hpp
+        src/Action/JoinLobbyAction.hpp
+        src/Action/LeaveLobbyAction.hpp
+        src/Action/JoinSuccessfullAction.hpp
         ../Server/Protocol/UdpServer.hpp
         ../Client/Protocol/UdpClient.hpp
         ../Game/CreateEntities/Init.hpp
@@ -96,6 +100,10 @@ set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         src/Action/IncreaseAction.cpp
         src/Action/CollisionAction.cpp
         src/Action/DestroyAction.cpp
+        src/Action/CreateLobbyAction.cpp
+        src/Action/JoinLobbyAction.cpp
+        src/Action/LeaveLobbyAction.cpp
+        src/Action/JoinSuccessfullAction.cpp
         ../Game/Timer.cpp
         ../Server/Protocol/UdpServer.cpp
         ../Client/Protocol/UdpClient.cpp

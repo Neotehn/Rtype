@@ -133,16 +133,23 @@ std::shared_ptr<Action> IProtocol::getAction(std::string command) {
     EntityID player_id = std::stoull(commands[4]);
     return std::make_shared<Action>(
       DamageAction(id, damage, action_id, player_id));
-  } /*else if (action_type == "JOINLOBBY") {
-    return std::make_shared<Action>(
-      StateAction(Action::ActionType::JOINLOBBY, id, action_id));
   } else if (action_type == "CREATELOBBY") {
     return std::make_shared<Action>(
-      StateAction(Action::ActionType::CREATELOBBY, id, action_id));
-  } else if (action_type == "JOINSUCCESSFULL") {
+      CreateLobbyAction(id, commands[3], commands[4], action_id));
+  } else if (action_type == "JOINLOBBY") {
     return std::make_shared<Action>(
-      StateAction(Action::ActionType::CREATELOBBY, id, action_id));
-  } else if (action_type == "CREATESUCCESSFULL") {
+      JoinLobbyAction(id, commands[3], commands[4], action_id));
+  } else if (action_type == "LEAVELOBBY") {
+    return std::make_shared<Action>(
+      LeaveLobbyAction(id, commands[3], commands[4], action_id));
+  } else if (action_type == "JOINSUCCESSFULL") {
+    std::vector<std::string> names;
+    for (int i = 3; i < commands.size() - 1; i++) {
+      names.push_back(commands[i]);
+    }
+    return std::make_shared<Action>(
+      JoinSuccessfullAction(id, names, action_id));
+  } /*else if (action_type == "CREATESUCCESSFULL") {
     return std::make_shared<Action>(
       StateAction(Action::ActionType::CREATELOBBY, id, action_id));
   }*/

@@ -13,9 +13,9 @@ CreateLobbyState::CreateLobbyState(StateMachine &t_machine,
                                    std::size_t t_flag,
                                    rtype::IGraphicLoader *t_graphic_loader,
                                    int *t_level, const bool t_replace,
-                                   std::string t_ip)
+                                   std::string t_ip, UdpClient *t_clientCom)
     : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level,
-            t_replace, t_ip),
+            t_replace, t_ip, t_clientCom),
       m_home_btn(Button(
         "./assets/icons/white/home.png",
         rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 32),
@@ -85,6 +85,28 @@ CreateLobbyState::CreateLobbyState(StateMachine &t_machine,
   m_title->setCharacterSize(50);
   m_title->setPosition(
     {(size_x / 2) - (m_title->getLocalBounds().width / 2), 100});
+
+  m_player_one_text = m_graphic_loader->loadText();
+  m_player_one_text->setFont(m_font);
+  m_player_one_text->setString("CREATE LOBBY");
+  m_player_one_text->setCharacterSize(50);
+  m_player_one_text->setPosition(
+    {(size_x / 2) - (m_player_one_text->getLocalBounds().width / 2), 500});
+
+  m_player_two_text = m_graphic_loader->loadText();
+  m_player_two_text->setFont(m_font);
+  m_player_two_text->setString("CREATE LOBBY");
+  m_player_two_text->setCharacterSize(50);
+  m_player_two_text->setPosition(
+    {(size_x / 2) - (m_player_two_text->getLocalBounds().width / 2), 600});
+
+  m_lobby_code_text = m_graphic_loader->loadText();
+  m_lobby_code_text->setFont(m_font);
+  m_lobby_code_text->setString(m_clientCom->m_lobby_code);
+  m_lobby_code_text->setCharacterSize(50);
+  m_lobby_code_text->setColor(rtype::Black);
+  m_lobby_code_text->setPosition(
+    {(size_x / 2) - (m_lobby_code_text->getLocalBounds().width / 2), 500});
   m_music_player.play(MusicID::MENU_THEME);
   // call protocol for creating lobby
 }
@@ -105,15 +127,21 @@ void CreateLobbyState::update() {
     if (m_mouse->isLeftMouseButtonPressed()) {
       if (m_home_btn.is_pressed(mouse_pos_f)) {
         std::cout << "homebtn pressed" << std::endl;
+        LeaveLobbyAction create_lobby_action = LeaveLobbyAction(
+          Action::ActionType::LEAVELOBBY, m_clientCom->m_lobby_code, "Nutzer");
+        m_clientCom->sendMessage(create_lobby_action.getCommand());
+        m_clientCom->m_lobby_code = "";
+        m_clientCom->m_lobby_successfull_connected = false;
         m_next = StateMachine::build<MainState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, true);
+          m_level, true, "", m_clientCom);
       }
-      if (m_start_btn.is_pressed(mouse_pos_f)) {  // start game if pressed
+      if (m_start_btn.is_pressed(mouse_pos_f) &&
+          m_clientCom->m_lobby_names.size() == 2) {  // start game if pressed
         std::cout << "startbtn pressed" << std::endl;
         m_next = StateMachine::build<GameState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, true);
+          m_level, true, "", m_clientCom);
       }  // currently lobby is just set between main and game
     }
     switch (event.type) {
@@ -125,7 +153,7 @@ void CreateLobbyState::update() {
           case rtype::EventKey::Escape:
             m_next = StateMachine::build<MainState>(
               m_state_machine, m_window, m_music_player, m_flag,
-              m_graphic_loader, m_level, true);
+              m_graphic_loader, m_level, true, "", m_clientCom);
             break;
           default:
             break;
@@ -141,12 +169,22 @@ void CreateLobbyState::draw() {
   m_window->clear();
   m_window->draw(m_bg_s);
   m_window->draw(m_title);
-  m_window->draw(m_player_one_s);
-  // could add if statement to show icon depending on how many players are connected
-  // m_window->draw(m_player_two_s);
+  m_window->draw(m_lobby_code_text);
+  for (int i = 0; i < m_clientCom->m_lobby_names.size(); i++) {
+    if (i == 0) {
+      m_player_one_text->setString(m_clientCom->m_lobby_names[i]);
+      m_window->draw(m_player_one_text);
+      m_window->draw(m_player_one_s);
+    } else {
+      m_player_two_text->setString(m_clientCom->m_lobby_names[i]);
+      m_window->draw(m_player_two_text);
+      m_window->draw(m_player_two_s);
+    }
+  }
   // m_window->draw(m_player_three_s);
   // m_window->draw(m_player_four_s);
   m_window->draw(m_home_btn.getSprite());
-  m_window->draw(m_start_btn.getSprite());
+  if (m_clientCom->m_lobby_names.size() == 2)
+    m_window->draw(m_start_btn.getSprite());
   m_window->display();
 }

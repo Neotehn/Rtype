@@ -35,6 +35,7 @@ class Textbox {
   rtype::IText *getText();
   void typedOn(rtype::Event t_input);
   int getLength();
+  std::string getTextString() const;
 
  private:
   rtype::IFont *m_font;
