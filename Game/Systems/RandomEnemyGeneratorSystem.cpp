@@ -16,6 +16,8 @@ void RandomEnemyGeneratorSystem::update() {
   int random = rand() % 1000;
   if (random < 10) {
     initEnemy(m_em, m_graphic_loader, m_serverCom);
+  } else if (random < 15) {
+    createCoin(m_em, m_graphic_loader, m_serverCom);
   } else if (random > 997) {
     initPowerUp(m_em, m_graphic_loader, m_serverCom);
   }

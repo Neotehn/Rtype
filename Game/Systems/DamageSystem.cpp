@@ -12,14 +12,12 @@ DamageSystem::DamageSystem(std::shared_ptr<EntityManager> t_em,
   m_graphic_loader = t_graphic_loader;
 }
 
-DamageSystem::~DamageSystem() {}
-
 void DamageSystem::update() {
   for (std::shared_ptr<Action> action :
        m_event_queue.getAllOfType(Action::ActionType::DAMAGE)) {
-    for (EntityID player_id : EntityViewer<Player>(*m_em.get())) {
+    for (EntityID player_id : EntityViewer<Player>(*m_em)) {
       if (player_id != action->getCollisionPartnerId()) { continue; }
-      Player *player = (*m_em.get()).Get<Player>(player_id);
+      Player *player = (*m_em).Get<Player>(player_id);
       int current_health = player->health.healthbar.getHealth();
       int damage = action->getShootDamage();
       int new_health = current_health - damage;
@@ -39,6 +37,21 @@ void DamageSystem::update() {
                   m_graphic_loader);
 
       player->health.body->setTexture(health_new_bar.getTexture());
+    }
+    for (EntityID enemy_id : EntityViewer<Enemy>(*m_em)) {
+      if (enemy_id != action->getCollisionPartnerId()) { continue; }
+      Enemy *enemy = (*m_em).Get<Enemy>(enemy_id);
+      enemy->health.cur_health -= action->getShootDamage();
+
+      if (enemy->health.cur_health <= 0) {
+        std::cout << "Enemy died :)" << std::endl;
+        m_play_sounds.push_back(SoundSystem::SoundType::death);
+      }
+      float x_size =
+        (float(enemy->health.cur_health) / float(enemy->health.max_health)) *
+        100.0;
+      enemy->health.left_health->setSize(
+        {x_size, enemy->health.left_health->getSize().y});
     }
   }
 }

@@ -14,15 +14,16 @@ class AnimationSystem : public ISystem {
  public:
   AnimationSystem(std::shared_ptr<EntityManager> t_em,
                   InputManager &t_input_manager);
-  ~AnimationSystem();
+  ~AnimationSystem() = default;
 
-  void update();
-  void updateData(SystemData &t_data);
+  void update() override;
+  void updateData(SystemData &t_data) override;
 
  private:
   Timer m_timer;
   InputManager &m_input_manager;
 
+  void generalAnimation(EntityID t_ent, AnimationObj *anim);
   void animateAnimationObj();
   void animateSpinningItem();
 };

@@ -62,8 +62,11 @@ class GameState final : public State {
   rtype::IMusic *m_music;
   std::shared_ptr<EntityManager> m_em;
   std::vector<SoundSystem::SoundType> m_sounds;
+  bool m_level_two_enemy_created = false;
+  bool m_will_reload = false;
 
   std::vector<std::shared_ptr<ISystem>> initSystems();
+  void manageLevels();
 };
 
 #endif /* !GAMESTATE_HPP_ */

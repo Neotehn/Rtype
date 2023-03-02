@@ -80,7 +80,6 @@ set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         ../Game/Systems/AnimationSystem.cpp
         ../Game/Systems/DestroySystem.cpp
         ../Game/Systems/DamageSystem.cpp
-        src/Action/IAction.cpp
         src/Action/ShootAction.cpp
         src/Action/MovementAction.cpp
         src/Action/StateAction.cpp

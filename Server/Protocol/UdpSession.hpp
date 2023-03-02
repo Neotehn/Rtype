@@ -24,7 +24,6 @@ class UdpServer;
 class UdpSession : public boost::enable_shared_from_this<UdpSession> {
  public:
   UdpSession(UdpServer *t_server);
-  void handleRequest(const error_code &t_error, std::size_t);
   void handleSent(const error_code &t_ec, std::size_t);
 
   udp::endpoint m_remoteEndpoint;

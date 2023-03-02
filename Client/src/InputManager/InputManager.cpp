@@ -16,7 +16,8 @@ void InputManager::recordInputs(const rtype::Event &t_event,
     recordKeyPressedInputs(t_event);
   } else if (t_event.type == rtype::EventType::KeyReleased) {
     recordKeyReleasedInputs(t_event);
-  } else if (t_event.type == rtype::EventType::MouseButtonPressed) {
+  } else if (t_event.type == rtype::EventType::MouseButtonPressed ||
+             t_event.type == rtype::EventType::MouseWheelMoved) {
     recordMouseButtonReleasedInputs(t_event, t_mouse);
   } else if (t_event.type == rtype::EventType::MouseMoved) {
     recordMouseMovement(t_event, t_mouse, t_window);
@@ -64,6 +65,12 @@ void InputManager::recordKeyReleasedInputs(const rtype::Event &t_event) {
           ShootAction(m_player_id, 1, Action::ShootingType::NORMAL, true)),
         Action::ActionType::SHOOT);
       break;
+    case rtype::EventKey::B:
+      m_input_queue.addToQueueIfNotExist(
+        std::make_shared<Action>(
+          ShootAction(m_player_id, 1, Action::ShootingType::COIN, true)),
+        Action::ActionType::SHOOT);
+      break;
     case rtype::EventKey::M:
       m_input_queue.addToQueueIfNotExist(
         std::make_shared<Action>(
@@ -97,7 +104,7 @@ void InputManager::recordMouseButtonReleasedInputs(const rtype::Event &t_event,
   } else if (t_mouse->isRightMouseButtonPressed()) {
     m_input_queue.addToQueueIfNotExist(
       std::make_shared<Action>(
-        ShootAction(m_player_id, 1, Action::ShootingType::BOMB, true)),
+        ShootAction(m_player_id, 1, Action::ShootingType::COIN, true)),
       Action::ActionType::SHOOT);
   } else if (t_mouse->isMouseMiddleButtonPressed()) {
     m_input_queue.addToQueueIfNotExist(
@@ -105,6 +112,15 @@ void InputManager::recordMouseButtonReleasedInputs(const rtype::Event &t_event,
         ShootAction(m_player_id, 1, Action::ShootingType::FIRE, true)),
       Action::ActionType::SHOOT);
   } else if (t_mouse->isMouseXButton2Pressed()) {
+    m_input_queue.addToQueueIfNotExist(
+      std::make_shared<Action>(
+        ShootAction(m_player_id, 1, Action::ShootingType::COIN, true)),
+      Action::ActionType::SHOOT);
+  } else if (t_event.type == rtype::EventType::MouseWheelMoved) {
+    m_input_queue.addToQueueIfNotExist(
+      std::make_shared<Action>(
+        ShootAction(m_player_id, 1, Action::ShootingType::BOMB, true)),
+      Action::ActionType::SHOOT);
   }
 }
 
