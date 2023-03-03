@@ -1,22 +1,19 @@
 #include "IntroState.hpp"
 
 
-IntroState::IntroState(StateMachine &t_machine,
-                             rtype::IRenderWindow *t_window,
-                             MusicPlayer &t_music_player,
-                              std::size_t t_flag,
-                             rtype::IGraphicLoader *t_graphic_loader,
-                             int *t_level,
-                       const std::string& t_path,
-                       const bool t_replace)
+IntroState::IntroState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
+                                  MusicPlayer &t_music_player, std::size_t t_flag,
+                                  rtype::IGraphicLoader *t_graphic_loader, int *t_level,
+                                  const std::string& t_path_to_sprite,
+                                  bool t_replace, std::string t_ip,
+                                  UdpClient *t_clientCom)
     : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level,
-            t_path,
-            t_replace),
+            t_path_to_sprite, t_replace, t_ip, t_clientCom),
       m_start_btn(
         Button("./assets/startBtn.png",
                rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 + 135),
                                static_cast<float>(m_window->getSize().y - 180)},
-               rtype::Vector2f{270, 130}, t_graphic_loader)),
+               rtype::Vector2f{270, 130}, t_graphic_loader, false)),
       m_flag(t_flag) {
   m_bg_t = m_graphic_loader->loadTexture();
   m_bg_s = m_graphic_loader->loadSprite();
@@ -35,7 +32,7 @@ IntroState::IntroState(StateMachine &t_machine,
   float scale_y = size_y / m_bg_t->getSize().y;
   m_bg_s->setTexture(m_bg_t, true);
   m_bg_s->setScale({scale_x, scale_y});
-  m_path_to_sprite = t_path;
+  m_path_to_sprite = t_path_to_sprite;
 
 
   m_spaceship_s->setScale({0.2, 0.2});
@@ -95,8 +92,8 @@ void IntroState::update() {
       if (m_start_btn.is_pressed(mouse_pos_f)) {
         std::cout << "startbtn pressed" << std::endl;
         m_next = StateMachine::build<MainState>(
-          m_state_machine, m_window, m_music_player,  m_flag, m_graphic_loader,
-          m_level,m_path_to_sprite, true);
+          m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
+          m_level, m_path_to_sprite, true, m_ip, m_clientCom);
       }
     }
     switch (event.type) {

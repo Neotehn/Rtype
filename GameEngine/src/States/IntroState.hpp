@@ -13,11 +13,11 @@
 class IntroState final : public State {
  public:
   IntroState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
-                MusicPlayer &t_music_player,
-                std::size_t t_flag,
-                rtype::IGraphicLoader *t_graphic_loader, int *t_level,
-                const std::string& t_path,
-                bool t_replace = true);
+              MusicPlayer &t_music_player, std::size_t t_flag,
+              rtype::IGraphicLoader *t_graphic_loader, int *t_level,
+              const std::string& t_path_to_sprite,
+              bool t_replace = true, std::string t_ip = "",
+              UdpClient *t_clientCom = nullptr);
   ~IntroState();
   void pause() override;
   void resume() override;

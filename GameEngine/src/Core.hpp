@@ -13,7 +13,8 @@
 
 class Core {
  public:
-  Core(std::size_t t_flag, std::string t_ip, int *t_level);
+  Core(std::size_t t_flag, std::string t_ip, const std::string& t_path,
+       int *t_level);
   ~Core();
   Core(const Core &);
   void run();

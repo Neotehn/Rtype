@@ -17,8 +17,10 @@ class State {
  public:
   State(StateMachine &t_machine, rtype::IRenderWindow *t_window,
         MusicPlayer &t_music_player, rtype::IGraphicLoader *t_graphic_loader,
-        int *t_level, bool t_replace = true, std::string t_ip = "",
-        UdpClient *t_clientCom = nullptr);
+        int *t_level, const std::string& t_path_to_sprite,
+        bool t_replace = true, std::string t_ip = "",
+        UdpClient *t_clientCom = nullptr
+        );
 
   virtual ~State() = default;
 

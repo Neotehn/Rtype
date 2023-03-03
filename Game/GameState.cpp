@@ -27,10 +27,11 @@ void GameState::initClientLoad() {
 GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
                      MusicPlayer &t_music_player, std::size_t t_flag,
                      rtype::IGraphicLoader *t_graphic_loader, int *t_level,
+                     const std::string& t_path_to_sprite,
                      const bool t_replace, std::string t_ip,
                      UdpClient *t_clientCom)
     : State{t_machine, t_window,  t_music_player, t_graphic_loader,
-            t_level,   t_replace, t_ip,           t_clientCom},
+            t_level, t_path_to_sprite, t_replace, t_ip, t_clientCom},
       m_client_input_manager(t_level), m_input_manager(t_level) {
   m_is_running = true;
   m_graphic_loader = t_graphic_loader;
