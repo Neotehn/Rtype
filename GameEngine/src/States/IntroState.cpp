@@ -92,9 +92,9 @@ void IntroState::update() {
     if (m_mouse->isLeftMouseButtonPressed()) {
       if (m_start_btn.is_pressed(mouse_pos_f)) {
         std::cout << "startbtn pressed" << std::endl;
-        m_next = StateMachine::build<MainState>(
-          m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, m_path_to_sprite, m_player_name, true, m_ip, m_clientCom);
+        m_next =  StateMachine::build<ProvideUserNameState>(
+          m_state_machine, m_window, m_music_player, m_flag,
+          m_graphic_loader, m_level, m_path_to_sprite, m_player_name, true);
       }
     }
     switch (event.type) {
@@ -104,9 +104,9 @@ void IntroState::update() {
       case rtype::EventType::KeyPressed:
         switch (event.key) {
           case rtype::EventKey::Space:
-            m_next = StateMachine::build<MainState>(
-              m_state_machine, m_window, m_music_player, m_flag,
-              m_graphic_loader, m_level, m_path_to_sprite, m_player_name, true);
+            m_next = StateMachine::build<ProvideUserNameState>(
+             m_state_machine, m_window, m_music_player, m_flag,
+             m_graphic_loader, m_level, m_path_to_sprite, m_player_name, true);
             break;
           case rtype::EventKey::Escape:
             m_state_machine.quit();

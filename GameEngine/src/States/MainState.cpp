@@ -71,7 +71,6 @@ MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
   initText();
   m_music_player.play(MusicID::MENU_THEME);
   m_start_pressed = false;
-  m_clientCom->m_lobby_names.clear();
 }
 
 MainState::~MainState() {
@@ -98,6 +97,7 @@ void MainState::update() {
     if (m_mouse->isLeftMouseButtonPressed()) {
       if (m_start_btn.is_pressed(mouse_pos_f) && m_start_pressed == false) {
         std::cout << "startbtn pressed" << std::endl;
+        std::cout << m_player_name << " stared the game" << std::endl;
         std::cout << m_title->getString() << std::endl;
         m_music_player.stop();
         m_next = StateMachine::build<GameState>(

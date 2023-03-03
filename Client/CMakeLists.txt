@@ -140,7 +140,7 @@ set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         ../Game/Encapsulation/SFML/GraphicLoader.cpp
         ../Game/CreateEntities/AssetLoader.cpp
         ../Server/src/Logger.cpp
-        ../GameEngine/src/States/IntroState.cpp)
+        ../GameEngine/src/States/IntroState.cpp ../GameEngine/src/States/ProvideUserNameState.cpp ../GameEngine/src/States/ProvideUserNameState.hpp)
 
 include(FetchContent)
 FetchContent_Declare(SFML

@@ -9,6 +9,7 @@
 #include "../Button.hpp"
 #include "../State.hpp"
 #include "../StateMachine.hpp"
+#include "./ProvideUserNameState.hpp"
 
 class IntroState final : public State {
  public:
