@@ -8,6 +8,7 @@
 #include "../IRenderWindow.hpp"
 #include "./Sprite.hpp"
 #include "./RectangleShape.hpp"
+#include "./Text.hpp"
 
 namespace rtype {
 
@@ -20,6 +21,7 @@ namespace rtype {
 
     void draw(const rtype::ISprite *t_sprite) override;
     void draw(rtype::IRectangleShape *t_shape) override;
+    void draw(const rtype::IText *t_text) override;
     void display() override;
     rtype::Vector2u getSize() const override;
     bool isOpen() override;
