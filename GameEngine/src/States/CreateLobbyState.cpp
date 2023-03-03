@@ -62,7 +62,7 @@ void CreateLobbyState::initSprites() {
   m_bg_text->setTexture(sprite_bg_text.getTexture());
   m_bg_text->setTextureRect({0, 0, 1018, 1938});
   m_bg_text->setRotation(180);
-  m_bg_text->setSize({size_x / 2 + 100, 100});
+  m_bg_text->setSize({size_x / 2 + 100, 80});
   m_bg_text->setPosition({size_x / 2 + 105, size_y - 5});
 }
 
@@ -106,20 +106,20 @@ void CreateLobbyState::initText() {
   m_chat_title = m_graphic_loader->loadText();
   m_chat_title->setFont(m_font);
   m_chat_title->setString("CHAT:");
-  m_chat_title->setCharacterSize(35);
+  m_chat_title->setCharacterSize(20);
   // m_chat_title->setColor({18, 107, 165, 255});
   m_chat_title->setPosition(
-    {20, static_cast<float>(m_window->getSize().y - 100)});
+    {20, static_cast<float>(m_window->getSize().y - 70)});
   m_placeholder = m_graphic_loader->loadText();
   m_placeholder->setFont(m_font);
   m_placeholder->setString("PRESS ENTER FOR CHAT");
-  m_placeholder->setCharacterSize(35);
+  m_placeholder->setCharacterSize(20);
   // m_placeholder->setColor({18, 107, 165, 255});
   m_placeholder->setPosition(
-    {20, static_cast<float>(m_window->getSize().y - 55)});
+    {20, static_cast<float>(m_window->getSize().y - 40)});
   m_chat.setLimit(true, 20);
   m_chat.setPosition(
-    rtype::Vector2f{20, static_cast<float>(m_window->getSize().y - 55)});
+    rtype::Vector2f{20, static_cast<float>(m_window->getSize().y - 40)});
 }
 
 CreateLobbyState::CreateLobbyState(StateMachine &t_machine,
@@ -141,7 +141,7 @@ CreateLobbyState::CreateLobbyState(StateMachine &t_machine,
         rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 65),
                         static_cast<float>(m_window->getSize().y - 230)},
         rtype::Vector2f{130, 50}, t_graphic_loader, false)),
-      m_chat(Textbox(35, rtype::White, false, t_graphic_loader)),
+      m_chat(Textbox(20, rtype::White, false, t_graphic_loader)),
       m_flag(t_flag) {
   initSprites();
   initText();
