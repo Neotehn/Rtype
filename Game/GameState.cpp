@@ -1,26 +1,52 @@
 #include "./GameState.hpp"
 
+void GameState::initClientLoad() {
+  float size_x = m_window->getSize().x;
+  float size_y = m_window->getSize().y;
+  m_bg_t = m_graphic_loader->loadTexture();
+  m_bg_s = m_graphic_loader->loadSprite();
+  if (!m_bg_t->loadFromFile("./assets/menubg.jpg")) {
+    throw std::runtime_error("Unable to load image.");
+  }
+  float scale_x = size_x / m_bg_t->getSize().x;
+  float scale_y = size_y / m_bg_t->getSize().y;
+  m_bg_s->setTexture(m_bg_t, true);
+  m_bg_s->setScale({scale_x, scale_y});
+  m_font = m_graphic_loader->loadFont();
+  if (!m_font->loadFromFile("./assets/font/nasalization-rg.ttf")) {
+    throw std::runtime_error("Unable to load font.");
+  }
+  m_title = m_graphic_loader->loadText();
+  m_title->setFont(m_font);
+  m_title->setString("LOADING...");
+  m_title->setCharacterSize(50);
+  m_title->setPosition({(size_x / 2) - (m_title->getLocalBounds().width / 2),
+                        (size_y / 2) - (m_title->getLocalBounds().height / 2)});
+}
+
 GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
                      MusicPlayer &t_music_player, std::size_t t_flag,
                      rtype::IGraphicLoader *t_graphic_loader, int *t_level,
-                     const bool t_replace)
-    : State{t_machine,        t_window, t_music_player,
-            t_graphic_loader, t_level,  t_replace},
+                     const bool t_replace, std::string t_ip,
+                     UdpClient *t_clientCom)
+    : State{t_machine, t_window,  t_music_player, t_graphic_loader,
+            t_level,   t_replace, t_ip,           t_clientCom},
       m_client_input_manager(t_level), m_input_manager(t_level) {
   m_is_running = true;
   m_graphic_loader = t_graphic_loader;
   m_music = m_graphic_loader->loadMusic();
   m_em = std::make_shared<EntityManager>();
   if (t_flag == client) {
+    initClientLoad();
     m_flag = CommunicationFlag::client;
-    m_port_number = rand() % 15000 + 40001;
-    m_clientCom =
-      new UdpClient(m_io_service, "localhost", "50000", m_port_number,
-                    m_input_manager, m_client_input_manager);
+    m_clientCom->setClientInputManager(&m_client_input_manager);
+    m_clientCom->setInputManager(&m_input_manager);
+    //client creation
   } else {
     m_flag = CommunicationFlag::server;
 
-    m_serverCom = new UdpServer(m_io_service, m_input_manager, m_is_running);
+    m_serverCom =
+      new UdpServer(m_io_service, m_input_manager, m_is_running, m_ip);
   }
   loadLevel(m_level, m_em, m_graphic_loader, m_music,
             m_flag == CommunicationFlag::client);
@@ -50,9 +76,9 @@ std::vector<std::shared_ptr<ISystem>> GameState::initSystems() {
       std::make_shared<ShootingSystem>(m_em, m_serverCom, m_graphic_loader));
     systems.push_back(std::make_shared<MovementSystem>(m_em, m_serverCom));
   } else {
-    systems.push_back(
-      std::make_shared<DamageSystem>(m_em, m_input_manager, m_port_number,
-                                     m_is_running, m_sounds, m_graphic_loader));
+    systems.push_back(std::make_shared<DamageSystem>(
+      m_em, m_input_manager, m_clientCom->getPortNumber(), m_is_running,
+      m_sounds, m_graphic_loader));
     systems.push_back(
       std::make_shared<CreateObjectSystem>(m_em, m_sounds, m_graphic_loader));
     systems.push_back(
@@ -146,14 +172,19 @@ void GameState::update() {
       std::cout << "waiting on Client Connection" << std::endl;
       boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
     }
-    while (m_flag == CommunicationFlag::client &&
-           m_clientCom->m_flag != m_clientCom->connected) {
+    while (  // if wanted to revert to original remove everything except l.112 - 115
+      m_flag == CommunicationFlag::client &&
+      m_clientCom->m_flag != m_clientCom->connected && m_is_running) {
       std::cout << "Connecting to Server ..." << std::endl;
       boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
       StateAction start_action =
-        StateAction(Action::ActionType::START, m_port_number);
+        StateAction(Action::ActionType::START, m_clientCom->getPortNumber());
       m_clientCom->sendMessage(start_action.getCommand());
       std::cout << "waiting on Server Connection" << std::endl;
+      m_window->clear();
+      m_window->draw(m_bg_s);
+      m_window->draw(m_title);
+      m_window->display();
     }
     rtype::Event event;
     if (m_window->isOpen()) {
