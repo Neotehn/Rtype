@@ -8,7 +8,8 @@
 class DisplaySystem : public ISystem {
  public:
   DisplaySystem(std::shared_ptr<EntityManager> t_em,
-                rtype::IRenderWindow *t_window);
+                rtype::IRenderWindow *t_window, std::size_t t_flag,
+                rtype::IGraphicLoader *t_graphic_loader);
   ~DisplaySystem() = default;
 
   virtual void update() override;
