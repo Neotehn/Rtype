@@ -150,7 +150,7 @@ void CreateLobbyState::update() {
       }
       if (m_start_btn.is_pressed(mouse_pos_f) &&
           m_clientCom->m_lobby_names.size() == 2) {  // start game if pressed
-        std::cout << "startbtn pressed" << std::endl;
+        std::cout << "startbtn pressed from create to game" << std::endl;
         m_next = StateMachine::build<GameState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, true, "", m_clientCom);

@@ -93,7 +93,7 @@ void MainState::update() {
     }
     if (m_mouse->isLeftMouseButtonPressed()) {
       if (m_start_btn.is_pressed(mouse_pos_f) && m_start_pressed == false) {
-        std::cout << "startbtn pressed" << std::endl;
+        std::cout << "startbtn pressed from main to game" << std::endl;
         std::cout << m_title->getString() << std::endl;
         m_music_player.stop();
         m_next = StateMachine::build<GameState>(
