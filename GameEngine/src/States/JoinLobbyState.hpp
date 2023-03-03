@@ -54,6 +54,9 @@ class JoinLobbyState final : public State {
   rtype::ISprite *m_player_four_s;
   Textbox m_textbox;
   bool m_is_pressed;
+
+  void initSprites();
+  void initText();
 };
 
 #endif /* !JOINLOBBYSTATE_HPP_ */

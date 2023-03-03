@@ -1,5 +1,29 @@
 #include "./GameState.hpp"
 
+void GameState::initClientLoad() {
+  float size_x = m_window->getSize().x;
+  float size_y = m_window->getSize().y;
+  m_bg_t = m_graphic_loader->loadTexture();
+  m_bg_s = m_graphic_loader->loadSprite();
+  if (!m_bg_t->loadFromFile("./assets/menubg.jpg")) {
+    throw std::runtime_error("Unable to load image.");
+  }
+  float scale_x = size_x / m_bg_t->getSize().x;
+  float scale_y = size_y / m_bg_t->getSize().y;
+  m_bg_s->setTexture(m_bg_t, true);
+  m_bg_s->setScale({scale_x, scale_y});
+  m_font = m_graphic_loader->loadFont();
+  if (!m_font->loadFromFile("./assets/font/nasalization-rg.ttf")) {
+    throw std::runtime_error("Unable to load font.");
+  }
+  m_title = m_graphic_loader->loadText();
+  m_title->setFont(m_font);
+  m_title->setString("LOADING...");
+  m_title->setCharacterSize(50);
+  m_title->setPosition({(size_x / 2) - (m_title->getLocalBounds().width / 2),
+                        (size_y / 2) - (m_title->getLocalBounds().height / 2)});
+}
+
 GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
                      MusicPlayer &t_music_player, std::size_t t_flag,
                      rtype::IGraphicLoader *t_graphic_loader, int *t_level,
@@ -13,28 +37,7 @@ GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
   m_music = m_graphic_loader->loadMusic();
   m_em = std::make_shared<EntityManager>();
   if (t_flag == client) {
-    m_bg_t = m_graphic_loader->loadTexture();
-    m_bg_s = m_graphic_loader->loadSprite();
-    if (!m_bg_t->loadFromFile("./assets/menubg.jpg")) {
-      throw std::runtime_error("Unable to load image.");
-    }
-    float size_x = m_window->getSize().x;
-    float size_y = m_window->getSize().y;
-    float scale_x = size_x / m_bg_t->getSize().x;
-    float scale_y = size_y / m_bg_t->getSize().y;
-    m_bg_s->setTexture(m_bg_t, true);
-    m_bg_s->setScale({scale_x, scale_y});
-    m_font = m_graphic_loader->loadFont();
-    if (!m_font->loadFromFile("./assets/font/nasalization-rg.ttf")) {
-      throw std::runtime_error("Unable to load font.");
-    }
-    m_title = m_graphic_loader->loadText();
-    m_title->setFont(m_font);
-    m_title->setString("LOADING...");
-    m_title->setCharacterSize(50);
-    m_title->setPosition(
-      {(size_x / 2) - (m_title->getLocalBounds().width / 2),
-       (size_y / 2) - (m_title->getLocalBounds().height / 2)});
+    initClientLoad();
     m_flag = CommunicationFlag::client;
     m_clientCom->setClientInputManager(&m_client_input_manager);
     m_clientCom->setInputManager(&m_input_manager);

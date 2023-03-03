@@ -43,6 +43,9 @@ class MainState final : public State {
   rtype::IText *m_title;
   std::size_t m_flag;
   bool m_start_pressed;
+
+  void initSprites();
+  void initText();
 };
 
 #endif  //!MAINSTATE_HPP_

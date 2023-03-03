@@ -37,8 +37,10 @@ class SettingsState final : public State {
   rtype::IFont *m_font;
   rtype::IText *m_title;
   rtype::IText *m_vol_txt;
-
   std::size_t m_flag;
+
+  void initSprites();
+  void initText();
 };
 
 #endif  // !SETTINGSSTATE_HPP_

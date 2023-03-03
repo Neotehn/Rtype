@@ -1,5 +1,42 @@
 #include "./SettingsState.hpp"
 
+void SettingsState::initSprites() {
+  float size_x = m_window->getSize().x;
+  float size_y = m_window->getSize().y;
+  m_bg_t = m_graphic_loader->loadTexture();
+  m_bg_s = m_graphic_loader->loadSprite();
+  if (!m_bg_t->loadFromFile("./assets/menubg.jpg")) {
+    throw std::runtime_error("Unable to load image.");
+  }
+  float scale_x = size_x / m_bg_t->getSize().x;
+  float scale_y = size_y / m_bg_t->getSize().y;
+  m_bg_s->setTexture(m_bg_t, true);
+  m_bg_s->setScale({scale_x, scale_y});
+}
+
+void SettingsState::initText() {
+  float size_x = m_window->getSize().x;
+  float size_y = m_window->getSize().y;
+
+  m_font = m_graphic_loader->loadFont();
+  if (!m_font->loadFromFile("./assets/font/nasalization-rg.ttf")) {
+    throw std::runtime_error("Unable to load font.");
+  }
+  m_title = m_graphic_loader->loadText();
+  m_title->setFont(m_font);
+  m_title->setString("SETTINGS");
+  m_title->setCharacterSize(50);
+  m_title->setPosition(
+    {(size_x / 2) - (m_title->getLocalBounds().width / 2), 100});
+  m_vol_txt = m_graphic_loader->loadText();
+  m_vol_txt->setFont(m_font);
+  m_vol_txt->setString("VOLUME");
+  m_vol_txt->setCharacterSize(35);
+  m_vol_txt->setPosition(
+    {(size_x / 2) - (m_vol_txt->getLocalBounds().width / 2),
+     (size_y / 2) - 50});
+}
+
 SettingsState::SettingsState(StateMachine &t_machine,
                              rtype::IRenderWindow *t_window,
                              MusicPlayer &t_music_player, std::size_t t_flag,
@@ -24,34 +61,8 @@ SettingsState::SettingsState(StateMachine &t_machine,
                         static_cast<float>(m_window->getSize().y / 2)},
         rtype::Vector2f{64, 64}, t_graphic_loader, true)),
       m_flag(t_flag) {
-  m_bg_t = m_graphic_loader->loadTexture();
-  m_bg_s = m_graphic_loader->loadSprite();
-  if (!m_bg_t->loadFromFile("./assets/menubg.jpg")) {
-    throw std::runtime_error("Unable to load image.");
-  }
-  float size_x = m_window->getSize().x;
-  float size_y = m_window->getSize().y;
-  float scale_x = size_x / m_bg_t->getSize().x;
-  float scale_y = size_y / m_bg_t->getSize().y;
-  m_bg_s->setTexture(m_bg_t, true);
-  m_bg_s->setScale({scale_x, scale_y});
-  m_font = m_graphic_loader->loadFont();
-  if (!m_font->loadFromFile("./assets/font/nasalization-rg.ttf")) {
-    throw std::runtime_error("Unable to load font.");
-  }
-  m_title = m_graphic_loader->loadText();
-  m_title->setFont(m_font);
-  m_title->setString("SETTINGS");
-  m_title->setCharacterSize(50);
-  m_title->setPosition(
-    {(size_x / 2) - (m_title->getLocalBounds().width / 2), 100});
-  m_vol_txt = m_graphic_loader->loadText();
-  m_vol_txt->setFont(m_font);
-  m_vol_txt->setString("VOLUME");
-  m_vol_txt->setCharacterSize(35);
-  m_vol_txt->setPosition(
-    {(size_x / 2) - (m_vol_txt->getLocalBounds().width / 2),
-     (size_y / 2) - 50});
+  initSprites();
+  initText();
   m_music_player.play(MusicID::MENU_THEME);
 }
 

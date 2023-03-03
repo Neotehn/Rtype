@@ -1,5 +1,35 @@
 #include "./MainState.hpp"
 
+void MainState::initSprites() {
+  float size_x = m_window->getSize().x;
+  float size_y = m_window->getSize().y;
+  m_bg_t = m_graphic_loader->loadTexture();
+  m_bg_s = m_graphic_loader->loadSprite();
+  if (!m_bg_t->loadFromFile("./assets/menubg.jpg")) {
+    throw std::runtime_error("Unable to load image.");
+  }
+  float scale_x = size_x / m_bg_t->getSize().x;
+  float scale_y = size_y / m_bg_t->getSize().y;
+  m_bg_s->setTexture(m_bg_t, true);
+  m_bg_s->setScale({scale_x, scale_y});
+}
+
+void MainState::initText() {
+  float size_x = m_window->getSize().x;
+  float size_y = m_window->getSize().y;
+
+  m_font = m_graphic_loader->loadFont();
+  if (!m_font->loadFromFile("./assets/font/nasalization-rg.ttf")) {
+    throw std::runtime_error("Unable to load font.");
+  }
+  m_title = m_graphic_loader->loadText();
+  m_title->setFont(m_font);
+  m_title->setString("R-TYPE");
+  m_title->setCharacterSize(50);
+  m_title->setPosition(
+    {(size_x / 2) - (m_title->getLocalBounds().width / 2), 100});
+}
+
 MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
                      MusicPlayer &t_music_player, std::size_t t_flag,
                      rtype::IGraphicLoader *t_graphic_loader, int *t_level,
@@ -33,29 +63,11 @@ MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
                         static_cast<float>(m_window->getSize().y / 2)},
         rtype::Vector2f{130, 50}, t_graphic_loader, false)),
       m_flag(t_flag) {
-  m_bg_t = m_graphic_loader->loadTexture();
-  m_bg_s = m_graphic_loader->loadSprite();
-  if (!m_bg_t->loadFromFile("./assets/menubg.jpg")) {
-    throw std::runtime_error("Unable to load image.");
-  }
-  float size_x = m_window->getSize().x;
-  float size_y = m_window->getSize().y;
-  float scale_x = size_x / m_bg_t->getSize().x;
-  float scale_y = size_y / m_bg_t->getSize().y;
-  m_bg_s->setTexture(m_bg_t, true);
-  m_bg_s->setScale({scale_x, scale_y});
-  m_font = m_graphic_loader->loadFont();
-  if (!m_font->loadFromFile("./assets/font/nasalization-rg.ttf")) {
-    throw std::runtime_error("Unable to load font.");
-  }
-  m_title = m_graphic_loader->loadText();
-  m_title->setFont(m_font);
-  m_title->setString("R-TYPE");
-  m_title->setCharacterSize(50);
-  m_title->setPosition(
-    {(size_x / 2) - (m_title->getLocalBounds().width / 2), 100});
+  initSprites();
+  initText();
   m_music_player.play(MusicID::MENU_THEME);
   m_start_pressed = false;
+  m_clientCom->m_lobby_names.clear();
 }
 
 MainState::~MainState() {
@@ -80,7 +92,7 @@ void MainState::update() {
       m_join_btn.is_hovered(mouse_pos_f);
     }
     if (m_mouse->isLeftMouseButtonPressed()) {
-      if (m_start_btn.is_pressed(mouse_pos_f)) {
+      if (m_start_btn.is_pressed(mouse_pos_f) && m_start_pressed == false) {
         std::cout << "startbtn pressed" << std::endl;
         std::cout << m_title->getString() << std::endl;
         m_music_player.stop();

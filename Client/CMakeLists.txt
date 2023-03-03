@@ -146,7 +146,7 @@ FetchContent_Declare(SFML
         GIT_TAG 2.6.x)
 FetchContent_MakeAvailable(SFML)
 
-find_package(Boost 1.81.0 COMPONENTS chrono system thread REQUIRED)
+find_package(Boost 1.69.0 COMPONENTS chrono system thread REQUIRED)
 
 if (NOT Boost_FOUND)
     message("Boost not found--> downloading and building")

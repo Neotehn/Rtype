@@ -7,36 +7,18 @@
 
 #include "JoinLobbyState.hpp"
 
-JoinLobbyState::JoinLobbyState(StateMachine &t_machine,
-                               rtype::IRenderWindow *t_window,
-                               MusicPlayer &t_music_player, std::size_t t_flag,
-                               rtype::IGraphicLoader *t_graphic_loader,
-                               int *t_level, const bool t_replace,
-                               std::string t_ip, UdpClient *t_clientCom)
-    : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level,
-            t_replace, t_ip, t_clientCom),
-      m_home_btn(Button(
-        "./assets/icons/white/home.png",
-        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 32),
-                        static_cast<float>(m_window->getSize().y - 100)},
-        rtype::Vector2f{64, 64}, t_graphic_loader, true)),
-      m_start_btn(Button(
-        "./assets/startBtn.png",
-        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 65),
-                        static_cast<float>(m_window->getSize().y - 230)},
-        rtype::Vector2f{130, 50}, t_graphic_loader, false)),
-      m_textbox(Textbox(35, rtype::Black, true, t_graphic_loader)),
-      m_join_btn(Button(
-        "./assets/icons/white/buttonStart.png",
-        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 100),
-                        static_cast<float>(m_window->getSize().y / 2 + 100)},
-        rtype::Vector2f{200, 200}, t_graphic_loader, true)),
-      m_flag(t_flag) {
+void JoinLobbyState::initSprites() {
+  float size_x = m_window->getSize().x;
+  float size_y = m_window->getSize().y;
   m_bg_t = m_graphic_loader->loadTexture();
   m_bg_s = m_graphic_loader->loadSprite();
   if (!m_bg_t->loadFromFile("./assets/menubg.jpg")) {
     throw std::runtime_error("Unable to load image.");
   }
+  float scale_x = size_x / m_bg_t->getSize().x;
+  float scale_y = size_y / m_bg_t->getSize().y;
+  m_bg_s->setTexture(m_bg_t, true);
+  m_bg_s->setScale({scale_x, scale_y});
   m_player_one_t = m_graphic_loader->loadTexture();
   m_player_one_s = m_graphic_loader->loadSprite();
   if (!m_player_one_t->loadFromFile("./assets/icons/white/gamepad1.png")) {
@@ -74,12 +56,12 @@ JoinLobbyState::JoinLobbyState(StateMachine &t_machine,
   m_player_four_s->setPosition(
     rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 + 50),
                     static_cast<float>(m_window->getSize().y / 2 + 50)});
+}
+
+void JoinLobbyState::initText() {
   float size_x = m_window->getSize().x;
   float size_y = m_window->getSize().y;
-  float scale_x = size_x / m_bg_t->getSize().x;
-  float scale_y = size_y / m_bg_t->getSize().y;
-  m_bg_s->setTexture(m_bg_t, true);
-  m_bg_s->setScale({scale_x, scale_y});
+
   m_font = m_graphic_loader->loadFont();
   if (!m_font->loadFromFile("./assets/font/nasalization-rg.ttf")) {
     throw std::runtime_error("Unable to load font.");
@@ -103,6 +85,35 @@ JoinLobbyState::JoinLobbyState(StateMachine &t_machine,
     static_cast<float>(m_window->getSize().x / 2 -
                        m_textbox.getText()->getLocalBounds().width / 2),
     static_cast<float>(m_window->getSize().y / 2 - 100)});
+}
+
+JoinLobbyState::JoinLobbyState(StateMachine &t_machine,
+                               rtype::IRenderWindow *t_window,
+                               MusicPlayer &t_music_player, std::size_t t_flag,
+                               rtype::IGraphicLoader *t_graphic_loader,
+                               int *t_level, const bool t_replace,
+                               std::string t_ip, UdpClient *t_clientCom)
+    : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level,
+            t_replace, t_ip, t_clientCom),
+      m_home_btn(Button(
+        "./assets/icons/white/home.png",
+        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 32),
+                        static_cast<float>(m_window->getSize().y - 100)},
+        rtype::Vector2f{64, 64}, t_graphic_loader, true)),
+      m_start_btn(Button(
+        "./assets/startBtn.png",
+        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 65),
+                        static_cast<float>(m_window->getSize().y - 230)},
+        rtype::Vector2f{130, 50}, t_graphic_loader, false)),
+      m_textbox(Textbox(35, rtype::Black, true, t_graphic_loader)),
+      m_join_btn(Button(
+        "./assets/icons/white/buttonStart.png",
+        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 100),
+                        static_cast<float>(m_window->getSize().y / 2 + 100)},
+        rtype::Vector2f{200, 200}, t_graphic_loader, true)),
+      m_flag(t_flag) {
+  initSprites();
+  initText();
   m_is_pressed = false;
   // call protocol to join lobby
 }
