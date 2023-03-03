@@ -10,7 +10,7 @@ Core::Core(std::size_t t_flag) {
   m_window->setFramerateLimit(60);
   int *level = new int(1);
   srand(time(nullptr));
-  std::string test = "./sprites/starship.png";
+  std::string test = "./sprites/starshipepitech.png";
 
   if (t_flag == 1)
     m_state_machine.run(

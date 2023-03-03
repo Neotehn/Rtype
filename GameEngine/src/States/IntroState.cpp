@@ -35,6 +35,7 @@ IntroState::IntroState(StateMachine &t_machine,
   float scale_y = size_y / m_bg_t->getSize().y;
   m_bg_s->setTexture(m_bg_t, true);
   m_bg_s->setScale({scale_x, scale_y});
+  m_path_to_sprite = t_path;
 
 
   m_spaceship_s->setScale({0.2, 0.2});

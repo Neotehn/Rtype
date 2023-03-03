@@ -32,6 +32,7 @@ MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
   m_bg_s->setScale({scale_x, scale_y});
   m_music_player.play(MusicID::MENU_THEME);
   m_start_pressed = false;
+  m_path_to_sprite = t_path;
 }
 
 MainState::~MainState() {
