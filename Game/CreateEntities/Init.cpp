@@ -47,10 +47,10 @@ bool loadLevel(int *t_level, std::shared_ptr<EntityManager> t_em,
   t_music->stop();
   loadMusic(t_music, t_play_music);
   initBackground(t_em, t_graphic_loader);
-  if (level == 2 && t_server_com) {
-    initPayWall(t_em, t_graphic_loader, t_server_com);
+  if (t_server_com) {
+    loadMap(t_em, t_graphic_loader, t_server_com);
+    if (level == 2) initPayWall(t_em, t_graphic_loader, t_server_com);
   }
-  loadMap(t_em, t_graphic_loader);
   return true;
 }
 
@@ -76,7 +76,7 @@ std::vector<std::vector<char>> readMap() {
 unsigned int initObstacle(std::shared_ptr<EntityManager> t_entity_manager,
                           rtype::IGraphicLoader *t_graphic_loader,
                           rtype::Vector2f t_pos, std::string t_sprite_path,
-                          int t_total_width) {
+                          int t_total_width, UdpServer *t_server_com) {
   EntityID obstacle = t_entity_manager->createNewEntity();
 
   SpriteECS obstacle_sprite = SpriteECS(t_sprite_path, t_graphic_loader);
@@ -98,7 +98,35 @@ unsigned int initObstacle(std::shared_ptr<EntityManager> t_entity_manager,
   Obstacle obstacle_obj =
     Obstacle{obstacle_pos, body, static_cast<float>(-t_total_width), 800};
   t_entity_manager->Assign<Obstacle>(obstacle, obstacle_obj);
+  t_server_com->addEvent(std::make_shared<Action>(
+    CreateAction(obstacle, Action::ObjectType::OBSTACLE, t_pos, t_total_width,
+                 t_sprite_path)));
   return size.x * scale;
+}
+
+void initObstacleClient(std::shared_ptr<EntityManager> t_entity_manager,
+                        rtype::IGraphicLoader *t_graphic_loader,
+                        rtype::Vector2f t_pos, std::string t_sprite_path,
+                        int t_total_width, EntityID t_id) {
+  EntityID obstacle = t_entity_manager->createNewEntity(t_id);
+
+  SpriteECS obstacle_sprite = SpriteECS(t_sprite_path, t_graphic_loader);
+  rtype::ISprite *sprite =
+    const_cast<rtype::ISprite *>(obstacle_sprite.getSprite());
+  rtype::Vector2u size = sprite->getSize();
+  float scale = 2;
+
+  Pos obstacle_pos = Pos{rtype::Vector2f{-3, 0}, t_pos};
+
+  rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
+  body->setSize({static_cast<float>(size.x), static_cast<float>(size.y)});
+  body->setScale({scale, scale});
+  body->setPosition({t_pos.x, t_pos.y});
+  body->setTexture(obstacle_sprite.getTexture());
+
+  Obstacle obstacle_obj =
+    Obstacle{obstacle_pos, body, static_cast<float>(-t_total_width), 800};
+  t_entity_manager->Assign<Obstacle>(obstacle, obstacle_obj);
 }
 
 int getTotalObstacleWidth(rtype::IGraphicLoader *t_graphic_loader,
@@ -122,7 +150,8 @@ int getTotalObstacleWidth(rtype::IGraphicLoader *t_graphic_loader,
 }
 
 void loadMap(std::shared_ptr<EntityManager> t_entity_manager,
-             rtype::IGraphicLoader *t_graphic_loader) {
+             rtype::IGraphicLoader *t_graphic_loader, UdpServer *t_server_com) {
+  std::cout << "Will load map..." << std::endl;
   std::vector<std::vector<char>> map = readMap();
   float x = 0;
   Json::Value obstacle_list = assetLoader.getObstacleData();
@@ -135,9 +164,10 @@ void loadMap(std::shared_ptr<EntityManager> t_entity_manager,
       if (index < 0 || index >= obstacle_list.size()) { continue; }
       Json::Value obstacle = obstacle_list[index];
       initObstacle(t_entity_manager, t_graphic_loader, {x, 0},
-                   obstacle["upper"].asString(), total_width);
-      x += initObstacle(t_entity_manager, t_graphic_loader, {x, 800},
-                        obstacle["lower"].asString(), total_width);
+                   obstacle["upper"].asString(), total_width, t_server_com);
+      x +=
+        initObstacle(t_entity_manager, t_graphic_loader, {x, 800},
+                     obstacle["lower"].asString(), total_width, t_server_com);
     }
   }
 }

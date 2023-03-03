@@ -49,7 +49,7 @@ GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
       new UdpServer(m_io_service, m_input_manager, m_is_running, m_ip);
   }
   loadLevel(m_level, m_em, m_graphic_loader, m_music,
-            m_flag == CommunicationFlag::client);
+            m_flag == CommunicationFlag::client, m_serverCom);
   m_systems = initSystems();
 }
 

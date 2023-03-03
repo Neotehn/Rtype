@@ -86,3 +86,14 @@ CreateAction::CreateAction(EntityID t_id, ObjectType t_object_type,
   m_collision_partner_id = t_owner_id;
   m_damage = t_damage;
 }
+
+CreateAction::CreateAction(EntityID t_id, ObjectType t_object_type,
+                           rtype::Vector2f t_position,
+                           int t_total_obstacle_width,
+                           std::string t_sprite_path)
+    : Action(ActionType::CREATE, t_id) {
+  m_object_type = t_object_type;
+  m_position = t_position;
+  m_sprite_path = t_sprite_path;
+  m_total_obstacle_width = t_total_obstacle_width;
+}
