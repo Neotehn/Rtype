@@ -139,7 +139,7 @@ CreateLobbyState::CreateLobbyState(
   const std::string &t_path_to_sprite, const bool t_replace, std::string t_ip,
   UdpClient *t_clientCom)
     : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level,
-            t_replace, t_ip, t_clientCom),
+            t_path_to_sprite, t_replace, t_ip, t_clientCom),
       m_home_btn(
         Button("./assets/icons/white/home.png",
                rtype::Vector2f{static_cast<float>(m_window->getSize().x - 100),
