@@ -93,9 +93,10 @@ std::shared_ptr<Action> IProtocol::getAction(std::string command) {
   EntityID id = std::stoull(commands[2]);
 
   if (action_type == "START") {
-    int player_id = std::stoi(commands[3]);
-    return std::make_shared<Action>(
-      StateAction(Action::ActionType::START, id, action_id, player_id));
+    std::string lobby_code = commands[3];
+    int player_id = std::stoi(commands[4]);
+    return std::make_shared<Action>(StateAction(
+      Action::ActionType::START, id, action_id, lobby_code, player_id));
   } else if (action_type == "RESTART") {
     return std::make_shared<Action>(
       StateAction(Action::ActionType::RESTART, id, action_id));

@@ -62,11 +62,14 @@ std::string Action::getCommand() const {
   std::string type_string = getTypeAsString();
   std::string data = "";
   std::string names = "";
+  std::string lobby_code = "";
 
   switch (m_type) {
     case ActionType::START:
+      if (m_lobby_ip != "") { lobby_code = m_lobby_ip; }
       return std::to_string(m_action_id) + ";" + type_string + ";" +
-             std::to_string(m_id) + ";" + std::to_string(m_client_id) + ";";
+             std::to_string(m_id) + ";" + lobby_code + ";" +
+             std::to_string(m_client_id) + ";";
     case ActionType::DEAD:
     case ActionType::END:
       return std::to_string(m_action_id) + ";" + type_string + ";" +

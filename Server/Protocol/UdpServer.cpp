@@ -50,17 +50,22 @@ void UdpServer::receiveClient() {
 
 bool UdpServer::doesAlreadyExist(std::shared_ptr<Action> t_action) {
   if (t_action->getType() == Action::ActionType::START) {
+    std::string lobby_ip = t_action->getLobbyIp();
     int id = t_action->getId();
-    std::cout << std::to_string(id) << std::endl;
 
     for (int registered_id : m_client_ports) {
       if (registered_id == id) { return true; }
     }
-    std::cout << "register new client port: " << std::to_string(id)
-              << std::endl;
     m_client_ports.push_back(id);
-    udp::endpoint tmp(udp::v4(), id);
-    m_endpoints.push_back(tmp);
+    if (m_endpoints.size() == 0) {
+      for (int i = 0; i < m_lobbys.size(); i++) {
+        if (lobby_ip == m_lobbys[i].m_lobby_code) {
+          for (int x = 0; x < m_lobbys[i].m_endpoints.size(); x++) {
+            m_endpoints.push_back(m_lobbys[i].m_endpoints[x]);
+          }
+        }
+      }
+    }
   }
   return false;
 }
@@ -152,7 +157,7 @@ void UdpServer::handleReceive(const boost::system::error_code &t_error,
     if (action->getType() != Action::ActionType::END &&
         m_client_ports.size() != 2) {
       receiveClient();
-    } else if (m_client_ports.size() == 2) {
+    } else if (m_client_ports.size() == m_endpoints.size()) {
       std::cout << m_endpoints.size() << std::endl;
       m_flag = GameMode::coop;
       receiveClient();

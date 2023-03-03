@@ -56,6 +56,7 @@ class UdpServer : public IProtocol {
   std::vector<int> m_client_ids;
 
  private:
+  std::vector<bool> m_client_connected;
   std::vector<int> m_client_ports;
   std::vector<udp::endpoint> m_endpoints;
   std::vector<Lobby> m_lobbys;

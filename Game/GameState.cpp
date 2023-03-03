@@ -177,7 +177,8 @@ void GameState::update() {
       std::cout << "Connecting to Server ..." << std::endl;
       boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
       StateAction start_action =
-        StateAction(Action::ActionType::START, m_clientCom->getPortNumber());
+        StateAction(Action::ActionType::START, m_clientCom->getPortNumber(),
+                    m_clientCom->m_lobby_code);
       m_clientCom->sendMessage(start_action.getCommand());
       std::cout << "waiting on Server Connection" << std::endl;
       m_window->clear();
