@@ -44,7 +44,8 @@ std::vector<std::shared_ptr<ISystem>> GameState::initSystems() {
                                                            m_graphic_loader));
     systems.push_back(std::make_shared<RandomEnemyGeneratorSystem>(
       m_em, m_serverCom, m_graphic_loader));
-    systems.push_back(std::make_shared<CollisionSystem>(m_em, m_serverCom));
+    systems.push_back(
+      std::make_shared<CollisionSystem>(m_em, m_serverCom, m_graphic_loader));
     systems.push_back(
       std::make_shared<ShootingSystem>(m_em, m_serverCom, m_graphic_loader));
     systems.push_back(std::make_shared<MovementSystem>(m_em, m_serverCom));
@@ -71,6 +72,72 @@ std::vector<std::shared_ptr<ISystem>> GameState::initSystems() {
 void GameState::pause() { std::cout << "GameState Pause\n"; }
 
 void GameState::resume() { std::cout << "GameState Resume\n"; }
+
+void GameState::manageLevels() {
+  if (*m_level == 2) {
+    if (m_flag == CommunicationFlag::server && m_will_reload) {
+      m_will_reload = false;
+      *m_level += 1;
+      m_level_two_enemy_created = false;
+      loadLevel(m_level, m_em, m_graphic_loader, m_music,
+                (m_flag == CommunicationFlag::client), m_serverCom);
+      std::cout << "finished level 2" << std::endl;
+      return;
+    }
+    if (!m_level_two_enemy_created) {
+      for (EntityID ent : EntityViewer<Enemy>(*m_em)) {
+        Enemy *enem = (*m_em).Get<Enemy>(ent);
+        if (enem->obj->type == "paywall") {
+          m_level_two_enemy_created = true;
+          break;
+        }
+      }
+    }
+    if (!m_level_two_enemy_created) return;
+    bool paywall_exists = false;
+    for (EntityID ent : EntityViewer<Enemy>(*m_em)) {
+      Enemy *enem = (*m_em).Get<Enemy>(ent);
+      if (enem->obj->type == "paywall") {
+        paywall_exists = true;
+        break;
+      }
+    }
+    if (paywall_exists) return;
+    if (m_flag == CommunicationFlag::server) {
+      m_will_reload = true;
+    } else {
+      *m_level += 1;
+      m_level_two_enemy_created = false;
+      loadLevel(m_level, m_em, m_graphic_loader, m_music,
+                (m_flag == CommunicationFlag::client), m_serverCom);
+      std::cout << "finished level 2" << std::endl;
+    }
+  } else if (*m_level == 1) {
+    if (m_flag == CommunicationFlag::server && m_will_reload) {
+      m_will_reload = false;
+      *m_level += 1;
+      loadLevel(m_level, m_em, m_graphic_loader, m_music,
+                (m_flag == CommunicationFlag::client), m_serverCom);
+      std::cout << "finished level 1" << std::endl;
+      return;
+    }
+    int total_coins = 0;
+    for (EntityID ent : EntityViewer<Player>(*m_em)) {
+      Player *player = (*m_em).Get<Player>(ent);
+      total_coins += player->coins;
+    }
+    if (total_coins < 40) return;
+    if (m_flag == CommunicationFlag::server) {
+      m_will_reload = true;
+    } else {
+      *m_level += 1;
+
+      loadLevel(m_level, m_em, m_graphic_loader, m_music,
+                (m_flag == CommunicationFlag::client), m_serverCom);
+      std::cout << "finished level 1" << std::endl;
+    }
+  }
+}
 
 void GameState::update() {
   while (m_is_running) {
@@ -106,9 +173,10 @@ void GameState::update() {
       if (type == Action::ActionType::RESTART && !action->isTriggeredByUser()) {
         *m_level = action->getId();
         loadLevel(m_level, m_em, m_graphic_loader, m_music,
-                  (m_flag == CommunicationFlag::client));
+                  (m_flag == CommunicationFlag::client), m_serverCom);
       }
     }
+    manageLevels();
     SystemData data = {.event_queue = m_input_manager.getInputs()};
     if (m_flag == CommunicationFlag::client && m_clientCom->m_flag) {
       EventQueue eq = m_client_input_manager.getInputsWithoutPop();
@@ -125,7 +193,7 @@ void GameState::update() {
              type == Action::ActionType::LEFT ||
              type == Action::ActionType::RIGHT ||
              type == Action::ActionType::SHOOT) &&
-            action.get()->isTriggeredByUser())
+            action->isTriggeredByUser())
           m_clientCom->sendMessage(action->getCommand());
       }
     }

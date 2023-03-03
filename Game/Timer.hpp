@@ -13,8 +13,8 @@ class Timer {
   void startTimer();
   float returnTime();
 
-  float returnAnimationTime();
-  void setAnimationTime(float t_time);
+  //  float returnAnimationTime();
+  //  void setAnimationTime(float t_time);
   void restartTimer();
   void startPause();
   void stopPause();

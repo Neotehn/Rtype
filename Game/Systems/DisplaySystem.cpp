@@ -9,8 +9,6 @@ DisplaySystem::DisplaySystem(std::shared_ptr<EntityManager> t_em,
   m_flag = t_flag;
 }
 
-DisplaySystem::~DisplaySystem() {}
-
 void DisplaySystem::update() {
   m_window->clear();
   for (EntityID ent : EntityViewer<BackgroundLayer>(*m_em.get())) {
@@ -29,6 +27,12 @@ void DisplaySystem::update() {
   for (EntityID ent : EntityViewer<AnimationObj>(*m_em.get())) {
     AnimationObj *anim = (*m_em.get()).Get<AnimationObj>(ent);
     m_window->draw(anim->body);
+  }
+  for (EntityID ent : EntityViewer<Enemy>(*m_em.get())) {
+    Enemy *enem = (*m_em.get()).Get<Enemy>(ent);
+    m_window->draw(enem->obj->body);
+    m_window->draw(enem->health.missing_health);
+    m_window->draw(enem->health.left_health);
   }
   for (EntityID ent : EntityViewer<SpinningItem>(*m_em.get())) {
     SpinningItem *item = (*m_em.get()).Get<SpinningItem>(ent);
