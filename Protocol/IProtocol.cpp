@@ -22,6 +22,9 @@ IProtocol::getCreateAction(std::vector<std::string> commands, int action_id,
     velocity = std::stof(commands[6]);
     return std::make_shared<Action>(CreateAction(
       id, CreateAction::ENEMY, rtype::Vector2f{x, y}, "", action_id, velocity));
+  } else if (type == Action::ObjectType::PAYWALL) {
+    return std::make_shared<Action>(CreateAction(
+      id, CreateAction::PAYWALL, rtype::Vector2f{x, y}, "", action_id, 0));
   } else if (type == Action::ObjectType::BULLET) {
     shooting_type = Action::ShootingType(std::stoi(commands[6]));
     owner_id = std::stoull(commands[7]);
@@ -90,9 +93,10 @@ std::shared_ptr<Action> IProtocol::getAction(std::string command) {
   EntityID id = std::stoull(commands[2]);
 
   if (action_type == "START") {
-    int player_id = std::stoi(commands[3]);
-    return std::make_shared<Action>(
-      StateAction(Action::ActionType::START, id, action_id, player_id));
+    std::string lobby_code = commands[3];
+    int player_id = std::stoi(commands[4]);
+    return std::make_shared<Action>(StateAction(
+      Action::ActionType::START, id, action_id, lobby_code, player_id));
   } else if (action_type == "RESTART") {
     return std::make_shared<Action>(
       StateAction(Action::ActionType::RESTART, id, action_id));
@@ -133,6 +137,25 @@ std::shared_ptr<Action> IProtocol::getAction(std::string command) {
     EntityID player_id = std::stoull(commands[4]);
     return std::make_shared<Action>(
       DamageAction(id, damage, action_id, player_id));
+  } else if (action_type == "CREATELOBBY") {
+    return std::make_shared<Action>(
+      CreateLobbyAction(id, commands[3], commands[4], action_id));
+  } else if (action_type == "JOINLOBBY") {
+    return std::make_shared<Action>(
+      JoinLobbyAction(id, commands[3], commands[4], action_id));
+  } else if (action_type == "LEAVELOBBY") {
+    return std::make_shared<Action>(
+      LeaveLobbyAction(id, commands[3], commands[4], action_id));
+  } else if (action_type == "JOINSUCCESSFULL") {
+    std::vector<std::string> names;
+    for (int i = 3; i < commands.size() - 1; i++) {
+      names.push_back(commands[i]);
+    }
+    return std::make_shared<Action>(
+      JoinSuccessfullAction(id, names, action_id));
+  } else if (action_type == "CHAD") {
+    return std::make_shared<Action>(
+      ChadAction(id, commands[3], commands[4], action_id));
   } else if (action_type == "END") {
     return std::make_shared<Action>(
       StateAction(Action::ActionType::END, id, action_id));

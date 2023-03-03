@@ -29,6 +29,11 @@ set(CLIENT_HPP ../Game/ECS/ComponentPool.hpp
         src/Action/CollisionAction.hpp
         src/Action/DamageAction.hpp
         src/Action/DestroyAction.hpp
+        src/Action/CreateLobbyAction.hpp
+        src/Action/JoinLobbyAction.hpp
+        src/Action/LeaveLobbyAction.hpp
+        src/Action/JoinSuccessfullAction.hpp
+        src/Action/ChadAction.hpp
         ../Server/Protocol/UdpServer.hpp
         ../Client/Protocol/UdpClient.hpp
         ../Game/CreateEntities/Init.hpp
@@ -58,6 +63,7 @@ set(CLIENT_HPP ../Game/ECS/ComponentPool.hpp
         ../Game/Encapsulation/SFML/Text.hpp
         ../Game/Encapsulation/SFML/Texture.hpp
         ../GameEngine/src/Button.hpp
+        ../GameEngine/src/Textbox.hpp
         ../GameEngine/src/Core.hpp
         ../GameEngine/src/MusicPlayer.hpp
         ../GameEngine/src/Sprite.hpp
@@ -66,12 +72,15 @@ set(CLIENT_HPP ../Game/ECS/ComponentPool.hpp
         ../Game/GameState.hpp
         ../GameEngine/src/States/MainState.hpp
         ../GameEngine/src/States/SettingsState.hpp
+        ../GameEngine/src/States/JoinLobbyState.hpp
+        ../GameEngine/src/States/CreateLobbyState.hpp
         ../Game/Encapsulation/IMouse.hpp
         ../Game/Encapsulation/SFML/Mouse.hpp
         ../Game/Systems/CreatePlayerSystem.hpp
         ../Game/Encapsulation/IGraphicLoader.hpp
         ../Game/Encapsulation/SFML/GraphicLoader.hpp
-        ../Game/CreateEntities/AssetLoader.hpp)
+        ../Game/CreateEntities/AssetLoader.hpp
+        ../Server/src/Logger.hpp)
 
 set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         src/InputManager/InputManager.cpp
@@ -83,7 +92,6 @@ set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         ../Game/Systems/AnimationSystem.cpp
         ../Game/Systems/DestroySystem.cpp
         ../Game/Systems/DamageSystem.cpp
-        src/Action/IAction.cpp
         src/Action/ShootAction.cpp
         src/Action/MovementAction.cpp
         src/Action/StateAction.cpp
@@ -93,6 +101,11 @@ set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         src/Action/IncreaseAction.cpp
         src/Action/CollisionAction.cpp
         src/Action/DestroyAction.cpp
+        src/Action/CreateLobbyAction.cpp
+        src/Action/JoinLobbyAction.cpp
+        src/Action/LeaveLobbyAction.cpp
+        src/Action/JoinSuccessfullAction.cpp
+        src/Action/ChadAction.cpp
         ../Game/Timer.cpp
         ../Server/Protocol/UdpServer.cpp
         ../Client/Protocol/UdpClient.cpp
@@ -112,6 +125,7 @@ set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         ../Game/Encapsulation/SFML/Texture.cpp
         ../Game/Encapsulation/SFML/RectangleShape.cpp
         ../GameEngine/src/Button.cpp
+        ../GameEngine/src/Textbox.cpp
         ../GameEngine/src/Core.cpp
         ../GameEngine/src/MusicPlayer.cpp
         ../GameEngine/src/Sprite.cpp
@@ -120,10 +134,13 @@ set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         ../Game/GameState.cpp
         ../GameEngine/src/States/MainState.cpp
         ../GameEngine/src/States/SettingsState.cpp
+        ../GameEngine/src/States/JoinLobbyState.cpp
+        ../GameEngine/src/States/CreateLobbyState.cpp
         ../Game/Encapsulation/SFML/Mouse.cpp
         ../Game/Systems/CreatePlayerSystem.cpp
         ../Game/Encapsulation/SFML/GraphicLoader.cpp
-        ../Game/CreateEntities/AssetLoader.cpp)
+        ../Game/CreateEntities/AssetLoader.cpp
+        ../Server/src/Logger.cpp)
 
 include(FetchContent)
 FetchContent_Declare(SFML

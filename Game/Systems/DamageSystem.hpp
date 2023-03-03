@@ -18,10 +18,10 @@ class DamageSystem : public ISystem {
                bool &t_is_running,
                std::vector<SoundSystem::SoundType> &t_sounds,
                rtype::IGraphicLoader *t_graphic_loader);
-  ~DamageSystem();
+  ~DamageSystem() = default;
 
-  virtual void update();
-  virtual void updateData(SystemData &t_data);
+  virtual void update() override;
+  virtual void updateData(SystemData &t_data) override;
 
  private:
   EventQueue m_event_queue;

@@ -9,8 +9,11 @@
 #include "../../../Game/Encapsulation/ISprite.hpp"
 #include "../../../Game/Encapsulation/IFont.hpp"
 #include "../../../Game/Encapsulation/IText.hpp"
+#include "../../../Game/Encapsulation/IFont.hpp"
+#include "../../../Game/Encapsulation/IText.hpp"
 
 #include "./MainState.hpp"
+#include "../MusicPlayer.hpp"
 #include "../MusicPlayer.hpp"
 #include "../Button.hpp"
 #include "../State.hpp"
@@ -21,7 +24,8 @@ class SettingsState final : public State {
   SettingsState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
                 MusicPlayer &t_music_player, std::size_t t_flag,
                 rtype::IGraphicLoader *t_graphic_loader, int *t_level,
-                bool t_replace = true);
+                bool t_replace = true, std::string t_ip = "",
+                UdpClient *t_clientCom = nullptr);
   ~SettingsState();
   void pause() override;
   void resume() override;
@@ -38,8 +42,10 @@ class SettingsState final : public State {
   rtype::IText *m_title;
   rtype::IText *m_vol_txt;
   rtype::IText *m_vol_digit;
-
   std::size_t m_flag;
+
+  void initSprites();
+  void initText();
 };
 
 #endif  // !SETTINGSSTATE_HPP_

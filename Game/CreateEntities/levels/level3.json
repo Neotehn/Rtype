@@ -63,7 +63,10 @@
   "enemies": [
     {
       "path": "../Client/sprites/r-typesheet30a.gif",
-      "size": 34,
+      "size": {
+        "x": 34,
+        "y": 34
+      },
       "limit": 68,
       "color": {
         "r": 100,

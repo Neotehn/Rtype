@@ -1,39 +1,23 @@
 #include "./SettingsState.hpp"
 
-SettingsState::SettingsState(StateMachine &t_machine,
-                             rtype::IRenderWindow *t_window,
-                             MusicPlayer &t_music_player, std::size_t t_flag,
-                             rtype::IGraphicLoader *t_graphic_loader,
-                             int *t_level, const bool t_replace)
-    : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level,
-            t_replace),
-      m_start_btn(Button(
-        "./assets/icons/home.png",
-        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 32),
-                        static_cast<float>(m_window->getSize().y - 100)},
-        rtype::Vector2f{64, 64}, t_graphic_loader)),
-      m_vol_up(Button(
-        "./assets/icons/plus.png",
-        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 91.5),
-                        static_cast<float>(m_window->getSize().y / 2)},
-        rtype::Vector2f{64, 64}, t_graphic_loader)),
-      m_vol_down(Button(
-        "./assets/icons/minus.png",
-        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 + 27.5),
-                        static_cast<float>(m_window->getSize().y / 2)},
-        rtype::Vector2f{64, 64}, t_graphic_loader)),
-      m_flag(t_flag) {
+void SettingsState::initSprites() {
+  float size_x = m_window->getSize().x;
+  float size_y = m_window->getSize().y;
   m_bg_t = m_graphic_loader->loadTexture();
   m_bg_s = m_graphic_loader->loadSprite();
   if (!m_bg_t->loadFromFile("./assets/menubg.jpg")) {
     throw std::runtime_error("Unable to load image.");
   }
-  float size_x = m_window->getSize().x;
-  float size_y = m_window->getSize().y;
   float scale_x = size_x / m_bg_t->getSize().x;
   float scale_y = size_y / m_bg_t->getSize().y;
   m_bg_s->setTexture(m_bg_t, true);
   m_bg_s->setScale({scale_x, scale_y});
+}
+
+void SettingsState::initText() {
+  float size_x = m_window->getSize().x;
+  float size_y = m_window->getSize().y;
+
   m_font = m_graphic_loader->loadFont();
   if (!m_font->loadFromFile("./assets/font/nasalization-rg.ttf")) {
     throw std::runtime_error("Unable to load font.");
@@ -59,6 +43,34 @@ SettingsState::SettingsState(StateMachine &t_machine,
   m_vol_digit->setPosition(
     {(size_x / 2) - (m_vol_digit->getLocalBounds().width / 2),
      static_cast<float>((size_y / 2) + 14.5)});
+}
+
+SettingsState::SettingsState(StateMachine &t_machine,
+                             rtype::IRenderWindow *t_window,
+                             MusicPlayer &t_music_player, std::size_t t_flag,
+                             rtype::IGraphicLoader *t_graphic_loader,
+                             int *t_level, const bool t_replace,
+                             std::string t_ip, UdpClient *t_clientCom)
+    : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level,
+            t_replace, t_ip, t_clientCom),
+      m_start_btn(Button(
+        "./assets/icons/white/home.png",
+        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 32),
+                        static_cast<float>(m_window->getSize().y - 100)},
+        rtype::Vector2f{64, 64}, t_graphic_loader, true)),
+      m_vol_up(Button(
+        "./assets/icons/white/plus.png",
+        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 81.5),
+                        static_cast<float>(m_window->getSize().y / 2)},
+        rtype::Vector2f{64, 64}, t_graphic_loader, true)),
+      m_vol_down(Button(
+        "./assets/icons/white/minus.png",
+        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 + 17.5),
+                        static_cast<float>(m_window->getSize().y / 2)},
+        rtype::Vector2f{64, 64}, t_graphic_loader, true)),
+      m_flag(t_flag) {
+  initSprites();
+  initText();
   m_music_player.play(MusicID::MENU_THEME);
 }
 
@@ -66,6 +78,7 @@ SettingsState::~SettingsState() {
   delete m_bg_t;
   delete m_bg_s;
 }
+
 void SettingsState::pause() { std::cout << "MenuState Pause\n"; }
 
 void SettingsState::resume() { std::cout << "MenuState resume\n"; }
@@ -85,7 +98,7 @@ void SettingsState::update() {
         std::cout << "startbtn pressed" << std::endl;
         m_next = StateMachine::build<MainState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, true);
+          m_level, true, "", m_clientCom);
       }
       if (m_vol_down.is_pressed(mouse_pos_f)) {
         if (m_music_player.getVolume() > 0) {
@@ -121,20 +134,6 @@ void SettingsState::update() {
     switch (event.type) {
       case rtype::EventType::Closed:
         m_state_machine.quit();
-        break;
-      case rtype::EventType::KeyPressed:
-        switch (event.key) {
-          case rtype::EventKey::Space:
-            m_next = StateMachine::build<MainState>(
-              m_state_machine, m_window, m_music_player, m_flag,
-              m_graphic_loader, m_level, true);
-            break;
-          case rtype::EventKey::Escape:
-            m_state_machine.quit();
-            break;
-          default:
-            break;
-        }
         break;
       default:
         break;

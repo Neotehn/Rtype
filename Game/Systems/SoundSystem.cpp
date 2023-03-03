@@ -16,7 +16,9 @@ SoundSystem::SoundSystem(std::shared_ptr<EntityManager> t_em,
   m_sounds->addSoundFromFile("../Client/assets/sounds/win.wav");
 }
 
-SoundSystem::~SoundSystem() { delete m_sounds; }
+SoundSystem::~SoundSystem() {
+  if (m_sounds) delete m_sounds;
+}
 
 void SoundSystem::updateData(SystemData &t_data) { m_vol = t_data.volume; }
 

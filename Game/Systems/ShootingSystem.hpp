@@ -12,18 +12,19 @@ class ShootingSystem : public ISystem {
  public:
   ShootingSystem(std::shared_ptr<EntityManager> t_em, UdpServer *t_serverCom,
                  rtype::IGraphicLoader *t_graphic_loader);
-  ~ShootingSystem();
+  ~ShootingSystem() = default;
 
-  void update();
-  void updateData(SystemData &t_data);
+  void update() override;
+  void updateData(SystemData &t_data) override;
 
  private:
   EventQueue m_event_queue;
   UdpServer *m_serverCom;
   rtype::IGraphicLoader *m_graphic_loader;
 
-  void shootFire(std::shared_ptr<Action> action);
-  void shootBomb(std::shared_ptr<Action> action);
+  void shootMoney(std::shared_ptr<Action> t_action);
+  void shootFire(std::shared_ptr<Action> t_action);
+  void shootBomb(std::shared_ptr<Action> t_action);
 };
 
 #endif  // CLIENT_SRC_SYSTEMS_SHOOTINGSYSTEM_HPP_
