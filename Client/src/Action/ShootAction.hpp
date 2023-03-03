@@ -7,10 +7,10 @@
 
 class ShootAction : public Action {
  public:
-  ShootAction(EntityID t_id, int t_damage, int t_type,
+  ShootAction(EntityID t_id, int t_damage, Action::ShootingType t_type,
               bool t_triggered_by_user);
-  ShootAction(EntityID t_id, int t_damage, int t_type, bool t_triggered_by_user,
-              int t_action_id);
+  ShootAction(EntityID t_id, int t_damage, Action::ShootingType t_type,
+              bool t_triggered_by_user, int t_action_id);
   ~ShootAction() override = default;
 };
 

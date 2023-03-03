@@ -8,10 +8,10 @@ class DisplaySystem : public ISystem {
  public:
   DisplaySystem(std::shared_ptr<EntityManager> t_em,
                 rtype::IRenderWindow *t_window);
-  ~DisplaySystem();
+  ~DisplaySystem() = default;
 
-  virtual void update();
-  virtual void updateData(SystemData &t_data);
+  virtual void update() override;
+  virtual void updateData(SystemData &t_data) override;
 
  private:
   rtype::IRenderWindow *m_window;

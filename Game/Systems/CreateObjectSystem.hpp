@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 
+#include "../CreateEntities/Init.hpp"
 #include "../ECS/ISystem.hpp"
 #include "../ECS/DataTypesECS.hpp"
 #include "./AnimationSystem.hpp"
@@ -12,24 +13,18 @@
 class CreateObjectSystem : public ISystem {
  public:
   CreateObjectSystem(std::shared_ptr<EntityManager> t_em,
-                     std::vector<SoundSystem::SoundType> &t_sounds);
-  ~CreateObjectSystem();
+                     std::vector<SoundSystem::SoundType> &t_sounds,
+                     rtype::IGraphicLoader *t_graphic_loader);
+  ~CreateObjectSystem() = default;
 
-  void update();
-  void updateData(SystemData &t_data);
+  void update() override;
+  void updateData(SystemData &t_data) override;
 
  private:
   std::shared_ptr<EntityManager> m_em;
   EventQueue m_event_queue;
   std::vector<SoundSystem::SoundType> &m_play_sounds;
-
-  void createPlayer(EntityID t_id, std::string t_sprite_path,
-                    rtype::Vector2f t_pos);
-  Health initPlayerHealthBar(EntityID t_player_id);
-  void createBullet(EntityID t_id, rtype::Vector2f t_pos);
-  void createEnemy(EntityID t_id, rtype::Vector2f t_pos, float velocity);
-  void createExplosion(EntityID t_id, rtype::Vector2f t_pos);
-  void createPowerUp(EntityID t_id, rtype::Vector2f t_pos);
+  rtype::IGraphicLoader *m_graphic_loader;
 };
 
 #endif  //R_TYPE_CLIENT_CREATEOBJECTSYSTEM_HPP

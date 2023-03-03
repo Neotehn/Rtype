@@ -16,11 +16,12 @@ class DamageSystem : public ISystem {
   DamageSystem(std::shared_ptr<EntityManager> t_em,
                InputManager &t_client_input_manager, std::size_t t_port_number,
                bool &t_is_running,
-               std::vector<SoundSystem::SoundType> &t_sounds);
-  ~DamageSystem();
+               std::vector<SoundSystem::SoundType> &t_sounds,
+               rtype::IGraphicLoader *t_graphic_loader);
+  ~DamageSystem() = default;
 
-  virtual void update();
-  virtual void updateData(SystemData &t_data);
+  virtual void update() override;
+  virtual void updateData(SystemData &t_data) override;
 
  private:
   EventQueue m_event_queue;
@@ -28,6 +29,7 @@ class DamageSystem : public ISystem {
   std::size_t m_port_number;
   bool &m_is_running;
   std::vector<SoundSystem::SoundType> &m_play_sounds;
+  rtype::IGraphicLoader *m_graphic_loader;
 };
 
 #endif  // CLIENT_SRC_SYSTEMS_DAMAGESYSTEM_HPP_

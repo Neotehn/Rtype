@@ -2,14 +2,15 @@
 
 UdpClient::UdpClient(boost::asio::io_service &t_io_service,
                      const std::string &t_host, const std::string &t_port,
-                     const std::size_t &t_ownPort,
-                     InputManager &t_input_manager,
-                     InputManager &t_client_input_manager)
-    : m_io_service(t_io_service), m_remoteEndpoint(udp::v4(), stoi(t_port)),
-      m_socket(t_io_service, udp::endpoint(udp::v4(), t_ownPort)),
-      m_input_manager(t_input_manager),
-      m_client_input_manager(t_client_input_manager) {
+                     const std::size_t &t_ownPort)
+    : m_io_service(t_io_service),
+      m_remoteEndpoint(boost::asio::ip::address::from_string(t_host),
+                       stoi(t_port)),
+      m_socket(t_io_service, udp::endpoint(udp::v4(), t_ownPort)) {
   m_flag = ConnectState::none;
+  m_id = 0;
+  m_port_number = t_ownPort;
+  m_lobby_successfull_connected = false;
   receiveClient();
   m_thread = boost::thread([&t_io_service]() { t_io_service.run(); });
 }
@@ -36,6 +37,37 @@ void UdpClient::receiveClient() {
                 boost::asio::placeholders::bytes_transferred));
 }
 
+void UdpClient::setPlayerId(std::shared_ptr<Action> t_action) {
+  if (!m_client_input_manager->isPlayerIdSet()) {
+    if (t_action->getType() == Action::ActionType::START) {
+      m_client_input_manager->setPlayerId(t_action->getId());
+      m_id = t_action->getClientId();
+      std::cout << "id: " << std::to_string(t_action->getClientId())
+                << std::endl;
+    }
+  }
+}
+
+bool UdpClient::checkAndHandleLobbyJoining(std::shared_ptr<Action> t_action) {
+  if (t_action->getType() == Action::ActionType::JOINSUCCESSFULL) {
+    m_lobby_successfull_connected = true;
+    m_lobby_names = t_action->getLobbyPlayerNames();
+    std::cout << std::to_string(m_lobby_names.size()) << std::endl;
+    return true;
+  } else if (t_action->getType() == Action::ActionType::LEAVELOBBY) {
+    std::cout << std::to_string(m_lobby_names.size()) << std::endl;
+    for (int i = 0; i < m_lobby_names.size(); i++) {
+      if (m_lobby_names[i] == t_action->getPlayerName()) {
+        m_lobby_names.erase(m_lobby_names.begin() + i);
+        break;
+      }
+    }
+    std::cout << std::to_string(m_lobby_names.size()) << std::endl;
+    return true;
+  }
+  return false;
+}
+
 void UdpClient::handleReceive(const boost::system::error_code &t_error,
                               std::size_t t_size) {
   if (!t_error) {
@@ -43,16 +75,21 @@ void UdpClient::handleReceive(const boost::system::error_code &t_error,
       std::string(m_recvBuffer.begin(), m_recvBuffer.begin() + t_size);
     try {
       std::shared_ptr<Action> action = getAction(msg);
+      if (checkAndHandleLobbyJoining(action)) {
+        receiveClient();
+        std::cout << "yes" << std::endl;
+        return;
+      }
+      setPlayerId(action);
       //      if (!m_client_input_manager.doesActionExist(action)) {
-      m_client_input_manager.addActionsToQueue(action);
+      m_client_input_manager->addActionsToQueue(action);
       //      }
     } catch (std::exception &e) {
       std::cout << "Error: " << e.what() << std::endl;
     }
-
-    EventQueue eq = m_client_input_manager.getInputs();
+    EventQueue eq = m_client_input_manager->getInputs();
     for (std::shared_ptr<Action> action : eq.getEventQueue()) {
-      m_input_manager.addActionsToQueue(action);
+      m_input_manager->addActionsToQueue(action);
     }
 
     std::cout << "Received: '" << msg << "' (" << t_error.message() << ")\n";
@@ -64,4 +101,14 @@ void UdpClient::handleReceive(const boost::system::error_code &t_error,
   } else {
     m_socket.close();
   }
+}
+
+std::size_t UdpClient::getPortNumber() const { return m_port_number; }
+
+void UdpClient::setInputManager(InputManager *t_input_manager) {
+  m_input_manager = t_input_manager;
+}
+
+void UdpClient::setClientInputManager(InputManager *t_client_input_manager) {
+  m_client_input_manager = t_client_input_manager;
 }

@@ -20,6 +20,11 @@ void rtype::RenderWindow::draw(rtype::IRectangleShape *t_shape) {
     dynamic_cast<rtype::RectangleShape *>(t_shape)->getRectangleShape());
 }
 
+void rtype::RenderWindow::draw(const rtype::IText *t_text) {
+  rtype::IText *text = const_cast<rtype::IText *>(t_text);
+  m_window.draw(dynamic_cast<rtype::Text *>(text)->getText());
+}
+
 void rtype::RenderWindow::display() { m_window.display(); }
 
 rtype::Vector2u rtype::RenderWindow::getSize() const {
@@ -43,9 +48,16 @@ void rtype::RenderWindow::create(unsigned int t_width, unsigned int t_height,
   m_window.create(sf::VideoMode(t_width, t_height), t_title);
 }
 
+void rtype::RenderWindow::create(unsigned int t_width, unsigned int t_height,
+                                 std::string t_title, rtype::Style t_style) {
+  m_window.create(sf::VideoMode(t_width, t_height), t_title, t_style);
+}
+
 bool rtype::RenderWindow::pollEvent(rtype::Event &t_event) {
   bool res = m_window.pollEvent(m_event);
   t_event.type = rtype::EventType(m_event.type);
   t_event.key = rtype::EventKey(m_event.key.code);
   return res;
 }
+
+sf::RenderWindow *rtype::RenderWindow::getRenderWindow() { return &m_window; }

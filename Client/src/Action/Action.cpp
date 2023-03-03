@@ -16,6 +16,8 @@ std::string Action::getTypeAsString() const {
   switch (m_type) {
     case ActionType::START:
       return "START";
+    case ActionType::RESTART:
+      return "RESTART";
     case ActionType::UP:
       return "UP";
     case ActionType::DOWN:
@@ -42,6 +44,14 @@ std::string Action::getTypeAsString() const {
       return "DESTROY";
     case ActionType::DAMAGE:
       return "DAMAGE";
+    case ActionType::CREATELOBBY:
+      return "CREATELOBBY";
+    case ActionType::CREATESUCCESSFULL:
+      return "CREATESUCCESSFULL";
+    case ActionType::JOINLOBBY:
+      return "JOINLOBBY";
+    case ActionType::JOINSUCCESSFULL:
+      return "JOINSUCCESSFULL";
     case ActionType::ERROR:
       return "ERROR";
   }
@@ -51,9 +61,12 @@ std::string Action::getTypeAsString() const {
 std::string Action::getCommand() const {
   std::string type_string = getTypeAsString();
   std::string data = "";
+  std::string names = "";
 
   switch (m_type) {
     case ActionType::START:
+      return std::to_string(m_action_id) + ";" + type_string + ";" +
+             std::to_string(m_id) + ";" + std::to_string(m_client_id) + ";";
     case ActionType::DEAD:
     case ActionType::END:
       return std::to_string(m_action_id) + ";" + type_string + ";" +
@@ -62,6 +75,7 @@ std::string Action::getCommand() const {
     case ActionType::DOWN:
     case ActionType::LEFT:
     case ActionType::RIGHT:
+    case ActionType::RESTART:
       return std::to_string(m_action_id) + ";" + type_string + ";" +
              std::to_string(m_id) + ";" + std::to_string(m_triggered_by_user) +
              ";";
@@ -80,12 +94,21 @@ std::string Action::getCommand() const {
              std::to_string(m_value) + ";";
     case ActionType::DAMAGE:
       return std::to_string(m_action_id) + ";DAMAGE;" + std::to_string(m_id) +
-             ";" + std::to_string(m_damage) + ";";
+             ";" + std::to_string(m_damage) + ";" +
+             std::to_string(m_collision_partner_id) + ";";
     case ActionType::CREATE:
       data =
         std::to_string(m_position.x) + ";" + std::to_string(m_position.y) + ";";
       if (m_sprite_path.length() > 0) { data += m_sprite_path + ";"; }
       if (m_velocity >= -1) { data += std::to_string(m_velocity) + ";"; }
+      if (m_item_type != 0) {
+        data += std::to_string(float(m_item_type)) + ";";
+      }
+      if (m_client_id != 0) { data += std::to_string(m_client_id) + ";"; }
+      if (m_collision_partner_id != 0) {
+        data += std::to_string(m_collision_partner_id) + ";";
+      }
+      if (m_damage != 0) { data += std::to_string(m_damage) + ";"; }
       std::cout << std::to_string(m_velocity) << std::endl;
 
       return std::to_string(m_action_id) + ";CREATE;" + std::to_string(m_id) +
@@ -97,6 +120,28 @@ std::string Action::getCommand() const {
     case ActionType::DESTROY:
       return std::to_string(m_action_id) + ";DESTROY;" + std::to_string(m_id) +
              ";";
+    case ActionType::CREATELOBBY:
+      return std::to_string(m_action_id) + ";CREATELOBBY;" +
+             std::to_string(m_id) + ";" + m_lobby_ip + ";" + m_player_name +
+             ";";
+    case ActionType::LEAVELOBBY:
+      return std::to_string(m_action_id) + ";LEAVELOBBY;" +
+             std::to_string(m_id) + ";" + m_lobby_ip + ";" + m_player_name +
+             ";";
+    case ActionType::JOINLOBBY:
+      return std::to_string(m_action_id) + ";JOINLOBBY;" +
+             std::to_string(m_id) + ";" + m_lobby_ip + ";" + m_player_name +
+             ";";
+    case ActionType::JOINSUCCESSFULL:
+      for (int i = 0; i < m_lobby_player_names.size(); i++) {
+        names += m_lobby_player_names[i];
+        names += ";";
+      }
+      return std::to_string(m_action_id) + ";JOINSUCCESSFULL;" +
+             std::to_string(m_id) + ";" + names;
+    case ActionType::CREATESUCCESSFULL:
+      return std::to_string(m_action_id) + ";CREATESUCCESSFULL;" +
+             std::to_string(m_id) + ";";
   }
   return std::to_string(m_action_id) + ";" + type_string + ";" +
          std::to_string(m_id) + ";";
@@ -124,6 +169,37 @@ int Action::getIncreaseValue() const { return m_value; }
 
 int Action::getShootDamage() const { return m_damage; }
 
-int Action::getShootType() const { return m_shoot_type; }
+Action::ShootingType Action::getShootType() const { return m_shoot_type; }
 
 float Action::getVelocity() const { return m_velocity; }
+
+int Action::getItemType() const { return m_item_type; }
+
+void Action::setPlayerId(EntityID t_id) { m_id = t_id; }
+
+int Action::getClientId() const { return m_client_id; }
+
+void Action::setClientId(int t_client_id) { m_client_id = t_client_id; }
+
+void Action::setLobbyId(int t_lobby_id) { m_lobby_id = t_lobby_id; }
+
+int Action::getLobbyId() const { return m_lobby_id; }
+
+void Action::setPlayerName(std::string t_player_name) {
+  m_player_name = t_player_name;
+}
+
+std::string Action::getPlayerName() const { return m_player_name; }
+
+void Action::setLobbyIp(std::string t_lobby_ip) { m_lobby_ip = t_lobby_ip; }
+
+std::string Action::getLobbyIp() const { return m_lobby_ip; }
+
+void Action::setLobbyPlayerNames(
+  std::vector<std::string> t_lobby_player_names) {
+  m_lobby_player_names = t_lobby_player_names;
+}
+
+std::vector<std::string> Action::getLobbyPlayerNames() const {
+  return m_lobby_player_names;
+}

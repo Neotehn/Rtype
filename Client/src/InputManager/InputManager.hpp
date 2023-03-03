@@ -7,29 +7,39 @@
 #include "../Action/Action.hpp"
 #include "../Action/MovementAction.hpp"
 #include "../Action/ShootAction.hpp"
+#include "../Action/StateAction.hpp"
 #include "../../../Game/EventQueue.hpp"
 #include "../../../Game/Encapsulation/Event.hpp"
+#include "../../../Game/Encapsulation/SFML/Mouse.hpp"
 
 class InputManager {
  public:
-  InputManager();
+  InputManager(int *t_level);
   ~InputManager(){};
 
-  void recordInputs(const rtype::Event &t_event);
+  void recordInputs(const rtype::Event &t_event, rtype::IMouse *t_mouse,
+                    rtype::IRenderWindow *t_window);
+  void recordKeyPressedInputs(const rtype::Event &t_event);
+  void recordKeyReleasedInputs(const rtype::Event &t_event);
+  void recordMouseButtonReleasedInputs(const rtype::Event &t_event,
+                                       rtype::IMouse *t_mouse);
+  void recordMouseMovement(const rtype::Event &t_event, rtype::IMouse *t_mouse,
+                           rtype::IRenderWindow *t_window);
   void addActionsToQueue(std::shared_ptr<Action> t_action);
   void popInputs();
+  void removeEvent(int t_action_id);
 
   EventQueue getInputs();
   EventQueue getInputsWithoutPop();
   bool doesActionExist(std::shared_ptr<Action> t_action_id);
-  // TODO: encapsulate sf::Mouse
-  //  sf::Vector2i getMousePosition();
-  //  bool isMouseLeftClicked();
-  //  bool isMouseRightClicked();
+  bool isPlayerIdSet();
+  void setPlayerId(EntityID t_player_id);
+  int *m_level;
 
  private:
-  EntityID m_player_id;
+  EntityID m_player_id = 0;
   EventQueue m_input_queue;
+  rtype::Vector2i m_last_mouse_pos;
 };
 
 #endif  // CLIENT_SRC_INPUTMANAGER_INPUTMANAGER_HPP_

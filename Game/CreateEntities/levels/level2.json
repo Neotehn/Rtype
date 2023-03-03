@@ -1,0 +1,93 @@
+{
+  "backgrounds": [
+    {
+      "path": "../Client/sprites/background/bg1.png",
+      "scale": {
+        "x": 5,
+        "y": 5
+      },
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "speed": 1,
+      "limit": -1360,
+      "color": {
+        "r": 255,
+        "g": 100,
+        "b": 100,
+        "a": 255
+      }
+    },
+    {
+      "path": "../Client/sprites/background/bg2.png",
+      "scale": {
+        "x": 4,
+        "y": 4
+      },
+      "position": {
+        "x": 0,
+        "y": 160
+      },
+      "speed": 2,
+      "limit": -2720,
+      "color": {
+        "r": 255,
+        "g": 100,
+        "b": 100,
+        "a": 255
+      }
+    },
+    {
+      "path": "../Client/sprites/background/bg3.png",
+      "scale": {
+        "x": 5,
+        "y": 5
+      },
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "speed": 3,
+      "limit": -1360,
+      "color": {
+        "r": 255,
+        "g": 100,
+        "b": 100,
+        "a": 255
+      }
+    }
+  ],
+  "background_speed": 1.4,
+  "music": "../Client/assets/music/music2.ogg",
+  "enemies": [
+    {
+      "path": "../Client/sprites/r-typesheet30a.gif",
+      "size": {
+        "x": 34,
+        "y": 34
+      },
+      "limit": 68,
+      "color": {
+        "r": 255,
+        "g": 100,
+        "b": 100,
+        "a": 255
+      }
+    },
+    {
+      "path": "../Client/sprites/enemies/WallOfFlesh.png",
+      "size": {
+        "x": 190,
+        "y": 800
+      },
+      "limit": 0,
+      "color": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 255
+      }
+    }
+  ]
+}

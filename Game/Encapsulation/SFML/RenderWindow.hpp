@@ -8,6 +8,7 @@
 #include "../IRenderWindow.hpp"
 #include "./Sprite.hpp"
 #include "./RectangleShape.hpp"
+#include "./Text.hpp"
 
 namespace rtype {
 
@@ -20,6 +21,7 @@ namespace rtype {
 
     void draw(const rtype::ISprite *t_sprite) override;
     void draw(rtype::IRectangleShape *t_shape) override;
+    void draw(const rtype::IText *t_text) override;
     void display() override;
     rtype::Vector2u getSize() const override;
     bool isOpen() override;
@@ -28,7 +30,11 @@ namespace rtype {
     void setFramerateLimit(unsigned int t_fps) override;
     void create(unsigned int t_width, unsigned int t_height,
                 std::string t_title) override;
+    void create(unsigned int t_width, unsigned int t_height,
+                std::string t_title, rtype::Style t_style) override;
     bool pollEvent(rtype::Event &t_event) override;
+
+    sf::RenderWindow *getRenderWindow();
 
    private:
     sf::RenderWindow m_window;

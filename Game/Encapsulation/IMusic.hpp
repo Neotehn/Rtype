@@ -9,7 +9,7 @@ namespace rtype {
     virtual bool openFromFile(const std::string &) = 0;
     virtual void setVolume(float) = 0;
     virtual void setLoop(bool) = 0;
-    virtual void play() = 0;
+    virtual void play(int index = 0) = 0;
     virtual void stop() = 0;
     virtual void pause() = 0;
   };

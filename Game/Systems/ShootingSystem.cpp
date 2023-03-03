@@ -1,35 +1,69 @@
 #include "ShootingSystem.hpp"
 
 ShootingSystem::ShootingSystem(std::shared_ptr<EntityManager> t_em,
-                               UdpServer *t_serverCom) {
+                               UdpServer *t_serverCom,
+                               rtype::IGraphicLoader *t_graphic_loader) {
   m_em = t_em;
   m_serverCom = t_serverCom;
+  m_graphic_loader = t_graphic_loader;
 }
-
-ShootingSystem::~ShootingSystem() {}
 
 void ShootingSystem::updateData(SystemData &t_data) {
   m_event_queue = t_data.event_queue;
 }
 
 void ShootingSystem::update() {
-  if (m_event_queue.checkIfKeyPressed(Action::ActionType::SHOOT)) {
-    for (EntityID ent : EntityViewer<Player>(*m_em.get())) {
-      Player *player = (*m_em.get()).Get<Player>(ent);
-      EntityID bullet = m_em->createNewEntity();
-      SpriteECS sprite = SpriteECS("./../Client/sprites/shoot2.png");
-      rtype::Vector2f bullet_pos = {player->position.position.x - 20,
-                                    player->position.position.y +
-                                      player->body->getSize().y / 2 - 10};
-      rtype::IRectangleShape *bullet_body = new rtype::RectangleShape();
+  for (std::shared_ptr<Action> action :
+       m_event_queue.getAllOfType(Action::ActionType::SHOOT)) {
+    for (EntityID ent : EntityViewer<Player>(*m_em)) {
+      if (ent != action->getId()) continue;
 
-      bullet_body->setSize({20, 20});
-      bullet_body->setPosition({bullet_pos.x, bullet_pos.y});
-      bullet_body->setTexture(sprite.getTexture());
-
-      m_em->Assign<Bullet>(bullet, Bullet{bullet_body, 10.0, bullet_pos});
-      m_serverCom->addEvent(std::make_shared<Action>(
-        CreateAction(bullet, Action::ObjectType::BULLET, bullet_pos, "")));
+      switch (action->getShootType()) {
+        case Action::ShootingType::NORMAL:
+          initShoot(action, m_em, m_graphic_loader, m_serverCom);
+          break;
+        case Action::ShootingType::COIN:
+          shootMoney(action);
+          break;
+        case Action::ShootingType::FIRE:
+          shootFire(action);
+          break;
+        case Action::ShootingType::BOMB:
+          shootBomb(action);
+          break;
+        default:
+          break;
+      }
     }
   }
+}
+
+void ShootingSystem::shootMoney(std::shared_ptr<Action> t_action) {
+  Player *player = (*m_em).Get<Player>(t_action->getId());
+
+  if (player->coin_shot == 0) return;
+  player->coin_shot -= 1;
+  if (player->coin_shot < 0) player->coin_shot = 0;
+
+  initCoinShoot(t_action, m_em, m_graphic_loader, m_serverCom);
+}
+
+void ShootingSystem::shootFire(std::shared_ptr<Action> t_action) {
+  Player *player = (*m_em).Get<Player>(t_action->getId());
+
+  if (player->fire_shot == 0) return;
+  player->fire_shot -= 1;
+  if (player->fire_shot < 0) player->fire_shot = 0;
+
+  initFireShoot(t_action, m_em, m_graphic_loader, m_serverCom);
+}
+
+void ShootingSystem::shootBomb(std::shared_ptr<Action> t_action) {
+  Player *player = (*m_em).Get<Player>(t_action->getId());
+
+  if (player->bomb_shot == 0) return;
+  player->bomb_shot -= 1;
+  if (player->bomb_shot < 0) player->bomb_shot = 0;
+
+  initBombShoot(t_action, m_em, m_graphic_loader, m_serverCom);
 }

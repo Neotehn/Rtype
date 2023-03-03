@@ -20,8 +20,10 @@ class EntityManager {
   EntityID createNewEntity(EntityID t_id = 0) {
     if (t_id != 0) {
       if (getEntityVersion(t_id) != 0) {
-        m_free_entities.back();
-        m_free_entities.pop_back();
+        if (!m_free_entities.empty()) {
+          m_free_entities.back();
+          m_free_entities.pop_back();
+        }
         m_entities[getEntityIndex(t_id)].id = t_id;
         return m_entities[getEntityIndex(t_id)].id;
       }
@@ -41,11 +43,22 @@ class EntityManager {
     return m_entities.back().id;
   }
   void destroyEntity(EntityID t_id) {
-    EntityID newID =
-      createEntityId(EntityIndex(-1), getEntityVersion(t_id) + 1);
-    m_entities[getEntityIndex(t_id)].id = newID;
-    m_entities[getEntityIndex(t_id)].mask.reset();
-    m_free_entities.push_back(getEntityIndex(t_id));
+    try {
+      std::cout << "start destroy entity" << std::endl;
+      EntityID newID =
+        createEntityId(EntityIndex(-1), getEntityVersion(t_id) + 1);
+      EntityIndex index = getEntityIndex(t_id);
+      std::cout << "destroy entity 1" << std::endl;
+      m_entities[index].id = newID;
+      std::cout << "destroy entity 2" << std::endl;
+      m_entities[index].mask.reset();
+      std::cout << "destroy entity 3: " << std::to_string(t_id) << std::endl;
+      m_free_entities.push_back(index);
+      std::cout << "destroy entity 4" << std::endl;
+    } catch (std::exception &e) {
+      std::cout << "Error destroying entity: " << e.what() << std::endl;
+    }
+    std::cout << "end destroy entity" << std::endl;
   }
 
   template<typename T>
