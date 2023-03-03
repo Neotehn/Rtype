@@ -102,3 +102,5 @@ void Textbox::typedOn(rtype::Event t_input) {
 int Textbox::getLength() { return m_text.str().length(); }
 
 std::string Textbox::getTextString() const { return m_text.str().c_str(); }
+
+bool Textbox::getSelected() { return m_is_selected; }

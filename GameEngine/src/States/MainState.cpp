@@ -12,6 +12,14 @@ void MainState::initSprites() {
   float scale_y = size_y / m_bg_t->getSize().y;
   m_bg_s->setTexture(m_bg_t, true);
   m_bg_s->setScale({scale_x, scale_y});
+  m_bg_text = m_graphic_loader->loadRectangleShape();
+  SpriteECS sprite_bg_text =
+    SpriteECS("./../Client/assets/bg_textbox.png", m_graphic_loader);
+  m_bg_text->setTexture(sprite_bg_text.getTexture());
+  m_bg_text->setTextureRect({0, 0, 1018, 1938});
+  m_bg_text->setRotation(180);
+  m_bg_text->setSize({size_x / 2 + 100, 100});
+  m_bg_text->setPosition({size_x / 2 + 105, size_y - 5});
 }
 
 void MainState::initText() {
@@ -28,6 +36,23 @@ void MainState::initText() {
   m_title->setCharacterSize(50);
   m_title->setPosition(
     {(size_x / 2) - (m_title->getLocalBounds().width / 2), 100});
+  m_chat_title = m_graphic_loader->loadText();
+  m_chat_title->setFont(m_font);
+  m_chat_title->setString("CHAT:");
+  m_chat_title->setCharacterSize(35);
+  // m_chat_title->setColor({18, 107, 165, 255});
+  m_chat_title->setPosition(
+    {20, static_cast<float>(m_window->getSize().y - 100)});
+  m_placeholder = m_graphic_loader->loadText();
+  m_placeholder->setFont(m_font);
+  m_placeholder->setString("PRESS ENTER FOR CHAT");
+  m_placeholder->setCharacterSize(35);
+  // m_placeholder->setColor({18, 107, 165, 255});
+  m_placeholder->setPosition(
+    {20, static_cast<float>(m_window->getSize().y - 55)});
+  m_chat.setLimit(true, 20);
+  m_chat.setPosition(
+    rtype::Vector2f{20, static_cast<float>(m_window->getSize().y - 55)});
 }
 
 MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
@@ -62,6 +87,7 @@ MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
         rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 65),
                         static_cast<float>(m_window->getSize().y / 2)},
         rtype::Vector2f{130, 50}, t_graphic_loader, false)),
+      m_chat(Textbox(35, rtype::White, false, t_graphic_loader)),
       m_flag(t_flag) {
   initSprites();
   initText();
@@ -140,12 +166,17 @@ void MainState::update() {
         break;
       case rtype::EventType::KeyPressed:
         switch (event.key) {
-          case rtype::EventKey::Escape:
-            m_state_machine.quit();
+          case rtype::EventKey::Enter:
+            m_chat.setSelected(true);
             break;
+          case rtype::EventKey::Escape:
+            m_chat.setSelected(false);
           default:
             break;
         }
+        break;
+      case rtype::EventType::TextEntered:
+        m_chat.typedOn(event);
         break;
       default:
         break;
@@ -162,6 +193,13 @@ void MainState::draw() {
   m_window->draw(m_start_btn.getSprite());
   m_window->draw(m_settings_btn.getSprite());
   m_window->draw(m_exit_btn.getSprite());
+  m_window->draw(m_bg_text);
+  m_window->draw(m_chat_title);
+  if (m_chat.getSelected()) {
+    m_window->draw(m_chat.getText());
+  } else {
+    m_window->draw(m_placeholder);
+  }
   m_window->display();
 }
 
