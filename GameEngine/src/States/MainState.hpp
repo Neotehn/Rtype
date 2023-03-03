@@ -19,6 +19,7 @@ class MainState final : public State {
   MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
             MusicPlayer &t_music_player, std::size_t t_flag,
             rtype::IGraphicLoader *t_graphic_loader, int *t_level,
+            const std::string& t_path,
             bool t_replace = true);
   ~MainState();
   void pause() override;
@@ -33,6 +34,7 @@ class MainState final : public State {
   Button m_settings_btn;
   std::size_t m_flag;
   bool m_start_pressed;
+  std::string m_path_to_sprite;
 };
 
 #endif  //!MAINSTATE_HPP_

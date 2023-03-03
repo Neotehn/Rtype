@@ -16,6 +16,7 @@ class IntroState final : public State {
                 MusicPlayer &t_music_player,
                 std::size_t t_flag,
                 rtype::IGraphicLoader *t_graphic_loader, int *t_level,
+                const std::string& t_path,
                 bool t_replace = true);
   ~IntroState();
   void pause() override;
@@ -39,6 +40,7 @@ class IntroState final : public State {
   std::vector<rtype::ITexture*> m_flying_obj_t;
   std::vector<rtype::ISprite*> m_flying_obj_s;
   MusicPlayer m_sound_manager;
+  std::string m_path_to_sprite;
 };
 
 #endif  //RTYPE_INTROSTATE_HPP

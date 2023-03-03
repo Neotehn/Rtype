@@ -17,6 +17,7 @@ class SettingsState final : public State {
   SettingsState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
                 MusicPlayer &t_music_player, std::size_t t_flag,
                 rtype::IGraphicLoader *t_graphic_loader, int *t_level,
+                const std::string& t_path,
                 bool t_replace = true);
   ~SettingsState();
   void pause() override;

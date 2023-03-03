@@ -10,15 +10,16 @@ Core::Core(std::size_t t_flag) {
   m_window->setFramerateLimit(60);
   int *level = new int(1);
   srand(time(nullptr));
+  std::string test = "./sprites/starship.png";
 
   if (t_flag == 1)
     m_state_machine.run(
       StateMachine::build<IntroState>(m_state_machine, m_window, m_music_player,
-                                     t_flag, m_graphic_loader, level, true));
+                                     t_flag, m_graphic_loader, level, test, true));
   else
     m_state_machine.run(
       StateMachine::build<GameState>(m_state_machine, m_window, m_music_player,
-                                     t_flag, m_graphic_loader, level, true));
+                                     t_flag, m_graphic_loader, level, "", true));
 }
 
 Core::~Core() {

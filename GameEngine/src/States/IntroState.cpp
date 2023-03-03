@@ -6,8 +6,11 @@ IntroState::IntroState(StateMachine &t_machine,
                              MusicPlayer &t_music_player,
                               std::size_t t_flag,
                              rtype::IGraphicLoader *t_graphic_loader,
-                             int *t_level, const bool t_replace)
+                             int *t_level,
+                       const std::string& t_path,
+                       const bool t_replace)
     : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level,
+            t_path,
             t_replace),
       m_start_btn(
         Button("./assets/startBtn.png",
@@ -92,7 +95,7 @@ void IntroState::update() {
         std::cout << "startbtn pressed" << std::endl;
         m_next = StateMachine::build<MainState>(
           m_state_machine, m_window, m_music_player,  m_flag, m_graphic_loader,
-          m_level, true);
+          m_level,m_path_to_sprite, true);
       }
     }
     switch (event.type) {
@@ -104,7 +107,7 @@ void IntroState::update() {
           case rtype::EventKey::Space:
             m_next = StateMachine::build<MainState>(
               m_state_machine, m_window, m_music_player, m_flag,
-              m_graphic_loader, m_level, true);
+              m_graphic_loader, m_level, m_path_to_sprite, true);
             break;
           case rtype::EventKey::Escape:
             m_state_machine.quit();

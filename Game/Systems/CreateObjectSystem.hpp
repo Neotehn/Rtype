@@ -14,7 +14,7 @@ class CreateObjectSystem : public ISystem {
  public:
   CreateObjectSystem(std::shared_ptr<EntityManager> t_em,
                      std::vector<SoundSystem::SoundType> &t_sounds,
-                     rtype::IGraphicLoader *t_graphic_loader);
+                     rtype::IGraphicLoader *t_graphic_loader, const std::string& t_path_to_sprite);
   ~CreateObjectSystem();
 
   void update();
@@ -25,6 +25,7 @@ class CreateObjectSystem : public ISystem {
   EventQueue m_event_queue;
   std::vector<SoundSystem::SoundType> &m_play_sounds;
   rtype::IGraphicLoader *m_graphic_loader;
+  std::string m_path_to_sprite;
 };
 
 #endif  //R_TYPE_CLIENT_CREATEOBJECTSYSTEM_HPP
