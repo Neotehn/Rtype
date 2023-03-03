@@ -31,16 +31,13 @@ void MainState::initText() {
 }
 
 MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
-                     MusicPlayer &t_music_player,
-                     std::size_t t_flag,
+                     MusicPlayer &t_music_player, std::size_t t_flag,
                      rtype::IGraphicLoader *t_graphic_loader, int *t_level,
-                     const std::string& t_path_to_sprite,
-                     const std::string& t_player_name,
-                     const bool t_replace, std::string t_ip,
-                     UdpClient *t_clientCom)
+                     const std::string &t_path_to_sprite,
+                     const std::string &t_player_name, const bool t_replace,
+                     std::string t_ip, UdpClient *t_clientCom)
     : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level,
-            t_path_to_sprite, t_player_name,
-            t_replace, t_ip, t_clientCom),
+            t_path_to_sprite, t_player_name, t_replace, t_ip, t_clientCom),
       m_start_btn(Button(
         "./assets/startBtn.png",
         rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 65),

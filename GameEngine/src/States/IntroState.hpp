@@ -14,12 +14,11 @@
 class IntroState final : public State {
  public:
   IntroState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
-              MusicPlayer &t_music_player, std::size_t t_flag,
-              rtype::IGraphicLoader *t_graphic_loader, int *t_level,
-              const std::string& t_path_to_sprite,
-             const std::string& t_player_name,
-              bool t_replace = true, std::string t_ip = "",
-              UdpClient *t_clientCom = nullptr);
+             MusicPlayer &t_music_player, std::size_t t_flag,
+             rtype::IGraphicLoader *t_graphic_loader, int *t_level,
+             const std::string &t_path_to_sprite,
+             const std::string &t_player_name, bool t_replace = true,
+             std::string t_ip = "", UdpClient *t_clientCom = nullptr);
   ~IntroState();
   void pause() override;
   void resume() override;
@@ -39,8 +38,8 @@ class IntroState final : public State {
   rtype::ITexture *m_spaceship_t;
   rtype::ISprite *m_spaceship_s;
   rtype::Vector2f m_spaceMovement;
-  std::vector<rtype::ITexture*> m_flying_obj_t;
-  std::vector<rtype::ISprite*> m_flying_obj_s;
+  std::vector<rtype::ITexture *> m_flying_obj_t;
+  std::vector<rtype::ISprite *> m_flying_obj_s;
   MusicPlayer m_sound_manager;
 };
 
