@@ -56,6 +56,7 @@ MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
     {(size_x / 2) - (m_title->getLocalBounds().width / 2), 100});
   m_music_player.play(MusicID::MENU_THEME);
   m_start_pressed = false;
+  m_clientCom->m_lobby_names.clear();
 }
 
 MainState::~MainState() {
