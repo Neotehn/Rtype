@@ -12,6 +12,10 @@ namespace rtype {
     ~Mouse() override = default;
 
     bool isLeftMouseButtonPressed() const override;
+    bool isRightMouseButtonPressed() const override;
+    bool isMouseXButton1Pressed() const override;
+    bool isMouseXButton2Pressed() const override;
+    bool isMouseMiddleButtonPressed() const override;
 
     rtype::Vector2i
     getMousePosition(rtype::IRenderWindow *m_window) const override;

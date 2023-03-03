@@ -20,6 +20,11 @@ void rtype::RenderWindow::draw(rtype::IRectangleShape *t_shape) {
     dynamic_cast<rtype::RectangleShape *>(t_shape)->getRectangleShape());
 }
 
+void rtype::RenderWindow::draw(const rtype::IText *t_text) {
+  rtype::IText *text = const_cast<rtype::IText *>(t_text);
+  m_window.draw(dynamic_cast<rtype::Text *>(text)->getText());
+}
+
 void rtype::RenderWindow::display() { m_window.display(); }
 
 rtype::Vector2u rtype::RenderWindow::getSize() const {

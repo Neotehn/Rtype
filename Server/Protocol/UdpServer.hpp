@@ -17,6 +17,8 @@
 #include <boost/make_shared.hpp>
 #include <boost/asio.hpp>
 #include <boost/thread.hpp>
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
 
 #include <math.h>
 
@@ -31,7 +33,8 @@ using boost::system::error_code;
 class UdpServer : public IProtocol {
  public:
   UdpServer(boost::asio::io_service &t_io_service,
-            InputManager &t_input_manager, bool &t_is_running);
+            InputManager &t_input_manager, bool &t_is_running,
+            std::string t_ip);
   ~UdpServer();
   void sendMessage(const std::string &, udp::endpoint t_client);
   void receiveClient();
@@ -43,6 +46,7 @@ class UdpServer : public IProtocol {
   void sendEvents();
   int getPlayerIdCount() const;
   void setPlayerIdCount(int t_new_player_id_count);
+  bool checkAndLobbyHandling(std::shared_ptr<Action> t_action);
 
   float getTimeDiff();
   void resetTime();
@@ -54,6 +58,7 @@ class UdpServer : public IProtocol {
  private:
   std::vector<int> m_client_ports;
   std::vector<udp::endpoint> m_endpoints;
+  std::vector<Lobby> m_lobbys;
   boost::thread m_thread;
   udp::socket m_socket;
   udp::endpoint m_remoteEndpoint;

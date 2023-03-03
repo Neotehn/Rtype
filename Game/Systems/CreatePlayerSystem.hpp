@@ -12,8 +12,8 @@ class CreatePlayerSystem : public ISystem {
                      rtype::IGraphicLoader *t_graphic_loader);
   ~CreatePlayerSystem() = default;
 
-  void update();
-  void updateData(SystemData &t_data);
+  void update() override;
+  void updateData(SystemData &t_data) override;
 
  private:
   std::shared_ptr<EntityManager> m_em;

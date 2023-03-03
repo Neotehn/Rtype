@@ -1,9 +1,3 @@
-/*
-** EPITECH PROJECT, 2022
-** .
-** File description:
-** .
-*/
 #ifndef ECS_COMPONENTPOOL_HPP_
 #define ECS_COMPONENTPOOL_HPP_
 

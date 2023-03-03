@@ -4,15 +4,23 @@
 
 InputManager::InputManager(int *t_level) {
   m_level = t_level;
+  m_last_mouse_pos = {0, 0};
   //SetExitKey(KEY_CAPS_LOCK);
 }
 
 // -4 = UP ; -3 = LEFT ; -2 = DOWN ; -1 = RIGHT
-void InputManager::recordInputs(const rtype::Event &t_event) {
+void InputManager::recordInputs(const rtype::Event &t_event,
+                                rtype::IMouse *t_mouse,
+                                rtype::IRenderWindow *t_window) {
   if (t_event.type == rtype::EventType::KeyPressed) {
     recordKeyPressedInputs(t_event);
   } else if (t_event.type == rtype::EventType::KeyReleased) {
     recordKeyReleasedInputs(t_event);
+  } else if (t_event.type == rtype::EventType::MouseButtonPressed ||
+             t_event.type == rtype::EventType::MouseWheelMoved) {
+    recordMouseButtonReleasedInputs(t_event, t_mouse);
+  } else if (t_event.type == rtype::EventType::MouseMoved) {
+    recordMouseMovement(t_event, t_mouse, t_window);
   }
 
   //std::this_thread::sleep_for(std::chrono::milliseconds(100)); // This should change
@@ -57,6 +65,12 @@ void InputManager::recordKeyReleasedInputs(const rtype::Event &t_event) {
           ShootAction(m_player_id, 1, Action::ShootingType::NORMAL, true)),
         Action::ActionType::SHOOT);
       break;
+    case rtype::EventKey::B:
+      m_input_queue.addToQueueIfNotExist(
+        std::make_shared<Action>(
+          ShootAction(m_player_id, 1, Action::ShootingType::COIN, true)),
+        Action::ActionType::SHOOT);
+      break;
     case rtype::EventKey::M:
       m_input_queue.addToQueueIfNotExist(
         std::make_shared<Action>(
@@ -77,6 +91,69 @@ void InputManager::recordKeyReleasedInputs(const rtype::Event &t_event) {
       break;
     default:
       break;
+  }
+}
+
+void InputManager::recordMouseButtonReleasedInputs(const rtype::Event &t_event,
+                                                   rtype::IMouse *t_mouse) {
+  if (t_mouse->isLeftMouseButtonPressed()) {
+    m_input_queue.addToQueueIfNotExist(
+      std::make_shared<Action>(
+        ShootAction(m_player_id, 1, Action::ShootingType::NORMAL, true)),
+      Action::ActionType::SHOOT);
+  } else if (t_mouse->isRightMouseButtonPressed()) {
+    m_input_queue.addToQueueIfNotExist(
+      std::make_shared<Action>(
+        ShootAction(m_player_id, 1, Action::ShootingType::COIN, true)),
+      Action::ActionType::SHOOT);
+  } else if (t_mouse->isMouseMiddleButtonPressed()) {
+    m_input_queue.addToQueueIfNotExist(
+      std::make_shared<Action>(
+        ShootAction(m_player_id, 1, Action::ShootingType::FIRE, true)),
+      Action::ActionType::SHOOT);
+  } else if (t_mouse->isMouseXButton2Pressed()) {
+    m_input_queue.addToQueueIfNotExist(
+      std::make_shared<Action>(
+        ShootAction(m_player_id, 1, Action::ShootingType::COIN, true)),
+      Action::ActionType::SHOOT);
+  } else if (t_event.type == rtype::EventType::MouseWheelMoved) {
+    m_input_queue.addToQueueIfNotExist(
+      std::make_shared<Action>(
+        ShootAction(m_player_id, 1, Action::ShootingType::BOMB, true)),
+      Action::ActionType::SHOOT);
+  }
+}
+
+void InputManager::recordMouseMovement(const rtype::Event &t_event,
+                                       rtype::IMouse *t_mouse,
+                                       rtype::IRenderWindow *t_window) {
+  rtype::Vector2i active_mouse_pos = t_mouse->getMousePosition(t_window);
+  if (active_mouse_pos.x < m_last_mouse_pos.x - 50 ||
+      active_mouse_pos.x > m_last_mouse_pos.x + 50 ||
+      active_mouse_pos.y > m_last_mouse_pos.y + 50 ||
+      active_mouse_pos.y < m_last_mouse_pos.y - 50) {
+    if (active_mouse_pos.x < m_last_mouse_pos.x - 50) {
+      m_input_queue.addToQueueIfNotExist(
+        std::make_shared<Action>(
+          MovementAction(Action::ActionType::LEFT, m_player_id, true)),
+        Action::ActionType::LEFT);
+    } else if (active_mouse_pos.x > m_last_mouse_pos.x + 50) {
+      m_input_queue.addToQueueIfNotExist(
+        std::make_shared<Action>(
+          MovementAction(Action::ActionType::RIGHT, m_player_id, true)),
+        Action::ActionType::RIGHT);
+    } else if (active_mouse_pos.y > m_last_mouse_pos.y + 50) {
+      m_input_queue.addToQueueIfNotExist(
+        std::make_shared<Action>(
+          MovementAction(Action::ActionType::DOWN, m_player_id, true)),
+        Action::ActionType::DOWN);
+    } else if (active_mouse_pos.y < m_last_mouse_pos.y - 50) {
+      m_input_queue.addToQueueIfNotExist(
+        std::make_shared<Action>(
+          MovementAction(Action::ActionType::UP, m_player_id, true)),
+        Action::ActionType::UP);
+    }
+    m_last_mouse_pos = active_mouse_pos;
   }
 }
 

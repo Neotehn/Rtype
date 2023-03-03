@@ -23,6 +23,7 @@ class MusicPlayer {
   void stop();
   void setPaused(bool t_paused);
   void setVolume(float t_volume);
+  float getVolume();
 
  private:
   rtype::IMusic *m_music;
