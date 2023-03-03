@@ -72,7 +72,6 @@ class GameState final : public State {
   rtype::IFont *m_font;
   rtype::IText *m_title;
   void manageLevels();
-
   void initClientLoad();
 };
 
