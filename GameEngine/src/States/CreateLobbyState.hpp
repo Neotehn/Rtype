@@ -58,10 +58,11 @@ class CreateLobbyState final : public State {
   rtype::IText *m_chat_title;
   rtype::IText *m_placeholder;
   rtype::IRectangleShape *m_bg_text;
-  std::vector<rtype::IText *> m_chat_messages;
+  std::vector<rtype::IText *> m_chad_messages;
 
   void initSprites();
   void initText();
+  void initChad();
 };
 
 #endif /* !LOBBYSTATE_HPP_ */

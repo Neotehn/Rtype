@@ -122,6 +122,16 @@ void CreateLobbyState::initText() {
     rtype::Vector2f{20, static_cast<float>(m_window->getSize().y - 40)});
 }
 
+void CreateLobbyState::initChad() {
+  for (int i = 0; i < 10; i++) {
+    rtype::IText *tmp = m_graphic_loader->loadText();
+    tmp->setFont(m_font);
+    tmp->setString("");
+    tmp->setCharacterSize(20);
+    m_chad_messages.push_back(tmp);
+  }
+}
+
 CreateLobbyState::CreateLobbyState(StateMachine &t_machine,
                                    rtype::IRenderWindow *t_window,
                                    MusicPlayer &t_music_player,
@@ -145,6 +155,7 @@ CreateLobbyState::CreateLobbyState(StateMachine &t_machine,
       m_flag(t_flag) {
   initSprites();
   initText();
+  initChad();
   m_music_player.play(MusicID::MENU_THEME);
   // call protocol for creating lobby
 }
@@ -154,6 +165,13 @@ void CreateLobbyState::pause() { std::cout << "MenuState Pause\n"; }
 void CreateLobbyState::resume() { std::cout << "MenuState resume\n"; }
 
 void CreateLobbyState::update() {
+  for (int i = 0; i < m_clientCom->m_chad_msgs.size(); i++) {
+    m_chad_messages[i]->setString(m_clientCom->m_chad_msgs[i]);
+    m_chad_messages[i]->setPosition({20, static_cast<float>(100 + (i * 50))});
+  }
+  for (int i = 9; i > m_clientCom->m_chad_msgs.size(); i--) {
+    m_chad_messages[i]->setString("");
+  }
   for (auto event = rtype::Event{}; m_window->pollEvent(event);) {
     rtype::Vector2i mouse_pos = m_mouse->getMousePosition(m_window);
     rtype::Vector2f mouse_pos_f{static_cast<float>(mouse_pos.x),
@@ -191,13 +209,13 @@ void CreateLobbyState::update() {
           case rtype::EventKey::Enter:
             if (m_chat.getSelected() && m_chat.getTextString() != "_") {
               std::cout << "prep push\n";
-              m_chat_messages.push_back(m_chat.getText());
-              std::cout << m_chat_messages.empty() << std::endl;
-              std::cout << "pushed back\n";
-              m_clientCom->m_chad_msgs.push_back(m_chat.getTextString());
+              ChadAction chad_action =
+                ChadAction(Action::ActionType::CHAD, m_chat.getTextString(),
+                           m_clientCom->m_lobby_code);
+              m_clientCom->sendMessage(chad_action.getCommand());
               m_chat.resetString();
-              std::cout << "reset string textbox\n";
 
+              std::cout << "reset string textbox\n";
             } else {
               m_chat.setSelected(true);
             }
@@ -237,9 +255,9 @@ void CreateLobbyState::draw() {
   // m_window->draw(m_player_four_s);
   m_window->draw(m_bg_text);
   m_window->draw(m_chat_title);
-  if (!m_chat_messages.empty()) {
-    for (rtype::IText *str : m_chat_messages) {
-      m_window->draw(str);
+  if (!m_chad_messages.empty()) {
+    for (int i = 0; i < m_clientCom->m_chad_msgs.size(); i++) {
+      m_window->draw(m_chad_messages[i]);
     }
   }
   if (m_chat.getSelected()) {
