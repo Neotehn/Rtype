@@ -55,14 +55,9 @@ Table of Contents
 
 
 
-
-
-
-
 Werner                       Standard Track                     [Page 1]
 
 RFC9999                     R-Type Protocol                   March 2023
-
 
 
 3. R-Type UDP Protocol
@@ -88,44 +83,70 @@ RFC9999                     R-Type Protocol                   March 2023
         The ActionType enumeration:
 
             enum ActionType {
-                START,  // ACTION_ID;START;PORT_NB OR START;PLAYER_ID
-                UP,     // ACTION_ID;UP;ID;USER_TRIGGERED
-                DOWN,   // ACTION_ID;DOWN;ID;USER_TRIGGERED
-                LEFT,   // ACTION_ID;LEFT;ID;USER_TRIGGERED
-                RIGHT,  // ACTION_ID;RIGHT;ID;USER_TRIGGERED
-                POS,    // ACTION_ID;POS;ID;X;
-                SHOOT,  // ACTION_ID;SHOOT;ID;;USER_TRIGGERED;DMG;TYPE
-                // DAMAGE = amount of damage based on load time
-                // TYPE = 1, 2, ...
-                CREATE,  // ACTION_ID;CREATE;ID;TYPE;TYPE_DATA
-                // TYPE = PLAYER, ENEMY, BULLET
-                // PLAYER_DATA: X;Y;SPRITE_PATH
-                // ENEMY_DATA:  X;Y;VELOCITY
-                // BULLET_DATA: X;Y
-                // EXPLOSION_DATA: X;Y
-                // POWER_UP_DATA: X;Y
-                INCREASE,  // ACTION_ID;INCREASE;ID;TYPE;VALUE
-                // TYPE = LIFE, SPEED, SHOOTING_SPEED
-                COLLISION,  // ACTION_ID;COLLISION;ID1;ID2
-                DAMAGE,     // ACTION_ID;DAMAGE;ID1;DMG
-                DESTROY,    // ACTION_ID;DESTROY;ID1
-                DEAD,       // ACTION_ID;DEAD;ID
-                END,        // ACTION_ID;END; OR END;PORT_NB
+                START, 
+                RESTART,
+                UP,       
+                DOWN,     
+                LEFT,     
+                RIGHT,    
+                POS,    
+                SHOOT, 
+                CREATE, 
+                INCREASE,
+                COLLISION,          
+                DAMAGE,             
+                DESTROY,            
+                DEAD,             
+                END,                
+                JOINLOBBY,          
+                CREATELOBBY,
+                LEAVELOBBY,         
+                JOINSUCCESSFULL,    
+                CREATESUCCESSFULL,
                 ERROR,
             };
 
-        To send a command you need to write the data in the order 
-        mentioned in the ActionType enumeration above (behind the '//').
+        The excact structure of the commands are explained throughout
+        the document.
+
+
+
+
+
 
 
 Werner                       Standard Track                     [Page 2]
 
 RFC9999                     R-Type Protocol                   March 2023
 
+        
 
     3.2. Server connection
 
-        When the server is running it waits for a client to connect. 
+        When the server is running it waits for a client to connect.
+        The client has two options: create a lobby or join a lobby.
+
+        In case the client chooses to create a lobby the client must 
+        send following command: 
+
+            ACTION_ID;CREATELOBBY;ACTION_TYPE_ID;LOBBY_IP;PLAYERNAME;
+
+        Now the server waits for a second connection. When a second 
+        player wants to join a lobby the client must send following
+        command:
+
+            ACTION_ID;JOINLOBBY;ACTION_TYPE_ID;LOBBY_IP;PLAYERNAME;
+
+        If the connection is successful the server sends back following
+        command:
+
+       ACTION_ID;JOINSUCCESSFULL;ACTION_TYPE_ID;PLAYERNAME1;PLAYERNAME2;
+
+       Once both player are connected the players can press the start 
+       button and have to send the start command:
+
+            ACTION_ID;START;PORT_NB;CURRENT_PLAYER_ID;
+
         It listens for a command containing:
 
             ACTION_ID = 0
