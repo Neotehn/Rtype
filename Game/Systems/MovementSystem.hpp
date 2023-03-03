@@ -8,7 +8,6 @@
 #include "../../Client/src/Action/Action.hpp"
 #include "../../Server/Protocol/UdpServer.hpp"
 #include "../../Client/Protocol/UdpClient.hpp"
-#include "../../Client/Protocol/UdpClient.hpp"
 
 class MovementSystem : public ISystem {
  public:

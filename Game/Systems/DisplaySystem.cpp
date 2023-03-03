@@ -2,8 +2,9 @@
 
 DisplaySystem::DisplaySystem(std::shared_ptr<EntityManager> t_em,
                              rtype::IRenderWindow *t_window, std::size_t t_flag,
-                             rtype::IGraphicLoader *t_graphic_loader)
-    : m_gui(GUISystem(t_em, t_graphic_loader, t_window)) {
+                             rtype::IGraphicLoader *t_graphic_loader,
+                             UdpClient *m_clientCom)
+    : m_gui(GUISystem(t_em, t_graphic_loader, t_window, m_clientCom)) {
   m_em = t_em;
   m_window = t_window;
   m_flag = t_flag;

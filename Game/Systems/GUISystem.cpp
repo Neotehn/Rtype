@@ -51,10 +51,11 @@ void GUISystem::initText() {
 
 GUISystem::GUISystem(std::shared_ptr<EntityManager> t_em,
                      rtype::IGraphicLoader *t_graphic_loader,
-                     rtype::IRenderWindow *t_window) {
+                     rtype::IRenderWindow *t_window, UdpClient *t_clientCom) {
   m_em = t_em;
   m_graphic_loader = t_graphic_loader;
   m_window = t_window;
+  m_clientCom = t_clientCom;
   initText();
   SpriteECS sprite =
     SpriteECS("./../Client/sprites/powerup/coin.png", t_graphic_loader);
@@ -81,37 +82,21 @@ void GUISystem::updateData(SystemData &t_data) {
 }
 
 void GUISystem::update() {
-  for (std::shared_ptr<Action> action :
-       m_event_queue.getAllOfType(Action::ActionType::INCREASE)) {
-    Action::IncreaseType type = action->getIncreaseType();
-    Player *player;
-    switch (type) {
-      case Action::IncreaseType::KILLS:
-        player = (*m_em.get()).Get<Player>(action->getId());
-        m_nb_kills->setString(std::to_string(player->kills));
-        m_nb_exp->setString(std::to_string(player->exp));
-        m_nb_exp->setPosition(
-          {static_cast<float>(m_window->getSize().x -
-                              (m_nb_exp->getLocalBounds().width + 10)),
-           static_cast<float>(m_window->getSize().y - 40)});
-        m_exp->setPosition(
-          {static_cast<float>(m_window->getSize().x -
-                              (m_nb_exp->getLocalBounds().width + 20 +
-                               m_exp->getLocalBounds().width)),
-           static_cast<float>(m_window->getSize().y - 40)});
-        break;
-      case Action::IncreaseType::FIRE_SHOT:
-        player = (*m_em.get()).Get<Player>(action->getId());
-        break;
-      case Action::IncreaseType::BOMB_SHOT:
-        player = (*m_em.get()).Get<Player>(action->getId());
-        break;
-      case Action::IncreaseType::COINS:
-        player = (*m_em.get()).Get<Player>(action->getId());
-        m_nb_coins->setString(std::to_string(player->coins));
-        break;
-      default:
-        break;
+  for (EntityID ent : EntityViewer<Player>(*m_em)) {
+    Player *player = (*m_em).Get<Player>(ent);
+    if (player->player_id == m_clientCom->m_id) {
+      m_nb_kills->setString(std::to_string(player->kills));
+      m_nb_exp->setString(std::to_string(player->exp));
+      m_nb_exp->setPosition(
+        {static_cast<float>(m_window->getSize().x -
+                            (m_nb_exp->getLocalBounds().width + 10)),
+         static_cast<float>(m_window->getSize().y - 40)});
+      m_exp->setPosition(
+        {static_cast<float>(m_window->getSize().x -
+                            (m_nb_exp->getLocalBounds().width + 20 +
+                             m_exp->getLocalBounds().width)),
+         static_cast<float>(m_window->getSize().y - 40)});
+      m_nb_coins->setString(std::to_string(player->coins));
     }
   }
   m_window->draw(m_bg);

@@ -14,12 +14,13 @@
 #include "./SoundSystem.hpp"
 #include "../Encapsulation/IFont.hpp"
 #include "../Encapsulation/IText.hpp"
+#include "../../Client/Protocol/UdpClient.hpp"
 
 class GUISystem : public ISystem {
  public:
   GUISystem(std::shared_ptr<EntityManager> t_em,
             rtype::IGraphicLoader *t_graphic_loader,
-            rtype::IRenderWindow *t_window);
+            rtype::IRenderWindow *t_window, UdpClient *t_clientCom);
   ~GUISystem();
   void update();
   void updateData(SystemData &t_data);
@@ -36,6 +37,7 @@ class GUISystem : public ISystem {
   rtype::IText *m_exp;
   rtype::IText *m_nb_exp;
   rtype::IRenderWindow *m_window;
+  UdpClient *m_clientCom;
 
   void initText();
 };
