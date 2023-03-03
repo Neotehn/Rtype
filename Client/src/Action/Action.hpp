@@ -42,6 +42,7 @@ class Action : public IAction {
     LEAVELOBBY,         // ACTION_ID;LOBBY_IP;PLAYERNAME
     JOINSUCCESSFULL,    // ACTION_ID;
     CREATESUCCESSFULL,  // ACTION_ID;
+    CHAD,               // ACTION_ID;CHAT_MSG
     ERROR,
   };
   enum ShootingType { NORMAL, FIRE, BOMB, COIN };
@@ -111,6 +112,9 @@ class Action : public IAction {
   void setLobbyPlayerNames(std::vector<std::string> t_lobby_player_names);
   std::vector<std::string> getLobbyPlayerNames() const;
 
+  std::string getChadMsg() const;
+  void setChadMsg(std::string t_chad_msg);
+
  protected:
   int m_action_id;
   ActionType m_type;
@@ -132,6 +136,7 @@ class Action : public IAction {
   std::string m_player_name = "";
   std::string m_lobby_ip = "";
   std::vector<std::string> m_lobby_player_names;
+  std::string m_chad_msg = "";
   int m_lobby_id = 0;
 };
 

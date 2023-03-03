@@ -47,6 +47,7 @@ class UdpServer : public IProtocol {
   int getPlayerIdCount() const;
   void setPlayerIdCount(int t_new_player_id_count);
   bool checkAndLobbyHandling(std::shared_ptr<Action> t_action);
+  bool chadHandling(std::shared_ptr<Action> t_action);
 
   float getTimeDiff();
   void resetTime();
@@ -56,6 +57,7 @@ class UdpServer : public IProtocol {
   std::vector<int> m_client_ids;
 
  private:
+  std::vector<bool> m_client_connected;
   std::vector<int> m_client_ports;
   std::vector<udp::endpoint> m_endpoints;
   std::vector<Lobby> m_lobbys;

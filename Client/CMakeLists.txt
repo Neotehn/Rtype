@@ -33,6 +33,7 @@ set(CLIENT_HPP ../Game/ECS/ComponentPool.hpp
         src/Action/JoinLobbyAction.hpp
         src/Action/LeaveLobbyAction.hpp
         src/Action/JoinSuccessfullAction.hpp
+        src/Action/ChadAction.hpp
         ../Server/Protocol/UdpServer.hpp
         ../Client/Protocol/UdpClient.hpp
         ../Game/CreateEntities/Init.hpp
@@ -105,6 +106,7 @@ set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         src/Action/JoinLobbyAction.cpp
         src/Action/LeaveLobbyAction.cpp
         src/Action/JoinSuccessfullAction.cpp
+        src/Action/ChadAction.cpp
         ../Game/Timer.cpp
         ../Server/Protocol/UdpServer.cpp
         ../Client/Protocol/UdpClient.cpp
