@@ -32,7 +32,7 @@ void Textbox::inputLogic(int t_char_typed) {
       t_char_typed != ESCAPE_KEY) {
     m_text << static_cast<char>(t_char_typed);
   } else if (t_char_typed == DELETE_KEY) {
-    if (m_text.str().length() + 1 > 0) { deleteLastChar(); }
+    if (m_text.str().length() > 0) { deleteLastChar(); }
   }
   m_textbox->setString(m_text.str());
 }
