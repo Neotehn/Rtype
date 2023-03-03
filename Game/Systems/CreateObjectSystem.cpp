@@ -3,13 +3,11 @@
 CreateObjectSystem::CreateObjectSystem(
   std::shared_ptr<EntityManager> t_em,
   std::vector<SoundSystem::SoundType> &t_sounds,
-  rtype::IGraphicLoader *t_graphic_loader,
-  const std::string& t_path_to_sprite)
+  rtype::IGraphicLoader *t_graphic_loader, const std::string &t_path_to_sprite)
     : m_play_sounds(t_sounds) {
   m_em = t_em;
   m_graphic_loader = t_graphic_loader;
   m_path_to_sprite = t_path_to_sprite;
-
 }
 
 void CreateObjectSystem::updateData(SystemData &t_data) {
@@ -26,8 +24,8 @@ void CreateObjectSystem::update() {
     int player_id = action->getClientId();
     switch (type) {
       case Action::ObjectType::PLAYER:
-        initPlayerClient(id, m_path_to_sprite, pos, m_em,
-                         m_graphic_loader, player_id);
+        initPlayerClient(id, m_path_to_sprite, pos, m_em, m_graphic_loader,
+                         player_id);
         break;
       case Action::ObjectType::BULLET:
         m_play_sounds.push_back(SoundSystem::SoundType::shoot);

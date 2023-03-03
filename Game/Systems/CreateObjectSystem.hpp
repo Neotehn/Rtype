@@ -14,7 +14,8 @@ class CreateObjectSystem : public ISystem {
  public:
   CreateObjectSystem(std::shared_ptr<EntityManager> t_em,
                      std::vector<SoundSystem::SoundType> &t_sounds,
-                     rtype::IGraphicLoader *t_graphic_loader, const std::string& t_path_to_sprite);
+                     rtype::IGraphicLoader *t_graphic_loader,
+                     const std::string &t_path_to_sprite);
   ~CreateObjectSystem() = default;
 
   void update() override;
