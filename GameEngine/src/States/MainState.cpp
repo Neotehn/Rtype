@@ -62,6 +62,7 @@ MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
         rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 65),
                         static_cast<float>(m_window->getSize().y / 2)},
         rtype::Vector2f{130, 50}, t_graphic_loader, false)),
+
       m_flag(t_flag) {
   initSprites();
   initText();
@@ -137,15 +138,6 @@ void MainState::update() {
     switch (event.type) {
       case rtype::EventType::Closed:
         m_state_machine.quit();
-        break;
-      case rtype::EventType::KeyPressed:
-        switch (event.key) {
-          case rtype::EventKey::Escape:
-            m_state_machine.quit();
-            break;
-          default:
-            break;
-        }
         break;
       default:
         break;
