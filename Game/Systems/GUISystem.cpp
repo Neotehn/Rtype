@@ -8,6 +8,10 @@
 #include "GUISystem.hpp"
 
 void GUISystem::initText() {
+  m_font = m_graphic_loader->loadFont();
+  if (!m_font->loadFromFile("./assets/font/nasalization-rg.ttf")) {
+    throw std::runtime_error("Unable to load font.");
+  }
   m_nb_coins = m_graphic_loader->loadText();
   m_nb_coins->setFont(m_font);
   m_nb_coins->setString("0");
@@ -51,14 +55,9 @@ GUISystem::GUISystem(std::shared_ptr<EntityManager> t_em,
   m_em = t_em;
   m_graphic_loader = t_graphic_loader;
   m_window = t_window;
-  m_font = m_graphic_loader->loadFont();
-  if (!m_font->loadFromFile("./assets/font/nasalization-rg.ttf")) {
-    throw std::runtime_error("Unable to load font.");
-  }
-
+  initText();
   SpriteECS sprite =
     SpriteECS("./../Client/sprites/powerup/coin.png", t_graphic_loader);
-  initText();
   m_coin = m_graphic_loader->loadRectangleShape();
   m_coin->setSize({30, 30});
   m_coin->setPosition({10, static_cast<float>(m_window->getSize().y - 40)});
@@ -86,12 +85,9 @@ void GUISystem::update() {
        m_event_queue.getAllOfType(Action::ActionType::INCREASE)) {
     Action::IncreaseType type = action->getIncreaseType();
     Player *player;
-
     switch (type) {
       case Action::IncreaseType::KILLS:
         player = (*m_em.get()).Get<Player>(action->getId());
-        // player->kills += 1;
-        // player->exp += action->getIncreaseValue();
         m_nb_kills->setString(std::to_string(player->kills));
         m_nb_exp->setString(std::to_string(player->exp));
         m_nb_exp->setPosition(
@@ -106,15 +102,12 @@ void GUISystem::update() {
         break;
       case Action::IncreaseType::FIRE_SHOT:
         player = (*m_em.get()).Get<Player>(action->getId());
-        // player->fire_shot += action->getIncreaseValue();
         break;
       case Action::IncreaseType::BOMB_SHOT:
         player = (*m_em.get()).Get<Player>(action->getId());
-        // player->bomb_shot += action->getIncreaseValue();
         break;
       case Action::IncreaseType::COINS:
         player = (*m_em.get()).Get<Player>(action->getId());
-        // player->coins += action->getIncreaseValue();
         m_nb_coins->setString(std::to_string(player->coins));
         break;
       default:
