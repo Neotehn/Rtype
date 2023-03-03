@@ -31,6 +31,8 @@ class UdpClient : public IProtocol {
   void setClientInputManager(InputManager *t_client_input_manager);
   bool checkAndHandleLobbyJoining(std::shared_ptr<Action> t_action);
   enum ConnectState { none, connected };
+  std::string getPlayerName();
+  void setPlayerName(std::string t_new_name);
   ConnectState m_flag;
   int m_id;
   std::string m_lobby_code;

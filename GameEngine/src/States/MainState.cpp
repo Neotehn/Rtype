@@ -33,11 +33,10 @@ void MainState::initText() {
 MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
                      MusicPlayer &t_music_player, std::size_t t_flag,
                      rtype::IGraphicLoader *t_graphic_loader, int *t_level,
-                     const std::string &t_path_to_sprite,
-                     const std::string &t_player_name, const bool t_replace,
+                     const std::string &t_path_to_sprite, const bool t_replace,
                      std::string t_ip, UdpClient *t_clientCom)
     : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level,
-            t_path_to_sprite, t_player_name, t_replace, t_ip, t_clientCom),
+            t_path_to_sprite, t_replace, t_ip, t_clientCom),
       m_start_btn(Button(
         "./assets/startBtn.png",
         rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 65),
@@ -94,19 +93,18 @@ void MainState::update() {
     if (m_mouse->isLeftMouseButtonPressed()) {
       if (m_start_btn.is_pressed(mouse_pos_f) && m_start_pressed == false) {
         std::cout << "startbtn pressed" << std::endl;
-        std::cout << m_player_name << " stared the game" << std::endl;
         std::cout << m_title->getString() << std::endl;
         m_music_player.stop();
         m_next = StateMachine::build<GameState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, m_path_to_sprite, m_player_name, true, m_ip, m_clientCom);
+          m_level, m_path_to_sprite, true, m_ip, m_clientCom);
         m_start_pressed = true;
       }
       if (m_settings_btn.is_pressed(mouse_pos_f)) {
         std::cout << "settingsbtn pressed" << std::endl;
         m_next = StateMachine::build<SettingsState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, m_path_to_sprite, m_player_name, true, "", m_clientCom);
+          m_level, m_path_to_sprite, true, "", m_clientCom);
       }
       if (m_exit_btn.is_pressed(mouse_pos_f)) {
         std::cout << "exitbtn pressed" << std::endl;
@@ -118,21 +116,22 @@ void MainState::update() {
       }
       if (m_create_btn.is_pressed(mouse_pos_f)) {
         std::string lobby_code = createLobbyCode();
-        CreateLobbyAction create_lobby_action = CreateLobbyAction(
-          Action::ActionType::CREATELOBBY, lobby_code, m_player_name);
+        CreateLobbyAction create_lobby_action =
+          CreateLobbyAction(Action::ActionType::CREATELOBBY, lobby_code,
+                            m_clientCom->getPlayerName());
         m_clientCom->sendMessage(create_lobby_action.getCommand());
         m_clientCom->m_lobby_code = lobby_code;
-        m_clientCom->m_lobby_names.push_back(m_player_name);
+        m_clientCom->m_lobby_names.push_back(m_clientCom->getPlayerName());
         std::cout << "create lobby" << std::endl;
         m_next = StateMachine::build<CreateLobbyState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, m_path_to_sprite, m_player_name, true, "", m_clientCom);
+          m_level, m_path_to_sprite, true, "", m_clientCom);
       }
       if (m_join_btn.is_pressed(mouse_pos_f)) {
         std::cout << "join lobby" << std::endl;
         m_next = StateMachine::build<JoinLobbyState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, m_path_to_sprite, m_player_name, true, "", m_clientCom);
+          m_level, m_path_to_sprite, true, "", m_clientCom);
       }
     }
     switch (event.type) {
