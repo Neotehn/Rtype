@@ -1,9 +1,12 @@
 #include "DisplaySystem.hpp"
 
 DisplaySystem::DisplaySystem(std::shared_ptr<EntityManager> t_em,
-                             rtype::IRenderWindow *t_window) {
+                             rtype::IRenderWindow *t_window, std::size_t t_flag,
+                             rtype::IGraphicLoader *t_graphic_loader)
+    : m_gui(GUISystem(t_em, t_graphic_loader, t_window)) {
   m_em = t_em;
   m_window = t_window;
+  m_flag = t_flag;
 }
 
 DisplaySystem::~DisplaySystem() {}
@@ -31,8 +34,10 @@ void DisplaySystem::update() {
     SpinningItem *item = (*m_em.get()).Get<SpinningItem>(ent);
     m_window->draw(item->body);
   }
-
+  if (m_flag == 1) { m_gui.update(); }
   m_window->display();
 }
 
-void DisplaySystem::updateData(SystemData &t_data) {}
+void DisplaySystem::updateData(SystemData &t_data) {
+  if (m_flag == 1) { m_gui.updateData(t_data); }
+}

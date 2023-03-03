@@ -37,6 +37,7 @@ set(CLIENT_HPP ../Game/ECS/ComponentPool.hpp
         src/Action/Action.hpp
         ../Game/Systems/CreateObjectSystem.hpp
         ../Game/Systems/PowerUpSystem.hpp
+        ../Game/Systems/GUISystem.hpp
         ../Game/Systems/SoundSystem.hpp
         ../Game/Encapsulation/Event.hpp
         ../Game/Encapsulation/GraphicDataTypes.hpp
@@ -51,6 +52,8 @@ set(CLIENT_HPP ../Game/ECS/ComponentPool.hpp
         ../Game/Encapsulation/SFML/RectangleShape.hpp
         ../Game/Encapsulation/SFML/RenderWindow.hpp
         ../Game/Encapsulation/SFML/Sounds.hpp
+        ../Game/Encapsulation/SFML/Font.hpp
+        ../Game/Encapsulation/SFML/Text.hpp
         ../Game/Encapsulation/SFML/Sprite.hpp
         ../Game/Encapsulation/SFML/Texture.hpp
         ../GameEngine/src/Button.hpp
@@ -99,12 +102,15 @@ set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         src/Action/Action.cpp
         ../Game/Systems/CreateObjectSystem.cpp
         ../Game/Systems/PowerUpSystem.cpp
+        ../Game/Systems/GUISystem.cpp
         ../Game/Systems/SoundSystem.cpp
         ../Game/Encapsulation/SFML/Music.cpp
         ../Game/Encapsulation/SFML/RenderWindow.cpp
         ../Game/Encapsulation/SFML/Sounds.cpp
         ../Game/Encapsulation/SFML/Sprite.cpp
         ../Game/Encapsulation/SFML/Texture.cpp
+        ../Game/Encapsulation/SFML/Text.cpp
+        ../Game/Encapsulation/SFML/Font.cpp
         ../Game/Encapsulation/SFML/RectangleShape.cpp
         ../GameEngine/src/Button.cpp
         ../GameEngine/src/Core.cpp
@@ -126,6 +132,7 @@ FetchContent_Declare(SFML
         GIT_REPOSITORY https://github.com/SFML/SFML.git
         GIT_TAG 2.6.x)
 FetchContent_MakeAvailable(SFML)
+find_package(Boost 1.69.0 COMPONENTS chrono system thread REQUIRED)
 
 if (NOT Boost_FOUND)
     message("Boost not found--> downloading and building")
