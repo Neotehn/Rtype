@@ -26,6 +26,7 @@
 #include "../Client/src/Action/JoinLobbyAction.hpp"
 #include "../Client/src/Action/CreateLobbyAction.hpp"
 #include "../Client/src/Action/JoinSuccessfullAction.hpp"
+#include "../Client/src/Action/ChadAction.hpp"
 
 struct Lobby {
   std::string m_lobby_code;
