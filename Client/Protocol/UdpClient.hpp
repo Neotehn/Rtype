@@ -46,6 +46,7 @@ class UdpClient : public IProtocol {
   InputManager *m_client_input_manager = nullptr;
   boost::thread m_thread;
   std::size_t m_port_number;
+  std::string m_player_name;
 
   void setPlayerId(std::shared_ptr<Action> t_action);
 };

@@ -28,15 +28,17 @@ GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
                      MusicPlayer &t_music_player, std::size_t t_flag,
                      rtype::IGraphicLoader *t_graphic_loader, int *t_level,
                      const std::string& t_path_to_sprite,
+                     const std::string& t_player_name,
                      const bool t_replace, std::string t_ip,
                      UdpClient *t_clientCom)
     : State{t_machine, t_window,  t_music_player, t_graphic_loader,
-            t_level, t_path_to_sprite, t_replace, t_ip, t_clientCom},
+            t_level, t_path_to_sprite, t_player_name, t_replace, t_ip, t_clientCom},
       m_client_input_manager(t_level), m_input_manager(t_level) {
   m_is_running = true;
   m_graphic_loader = t_graphic_loader;
   m_music = m_graphic_loader->loadMusic();
   m_em = std::make_shared<EntityManager>();
+  m_player_name = t_player_name;
   if (t_path_to_sprite.empty())
     m_path_to_sprite = "../Client/sprites/starship.png";
   else

@@ -93,10 +93,11 @@ JoinLobbyState::JoinLobbyState(StateMachine &t_machine,
                                rtype::IGraphicLoader *t_graphic_loader,
                                int *t_level,
                                const std::string& t_path_to_sprite,
+                               const std::string& t_player_name,
                                const bool t_replace,
                                std::string t_ip, UdpClient *t_clientCom)
     : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level,
-            t_path_to_sprite,
+            t_path_to_sprite, t_player_name,
             t_replace, t_ip, t_clientCom),
       m_home_btn(Button(
         "./assets/icons/white/home.png",
@@ -118,7 +119,6 @@ JoinLobbyState::JoinLobbyState(StateMachine &t_machine,
   initSprites();
   initText();
   m_is_pressed = false;
-  m_path_to_sprite = t_path_to_sprite;
   // call protocol to join lobby
 }
 
@@ -142,7 +142,7 @@ void JoinLobbyState::update() {
         m_clientCom->m_lobby_code = "";
         m_next = StateMachine::build<MainState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, m_path_to_sprite, true, m_ip, m_clientCom);
+          m_level, m_path_to_sprite, m_player_name, true, m_ip, m_clientCom);
       }
       if (m_join_btn.is_pressed(mouse_pos_f) &&
           !m_is_pressed) {  // start game if pressed
@@ -150,7 +150,7 @@ void JoinLobbyState::update() {
         m_clientCom->m_lobby_code = m_textbox.getTextString();
         std::cout << m_clientCom->m_lobby_code << std::endl;
         JoinLobbyAction join_lobby_action = JoinLobbyAction(
-          Action::ActionType::JOINLOBBY, m_clientCom->m_lobby_code, "Nutzer");
+          Action::ActionType::JOINLOBBY, m_clientCom->m_lobby_code, m_player_name);
         m_clientCom->sendMessage(join_lobby_action.getCommand());
         m_is_pressed = true;
       }
@@ -158,7 +158,7 @@ void JoinLobbyState::update() {
       if (m_clientCom->m_lobby_successfull_connected) {
         m_next = StateMachine::build<CreateLobbyState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, m_path_to_sprite, true, m_ip, m_clientCom);
+          m_level, m_path_to_sprite, m_player_name, true, m_ip, m_clientCom);
       }
     }
     switch (event.type) {

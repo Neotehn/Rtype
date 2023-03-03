@@ -18,6 +18,7 @@ class State {
   State(StateMachine &t_machine, rtype::IRenderWindow *t_window,
         MusicPlayer &t_music_player, rtype::IGraphicLoader *t_graphic_loader,
         int *t_level, const std::string& t_path_to_sprite,
+        const std::string& t_player_name,
         bool t_replace = true, std::string t_ip = "",
         UdpClient *t_clientCom = nullptr
         );
@@ -48,6 +49,7 @@ class State {
   int *m_level;
   std::string m_ip;
   std::string m_path_to_sprite;
+  std::string m_player_name;
 };
 
 #endif  // !STATE_HPP_

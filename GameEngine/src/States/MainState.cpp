@@ -35,10 +35,11 @@ MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
                      std::size_t t_flag,
                      rtype::IGraphicLoader *t_graphic_loader, int *t_level,
                      const std::string& t_path_to_sprite,
+                     const std::string& t_player_name,
                      const bool t_replace, std::string t_ip,
                      UdpClient *t_clientCom)
     : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level,
-            t_path_to_sprite,
+            t_path_to_sprite, t_player_name,
             t_replace, t_ip, t_clientCom),
       m_start_btn(Button(
         "./assets/startBtn.png",
@@ -70,7 +71,6 @@ MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
   initText();
   m_music_player.play(MusicID::MENU_THEME);
   m_start_pressed = false;
-  m_path_to_sprite = t_path_to_sprite;
   m_clientCom->m_lobby_names.clear();
 }
 
@@ -102,14 +102,14 @@ void MainState::update() {
         m_music_player.stop();
         m_next = StateMachine::build<GameState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, m_path_to_sprite, true, m_ip, m_clientCom);
+          m_level, m_path_to_sprite, m_player_name, true, m_ip, m_clientCom);
         m_start_pressed = true;
       }
       if (m_settings_btn.is_pressed(mouse_pos_f)) {
         std::cout << "settingsbtn pressed" << std::endl;
         m_next = StateMachine::build<SettingsState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, m_path_to_sprite, true, "", m_clientCom);
+          m_level, m_path_to_sprite, m_player_name, true, "", m_clientCom);
       }
       if (m_exit_btn.is_pressed(mouse_pos_f)) {
         std::cout << "exitbtn pressed" << std::endl;
@@ -122,20 +122,20 @@ void MainState::update() {
       if (m_create_btn.is_pressed(mouse_pos_f)) {
         std::string lobby_code = createLobbyCode();
         CreateLobbyAction create_lobby_action = CreateLobbyAction(
-          Action::ActionType::CREATELOBBY, lobby_code, "Nutzer");
+          Action::ActionType::CREATELOBBY, lobby_code, m_player_name);
         m_clientCom->sendMessage(create_lobby_action.getCommand());
         m_clientCom->m_lobby_code = lobby_code;
-        m_clientCom->m_lobby_names.push_back("Nutzer");
+        m_clientCom->m_lobby_names.push_back(m_player_name);
         std::cout << "create lobby" << std::endl;
         m_next = StateMachine::build<CreateLobbyState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, m_path_to_sprite, true, "", m_clientCom);
+          m_level, m_path_to_sprite, m_player_name, true, "", m_clientCom);
       }
       if (m_join_btn.is_pressed(mouse_pos_f)) {
         std::cout << "join lobby" << std::endl;
         m_next = StateMachine::build<JoinLobbyState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, m_path_to_sprite, true, "", m_clientCom);
+          m_level, m_path_to_sprite, m_player_name, true, "", m_clientCom);
       }
     }
     switch (event.type) {

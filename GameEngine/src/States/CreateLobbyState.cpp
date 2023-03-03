@@ -104,9 +104,11 @@ CreateLobbyState::CreateLobbyState(StateMachine &t_machine,
                                    rtype::IGraphicLoader *t_graphic_loader,
                                    int *t_level,
                                    const std::string& t_path_to_sprite,
+                                   const std::string& t_player_name,
                                    const bool t_replace,
                                    std::string t_ip, UdpClient *t_clientCom)
-    : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level, t_path_to_sprite,
+    : State(t_machine, t_window, t_music_player, t_graphic_loader,
+            t_level, t_path_to_sprite, t_player_name,
             t_replace, t_ip, t_clientCom),
       m_home_btn(Button(
         "./assets/icons/white/home.png",
@@ -142,20 +144,20 @@ void CreateLobbyState::update() {
       if (m_home_btn.is_pressed(mouse_pos_f)) {
         std::cout << "homebtn pressed" << std::endl;
         LeaveLobbyAction create_lobby_action = LeaveLobbyAction(
-          Action::ActionType::LEAVELOBBY, m_clientCom->m_lobby_code, "Nutzer");
+          Action::ActionType::LEAVELOBBY, m_clientCom->m_lobby_code, m_player_name);
         m_clientCom->sendMessage(create_lobby_action.getCommand());
         m_clientCom->m_lobby_code = "";
         m_clientCom->m_lobby_successfull_connected = false;
         m_next = StateMachine::build<MainState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, m_path_to_sprite, true, "", m_clientCom);
+          m_level, m_path_to_sprite, m_player_name, true, "", m_clientCom);
       }
       if (m_start_btn.is_pressed(mouse_pos_f) &&
           m_clientCom->m_lobby_names.size() == 2) {  // start game if pressed
         std::cout << "startbtn pressed" << std::endl;
         m_next = StateMachine::build<GameState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, m_path_to_sprite, true, "", m_clientCom);
+          m_level, m_path_to_sprite, m_player_name, true, "", m_clientCom);
       }  // currently lobby is just set between main and game
     }
     switch (event.type) {
@@ -168,6 +170,7 @@ void CreateLobbyState::update() {
             m_next = StateMachine::build<MainState>(
               m_state_machine, m_window, m_music_player, m_flag,
               m_graphic_loader, m_level, m_path_to_sprite,
+              m_player_name,
               true, "", m_clientCom);
             break;
           default:

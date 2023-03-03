@@ -16,11 +16,11 @@ Core::Core(std::size_t t_flag, std::string t_ip, const std::string& t_path ,int 
     m_clientCom = new UdpClient(m_io_service, t_ip, "55555", m_port_number);
     m_state_machine.run(StateMachine::build<IntroState>(
       m_state_machine, m_window, m_music_player, t_flag, m_graphic_loader,
-      t_level, t_path, true, t_ip, m_clientCom));
+      t_level, t_path, "", true, t_ip, m_clientCom));
   } else
     m_state_machine.run(StateMachine::build<GameState>(
       m_state_machine, m_window, m_music_player, t_flag, m_graphic_loader,
-      t_level, "", true, t_ip));
+      t_level, "", "" , true, t_ip));
 
 }
 
