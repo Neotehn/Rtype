@@ -37,6 +37,7 @@ class Textbox {
   int getLength();
   std::string getTextString() const;
   bool getSelected();
+  void resetString();
 
  private:
   rtype::IFont *m_font;

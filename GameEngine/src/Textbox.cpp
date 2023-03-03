@@ -104,3 +104,9 @@ int Textbox::getLength() { return m_text.str().length(); }
 std::string Textbox::getTextString() const { return m_text.str().c_str(); }
 
 bool Textbox::getSelected() { return m_is_selected; }
+
+void Textbox::resetString() {
+  m_textbox->setString("_");
+  m_text.str("");
+  m_text.clear();
+}

@@ -56,6 +56,14 @@ void CreateLobbyState::initSprites() {
   m_player_four_s->setPosition(
     rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 + 50),
                     static_cast<float>(m_window->getSize().y / 2 + 50)});
+  m_bg_text = m_graphic_loader->loadRectangleShape();
+  SpriteECS sprite_bg_text =
+    SpriteECS("./../Client/assets/bg_textbox.png", m_graphic_loader);
+  m_bg_text->setTexture(sprite_bg_text.getTexture());
+  m_bg_text->setTextureRect({0, 0, 1018, 1938});
+  m_bg_text->setRotation(180);
+  m_bg_text->setSize({size_x / 2 + 100, 100});
+  m_bg_text->setPosition({size_x / 2 + 105, size_y - 5});
 }
 
 void CreateLobbyState::initText() {
@@ -95,6 +103,23 @@ void CreateLobbyState::initText() {
   m_lobby_code_text->setColor(rtype::Black);
   m_lobby_code_text->setPosition(
     {(size_x / 2) - (m_lobby_code_text->getLocalBounds().width / 2), 500});
+  m_chat_title = m_graphic_loader->loadText();
+  m_chat_title->setFont(m_font);
+  m_chat_title->setString("CHAT:");
+  m_chat_title->setCharacterSize(35);
+  // m_chat_title->setColor({18, 107, 165, 255});
+  m_chat_title->setPosition(
+    {20, static_cast<float>(m_window->getSize().y - 100)});
+  m_placeholder = m_graphic_loader->loadText();
+  m_placeholder->setFont(m_font);
+  m_placeholder->setString("PRESS ENTER FOR CHAT");
+  m_placeholder->setCharacterSize(35);
+  // m_placeholder->setColor({18, 107, 165, 255});
+  m_placeholder->setPosition(
+    {20, static_cast<float>(m_window->getSize().y - 55)});
+  m_chat.setLimit(true, 20);
+  m_chat.setPosition(
+    rtype::Vector2f{20, static_cast<float>(m_window->getSize().y - 55)});
 }
 
 CreateLobbyState::CreateLobbyState(StateMachine &t_machine,
@@ -106,16 +131,17 @@ CreateLobbyState::CreateLobbyState(StateMachine &t_machine,
                                    std::string t_ip, UdpClient *t_clientCom)
     : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level,
             t_replace, t_ip, t_clientCom),
-      m_home_btn(Button(
-        "./assets/icons/white/home.png",
-        rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 32),
-                        static_cast<float>(m_window->getSize().y - 100)},
-        rtype::Vector2f{64, 64}, t_graphic_loader, true)),
+      m_home_btn(
+        Button("./assets/icons/white/home.png",
+               rtype::Vector2f{static_cast<float>(m_window->getSize().x - 100),
+                               static_cast<float>(m_window->getSize().y - 100)},
+               rtype::Vector2f{64, 64}, t_graphic_loader, true)),
       m_start_btn(Button(
         "./assets/startBtn.png",
         rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 65),
                         static_cast<float>(m_window->getSize().y - 230)},
         rtype::Vector2f{130, 50}, t_graphic_loader, false)),
+      m_chat(Textbox(35, rtype::White, false, t_graphic_loader)),
       m_flag(t_flag) {
   initSprites();
   initText();
@@ -162,14 +188,39 @@ void CreateLobbyState::update() {
         break;
       case rtype::EventType::KeyPressed:
         switch (event.key) {
-          case rtype::EventKey::Escape:
-            m_next = StateMachine::build<MainState>(
-              m_state_machine, m_window, m_music_player, m_flag,
-              m_graphic_loader, m_level, true, "", m_clientCom);
+          case rtype::EventKey::Enter:
+            if (m_chat.getSelected() && m_chat.getTextString() != "_") {
+              std::cout << "prep push\n";
+              m_chat_messages.push_back(m_chat.getText());
+              std::cout << m_chat_messages.empty() << std::endl;
+              std::cout << "pushed back\n";
+              m_chat.resetString();
+              std::cout << "reset string textbox\n";
+              for (rtype::IText *str : m_chat_messages) {
+                std::cout << "set pos chat title before\n";
+                float tmp_y_title = m_chat_title->getPosition().y - 55;
+                m_chat_title->setPosition({20, tmp_y_title});
+                std::cout << "set pos chat title after\n";
+                float tmp_y_str = str->getPosition().y - 55;
+                str->setPosition({20, tmp_y_str});
+                std::cout << "resize bg chat\n";
+                float tmp_y_bg = m_bg_text->getSize().y + 100;
+                m_bg_text->setSize(
+                  {static_cast<float>(m_window->getSize().x / 2 + 100),
+                   tmp_y_bg});
+              }
+            } else {
+              m_chat.setSelected(true);
+            }
             break;
+          case rtype::EventKey::Escape:
+            m_chat.setSelected(false);
           default:
             break;
         }
+        break;
+      case rtype::EventType::TextEntered:
+        m_chat.typedOn(event);
         break;
       default:
         break;
@@ -195,6 +246,18 @@ void CreateLobbyState::draw() {
   }
   // m_window->draw(m_player_three_s);
   // m_window->draw(m_player_four_s);
+  m_window->draw(m_bg_text);
+  m_window->draw(m_chat_title);
+  if (!m_chat_messages.empty()) {
+    for (rtype::IText *str : m_chat_messages) {
+      m_window->draw(str);
+    }
+  }
+  if (m_chat.getSelected()) {
+    m_window->draw(m_chat.getText());
+  } else {
+    m_window->draw(m_placeholder);
+  }
   m_window->draw(m_home_btn.getSprite());
   if (m_clientCom->m_lobby_names.size() == 2)
     m_window->draw(m_start_btn.getSprite());

@@ -15,7 +15,6 @@
 #include "../State.hpp"
 #include "../StateMachine.hpp"
 #include "./SettingsState.hpp"
-#include "../Textbox.hpp"
 #include "../../../Game/GameState.hpp"
 
 class MainState final : public State {
@@ -42,12 +41,8 @@ class MainState final : public State {
   Button m_create_btn;
   rtype::IFont *m_font;
   rtype::IText *m_title;
-  rtype::IText *m_chat_title;
-  rtype::IText *m_placeholder;
-  rtype::IRectangleShape *m_bg_text;
   std::size_t m_flag;
   bool m_start_pressed;
-  Textbox m_chat;
 
   void initSprites();
   void initText();
