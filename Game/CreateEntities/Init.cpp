@@ -16,7 +16,7 @@ bool loadLevel(int *t_level, std::shared_ptr<EntityManager> t_em,
   for (EntityID ent : EntityViewer<Bullet>(*t_em)) {
     t_em->destroyEntity(ent);
   }
-  for (EntityID ent : EntityViewer<AnimationObj>(*t_em)) {
+  for (EntityID ent : EntityViewer<AnimationObj>(*t_em.get())) {
     t_em->destroyEntity(ent);
   }
   for (EntityID ent : EntityViewer<Enemy>(*t_em)) {

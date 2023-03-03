@@ -39,7 +39,8 @@ class GameState final : public State {
   GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
             MusicPlayer &t_music_player, std::size_t t_flag,
             rtype::IGraphicLoader *t_graphic_loader, int *t_level,
-            bool t_replace = true);
+            bool t_replace = true, std::string t_ip = "",
+            UdpClient *t_clientCom = nullptr);
   ~GameState();
 
   void pause() override;
@@ -55,7 +56,6 @@ class GameState final : public State {
   InputManager m_input_manager;
   InputManager m_client_input_manager;
   CommunicationFlag m_flag;
-  UdpClient *m_clientCom = nullptr;
   UdpServer *m_serverCom = nullptr;
   std::vector<std::shared_ptr<ISystem>> m_systems;
   bool m_is_running;
@@ -66,7 +66,13 @@ class GameState final : public State {
   bool m_will_reload = false;
 
   std::vector<std::shared_ptr<ISystem>> initSystems();
+
+  rtype::ITexture *m_bg_t;
+  rtype::ISprite *m_bg_s;
+  rtype::IFont *m_font;
+  rtype::IText *m_title;
   void manageLevels();
+  void initClientLoad();
 };
 
 #endif /* !GAMESTATE_HPP_ */
