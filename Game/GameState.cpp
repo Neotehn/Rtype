@@ -139,7 +139,9 @@ void GameState::update() {
         m_music->setVolume(m_music_player.getVolume());
       }
     }
-    SystemData data = {.event_queue = m_input_manager.getInputs()};
+    SystemData data = {.event_queue = m_input_manager.getInputs(),
+                       m_music_player.getVolume()};
+    std::cout << "update data\n";
     if (m_flag == CommunicationFlag::client && m_clientCom->m_flag) {
       EventQueue eq = m_client_input_manager.getInputsWithoutPop();
       for (std::shared_ptr<Action> action : eq.getEventQueue()) {

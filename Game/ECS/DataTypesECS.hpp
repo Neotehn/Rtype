@@ -24,6 +24,7 @@ struct AnimationRect {
 
 struct SystemData {
   EventQueue event_queue;
+  float volume;
 };
 
 struct Pos {

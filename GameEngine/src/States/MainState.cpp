@@ -67,7 +67,7 @@ void MainState::update() {
       m_exit_btn.is_hovered(mouse_pos_f);
     }
     if (m_mouse->isLeftMouseButtonPressed()) {
-      if (m_start_btn.is_pressed(mouse_pos_f)) {
+      if (m_start_btn.is_pressed(mouse_pos_f) && m_start_pressed == false) {
         std::cout << "startbtn pressed" << std::endl;
         m_music_player.stop();
         m_next = StateMachine::build<GameState>(
