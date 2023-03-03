@@ -153,11 +153,10 @@ std::shared_ptr<Action> IProtocol::getAction(std::string command) {
     }
     return std::make_shared<Action>(
       JoinSuccessfullAction(id, names, action_id));
-  } /*else if (action_type == "CREATESUCCESSFULL") {
+  } else if (action_type == "CHAD") {
     return std::make_shared<Action>(
-      StateAction(Action::ActionType::CREATELOBBY, id, action_id));
-  }*/
-  else if (action_type == "END") {
+      ChadAction(id, commands[3], commands[4], action_id));
+  } else if (action_type == "END") {
     return std::make_shared<Action>(
       StateAction(Action::ActionType::END, id, action_id));
   } else {

@@ -68,6 +68,16 @@ bool UdpClient::checkAndHandleLobbyJoining(std::shared_ptr<Action> t_action) {
   return false;
 }
 
+bool UdpClient::chadHandling(std::shared_ptr<Action> t_action) {
+  if (t_action->getType() == Action::ActionType::CHAD) {
+    std::string msg = t_action->getChadMsg();
+
+    m_chad_msgs.push_back(msg);
+    return true;
+  }
+  return false;
+}
+
 void UdpClient::handleReceive(const boost::system::error_code &t_error,
                               std::size_t t_size) {
   if (!t_error) {

@@ -194,21 +194,10 @@ void CreateLobbyState::update() {
               m_chat_messages.push_back(m_chat.getText());
               std::cout << m_chat_messages.empty() << std::endl;
               std::cout << "pushed back\n";
+              m_clientCom->m_chad_msgs.push_back(m_chat.getTextString());
               m_chat.resetString();
               std::cout << "reset string textbox\n";
-              for (rtype::IText *str : m_chat_messages) {
-                std::cout << "set pos chat title before\n";
-                float tmp_y_title = m_chat_title->getPosition().y - 55;
-                m_chat_title->setPosition({20, tmp_y_title});
-                std::cout << "set pos chat title after\n";
-                float tmp_y_str = str->getPosition().y - 55;
-                str->setPosition({20, tmp_y_str});
-                std::cout << "resize bg chat\n";
-                float tmp_y_bg = m_bg_text->getSize().y + 100;
-                m_bg_text->setSize(
-                  {static_cast<float>(m_window->getSize().x / 2 + 100),
-                   tmp_y_bg});
-              }
+
             } else {
               m_chat.setSelected(true);
             }

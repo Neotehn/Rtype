@@ -136,6 +136,27 @@ bool UdpServer::checkAndLobbyHandling(std::shared_ptr<Action> t_action) {
   return false;
 }
 
+bool UdpServer::chadHandling(std::shared_ptr<Action> t_action) {
+  if (t_action->getType() == Action::ActionType::CHAD) {
+    std::string msg = t_action->getChadMsg();
+    std::string lobby_code = t_action->getLobbyIp();
+
+    for (int i = 0; i < m_lobbys.size(); i++) {
+      if (lobby_code == m_lobbys[i].m_lobby_code) {
+        for (int x = 0; x < m_lobbys[i].m_endpoints.size(); x++) {
+          ChadAction leave_lobby_action =
+            ChadAction(Action::ActionType::CHAD, msg, lobby_code);
+          sendMessage(leave_lobby_action.getCommand(),
+                      m_lobbys[i].m_endpoints[x]);
+        }
+        break;
+      }
+    }
+    return true;
+  }
+  return false;
+}
+
 void UdpServer::handleReceive(const boost::system::error_code &t_error,
                               std::size_t t_size) {
   if (!t_error) {
@@ -145,7 +166,7 @@ void UdpServer::handleReceive(const boost::system::error_code &t_error,
     m_logger.writeLog(Logger::Threatlevel::LOG,
                       "Received: '" + msg + "' (" + t_error.message() + ")");
     std::shared_ptr<Action> action = getAction(msg);
-    if (checkAndLobbyHandling(action)) {
+    if (checkAndLobbyHandling(action) || chadHandling(action)) {
       receiveClient();
       return;
     };
