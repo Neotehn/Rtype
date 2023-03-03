@@ -36,6 +36,8 @@ class GUISystem : public ISystem {
   rtype::IText *m_exp;
   rtype::IText *m_nb_exp;
   rtype::IRenderWindow *m_window;
+
+  void initText();
 };
 
 #endif /* !GUISYSTEM_HPP_ */

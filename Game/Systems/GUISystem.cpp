@@ -7,28 +7,12 @@
 
 #include "GUISystem.hpp"
 
-GUISystem::GUISystem(std::shared_ptr<EntityManager> t_em,
-                     rtype::IGraphicLoader *t_graphic_loader,
-                     rtype::IRenderWindow *t_window) {
-  m_em = t_em;
-  m_graphic_loader = t_graphic_loader;
-  m_window = t_window;
-  m_font = m_graphic_loader->loadFont();
-  if (!m_font->loadFromFile("./assets/font/nasalization-rg.ttf")) {
-    throw std::runtime_error("Unable to load font.");
-  }
+void GUISystem::initText() {
   m_nb_coins = m_graphic_loader->loadText();
   m_nb_coins->setFont(m_font);
   m_nb_coins->setString("0");
   m_nb_coins->setCharacterSize(30);
   m_nb_coins->setPosition({50, static_cast<float>(m_window->getSize().y - 40)});
-  SpriteECS sprite =
-    SpriteECS("./../Client/sprites/powerup/coin.png", t_graphic_loader);
-  m_coin = m_graphic_loader->loadRectangleShape();
-  m_coin->setSize({30, 30});
-  m_coin->setPosition({10, static_cast<float>(m_window->getSize().y - 40)});
-  m_coin->setTexture(sprite.getTexture());
-  m_coin->setTextureRect(rtype::IntRect{0, 0, 84, 84});
   m_nb_kills = m_graphic_loader->loadText();
   m_nb_kills->setFont(m_font);
   m_nb_kills->setString("0");
@@ -59,6 +43,28 @@ GUISystem::GUISystem(std::shared_ptr<EntityManager> t_em,
                                          (m_nb_exp->getLocalBounds().width +
                                           20 + m_exp->getLocalBounds().width)),
                       static_cast<float>(m_window->getSize().y - 40)});
+}
+
+GUISystem::GUISystem(std::shared_ptr<EntityManager> t_em,
+                     rtype::IGraphicLoader *t_graphic_loader,
+                     rtype::IRenderWindow *t_window) {
+  m_em = t_em;
+  m_graphic_loader = t_graphic_loader;
+  m_window = t_window;
+  m_font = m_graphic_loader->loadFont();
+  if (!m_font->loadFromFile("./assets/font/nasalization-rg.ttf")) {
+    throw std::runtime_error("Unable to load font.");
+  }
+
+  SpriteECS sprite =
+    SpriteECS("./../Client/sprites/powerup/coin.png", t_graphic_loader);
+  initText();
+  m_coin = m_graphic_loader->loadRectangleShape();
+  m_coin->setSize({30, 30});
+  m_coin->setPosition({10, static_cast<float>(m_window->getSize().y - 40)});
+  m_coin->setTexture(sprite.getTexture());
+  m_coin->setTextureRect(rtype::IntRect{0, 0, 84, 84});
+
   m_bg = m_graphic_loader->loadRectangleShape();
   m_bg->setSize({static_cast<float>(m_window->getSize().x), 50});
   m_bg->setPosition({0, static_cast<float>(m_window->getSize().y - 50)});
@@ -84,22 +90,31 @@ void GUISystem::update() {
     switch (type) {
       case Action::IncreaseType::KILLS:
         player = (*m_em.get()).Get<Player>(action->getId());
-        player->kills += 1;
-        player->exp += action->getIncreaseValue();
+        // player->kills += 1;
+        // player->exp += action->getIncreaseValue();
         m_nb_kills->setString(std::to_string(player->kills));
         m_nb_exp->setString(std::to_string(player->exp));
+        m_nb_exp->setPosition(
+          {static_cast<float>(m_window->getSize().x -
+                              (m_nb_exp->getLocalBounds().width + 10)),
+           static_cast<float>(m_window->getSize().y - 40)});
+        m_exp->setPosition(
+          {static_cast<float>(m_window->getSize().x -
+                              (m_nb_exp->getLocalBounds().width + 20 +
+                               m_exp->getLocalBounds().width)),
+           static_cast<float>(m_window->getSize().y - 40)});
         break;
       case Action::IncreaseType::FIRE_SHOT:
         player = (*m_em.get()).Get<Player>(action->getId());
-        player->fire_shot += action->getIncreaseValue();
+        // player->fire_shot += action->getIncreaseValue();
         break;
       case Action::IncreaseType::BOMB_SHOT:
         player = (*m_em.get()).Get<Player>(action->getId());
-        player->bomb_shot += action->getIncreaseValue();
+        // player->bomb_shot += action->getIncreaseValue();
         break;
       case Action::IncreaseType::COINS:
         player = (*m_em.get()).Get<Player>(action->getId());
-        player->coins += action->getIncreaseValue();
+        // player->coins += action->getIncreaseValue();
         m_nb_coins->setString(std::to_string(player->coins));
         break;
       default:
