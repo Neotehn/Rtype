@@ -67,6 +67,7 @@ class GameState final : public State {
   bool m_will_reload = false;
   std::string m_path_to_sprite;
 
+  bool playerAlive();
   std::vector<std::shared_ptr<ISystem>> initSystems();
 
   rtype::ITexture *m_bg_t;

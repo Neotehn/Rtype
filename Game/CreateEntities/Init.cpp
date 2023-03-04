@@ -779,7 +779,7 @@ bool loadNewEndboss(std::shared_ptr<EntityManager> t_em,
                     rtype::IGraphicLoader *t_graphic_loader,
                     UdpServer *t_server_com) {
   Json::Value enemy_data_list = assetLoader.getEnemyData();
-  if (enemy_data_list.size() < bullet_index) {
+  if (enemy_data_list.size() <= bullet_index + 1) {
     std::cout << "No more end bosses" << std::endl;
     return false;
   }
@@ -803,7 +803,7 @@ void initEndboss(std::shared_ptr<EntityManager> t_em,
                           enemy_data["size"]["y"].asInt()};
   EntityID enemy = t_em->createNewEntity();
   SpriteECS sprite = SpriteECS(enemy_data["path"].asString(), t_graphic_loader);
-  rtype::Vector2f enemy_pos = {800, 75};
+  rtype::Vector2f enemy_pos = {900, 75};
   float velocity_direction = 0;
 
   rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
@@ -846,7 +846,7 @@ void initEndbossClient(EntityID t_id, std::shared_ptr<EntityManager> t_em,
                           enemy_data["size"]["y"].asInt()};
   EntityID enemy = t_em->createNewEntity();
   SpriteECS sprite = SpriteECS(enemy_data["path"].asString(), t_graphic_loader);
-  rtype::Vector2f enemy_pos = {800, 75};
+  rtype::Vector2f enemy_pos = {900, 75};
   float velocity_direction = 0;
 
   rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
