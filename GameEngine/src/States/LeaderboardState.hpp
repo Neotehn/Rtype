@@ -24,6 +24,7 @@ class LeaderboardState : public State {
   void draw() override;
   void initSprites();
   void initText();
+  void setLeaderboard(std::vector<std::string> t_leaderboard);
 
  private:
   rtype::ITexture *m_bg_t;

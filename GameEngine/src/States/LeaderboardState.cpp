@@ -105,11 +105,12 @@ void LeaderboardState::initText() {
     text->setString( std::to_string(i+1) + ": ");
     text->setCharacterSize(30);
     text->setPosition(
-      {(size_x / 2) - (text->getLocalBounds().width / 2), static_cast<float>(200 + (i * 50))});
+      {(size_x / 2) - 100, static_cast<float>(200 + (i * 50))});
     m_leaderboard_list.push_back(text);
   }
-  m_leaderboard_list[0]->setString("1: Player1");
-  m_leaderboard_list[1]->setString("2: Player2");
+  std::vector<std::string> leaderboard = {"Player1 3454", "Player2 1234", "Player3 994", "Player4 954", "Player5 854", "Player6 799", "Player7 554",
+                                          "Player8 478", "Player9 300", "Player10 20"};
+  setLeaderboard(leaderboard);
 }
 
 void LeaderboardState::draw() {
@@ -122,4 +123,11 @@ void LeaderboardState::draw() {
       m_window->draw(text);
   }
   m_window->display();
+}
+
+void LeaderboardState::setLeaderboard(std::vector<std::string> t_leaderboard) {
+  for (int i = 0; i < t_leaderboard.size(); i++) {
+    m_leaderboard_list[i]->setString(std::to_string(i+1) + ": "
+                                     + t_leaderboard[i]);
+  }
 }

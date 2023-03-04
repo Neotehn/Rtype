@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <fstream>
 #include <chrono>
 #include <thread>
 #include <boost/asio.hpp>
@@ -48,7 +49,9 @@ class UdpServer : public IProtocol {
   void setPlayerIdCount(int t_new_player_id_count);
   bool checkAndLobbyHandling(std::shared_ptr<Action> t_action);
   bool chadHandling(std::shared_ptr<Action> t_action);
-
+  void initLeaderboard();
+  void clearLeaderboard();
+  void updateLeaderboard(std::string t_name, int t_score);
   float getTimeDiff();
   void resetTime();
 
@@ -76,6 +79,7 @@ class UdpServer : public IProtocol {
 
   bool doesAlreadyExist(std::shared_ptr<Action> t_action);
   bool isUpdated(std::shared_ptr<Action> t_event);
+  std::vector<std::string> m_leaderboard;
 };
 
 #endif /* !PROTOCOL_UDPSERVER_HPP_ */
