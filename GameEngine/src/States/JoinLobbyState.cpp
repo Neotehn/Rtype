@@ -117,6 +117,7 @@ JoinLobbyState::JoinLobbyState(StateMachine &t_machine,
   initSprites();
   initText();
   m_is_pressed = false;
+  m_music_player.play(MusicID::MENU_THEME);
   // call protocol to join lobby
 }
 
@@ -134,6 +135,7 @@ void JoinLobbyState::update() {
       if (m_home_btn.is_pressed(mouse_pos_f)) {
         std::cout << "homebtn pressed" << std::endl;
         m_clientCom->m_lobby_code = "";
+        m_music_player.stop();
         m_next = StateMachine::build<MainState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, m_ip, m_clientCom);
@@ -151,6 +153,7 @@ void JoinLobbyState::update() {
       }
 
       if (m_clientCom->m_lobby_successfull_connected) {
+        m_music_player.stop();
         m_next = StateMachine::build<CreateLobbyState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, m_ip, m_clientCom);

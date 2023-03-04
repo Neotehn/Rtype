@@ -101,6 +101,7 @@ void MainState::update() {
       }
       if (m_settings_btn.is_pressed(mouse_pos_f)) {
         std::cout << "settingsbtn pressed" << std::endl;
+        m_music_player.stop();
         m_next = StateMachine::build<SettingsState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, "", m_clientCom);
@@ -118,12 +119,14 @@ void MainState::update() {
         m_clientCom->m_lobby_code = lobby_code;
         m_clientCom->m_lobby_names.push_back(m_clientCom->getPlayerName());
         std::cout << "create lobby" << std::endl;
+        m_music_player.stop();
         m_next = StateMachine::build<CreateLobbyState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, "", m_clientCom);
       }
       if (m_join_btn.is_pressed(mouse_pos_f) && !m_join_pressed) {
         std::cout << "join lobby" << std::endl;
+        m_music_player.stop();
         m_next = StateMachine::build<JoinLobbyState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, "", m_clientCom);

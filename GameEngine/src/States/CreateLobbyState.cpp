@@ -185,6 +185,7 @@ void CreateLobbyState::update() {
         m_clientCom->sendMessage(create_lobby_action.getCommand());
         m_clientCom->m_lobby_code = "";
         m_clientCom->m_lobby_successfull_connected = false;
+        m_music_player.stop();
         m_next = StateMachine::build<MainState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, "", m_clientCom);
@@ -192,6 +193,7 @@ void CreateLobbyState::update() {
       if (m_start_btn.is_pressed(mouse_pos_f) &&  // start game if pressed
           m_clientCom->m_lobby_names.size() == 2 && !m_is_start_pressed) {
         std::cout << "startbtn pressed" << std::endl;
+        m_music_player.stop();
         m_next = StateMachine::build<GameState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, "", m_clientCom);

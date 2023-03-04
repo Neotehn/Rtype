@@ -17,6 +17,7 @@ ProvideUserNameState::ProvideUserNameState(
       m_flag(t_flag) {
   initSprites();
   initText();
+  m_music_player.play(MusicID::MENU_THEME);
   m_is_pressed = false;
 }
 
@@ -35,6 +36,7 @@ void ProvideUserNameState::update() {
         std::cout << m_clientCom->getPlayerName() << "  \n";
         m_clientCom->setPlayerName(m_textbox.getTextString());
         std::cout << m_clientCom->getPlayerName() << "  \n";
+        m_music_player.stop();
         m_next = StateMachine::build<MainState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, m_ip, m_clientCom);
