@@ -30,8 +30,16 @@ class GUISystem : public ISystem {
   rtype::IGraphicLoader *m_graphic_loader;
   rtype::IRectangleShape *m_bg;
   rtype::IRectangleShape *m_coin;
+  rtype::IRectangleShape *m_second_coin;
+  rtype::IRectangleShape *m_fire;
+  rtype::IRectangleShape *m_bomb;
+  rtype::IRectangleShape *m_money;
   rtype::IFont *m_font;
   rtype::IText *m_nb_coins;
+  rtype::IText *m_nb_total_coins;
+  rtype::IText *m_nb_bomb_shots;
+  rtype::IText *m_nb_fire_shots;
+  rtype::IText *m_nb_money_shots;
   rtype::IText *m_nb_kills;
   rtype::IText *m_kills;
   rtype::IText *m_exp;
