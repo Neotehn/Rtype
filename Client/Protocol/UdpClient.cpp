@@ -53,10 +53,8 @@ bool UdpClient::checkAndHandleLobbyJoining(std::shared_ptr<Action> t_action) {
   if (t_action->getType() == Action::ActionType::JOINSUCCESSFULL) {
     m_lobby_successfull_connected = true;
     m_lobby_names = t_action->getLobbyPlayerNames();
-    std::cout << std::to_string(m_lobby_names.size()) << std::endl;
     return true;
   } else if (t_action->getType() == Action::ActionType::LEAVELOBBY) {
-    std::cout << std::to_string(m_lobby_names.size()) << std::endl;
     for (int i = 0; i < m_lobby_names.size(); i++) {
       if (m_lobby_names[i] == t_action->getPlayerName()) {
         m_lobby_names.erase(m_lobby_names.begin() + i);
@@ -94,7 +92,6 @@ void UdpClient::handleReceive(const boost::system::error_code &t_error,
       std::shared_ptr<Action> action = getAction(msg);
       if (checkAndHandleLobbyJoining(action) || chadHandling(action)) {
         receiveClient();
-        std::cout << "yes" << std::endl;
         return;
       }
       setPlayerId(action);
