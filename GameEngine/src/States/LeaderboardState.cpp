@@ -102,12 +102,14 @@ void LeaderboardState::initText() {
   for (int i = 0; i < 10; i++) {
     rtype::IText *text = m_graphic_loader->loadText();
     text->setFont(m_font);
-    text->setString( std::to_string(i+1) + ": "+ "insertPlayernameHere");
+    text->setString( std::to_string(i+1) + ": ");
     text->setCharacterSize(30);
     text->setPosition(
       {(size_x / 2) - (text->getLocalBounds().width / 2), static_cast<float>(200 + (i * 50))});
     m_leaderboard_list.push_back(text);
   }
+  m_leaderboard_list[0]->setString("1: Player1");
+  m_leaderboard_list[1]->setString("2: Player2");
 }
 
 void LeaderboardState::draw() {
@@ -116,7 +118,8 @@ void LeaderboardState::draw() {
   m_window->draw(m_next_btn.getSprite());
   m_window->draw(m_title);
   for (auto &text : m_leaderboard_list) {
-    m_window->draw(text);
+    if (text->getString().size() > 4)
+      m_window->draw(text);
   }
   m_window->display();
 }
