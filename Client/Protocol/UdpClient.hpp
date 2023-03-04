@@ -33,6 +33,8 @@ class UdpClient : public IProtocol {
   bool chadHandling(std::shared_ptr<Action> t_action);
 
   enum ConnectState { none, connected };
+  std::string getPlayerName();
+  void setPlayerName(std::string t_new_name);
   ConnectState m_flag;
   int m_id;
   std::string m_lobby_code;
@@ -49,6 +51,7 @@ class UdpClient : public IProtocol {
   InputManager *m_client_input_manager = nullptr;
   boost::thread m_thread;
   std::size_t m_port_number;
+  std::string m_player_name;
 
   void setPlayerId(std::shared_ptr<Action> t_action);
 };

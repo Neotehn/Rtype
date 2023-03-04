@@ -206,7 +206,8 @@ void initPlayerClient(EntityID t_id, std::string t_sprite_path,
                       rtype::IGraphicLoader *t_graphic_loader,
                       int t_player_id) {
   EntityID player = t_entity_manager->createNewEntity(t_id);
-  SpriteECS player_sprite = SpriteECS(t_sprite_path, t_graphic_loader);
+  SpriteECS player_sprite =
+    SpriteECS(std::move(t_sprite_path), t_graphic_loader);
 
   Pos player_pos = Pos{rtype::Vector2f{0, 0}, t_pos};
 
