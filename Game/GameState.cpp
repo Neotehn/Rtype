@@ -54,7 +54,7 @@ GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
       new UdpServer(m_io_service, m_input_manager, m_is_running, m_ip);
   }
   loadLevel(m_level, m_em, m_graphic_loader, m_music,
-            m_flag == CommunicationFlag::client);
+            m_flag == CommunicationFlag::client, m_serverCom);
   m_music->setVolume(m_music_player.getVolume());
   m_systems = initSystems();
 }
@@ -95,7 +95,9 @@ std::vector<std::shared_ptr<ISystem>> GameState::initSystems() {
     systems.push_back(
       std::make_shared<SoundSystem>(m_em, m_sounds, m_graphic_loader));
   }
-  systems.push_back(std::make_shared<DisplaySystem>(m_em, m_window));
+
+  systems.push_back(std::make_shared<DisplaySystem>(
+    m_em, m_window, m_flag, m_graphic_loader, m_clientCom));
   systems.push_back(std::make_shared<DestroySystem>(m_em));
   return systems;
 }

@@ -51,6 +51,12 @@ void CreateObjectSystem::update() {
       case Action::ObjectType::ITEM:
         initItemClient(id, rtype::ItemType(action->getItemType()), pos, m_em,
                        m_graphic_loader);
+        break;
+      case Action::ObjectType::OBSTACLE:
+        initObstacleClient(m_em, m_graphic_loader, pos,
+                           action->getCreateSpritePath(),
+                           action->getTotalObstacleWidth(), id);
+        break;
       default:
         break;
     }

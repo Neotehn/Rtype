@@ -57,7 +57,7 @@ class CreateLobbyState final : public State {
   rtype::IText *m_placeholder;
   rtype::IRectangleShape *m_bg_text;
   std::vector<rtype::IText *> m_chad_messages;
-  bool m_is_start_pressed;
+  bool m_start_is_pressed;
 
   void initSprites();
   void initText();
