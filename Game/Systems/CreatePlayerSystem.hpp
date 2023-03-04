@@ -19,6 +19,7 @@ class CreatePlayerSystem : public ISystem {
   std::shared_ptr<EntityManager> m_em;
   EventQueue m_event_queue;
   UdpServer *m_server_com;
+  std::string m_path_to_sprite;
   std::vector<int> m_registered_players;
   rtype::IGraphicLoader *m_graphic_loader;
 

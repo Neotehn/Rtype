@@ -33,10 +33,10 @@ void MainState::initText() {
 MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
                      MusicPlayer &t_music_player, std::size_t t_flag,
                      rtype::IGraphicLoader *t_graphic_loader, int *t_level,
-                     const bool t_replace, std::string t_ip,
-                     UdpClient *t_clientCom)
+                     const std::string &t_path_to_sprite, const bool t_replace,
+                     std::string t_ip, UdpClient *t_clientCom)
     : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level,
-            t_replace, t_ip, t_clientCom),
+            t_path_to_sprite, t_replace, t_ip, t_clientCom),
       m_start_btn(Button(
         "./assets/startBtn.png",
         rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 65),
@@ -62,6 +62,7 @@ MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
         rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 65),
                         static_cast<float>(m_window->getSize().y / 2)},
         rtype::Vector2f{130, 50}, t_graphic_loader, false)),
+
       m_flag(t_flag) {
   initSprites();
   initText();
@@ -93,19 +94,19 @@ void MainState::update() {
     }
     if (m_mouse->isLeftMouseButtonPressed()) {
       if (m_start_btn.is_pressed(mouse_pos_f) && m_start_pressed == false) {
-        std::cout << "startbtn pressed" << std::endl;
+        std::cout << "startbtn pressed from main to game" << std::endl;
         std::cout << m_title->getString() << std::endl;
         m_music_player.stop();
         m_next = StateMachine::build<GameState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, true, m_ip, m_clientCom);
+          m_level, m_path_to_sprite, true, m_ip, m_clientCom);
         m_start_pressed = true;
       }
       if (m_settings_btn.is_pressed(mouse_pos_f)) {
         std::cout << "settingsbtn pressed" << std::endl;
         m_next = StateMachine::build<SettingsState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, true, "", m_clientCom);
+          m_level, m_path_to_sprite, true, "", m_clientCom);
       }
       if (m_exit_btn.is_pressed(mouse_pos_f)) {
         std::cout << "exitbtn pressed" << std::endl;
@@ -117,35 +118,27 @@ void MainState::update() {
       }
       if (m_create_btn.is_pressed(mouse_pos_f)) {
         std::string lobby_code = createLobbyCode();
-        CreateLobbyAction create_lobby_action = CreateLobbyAction(
-          Action::ActionType::CREATELOBBY, lobby_code, "Nutzer");
+        CreateLobbyAction create_lobby_action =
+          CreateLobbyAction(Action::ActionType::CREATELOBBY, lobby_code,
+                            m_clientCom->getPlayerName());
         m_clientCom->sendMessage(create_lobby_action.getCommand());
         m_clientCom->m_lobby_code = lobby_code;
-        m_clientCom->m_lobby_names.push_back("Nutzer");
+        m_clientCom->m_lobby_names.push_back(m_clientCom->getPlayerName());
         std::cout << "create lobby" << std::endl;
         m_next = StateMachine::build<CreateLobbyState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, true, "", m_clientCom);
+          m_level, m_path_to_sprite, true, "", m_clientCom);
       }
       if (m_join_btn.is_pressed(mouse_pos_f)) {
         std::cout << "join lobby" << std::endl;
         m_next = StateMachine::build<JoinLobbyState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, true, "", m_clientCom);
+          m_level, m_path_to_sprite, true, "", m_clientCom);
       }
     }
     switch (event.type) {
       case rtype::EventType::Closed:
         m_state_machine.quit();
-        break;
-      case rtype::EventType::KeyPressed:
-        switch (event.key) {
-          case rtype::EventKey::Escape:
-            m_state_machine.quit();
-            break;
-          default:
-            break;
-        }
         break;
       default:
         break;
@@ -175,5 +168,6 @@ std::string MainState::createLobbyCode() {
   };
   std::string str(10, 0);
   std::generate_n(str.begin(), 10, randchar);
+  std::cout << "Lobby Code: " << str << std::endl;
   return str;
 }

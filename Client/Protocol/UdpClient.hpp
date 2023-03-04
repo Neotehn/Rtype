@@ -30,12 +30,17 @@ class UdpClient : public IProtocol {
   void setInputManager(InputManager *t_input_manager);
   void setClientInputManager(InputManager *t_client_input_manager);
   bool checkAndHandleLobbyJoining(std::shared_ptr<Action> t_action);
+  bool chadHandling(std::shared_ptr<Action> t_action);
+
   enum ConnectState { none, connected };
+  std::string getPlayerName();
+  void setPlayerName(std::string t_new_name);
   ConnectState m_flag;
   int m_id;
   std::string m_lobby_code;
   std::vector<std::string> m_lobby_names;
   bool m_lobby_successfull_connected;
+  std::vector<std::string> m_chad_msgs;
 
  private:
   udp::socket m_socket;
@@ -46,6 +51,7 @@ class UdpClient : public IProtocol {
   InputManager *m_client_input_manager = nullptr;
   boost::thread m_thread;
   std::size_t m_port_number;
+  std::string m_player_name;
 
   void setPlayerId(std::shared_ptr<Action> t_action);
 };

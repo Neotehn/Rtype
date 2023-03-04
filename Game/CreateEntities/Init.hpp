@@ -14,9 +14,13 @@ bool loadLevel(int *t_level, std::shared_ptr<EntityManager> t_entity_manager,
                rtype::IGraphicLoader *t_graphic_loader, rtype::IMusic *t_music,
                bool t_play_music = true, UdpServer *t_server_com = nullptr);
 
+void loadMap(std::shared_ptr<EntityManager> t_entity_manager,
+             rtype::IGraphicLoader *t_graphic_loader, UdpServer *t_server_com);
+
 EntityID initPlayer(std::shared_ptr<EntityManager> t_entity_manager,
                     UdpServer *t_serverCom,
                     rtype::IGraphicLoader *t_graphic_loader);
+
 void initPlayerClient(EntityID t_id, std::string t_sprite_path,
                       rtype::Vector2f t_pos,
                       std::shared_ptr<EntityManager> t_entity_manager,
@@ -80,5 +84,14 @@ void loadMusic(rtype::IMusic *t_music, bool t_play = true);
 
 void initBackground(std::shared_ptr<EntityManager> t_em,
                     rtype::IGraphicLoader *t_graphic_loader);
+
+unsigned int initObstacle(std::shared_ptr<EntityManager> t_entity_manager,
+                          rtype::IGraphicLoader *t_graphic_loader,
+                          rtype::Vector2f t_pos, std::string t_sprite_path,
+                          int t_total_width, UdpServer *t_server_com);
+void initObstacleClient(std::shared_ptr<EntityManager> t_entity_manager,
+                        rtype::IGraphicLoader *t_graphic_loader,
+                        rtype::Vector2f t_pos, std::string t_sprite_path,
+                        int t_total_width, EntityID t_id);
 
 #endif  //R_TYPE_CLIENT_INIT_HPP

@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <fstream>
-#include <json/json.h>
+#include <jsoncpp/json/json.h>
 
 class AssetLoader {
  public:
@@ -16,6 +16,8 @@ class AssetLoader {
   float getBackgroundSpeed();
   Json::Value getEnemyData();
   std::string getMusicPath();
+  std::string getMapPath();
+  Json::Value getObstacleData();
 
  private:
   Json::Value m_level_data;

@@ -44,6 +44,12 @@ IProtocol::getCreateAction(std::vector<std::string> commands, int action_id,
     velocity = std::stof(commands[6]);
     return std::make_shared<Action>(CreateAction(
       id, CreateAction::ITEM, rtype::Vector2f{x, y}, "", action_id, velocity));
+  } else if (type == Action::ObjectType::OBSTACLE) {
+    sprite_path = commands[6];
+    player_id = std::stoi(commands[7]);  // actually total obstacle width
+    return std::make_shared<Action>(CreateAction(id, CreateAction::OBSTACLE,
+                                                 rtype::Vector2f{x, y},
+                                                 player_id, sprite_path));
   } else {
     return std::make_shared<Action>(VoidAction(id, 0));
   }
@@ -93,9 +99,10 @@ std::shared_ptr<Action> IProtocol::getAction(std::string command) {
   EntityID id = std::stoull(commands[2]);
 
   if (action_type == "START") {
-    int player_id = std::stoi(commands[3]);
-    return std::make_shared<Action>(
-      StateAction(Action::ActionType::START, id, action_id, player_id));
+    std::string lobby_code = commands[3];
+    int player_id = std::stoi(commands[4]);
+    return std::make_shared<Action>(StateAction(
+      Action::ActionType::START, id, action_id, lobby_code, player_id));
   } else if (action_type == "RESTART") {
     return std::make_shared<Action>(
       StateAction(Action::ActionType::RESTART, id, action_id));
@@ -152,11 +159,10 @@ std::shared_ptr<Action> IProtocol::getAction(std::string command) {
     }
     return std::make_shared<Action>(
       JoinSuccessfullAction(id, names, action_id));
-  } /*else if (action_type == "CREATESUCCESSFULL") {
+  } else if (action_type == "CHAD") {
     return std::make_shared<Action>(
-      StateAction(Action::ActionType::CREATELOBBY, id, action_id));
-  }*/
-  else if (action_type == "END") {
+      ChadAction(id, commands[3], commands[4], action_id));
+  } else if (action_type == "END") {
     return std::make_shared<Action>(
       StateAction(Action::ActionType::END, id, action_id));
   } else {

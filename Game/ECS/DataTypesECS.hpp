@@ -69,7 +69,8 @@ class SpriteECS {
             rtype::Color t_color = rtype::White) {
     m_sprite = t_graphic_loader->loadSprite();
     m_texture = t_graphic_loader->loadTexture();
-    m_texture->loadFromFile(t_sprite_path);
+    if (!m_texture->loadFromFile(t_sprite_path))
+      m_texture->loadFromFile("./sprites/starship.png");
     m_sprite->setTexture(m_texture);
     m_sprite->setScale({t_scale.x, t_scale.y});
     m_sprite->setColor(t_color);
@@ -126,6 +127,13 @@ struct Bullet {
   rtype::Vector2f pos;
   EntityID owner = 0;
   float damage = 1;
+};
+
+struct Obstacle {
+  Pos position;
+  rtype::IRectangleShape *body;
+  float limit;
+  float original_x;
 };
 
 struct AnimationObj {

@@ -10,6 +10,9 @@ std::vector<EntityID> background_entities;
 bool loadLevel(int *t_level, std::shared_ptr<EntityManager> t_em,
                rtype::IGraphicLoader *t_graphic_loader, rtype::IMusic *t_music,
                bool t_play_music, UdpServer *t_server_com) {
+  for (EntityID ent : EntityViewer<Obstacle>(*t_em)) {
+    t_em->destroyEntity(ent);
+  }
   for (EntityID ent : EntityViewer<Bullet>(*t_em)) {
     t_em->destroyEntity(ent);
   }
@@ -44,10 +47,128 @@ bool loadLevel(int *t_level, std::shared_ptr<EntityManager> t_em,
   t_music->stop();
   loadMusic(t_music, t_play_music);
   initBackground(t_em, t_graphic_loader);
-  if (level == 2 && t_server_com) {
-    initPayWall(t_em, t_graphic_loader, t_server_com);
+  if (t_server_com) {
+    loadMap(t_em, t_graphic_loader, t_server_com);
+    if (level == 2) initPayWall(t_em, t_graphic_loader, t_server_com);
   }
   return true;
+}
+
+std::vector<std::vector<char>> readMap() {
+  std::vector<std::vector<char>> map;
+  std::string map_path = assetLoader.getMapPath();
+  Json::Value obstacle_list = assetLoader.getObstacleData();
+
+  std::ifstream map_file(map_path);
+  std::string line;
+  while (map_file >> line) {
+    std::vector<char> row;
+    for (char c : line) {
+      row.push_back(c);
+    }
+    map.push_back(row);
+  }
+  map_file.close();
+  return map;
+}
+
+// returns x value where object ends
+unsigned int initObstacle(std::shared_ptr<EntityManager> t_entity_manager,
+                          rtype::IGraphicLoader *t_graphic_loader,
+                          rtype::Vector2f t_pos, std::string t_sprite_path,
+                          int t_total_width, UdpServer *t_server_com) {
+  EntityID obstacle = t_entity_manager->createNewEntity();
+
+  SpriteECS obstacle_sprite = SpriteECS(t_sprite_path, t_graphic_loader);
+  rtype::ISprite *sprite =
+    const_cast<rtype::ISprite *>(obstacle_sprite.getSprite());
+  rtype::Vector2u size = sprite->getSize();
+  float scale = 2;
+
+  if (t_pos.y >= 400) { t_pos.y -= scale * size.y; }
+
+  Pos obstacle_pos = Pos{rtype::Vector2f{-3, 0}, t_pos};
+
+  rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
+  body->setSize({static_cast<float>(size.x), static_cast<float>(size.y)});
+  body->setScale({scale, scale});
+  body->setPosition({t_pos.x, t_pos.y});
+  body->setTexture(obstacle_sprite.getTexture());
+
+  Obstacle obstacle_obj =
+    Obstacle{obstacle_pos, body, static_cast<float>(-t_total_width), 800};
+  t_entity_manager->Assign<Obstacle>(obstacle, obstacle_obj);
+  t_server_com->addEvent(std::make_shared<Action>(
+    CreateAction(obstacle, Action::ObjectType::OBSTACLE, t_pos, t_total_width,
+                 t_sprite_path)));
+  return size.x * scale;
+}
+
+void initObstacleClient(std::shared_ptr<EntityManager> t_entity_manager,
+                        rtype::IGraphicLoader *t_graphic_loader,
+                        rtype::Vector2f t_pos, std::string t_sprite_path,
+                        int t_total_width, EntityID t_id) {
+  EntityID obstacle = t_entity_manager->createNewEntity(t_id);
+
+  SpriteECS obstacle_sprite = SpriteECS(t_sprite_path, t_graphic_loader);
+  rtype::ISprite *sprite =
+    const_cast<rtype::ISprite *>(obstacle_sprite.getSprite());
+  rtype::Vector2u size = sprite->getSize();
+  float scale = 2;
+
+  Pos obstacle_pos = Pos{rtype::Vector2f{-3, 0}, t_pos};
+
+  rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
+  body->setSize({static_cast<float>(size.x), static_cast<float>(size.y)});
+  body->setScale({scale, scale});
+  body->setPosition({t_pos.x, t_pos.y});
+  body->setTexture(obstacle_sprite.getTexture());
+
+  Obstacle obstacle_obj =
+    Obstacle{obstacle_pos, body, static_cast<float>(-t_total_width), 800};
+  t_entity_manager->Assign<Obstacle>(obstacle, obstacle_obj);
+}
+
+int getTotalObstacleWidth(rtype::IGraphicLoader *t_graphic_loader,
+                          Json::Value t_obstacle_list,
+                          std::vector<std::vector<char>> t_map) {
+  int total_width = 0;
+  for (int i = 0; i < t_map.size(); i++) {
+    for (int j = 0; j < t_map[i].size(); j++) {
+      int index = t_map[i][j] - 'a';
+      if (index < 0 || index >= t_obstacle_list.size()) { continue; }
+      Json::Value obstacle = t_obstacle_list[index];
+      SpriteECS obstacle_sprite =
+        SpriteECS(obstacle["upper"].asString(), t_graphic_loader);
+      rtype::ISprite *sprite =
+        const_cast<rtype::ISprite *>(obstacle_sprite.getSprite());
+      rtype::Vector2u size = sprite->getSize();
+      total_width += size.x;
+    }
+  }
+  return total_width * 2;  // 2 is scale on body
+}
+
+void loadMap(std::shared_ptr<EntityManager> t_entity_manager,
+             rtype::IGraphicLoader *t_graphic_loader, UdpServer *t_server_com) {
+  std::vector<std::vector<char>> map = readMap();
+  float x = 0;
+  Json::Value obstacle_list = assetLoader.getObstacleData();
+  int total_width = getTotalObstacleWidth(t_graphic_loader, obstacle_list, map);
+  total_width -= 800;
+
+  for (int i = 0; i < map.size(); i++) {
+    for (int j = 0; j < map[i].size(); j++) {
+      int index = map[i][j] - 'a';
+      if (index < 0 || index >= obstacle_list.size()) { continue; }
+      Json::Value obstacle = obstacle_list[index];
+      initObstacle(t_entity_manager, t_graphic_loader, {x, 0},
+                   obstacle["upper"].asString(), total_width, t_server_com);
+      x +=
+        initObstacle(t_entity_manager, t_graphic_loader, {x, 800},
+                     obstacle["lower"].asString(), total_width, t_server_com);
+    }
+  }
 }
 
 EntityID initPlayer(std::shared_ptr<EntityManager> t_entity_manager,
@@ -84,7 +205,8 @@ void initPlayerClient(EntityID t_id, std::string t_sprite_path,
                       rtype::IGraphicLoader *t_graphic_loader,
                       int t_player_id) {
   EntityID player = t_entity_manager->createNewEntity(t_id);
-  SpriteECS player_sprite = SpriteECS(t_sprite_path, t_graphic_loader);
+  SpriteECS player_sprite =
+    SpriteECS(std::move(t_sprite_path), t_graphic_loader);
 
   Pos player_pos = Pos{rtype::Vector2f{0, 0}, t_pos};
 
@@ -133,6 +255,7 @@ void initBulletClient(EntityID t_id, rtype::Vector2f t_pos,
   bullet_body->setSize({20, 20});
   bullet_body->setPosition({t_pos.x, t_pos.y});
   float speed = 10;
+  Player *player = (*t_em).Get<Player>(t_owner_id);
 
   switch (t_action->getShootType()) {
     case Action::ShootingType::NORMAL:
@@ -141,6 +264,10 @@ void initBulletClient(EntityID t_id, rtype::Vector2f t_pos,
           .getTexture());
       break;
     case Action::ShootingType::COIN:
+      if (player->coin_shot == 0) return;
+      player->coin_shot -= 1;
+      if (player->coin_shot < 0) player->coin_shot = 0;
+
       bullet_body->setTexture(
         SpriteECS("./../Client/sprites/dollarPaul.png", t_graphic_loader)
           .getTexture());
@@ -148,11 +275,19 @@ void initBulletClient(EntityID t_id, rtype::Vector2f t_pos,
       bullet_body->setSize({40, 25});
       break;
     case Action::ShootingType::FIRE:
+      if (player->fire_shot == 0) return;
+      player->fire_shot -= 1;
+      if (player->fire_shot < 0) player->fire_shot = 0;
+
       bullet_body->setTexture(
         SpriteECS("./../Client/sprites/shoot3.png", t_graphic_loader)
           .getTexture());
       break;
     case Action::ShootingType::BOMB:
+      if (player->bomb_shot == 0) return;
+      player->bomb_shot -= 1;
+      if (player->bomb_shot < 0) player->bomb_shot = 0;
+
       bullet_body->setTexture(
         SpriteECS("./../Client/sprites/shoot4.png", t_graphic_loader)
           .getTexture());

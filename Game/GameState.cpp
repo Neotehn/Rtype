@@ -27,15 +27,20 @@ void GameState::initClientLoad() {
 GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
                      MusicPlayer &t_music_player, std::size_t t_flag,
                      rtype::IGraphicLoader *t_graphic_loader, int *t_level,
-                     const bool t_replace, std::string t_ip,
-                     UdpClient *t_clientCom)
-    : State{t_machine, t_window,  t_music_player, t_graphic_loader,
-            t_level,   t_replace, t_ip,           t_clientCom},
+                     const std::string &t_path_to_sprite, const bool t_replace,
+                     std::string t_ip, UdpClient *t_clientCom)
+    : State{t_machine,        t_window, t_music_player,
+            t_graphic_loader, t_level,  t_path_to_sprite,
+            t_replace,        t_ip,     t_clientCom},
       m_client_input_manager(t_level), m_input_manager(t_level) {
   m_is_running = true;
   m_graphic_loader = t_graphic_loader;
   m_music = m_graphic_loader->loadMusic();
   m_em = std::make_shared<EntityManager>();
+  if (t_path_to_sprite.empty())
+    m_path_to_sprite = "../Client/sprites/starship.png";
+  else
+    m_path_to_sprite = t_path_to_sprite;
   if (t_flag == client) {
     initClientLoad();
     m_flag = CommunicationFlag::client;
@@ -49,7 +54,7 @@ GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
       new UdpServer(m_io_service, m_input_manager, m_is_running, m_ip);
   }
   loadLevel(m_level, m_em, m_graphic_loader, m_music,
-            m_flag == CommunicationFlag::client);
+            m_flag == CommunicationFlag::client, m_serverCom);
   m_systems = initSystems();
 }
 
@@ -79,8 +84,8 @@ std::vector<std::shared_ptr<ISystem>> GameState::initSystems() {
     systems.push_back(std::make_shared<DamageSystem>(
       m_em, m_input_manager, m_clientCom->getPortNumber(), m_is_running,
       m_sounds, m_graphic_loader));
-    systems.push_back(
-      std::make_shared<CreateObjectSystem>(m_em, m_sounds, m_graphic_loader));
+    systems.push_back(std::make_shared<CreateObjectSystem>(
+      m_em, m_sounds, m_graphic_loader, m_path_to_sprite));
     systems.push_back(
       std::make_shared<MovementSystem>(m_em, nullptr, m_clientCom));
     systems.push_back(std::make_shared<AnimationSystem>(m_em, m_input_manager));
@@ -89,7 +94,9 @@ std::vector<std::shared_ptr<ISystem>> GameState::initSystems() {
     systems.push_back(
       std::make_shared<SoundSystem>(m_em, m_sounds, m_graphic_loader));
   }
-  systems.push_back(std::make_shared<DisplaySystem>(m_em, m_window));
+
+  systems.push_back(std::make_shared<DisplaySystem>(
+    m_em, m_window, m_flag, m_graphic_loader, m_clientCom));
   systems.push_back(std::make_shared<DestroySystem>(m_em));
   return systems;
 }
@@ -177,7 +184,8 @@ void GameState::update() {
       std::cout << "Connecting to Server ..." << std::endl;
       boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
       StateAction start_action =
-        StateAction(Action::ActionType::START, m_clientCom->getPortNumber());
+        StateAction(Action::ActionType::START, m_clientCom->getPortNumber(),
+                    m_clientCom->m_lobby_code);
       m_clientCom->sendMessage(start_action.getCommand());
       std::cout << "waiting on Server Connection" << std::endl;
       m_window->clear();

@@ -23,6 +23,7 @@ namespace rtype {
     void move(const rtype::Vector2f &offset) override;
     void rotate(float angle) override;
     void scale(const rtype::Vector2f &factor) override;
+    rtype::Vector2u getSize() const override;
     const rtype::ITexture *getTexture() const override;
     rtype::FloatRect getLocalBounds() const override;
     rtype::FloatRect getGlobalBounds() const override;

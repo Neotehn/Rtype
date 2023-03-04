@@ -20,6 +20,7 @@
 #include "../State.hpp"
 #include "../StateMachine.hpp"
 #include "./SettingsState.hpp"
+#include "../Textbox.hpp"
 #include "../../../Game/GameState.hpp"
 
 class CreateLobbyState final : public State {
@@ -27,8 +28,8 @@ class CreateLobbyState final : public State {
   CreateLobbyState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
                    MusicPlayer &t_music_player, std::size_t t_flag,
                    rtype::IGraphicLoader *t_graphic_loader, int *t_level,
-                   bool t_replace = true, std::string t_ip = "",
-                   UdpClient *t_clientCom = nullptr);
+                   const std::string &t_path_to_sprite, bool t_replace = true,
+                   std::string t_ip = "", UdpClient *t_clientCom = nullptr);
   void pause() override;
   void resume() override;
   void update() override;
@@ -53,10 +54,15 @@ class CreateLobbyState final : public State {
   rtype::ISprite *m_player_two_s;
   rtype::ISprite *m_player_three_s;
   rtype::ISprite *m_player_four_s;
-  bool m_start_pressed;
+  Textbox m_chat;
+  rtype::IText *m_chat_title;
+  rtype::IText *m_placeholder;
+  rtype::IRectangleShape *m_bg_text;
+  std::vector<rtype::IText *> m_chad_messages;
 
   void initSprites();
   void initText();
+  void initChad();
 };
 
 #endif /* !LOBBYSTATE_HPP_ */

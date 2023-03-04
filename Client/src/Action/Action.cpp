@@ -62,11 +62,14 @@ std::string Action::getCommand() const {
   std::string type_string = getTypeAsString();
   std::string data = "";
   std::string names = "";
+  std::string lobby_code = "";
 
   switch (m_type) {
     case ActionType::START:
+      if (m_lobby_ip != "") { lobby_code = m_lobby_ip; }
       return std::to_string(m_action_id) + ";" + type_string + ";" +
-             std::to_string(m_id) + ";" + std::to_string(m_client_id) + ";";
+             std::to_string(m_id) + ";" + lobby_code + ";" +
+             std::to_string(m_client_id) + ";";
     case ActionType::DEAD:
     case ActionType::END:
       return std::to_string(m_action_id) + ";" + type_string + ";" +
@@ -109,6 +112,9 @@ std::string Action::getCommand() const {
         data += std::to_string(m_collision_partner_id) + ";";
       }
       if (m_damage != 0) { data += std::to_string(m_damage) + ";"; }
+      if (m_total_obstacle_width != 0) {
+        data += std::to_string(m_total_obstacle_width) + ";";
+      }
       std::cout << std::to_string(m_velocity) << std::endl;
 
       return std::to_string(m_action_id) + ";CREATE;" + std::to_string(m_id) +
@@ -142,6 +148,9 @@ std::string Action::getCommand() const {
     case ActionType::CREATESUCCESSFULL:
       return std::to_string(m_action_id) + ";CREATESUCCESSFULL;" +
              std::to_string(m_id) + ";";
+    case ActionType::CHAD:
+      return std::to_string(m_action_id) + ";CHAD;" + std::to_string(m_id) +
+             ";" + m_chad_msg + ";" + m_lobby_ip + ";";
   }
   return std::to_string(m_action_id) + ";" + type_string + ";" +
          std::to_string(m_id) + ";";
@@ -175,6 +184,8 @@ float Action::getVelocity() const { return m_velocity; }
 
 int Action::getItemType() const { return m_item_type; }
 
+int Action::getTotalObstacleWidth() const { return m_total_obstacle_width; }
+
 void Action::setPlayerId(EntityID t_id) { m_id = t_id; }
 
 int Action::getClientId() const { return m_client_id; }
@@ -203,3 +214,7 @@ void Action::setLobbyPlayerNames(
 std::vector<std::string> Action::getLobbyPlayerNames() const {
   return m_lobby_player_names;
 }
+
+std::string Action::getChadMsg() const { return m_chad_msg; }
+
+void Action::setChadMsg(std::string t_chad_msg) { m_chad_msg = t_chad_msg; }
