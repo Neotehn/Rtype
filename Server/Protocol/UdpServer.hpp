@@ -7,15 +7,20 @@
 #include <sstream>
 #include <chrono>
 #include <thread>
+#include <fstream>
+#include <vector>
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 #include <boost/array.hpp>
 #include <boost/bind/bind.hpp>
+#include <boost/algorithm/string.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/asio.hpp>
+#include "boost/random.hpp"
+#include "boost/generator_iterator.hpp"
 #include <boost/thread.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -26,6 +31,7 @@
 #include "../../Client/src/InputManager/InputManager.hpp"
 #include "./UdpSession.hpp"
 #include "../src/Logger.hpp"
+#include "../src/ServerChadFilter.hpp"
 
 using boost::asio::ip::udp;
 using boost::system::error_code;
@@ -46,6 +52,7 @@ class UdpServer : public IProtocol {
   void sendEvents();
   int getPlayerIdCount() const;
   void setPlayerIdCount(int t_new_player_id_count);
+
   bool checkAndLobbyHandling(std::shared_ptr<Action> t_action);
   bool chadHandling(std::shared_ptr<Action> t_action);
 
@@ -69,6 +76,7 @@ class UdpServer : public IProtocol {
   InputManager &m_input_manager;
   InputManager m_send_event_manager;
   Logger m_logger;
+  ServerChadFilter m_chad_filter;
   bool &m_is_running;
   int m_player_id_count;
   std::chrono::system_clock::time_point m_start_time;

@@ -141,6 +141,8 @@ bool UdpServer::chadHandling(std::shared_ptr<Action> t_action) {
     std::string msg = t_action->getChadMsg();
     std::string lobby_code = t_action->getLobbyIp();
 
+    msg = m_chad_filter.chadFiltering(msg);
+
     for (int i = 0; i < m_lobbys.size(); i++) {
       if (lobby_code == m_lobbys[i].m_lobby_code) {
         for (int x = 0; x < m_lobbys[i].m_endpoints.size(); x++) {
