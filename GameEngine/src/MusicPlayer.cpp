@@ -27,7 +27,18 @@ void MusicPlayer::init(rtype::IGraphicLoader *t_graphic_loader) {
   m_music = m_graphic_loader->loadMusic();
   m_music->openFromFile("./assets/music/music1.ogg");
   m_music->openFromFile("./assets/music/music2.ogg");
+  m_music->openFromFile("./assets/music/moneySound.ogg");
   m_music->setLoop(true);
+  m_music->setVolume(m_volume);
+}
+
+void MusicPlayer::init(rtype::IGraphicLoader *t_graphic_loader, bool t_loop) {
+  m_graphic_loader = t_graphic_loader;
+  m_music = m_graphic_loader->loadMusic();
+  m_music->openFromFile("./assets/music/music1.ogg");
+  m_music->openFromFile("./assets/music/music2.ogg");
+  m_music->openFromFile("./assets/music/moneySound.ogg");
+  m_music->setLoop(t_loop);
   m_music->setVolume(m_volume);
 }
 

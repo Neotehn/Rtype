@@ -26,3 +26,4 @@ add_executable(r-type_server main.cpp ../Protocol/IProtocol.hpp
 include_directories(${Boost_INCLUDE_DIRS})
 target_link_libraries(r-type_server
         ${Boost_SYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY})
+

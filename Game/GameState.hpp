@@ -39,8 +39,8 @@ class GameState final : public State {
   GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
             MusicPlayer &t_music_player, std::size_t t_flag,
             rtype::IGraphicLoader *t_graphic_loader, int *t_level,
-            bool t_replace = true, std::string t_ip = "",
-            UdpClient *t_clientCom = nullptr);
+            const std::string &t_path_to_sprite, bool t_replace = true,
+            std::string t_ip = "", UdpClient *t_clientCom = nullptr);
   ~GameState();
 
   void pause() override;
@@ -64,6 +64,7 @@ class GameState final : public State {
   std::vector<SoundSystem::SoundType> m_sounds;
   bool m_level_two_enemy_created = false;
   bool m_will_reload = false;
+  std::string m_path_to_sprite;
 
   std::vector<std::shared_ptr<ISystem>> initSystems();
 

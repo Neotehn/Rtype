@@ -49,10 +49,11 @@ SettingsState::SettingsState(StateMachine &t_machine,
                              rtype::IRenderWindow *t_window,
                              MusicPlayer &t_music_player, std::size_t t_flag,
                              rtype::IGraphicLoader *t_graphic_loader,
-                             int *t_level, const bool t_replace,
-                             std::string t_ip, UdpClient *t_clientCom)
+                             int *t_level, const std::string &t_path_to_sprite,
+                             const bool t_replace, std::string t_ip,
+                             UdpClient *t_clientCom)
     : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level,
-            t_replace, t_ip, t_clientCom),
+            t_path_to_sprite, t_replace, t_ip, t_clientCom),
       m_start_btn(Button(
         "./assets/icons/white/home.png",
         rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 32),
@@ -98,7 +99,7 @@ void SettingsState::update() {
         std::cout << "startbtn pressed" << std::endl;
         m_next = StateMachine::build<MainState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, true, "", m_clientCom);
+          m_level, m_path_to_sprite, true, "", m_clientCom);
       }
       if (m_vol_down.is_pressed(mouse_pos_f)) {
         if (m_music_player.getVolume() > 0) {
@@ -134,6 +135,21 @@ void SettingsState::update() {
     switch (event.type) {
       case rtype::EventType::Closed:
         m_state_machine.quit();
+        break;
+      case rtype::EventType::KeyPressed:
+        switch (event.key) {
+          case rtype::EventKey::Space:
+            m_next = StateMachine::build<MainState>(
+              m_state_machine, m_window, m_music_player, m_flag,
+              m_graphic_loader, m_level, m_path_to_sprite, true, "",
+              m_clientCom);
+            break;
+          case rtype::EventKey::Escape:
+            m_state_machine.quit();
+            break;
+          default:
+            break;
+        }
         break;
       default:
         break;

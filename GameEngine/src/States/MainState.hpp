@@ -15,6 +15,7 @@
 #include "../State.hpp"
 #include "../StateMachine.hpp"
 #include "./SettingsState.hpp"
+#include "IntroState.hpp"
 #include "../../../Game/GameState.hpp"
 
 class MainState final : public State {
@@ -22,8 +23,8 @@ class MainState final : public State {
   MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
             MusicPlayer &t_music_player, std::size_t t_flag,
             rtype::IGraphicLoader *t_graphic_loader, int *t_level,
-            bool t_replace = true, std::string t_ip = "",
-            UdpClient *t_clientCom = nullptr);
+            const std::string &t_path_to_sprite, bool t_replace = true,
+            std::string t_ip = "", UdpClient *t_clientCom = nullptr);
   ~MainState();
   std::string createLobbyCode();
   void pause() override;

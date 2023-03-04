@@ -80,7 +80,8 @@ set(CLIENT_HPP ../Game/ECS/ComponentPool.hpp
         ../Game/Encapsulation/IGraphicLoader.hpp
         ../Game/Encapsulation/SFML/GraphicLoader.hpp
         ../Game/CreateEntities/AssetLoader.hpp
-        ../Server/src/Logger.hpp)
+        ../Server/src/Logger.hpp
+        ../GameEngine/src/States/IntroState.hpp)
 
 set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         src/InputManager/InputManager.cpp
@@ -140,7 +141,8 @@ set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         ../Game/Systems/CreatePlayerSystem.cpp
         ../Game/Encapsulation/SFML/GraphicLoader.cpp
         ../Game/CreateEntities/AssetLoader.cpp
-        ../Server/src/Logger.cpp)
+        ../Server/src/Logger.cpp
+        ../GameEngine/src/States/IntroState.cpp ../GameEngine/src/States/ProvideUserNameState.cpp ../GameEngine/src/States/ProvideUserNameState.hpp)
 
 include(FetchContent)
 FetchContent_Declare(SFML
@@ -148,19 +150,10 @@ FetchContent_Declare(SFML
         GIT_TAG 2.6.x)
 FetchContent_MakeAvailable(SFML)
 
-find_package(Boost 1.69.0 COMPONENTS chrono system thread REQUIRED)
 
-if (NOT Boost_FOUND)
-    message("Boost not found--> downloading and building")
-    include(FetchContent)
-    FetchContent_Declare(Boost
-            GIT_REPOSITORY https://github.com/boostorg/boost.git
-            GIT_TAG boost-1.81.0
-            )
-    FetchContent_MakeAvailable(Boost)
-endif()
 
-find_package(jsoncpp REQUIRED)
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(JSONCPP jsoncpp)
 
 find_package(Boost 1.69.0 COMPONENTS chrono system thread REQUIRED)
 
@@ -168,7 +161,7 @@ find_package(OpenGL REQUIRED OPTIONAL_COMPONENTS OpenGL)
 include_directories(${OPENGL_INCLUDE_DIR})
 add_executable(r-type_client ${CLIENT_SRC} ${CLIENT_HPP})
 
-target_link_libraries(r-type_client sfml-graphics sfml-audio jsoncpp_lib
+target_link_libraries(r-type_client sfml-graphics sfml-audio ${JSONCPP_LIBRARIES}
         ${OPENGL_LIBRARIES} ${Boost_SYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY} ${Boost_CHRONO_LIBRARY})
 target_link_directories(r-type_client PUBLIC ${Boost_LIBRARY_DIRS})
 
