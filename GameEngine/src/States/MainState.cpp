@@ -68,6 +68,7 @@ MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
   initText();
   m_music_player.play(MusicID::MENU_THEME);
   m_start_pressed = false;
+  m_clientCom->m_lobby_names.clear();
 }
 
 MainState::~MainState() {

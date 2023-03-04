@@ -13,35 +13,10 @@ IntroState::IntroState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
                         static_cast<float>(m_window->getSize().y - 180)},
         rtype::Vector2f{270, 130}, t_graphic_loader, false)),
       m_flag(t_flag) {
-  m_bg_t = m_graphic_loader->loadTexture();
-  m_bg_s = m_graphic_loader->loadSprite();
-  m_spaceship_t = m_graphic_loader->loadTexture();
-  m_spaceship_s = m_graphic_loader->loadSprite();
   m_spaceMovement = {0.5, 1};
-  if (!m_spaceship_t->loadFromFile("./sprites/starship.png")) {
-    throw std::runtime_error("Unable to load image.");
-  }
-  if (!m_bg_t->loadFromFile("./assets/menubg.jpg")) {
-    throw std::runtime_error("Unable to load image.");
-  }
-  float size_x = m_window->getSize().x;
-  float size_y = m_window->getSize().y;
-  float scale_x = size_x / m_bg_t->getSize().x;
-  float scale_y = size_y / m_bg_t->getSize().y;
-  m_bg_s->setTexture(m_bg_t, true);
-  m_bg_s->setScale({scale_x, scale_y});
   m_path_to_sprite = t_path_to_sprite;
-
-  m_spaceship_s->setScale({0.2, 0.2});
-  m_spaceship_s->rotate(90);
-  m_spaceship_s->setOrigin(
-    {static_cast<float>(m_spaceship_t->getSize().x / 2),
-     static_cast<float>(m_spaceship_t->getSize().y / 2)});
-
-  m_spaceship_s->setPosition({size_x / 2 - 100, size_y / 2 - 100});
-  m_spaceship_s->setTexture(m_spaceship_t, true);
   m_music_player.play(MusicID::MENU_THEME);
-  loadTextureAndSpritesForFlyingObj();
+  initSprites();
   m_sound_manager.init(m_graphic_loader, false);
 }
 
@@ -187,4 +162,31 @@ void IntroState::checkCollisionWithFlyingObjects() {
       ++it;
     }
   }
+}
+
+void IntroState::initSprites() {
+  m_bg_t = m_graphic_loader->loadTexture();
+  m_bg_s = m_graphic_loader->loadSprite();
+  m_spaceship_t = m_graphic_loader->loadTexture();
+  m_spaceship_s = m_graphic_loader->loadSprite();
+  m_spaceship_s->setScale({0.2, 0.2});
+  m_spaceship_s->rotate(90);
+  m_spaceship_s->setOrigin(
+    {static_cast<float>(m_spaceship_t->getSize().x / 2),
+     static_cast<float>(m_spaceship_t->getSize().y / 2)});
+  if (!m_spaceship_t->loadFromFile("./sprites/starship.png")) {
+    throw std::runtime_error("Unable to load image.");
+  }
+  if (!m_bg_t->loadFromFile("./assets/menubg.jpg")) {
+    throw std::runtime_error("Unable to load image.");
+  }
+  float size_x = m_window->getSize().x;
+  float size_y = m_window->getSize().y;
+  float scale_x = size_x / m_bg_t->getSize().x;
+  float scale_y = size_y / m_bg_t->getSize().y;
+  m_bg_s->setTexture(m_bg_t, true);
+  m_bg_s->setScale({scale_x, scale_y});
+  m_spaceship_s->setPosition({size_x / 2 - 100, size_y / 2 - 100});
+  m_spaceship_s->setTexture(m_spaceship_t, true);
+  loadTextureAndSpritesForFlyingObj();
 }

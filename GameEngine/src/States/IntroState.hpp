@@ -28,6 +28,7 @@ class IntroState final : public State {
   void checkCollisionAngle(rtype::Vector2f collisionNormal);
   void checkCollisionWithFlyingObjects();
   void loadTextureAndSpritesForFlyingObj();
+  void initSprites();
 
  private:
   rtype::ITexture *m_bg_t;
