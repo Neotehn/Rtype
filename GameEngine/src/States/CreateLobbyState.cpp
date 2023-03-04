@@ -192,8 +192,7 @@ void CreateLobbyState::update() {
           m_level, m_path_to_sprite, true, "", m_clientCom);
       }
       if (m_start_btn.is_pressed(mouse_pos_f) &&  // start game if pressed
-          m_clientCom->m_lobby_names.size() == 2 && !m_start_is_pressed &&
-          !m_is_start_pressed) {
+          m_clientCom->m_lobby_names.size() == 2 && !m_start_is_pressed) {
         std::cout << "startbtn pressed from create to game" << std::endl;
         m_music_player.stop();
         m_next = StateMachine::build<GameState>(
