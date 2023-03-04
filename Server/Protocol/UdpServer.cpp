@@ -83,6 +83,7 @@ bool UdpServer::checkAndLobbyHandling(std::shared_ptr<Action> t_action) {
   } else if (t_action->getType() == Action::ActionType::LEAVELOBBY) {
     std::string lobby_ip = t_action->getLobbyIp();
     std::string username = t_action->getPlayerName();
+    int to_erase = 0;
 
     for (int i = 0; i < m_lobbys.size(); i++) {
       if (lobby_ip == m_lobbys[i].m_lobby_code) {
@@ -91,9 +92,8 @@ bool UdpServer::checkAndLobbyHandling(std::shared_ptr<Action> t_action) {
             Action::ActionType::LEAVELOBBY, lobby_ip, username);
           sendMessage(leave_lobby_action.getCommand(),
                       m_lobbys[i].m_endpoints[x]);
-          if (m_remoteEndpoint == m_lobbys[i].m_endpoints[x]) {
-            m_lobbys[i].m_endpoints.erase(m_lobbys[i].m_endpoints.begin() + x);
-          }
+          std::cout << "send" << std::endl;
+          if (m_remoteEndpoint == m_lobbys[i].m_endpoints[x]) { to_erase = x; }
         }
         if (m_lobbys[i].m_player_count == 1 ||
             m_lobbys[i].m_player_count == 0) {
@@ -106,6 +106,8 @@ bool UdpServer::checkAndLobbyHandling(std::shared_ptr<Action> t_action) {
                 m_lobbys[i].m_player_names.begin() + x);
             }
           }
+          m_lobbys[i].m_endpoints.erase(m_lobbys[i].m_endpoints.begin() +
+                                        to_erase);
         }
         break;
       }
