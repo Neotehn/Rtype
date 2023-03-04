@@ -21,6 +21,7 @@ ProvideUserNameState::ProvideUserNameState(
 }
 
 void ProvideUserNameState::update() {
+  bool pressed_enter = false;
   for (auto event = rtype::Event{}; m_window->pollEvent(event);) {
     rtype::Vector2i mouse_pos = m_mouse->getMousePosition(m_window);
     rtype::Vector2f mouse_pos_f{static_cast<float>(mouse_pos.x),
@@ -40,6 +41,7 @@ void ProvideUserNameState::update() {
           m_level, m_path_to_sprite, true, m_ip, m_clientCom);
       }
     }
+
     switch (event.type) {
       case rtype::EventType::Closed:
         m_state_machine.quit();
@@ -48,6 +50,8 @@ void ProvideUserNameState::update() {
         switch (event.key) {
           case rtype::EventKey::Enter:
             m_textbox.setSelected(true);
+            if (m_textbox.getTextString().size() >= 3)
+              pressed_enter = true;
             break;
           case rtype::EventKey::Escape:
             m_textbox.setSelected(false);
@@ -57,6 +61,17 @@ void ProvideUserNameState::update() {
         }
         break;
       case rtype::EventType::TextEntered:
+        if (pressed_enter) {
+          m_clientCom->setPlayerName(m_textbox.getTextString());
+          m_next = StateMachine::build<MainState>(
+            m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
+            m_level, m_path_to_sprite, true, m_ip, m_clientCom);
+          break;
+        }
+        if (event.key == rtype::EventKey::Enter ||
+            event.key == 10 || m_textbox.getTextString().size() >= 7) {
+          break;
+        }
         m_textbox.typedOn(event);
         m_textbox.setPosition(rtype::Vector2f{
           static_cast<float>(m_window->getSize().x / 2 -
