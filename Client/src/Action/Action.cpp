@@ -52,6 +52,10 @@ std::string Action::getTypeAsString() const {
       return "JOINLOBBY";
     case ActionType::JOINSUCCESSFULL:
       return "JOINSUCCESSFULL";
+    case ActionType::ASKLEADERBOARD:
+      return "ASKLEADERBOARD";
+    case ActionType::SENDLEADERBOARD:
+      return "SENDLEADERBOARD";
     case ActionType::ERROR:
       return "ERROR";
   }
@@ -149,6 +153,9 @@ std::string Action::getCommand() const {
     case ActionType::CHAD:
       return std::to_string(m_action_id) + ";CHAD;" + std::to_string(m_id) +
              ";" + m_chad_msg + ";" + m_lobby_ip + ";";
+    case ActionType::ASKLEADERBOARD:
+      return std::to_string(m_action_id) + ";ASKLEADERBOARD;" +
+             std::to_string(m_id) + ";";
   }
   return std::to_string(m_action_id) + ";" + type_string + ";" +
          std::to_string(m_id) + ";";

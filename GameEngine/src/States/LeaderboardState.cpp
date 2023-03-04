@@ -108,6 +108,7 @@ void LeaderboardState::initText() {
       {(size_x / 2) - 100, static_cast<float>(200 + (i * 50))});
     m_leaderboard_list.push_back(text);
   }
+  //Todo: get leaderboard from server
   std::vector<std::string> leaderboard = {"Player1 3454", "Player2 1234", "Player3 994", "Player4 954", "Player5 854", "Player6 799", "Player7 554",
                                           "Player8 478", "Player9 300", "Player10 20"};
   setLeaderboard(leaderboard);

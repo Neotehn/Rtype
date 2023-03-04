@@ -142,7 +142,7 @@ set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         ../Game/Encapsulation/SFML/GraphicLoader.cpp
         ../Game/CreateEntities/AssetLoader.cpp
         ../Server/src/Logger.cpp
-        ../GameEngine/src/States/IntroState.cpp ../GameEngine/src/States/ProvideUserNameState.cpp ../GameEngine/src/States/ProvideUserNameState.hpp ../GameEngine/src/States/LeaderboardState.cpp ../GameEngine/src/States/LeaderboardState.hpp)
+        ../GameEngine/src/States/IntroState.cpp ../GameEngine/src/States/ProvideUserNameState.cpp ../GameEngine/src/States/ProvideUserNameState.hpp ../GameEngine/src/States/LeaderboardState.cpp ../GameEngine/src/States/LeaderboardState.hpp src/Action/LeaderboardAction.cpp src/Action/LeaderboardAction.hpp)
 
 include(FetchContent)
 FetchContent_Declare(SFML

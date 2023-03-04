@@ -43,6 +43,8 @@ class Action : public IAction {
     JOINSUCCESSFULL,    // ACTION_ID;
     CREATESUCCESSFULL,  // ACTION_ID;
     CHAD,               // ACTION_ID;CHAT_MSG
+    ASKLEADERBOARD,    // ACTION_ID;PLAYER_ID
+    SENDLEADERBOARD,   // ACTION_ID;PLAYER_ID;LEADERBOARD
     ERROR,
     CLOSE,
   };
@@ -140,6 +142,7 @@ class Action : public IAction {
   std::vector<std::string> m_lobby_player_names;
   std::string m_chad_msg = "";
   int m_lobby_id = 0;
+  std::vector<std::string> m_leaderboard;
 };
 
 #endif  //R_TYPE_CLIENT_ACTION_HPP
