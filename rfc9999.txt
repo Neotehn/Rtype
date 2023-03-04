@@ -106,8 +106,8 @@ RFC9999                     R-Type Protocol                   March 2023
                 ERROR,
             };
 
-        The excact structure of the commands are explained throughout
-        the document. All commands are written in one line and seperated
+        The exact structure of the commands are explained throughout
+        the document. All commands are written in one line and separated
         by a semicolon(;) and end with a semicolon(;).
 
 
@@ -164,7 +164,7 @@ RFC9999                     R-Type Protocol                   March 2023
             PLAYERNAME = username
 
         In response the server sends the same command to both clients, 
-        in ordr to confirmthe action and to let the other player know 
+        in order to confirm the action and to let the other player know 
         the client has left his lobby.
 
         Once both player are connected the players can press the start 
@@ -188,8 +188,6 @@ RFC9999                     R-Type Protocol                   March 2023
             PLAYER_ID = id of player
             PLAYER_NB = 1 or 2 depending on which player
         
-
-
         After that the client must receive the CREATE command for 
         the both player character:
 
@@ -227,6 +225,8 @@ RFC9999                     R-Type Protocol                   March 2023
             ACTION_TYPE = UP / DOWN / LEFT / RIGHT
             ID = id of the player
             USER_TRIGGERED = TRUE (bool)
+
+
 
 
 
