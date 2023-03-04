@@ -23,21 +23,21 @@ void GUISystem::initText() {
   m_nb_money_shots->setString("0x");
   m_nb_money_shots->setCharacterSize(30);
   m_nb_money_shots->setPosition(
-    {static_cast<float>(m_window->getSize().x - 50), static_cast<float>(10)});
+    {static_cast<float>(m_window->getSize().x - 90), static_cast<float>(10)});
 
   m_nb_bomb_shots = m_graphic_loader->loadText();
   m_nb_bomb_shots->setFont(m_font);
   m_nb_bomb_shots->setString("0x");
   m_nb_bomb_shots->setCharacterSize(30);
   m_nb_bomb_shots->setPosition(
-    {static_cast<float>(m_window->getSize().x - 200), static_cast<float>(10)});
+    {static_cast<float>(m_window->getSize().x - 280), static_cast<float>(10)});
 
   m_nb_fire_shots = m_graphic_loader->loadText();
   m_nb_fire_shots->setFont(m_font);
   m_nb_fire_shots->setString("0x");
   m_nb_fire_shots->setCharacterSize(30);
   m_nb_fire_shots->setPosition(
-    {static_cast<float>(m_window->getSize().x - 300), static_cast<float>(10)});
+    {static_cast<float>(m_window->getSize().x - 430), static_cast<float>(10)});
 
   m_nb_coins = m_graphic_loader->loadText();
   m_nb_coins->setFont(m_font);
@@ -105,7 +105,7 @@ GUISystem::GUISystem(std::shared_ptr<EntityManager> t_em,
   m_bomb = m_graphic_loader->loadRectangleShape();
   m_bomb->setSize({30, 30});
   m_bomb->setPosition(
-    {static_cast<float>(m_window->getSize().x - 240), static_cast<float>(10)});
+    {static_cast<float>(m_window->getSize().x - 330), static_cast<float>(10)});
   m_bomb->setTexture(sprite_bomb.getTexture());
   m_bomb->setTextureRect(rtype::IntRect{0, 0, 361, 361});
 
@@ -114,7 +114,7 @@ GUISystem::GUISystem(std::shared_ptr<EntityManager> t_em,
   m_fire = m_graphic_loader->loadRectangleShape();
   m_fire->setSize({30, 30});
   m_fire->setPosition(
-    {static_cast<float>(m_window->getSize().x - 340), static_cast<float>(10)});
+    {static_cast<float>(m_window->getSize().x - 480), static_cast<float>(10)});
   m_fire->setTexture(sprite_fire.getTexture());
   m_fire->setTextureRect(rtype::IntRect{0, 0, 361, 361});
 
@@ -123,7 +123,7 @@ GUISystem::GUISystem(std::shared_ptr<EntityManager> t_em,
   m_money = m_graphic_loader->loadRectangleShape();
   m_money->setSize({70, 30});
   m_money->setPosition(
-    {static_cast<float>(m_window->getSize().x - 140), static_cast<float>(10)});
+    {static_cast<float>(m_window->getSize().x - 180), static_cast<float>(10)});
   m_money->setTexture(sprite_money.getTexture());
   m_money->setTextureRect(rtype::IntRect{0, 0, 800, 340});
 
