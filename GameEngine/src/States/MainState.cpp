@@ -167,5 +167,6 @@ std::string MainState::createLobbyCode() {
   };
   std::string str(10, 0);
   std::generate_n(str.begin(), 10, randchar);
+  std::cout << "Lobby Code: " << str << std::endl;
   return str;
 }

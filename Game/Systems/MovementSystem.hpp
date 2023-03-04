@@ -25,6 +25,8 @@ class MovementSystem : public ISystem {
   UdpServer *m_serverCom;
   UdpClient *m_clientCom;
 
+  void playerObstacleInteraction(Pos &t_position, const rtype::Vector2f &t_size,
+                                 float t_speed);
   void keepPlayerInsideScreen(rtype::Vector2f &t_position,
                               const rtype::Vector2f &t_size);
   void updatePlayer(EntityID t_ent);
