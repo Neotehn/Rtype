@@ -116,6 +116,7 @@ bool GameState::playerAlive() {
 void GameState::manageLevels() {
   if (!playerAlive()) {
     m_is_running = false;
+    std::cout << "you died under the epitech pressure" << std::endl;
     return;
   }
   if (*m_level == 3) {
