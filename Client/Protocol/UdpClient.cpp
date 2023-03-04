@@ -13,6 +13,7 @@ UdpClient::UdpClient(boost::asio::io_service &t_io_service,
   m_lobby_successfull_connected = false;
   receiveClient();
   m_thread = boost::thread([&t_io_service]() { t_io_service.run(); });
+  m_player_name = "";
 }
 
 UdpClient::~UdpClient() {
@@ -127,4 +128,10 @@ void UdpClient::setInputManager(InputManager *t_input_manager) {
 
 void UdpClient::setClientInputManager(InputManager *t_client_input_manager) {
   m_client_input_manager = t_client_input_manager;
+}
+
+std::string UdpClient::getPlayerName() { return m_player_name; }
+
+void UdpClient::setPlayerName(std::string t_new_name) {
+  m_player_name = t_new_name;
 }
