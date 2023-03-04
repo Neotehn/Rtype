@@ -27,8 +27,6 @@ class SettingsState final : public State {
                 const std::string &t_path_to_sprite, bool t_replace = true,
                 std::string t_ip = "", UdpClient *t_clientCom = nullptr);
   ~SettingsState() override;
-  void pause() override;
-  void resume() override;
   void update() override;
   void draw() override;
 

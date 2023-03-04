@@ -47,10 +47,6 @@ IntroState::~IntroState() {
   m_flying_obj_s.clear();
 }
 
-void IntroState::pause() { std::cout << "MenuState Pause\n"; }
-
-void IntroState::resume() { std::cout << "MenuState resume\n"; }
-
 void IntroState::update() {
   animateAndMoveShip();
   animateAndMoveFlyingObj();

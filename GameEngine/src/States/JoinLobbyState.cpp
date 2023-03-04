@@ -120,10 +120,6 @@ JoinLobbyState::JoinLobbyState(StateMachine &t_machine,
   // call protocol to join lobby
 }
 
-void JoinLobbyState::pause() { std::cout << "MenuState Pause\n"; }
-
-void JoinLobbyState::resume() { std::cout << "MenuState resume\n"; }
-
 void JoinLobbyState::update() {
   for (auto event = rtype::Event{}; m_window->pollEvent(event);) {
     rtype::Vector2i mouse_pos = m_mouse->getMousePosition(m_window);

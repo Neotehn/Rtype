@@ -80,10 +80,6 @@ SettingsState::~SettingsState() {
   delete m_bg_s;
 }
 
-void SettingsState::pause() { std::cout << "MenuState Pause\n"; }
-
-void SettingsState::resume() { std::cout << "MenuState resume\n"; }
-
 void SettingsState::update() {
   for (auto event = rtype::Event{}; m_window->pollEvent(event);) {
     rtype::Vector2i mouse_pos = m_mouse->getMousePosition(m_window);

@@ -160,10 +160,6 @@ CreateLobbyState::CreateLobbyState(
   // call protocol for creating lobby
 }
 
-void CreateLobbyState::pause() { std::cout << "MenuState Pause\n"; }
-
-void CreateLobbyState::resume() { std::cout << "MenuState resume\n"; }
-
 void CreateLobbyState::update() {
   for (int i = 0; i < m_clientCom->m_chad_msgs.size(); i++) {
     m_chad_messages[i]->setString(m_clientCom->m_chad_msgs[i]);
@@ -199,6 +195,7 @@ void CreateLobbyState::update() {
         m_next = StateMachine::build<GameState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, "", m_clientCom);
+        m_is_start_pressed = true;
       }  // currently lobby is just set between main and game
     }
     switch (event.type) {

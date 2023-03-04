@@ -100,10 +100,6 @@ std::vector<std::shared_ptr<ISystem>> GameState::initSystems() {
   return systems;
 }
 
-void GameState::pause() { std::cout << "GameState Pause\n"; }
-
-void GameState::resume() { std::cout << "GameState Resume\n"; }
-
 void GameState::manageLevels() {
   if (*m_level == 2) {
     if (m_flag == CommunicationFlag::server && m_will_reload) {
@@ -247,9 +243,12 @@ void GameState::update() {
     StateAction start_action =
       StateAction(Action::ActionType::END, m_port_number);
     m_clientCom->sendMessage(start_action.getCommand());
+    std::cout << "send end com ..." << std::endl;
   }
   m_music->stop();
+  std::cout << "music stop" << std::endl;
   m_state_machine.quit();
+  std::cout << "quit" << std::endl;
 }
 
 void GameState::draw() {}

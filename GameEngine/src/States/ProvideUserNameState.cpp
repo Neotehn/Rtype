@@ -121,7 +121,3 @@ void ProvideUserNameState::initText() {
                        m_textbox.getText()->getLocalBounds().width / 2),
     static_cast<float>(m_window->getSize().y / 2 - 100)});
 }
-
-void ProvideUserNameState::pause() { std::cout << "Pause" << std::endl; }
-
-void ProvideUserNameState::resume() { std::cout << "Resume" << std::endl; }

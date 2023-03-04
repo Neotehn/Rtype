@@ -28,8 +28,6 @@ class State {
 
   virtual void update() = 0;
   virtual void draw() = 0;
-  virtual void pause() = 0;
-  virtual void resume() = 0;
 
   std::unique_ptr<State> next();
 

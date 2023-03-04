@@ -27,8 +27,6 @@ class MainState final : public State {
             std::string t_ip = "", UdpClient *t_clientCom = nullptr);
   ~MainState();
   std::string createLobbyCode();
-  void pause() override;
-  void resume() override;
   void update() override;
   void draw() override;
 

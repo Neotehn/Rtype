@@ -77,10 +77,6 @@ MainState::~MainState() {
   delete m_bg_s;
 }
 
-void MainState::pause() { std::cout << "MenuState Pause\n"; }
-
-void MainState::resume() { std::cout << "MenuState resume\n"; }
-
 void MainState::update() {
   for (auto event = rtype::Event{}; m_window->pollEvent(event);) {
     rtype::Vector2i mouse_pos = m_mouse->getMousePosition(m_window);
@@ -107,11 +103,7 @@ void MainState::update() {
         std::cout << "settingsbtn pressed" << std::endl;
         m_next = StateMachine::build<SettingsState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, true, "", m_clientCom);
-      }
-      if (m_exit_btn.is_pressed(mouse_pos_f)) {
-        std::cout << "exitbtn pressed" << std::endl;
-        m_state_machine.quit();
+          m_level, m_path_to_sprite, true, "", m_clientCom);
       }
       if (m_exit_btn.is_pressed(mouse_pos_f)) {
         std::cout << "exitbtn pressed" << std::endl;
