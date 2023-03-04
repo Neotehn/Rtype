@@ -31,6 +31,13 @@ void MovementSystem::update() {
     if (obstacle->position.position.x <= obstacle->limit) {
       obstacle->position.position.x = obstacle->original_x;
     }
+    if (int(obstacle->position.position.x) % 50 == 0 && m_serverCom) {
+      m_serverCom->addEvent(
+        std::make_shared<Action>(PosAction(ent, obstacle->position.position)));
+    }
+    if (!m_serverCom && m_event_queue.hasLatestPos(ent)) {
+      obstacle->position.position = m_event_queue.getLatestPos(ent);
+    }
     obstacle->body->setPosition(obstacle->position.position);
   }
   for (EntityID ent : EntityViewer<Bullet>(*m_em)) {

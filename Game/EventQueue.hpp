@@ -26,6 +26,7 @@ class EventQueue {
   std::vector<std::shared_ptr<Action>> getAllOfType(Action::ActionType t_type);
   void removeEvent(int t_action_id);
 
+  bool hasLatestPos(EntityID t_id);
   rtype::Vector2f getLatestPos(EntityID t_id);
 
  private:
