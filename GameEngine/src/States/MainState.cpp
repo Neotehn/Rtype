@@ -68,6 +68,7 @@ MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
   initText();
   m_music_player.play(MusicID::MENU_THEME);
   m_start_pressed = false;
+  m_join_pressed = false;
   m_clientCom->m_lobby_names.clear();
 }
 
@@ -120,11 +121,12 @@ void MainState::update() {
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, true, "", m_clientCom);
       }
-      if (m_join_btn.is_pressed(mouse_pos_f)) {
+      if (m_join_btn.is_pressed(mouse_pos_f) && !m_join_pressed) {
         std::cout << "join lobby" << std::endl;
         m_next = StateMachine::build<JoinLobbyState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, true, "", m_clientCom);
+        m_join_pressed = true;
       }
       if (m_exit_btn.is_pressed(mouse_pos_f)) {
         std::cout << "exitbtn pressed" << std::endl;
