@@ -81,7 +81,7 @@ set(CLIENT_HPP ../Game/ECS/ComponentPool.hpp
         ../Game/Encapsulation/SFML/GraphicLoader.hpp
         ../Game/CreateEntities/AssetLoader.hpp
         ../Server/src/Logger.hpp
-        ../GameEngine/src/States/IntroState.hpp)
+        ../GameEngine/src/States/IntroState.hpp ../GameEngine/src/States/LeaderboardState.cpp ../GameEngine/src/States/LeaderboardState.hpp)
 
 set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         src/InputManager/InputManager.cpp
@@ -142,7 +142,7 @@ set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         ../Game/Encapsulation/SFML/GraphicLoader.cpp
         ../Game/CreateEntities/AssetLoader.cpp
         ../Server/src/Logger.cpp
-        ../GameEngine/src/States/IntroState.cpp ../GameEngine/src/States/ProvideUserNameState.cpp ../GameEngine/src/States/ProvideUserNameState.hpp)
+        ../GameEngine/src/States/IntroState.cpp ../GameEngine/src/States/ProvideUserNameState.cpp ../GameEngine/src/States/ProvideUserNameState.hpp ../GameEngine/src/States/LeaderboardState.cpp ../GameEngine/src/States/LeaderboardState.hpp)
 
 include(FetchContent)
 FetchContent_Declare(SFML
@@ -150,10 +150,12 @@ FetchContent_Declare(SFML
         GIT_TAG 2.6.x)
 FetchContent_MakeAvailable(SFML)
 
-
-
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(JSONCPP jsoncpp)
+if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(JSONCPP jsoncpp)
+else()
+    find_package(jsoncpp REQUIRED)
+endif()
 
 find_package(Boost 1.69.0 COMPONENTS chrono system thread REQUIRED)
 
