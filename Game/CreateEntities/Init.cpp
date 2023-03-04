@@ -255,6 +255,7 @@ void initBulletClient(EntityID t_id, rtype::Vector2f t_pos,
   bullet_body->setSize({20, 20});
   bullet_body->setPosition({t_pos.x, t_pos.y});
   float speed = 10;
+  Player *player = (*t_em).Get<Player>(t_owner_id);
 
   switch (t_action->getShootType()) {
     case Action::ShootingType::NORMAL:
@@ -263,6 +264,10 @@ void initBulletClient(EntityID t_id, rtype::Vector2f t_pos,
           .getTexture());
       break;
     case Action::ShootingType::COIN:
+      if (player->coin_shot == 0) return;
+      player->coin_shot -= 1;
+      if (player->coin_shot < 0) player->coin_shot = 0;
+
       bullet_body->setTexture(
         SpriteECS("./../Client/sprites/dollarPaul.png", t_graphic_loader)
           .getTexture());
@@ -270,11 +275,19 @@ void initBulletClient(EntityID t_id, rtype::Vector2f t_pos,
       bullet_body->setSize({40, 25});
       break;
     case Action::ShootingType::FIRE:
+      if (player->fire_shot == 0) return;
+      player->fire_shot -= 1;
+      if (player->fire_shot < 0) player->fire_shot = 0;
+
       bullet_body->setTexture(
         SpriteECS("./../Client/sprites/shoot3.png", t_graphic_loader)
           .getTexture());
       break;
     case Action::ShootingType::BOMB:
+      if (player->bomb_shot == 0) return;
+      player->bomb_shot -= 1;
+      if (player->bomb_shot < 0) player->bomb_shot = 0;
+
       bullet_body->setTexture(
         SpriteECS("./../Client/sprites/shoot4.png", t_graphic_loader)
           .getTexture());
