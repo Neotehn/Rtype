@@ -7,12 +7,14 @@
 #include "./States/MainState.hpp"
 #include "./MusicPlayer.hpp"
 #include "./StateMachine.hpp"
+#include "./States/IntroState.hpp"
 #include "../../Client/Protocol/UdpClient.hpp"
 #include "../../Server/Protocol/UdpServer.hpp"
 
 class Core {
  public:
-  Core(std::size_t t_flag, std::string t_ip, int *t_level);
+  Core(std::size_t t_flag, std::string t_ip, const std::string &t_path,
+       int *t_level);
   ~Core();
   Core(const Core &);
   void run();
