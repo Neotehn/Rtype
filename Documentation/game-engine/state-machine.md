@@ -4,7 +4,7 @@ In order to manage all different screens, like the different menus and the game 
 
 The state machine is split up in different classes. The most important are the "StateMachine" and the "State" class. The "StateMachine"-Class contains the stack of states and the "State"-Class builds the base of all screens. &#x20;
 
-<figure><img src="../.gitbook/assets/Screenshot from 2023-01-31 14-44-03.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../assets/Screenshot from 2023-01-31 14-44-03.png" alt=""><figcaption></figcaption></figure>
 
 To add a new screen you simply have to create a new class like the "ScreenStates"-Class in the following picture. The "update"-function contains event management, the "draw"-function contains everything relevant to display the scene. The new scene should be put inside the "States"-folder, which you find under "GameEngine" -> "src".
 

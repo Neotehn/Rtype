@@ -120,6 +120,7 @@ CreateLobbyState::CreateLobbyState(StateMachine &t_machine,
   initSprites();
   initText();
   m_music_player.play(MusicID::MENU_THEME);
+  m_start_pressed = false;
   // call protocol for creating lobby
 }
 
@@ -149,11 +150,13 @@ void CreateLobbyState::update() {
           m_level, true, "", m_clientCom);
       }
       if (m_start_btn.is_pressed(mouse_pos_f) &&
-          m_clientCom->m_lobby_names.size() == 2) {  // start game if pressed
+          m_clientCom->m_lobby_names.size() == 2 &&
+          !m_start_pressed) {  // start game if pressed
         std::cout << "startbtn pressed" << std::endl;
         m_next = StateMachine::build<GameState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, true, "", m_clientCom);
+        m_start_pressed = true;
       }  // currently lobby is just set between main and game
     }
     switch (event.type) {

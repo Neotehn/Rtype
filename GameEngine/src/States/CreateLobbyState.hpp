@@ -53,6 +53,7 @@ class CreateLobbyState final : public State {
   rtype::ISprite *m_player_two_s;
   rtype::ISprite *m_player_three_s;
   rtype::ISprite *m_player_four_s;
+  bool m_start_pressed;
 
   void initSprites();
   void initText();

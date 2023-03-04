@@ -2,8 +2,10 @@
 
 The client is the display terminal of the game. It must display the game and handle input.
 
-The Client contains to the most part only the different Screens. For how to add new screens please refere to the [Game Engine](game-engine.md) page under "State machine".
+The Client works as a state machine and every screen is in a different state. To add new screens please refer to the "[State Machine](../game-engine/state-machine.md)" page.&#x20;
 
-<figure><img src="../assets/R-Type Client.png" alt=""><figcaption><p>Overview of the client</p></figcaption></figure>
+In order to communicate with the server we use our "UDPClient" protocol. For better understanding in how the protocol works please refer to  the "[Protocol](protocol.md)" page.
+
+To be concise the client just transmits the user input (movement, shooting and close game) and everything else, like new enemies or bullets or status updates are all coming from the server.
 
 [Back](../../README.md)

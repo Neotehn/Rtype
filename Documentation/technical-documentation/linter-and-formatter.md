@@ -11,7 +11,7 @@ For this project, we are using cpplint as a Linter and clang-format for the form
 3. File → Settings → cpplint option → insert your python and cpplint path
    1.
 
-       <figure><img src="../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+       <figure><img src="../assets/image.png" alt=""><figcaption></figcaption></figure>
 
 #### Vscode <a href="#vscode" id="vscode"></a>
 
