@@ -12,7 +12,7 @@ class DisplaySystem : public ISystem {
                 rtype::IRenderWindow *t_window, std::size_t t_flag,
                 rtype::IGraphicLoader *t_graphic_loader,
                 UdpClient *m_clientCom = nullptr);
-  ./ ~DisplaySystem() = default;
+  ~DisplaySystem() = default;
 
   virtual void update() override;
   virtual void updateData(SystemData &t_data) override;
