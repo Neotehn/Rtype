@@ -106,7 +106,44 @@ void GameState::pause() { std::cout << "GameState Pause\n"; }
 void GameState::resume() { std::cout << "GameState Resume\n"; }
 
 void GameState::manageLevels() {
-  if (*m_level == 2) {
+  if (*m_level == 3) {
+    if (m_flag == CommunicationFlag::server && m_will_reload) {
+      m_level_three_enemy_created = false;
+      bool success = loadNewEndboss(m_em, m_graphic_loader, m_serverCom);
+      if (!success) {
+        std::cout << "end game" << std::endl;
+        return;
+      }
+      std::cout << "load new endboss" << std::endl;
+      return;
+    }
+    if (!m_level_three_enemy_created) {
+      for (EntityID ent : EntityViewer<Enemy>(*m_em)) {
+        Enemy *enem = (*m_em).Get<Enemy>(ent);
+        if (enem->obj->type == "endboss") {
+          m_level_three_enemy_created = true;
+          break;
+        }
+      }
+    }
+    if (!m_level_three_enemy_created) return;
+    bool endboss_exists = false;
+    for (EntityID ent : EntityViewer<Enemy>(*m_em)) {
+      Enemy *enem = (*m_em).Get<Enemy>(ent);
+      if (enem->obj->type == "endboss") {
+        endboss_exists = true;
+        break;
+      }
+    }
+    if (endboss_exists) return;
+    if (m_flag == CommunicationFlag::server) {
+      m_will_reload = true;
+    } else {
+      m_level_three_enemy_created = false;
+      loadNewEndboss(m_em, m_graphic_loader, m_serverCom);
+      std::cout << "load new endboss" << std::endl;
+    }
+  } else if (*m_level == 2) {
     if (m_flag == CommunicationFlag::server && m_will_reload) {
       m_will_reload = false;
       *m_level += 1;

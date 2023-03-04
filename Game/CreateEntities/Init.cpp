@@ -6,6 +6,7 @@
 AssetLoader assetLoader;
 int level = 1;
 std::vector<EntityID> background_entities;
+int bullet_index = 0;
 
 bool loadLevel(int *t_level, std::shared_ptr<EntityManager> t_em,
                rtype::IGraphicLoader *t_graphic_loader, rtype::IMusic *t_music,
@@ -50,6 +51,7 @@ bool loadLevel(int *t_level, std::shared_ptr<EntityManager> t_em,
   if (t_server_com) {
     loadMap(t_em, t_graphic_loader, t_server_com);
     if (level == 2) initPayWall(t_em, t_graphic_loader, t_server_com);
+    if (level == 3) initEndboss(t_em, t_graphic_loader, t_server_com, 0);
   }
   return true;
 }
@@ -311,7 +313,7 @@ DynamicHealthBar initEnemyHealth(rtype::IGraphicLoader *t_graphic_loader,
 void initEnemy(std::shared_ptr<EntityManager> t_em,
                rtype::IGraphicLoader *t_graphic_loader, UdpServer *t_server_com,
                rtype::Vector2f t_pos, int t_health) {
-  Json::Value enemy_data = assetLoader.getEnemyData()[0];
+  Json::Value enemy_data = assetLoader.getEnemyData()[bullet_index];
   rtype::Vector2i size = {enemy_data["size"]["x"].asInt(),
                           enemy_data["size"]["y"].asInt()};
   EntityID enemy = t_em->createNewEntity();
@@ -347,7 +349,7 @@ void initEnemy(std::shared_ptr<EntityManager> t_em,
 void initEnemyClient(EntityID t_id, rtype::Vector2f t_pos, float t_velocity,
                      std::shared_ptr<EntityManager> t_em,
                      rtype::IGraphicLoader *t_graphic_loader) {
-  Json::Value enemy_data = assetLoader.getEnemyData()[0];
+  Json::Value enemy_data = assetLoader.getEnemyData()[bullet_index];
   rtype::Vector2i size = {enemy_data["size"]["x"].asInt(),
                           enemy_data["size"]["y"].asInt()};
   EntityID enemy = t_em->createNewEntity(t_id);
@@ -717,11 +719,14 @@ void initPayWall(std::shared_ptr<EntityManager> t_em,
   body->setTextureRect(rtype::IntRect{0, 0, size.x, size.y});
 
   AnimationObj *enemy_obj = new AnimationObj{
-    "paywall", Pos{{-0.1, velocity_direction}, enemy_pos},
+    "paywall",
+    Pos{{-0.1, velocity_direction}, enemy_pos},
     AnimationTime{.current_animation_time = 0,
                   .display_time = 1,
                   .last_timer = 0},
-    AnimationRect{.size = size.x, .limit = enemy_data["limit"].asInt()}, body};
+    AnimationRect{.size = size.x, .limit = enemy_data["limit"].asInt()},
+    body,
+    10};
 
   t_em->Assign<Enemy>(
     enemy,
@@ -756,13 +761,116 @@ void initPayWallClient(EntityID t_id, std::shared_ptr<EntityManager> t_em,
   body->setTextureRect(rtype::IntRect{0, 0, size.x, size.y});
 
   AnimationObj *enemy_obj = new AnimationObj{
-    "paywall", Pos{{-0.1, 0}, enemy_pos},
+    "paywall",
+    Pos{{-0.1, 0}, enemy_pos},
     AnimationTime{.current_animation_time = 0,
                   .display_time = 1,
                   .last_timer = 0},
-    AnimationRect{.size = size.x, .limit = enemy_data["limit"].asInt()}, body};
+    AnimationRect{.size = size.x, .limit = enemy_data["limit"].asInt()},
+    body,
+    10};
 
   t_em->Assign<Enemy>(
     enemy,
     {enemy_obj, initEnemyHealth(t_graphic_loader, enemy_pos, {0, 400}, 800)});
+}
+
+bool loadNewEndboss(std::shared_ptr<EntityManager> t_em,
+                    rtype::IGraphicLoader *t_graphic_loader,
+                    UdpServer *t_server_com) {
+  Json::Value enemy_data_list = assetLoader.getEnemyData();
+  if (enemy_data_list.size() < bullet_index) {
+    std::cout << "No more end bosses" << std::endl;
+    return false;
+  }
+  bullet_index++;
+  if (t_server_com) {
+    initEndboss(t_em, t_graphic_loader, t_server_com, bullet_index);
+  }
+  return true;
+}
+
+void initEndboss(std::shared_ptr<EntityManager> t_em,
+                 rtype::IGraphicLoader *t_graphic_loader,
+                 UdpServer *t_server_com, int t_nb) {
+  Json::Value enemy_data_list = assetLoader.getEnemyData();
+  if (enemy_data_list.size() <= t_nb) {
+    std::cout << "Error while loading enemy data" << std::endl;
+    return;
+  }
+  Json::Value enemy_data = enemy_data_list[t_nb];
+  rtype::Vector2i size = {enemy_data["size"]["x"].asInt(),
+                          enemy_data["size"]["y"].asInt()};
+  EntityID enemy = t_em->createNewEntity();
+  SpriteECS sprite = SpriteECS(enemy_data["path"].asString(), t_graphic_loader);
+  rtype::Vector2f enemy_pos = {800, 75};
+  float velocity_direction = 0;
+
+  rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
+  body->setSize({400, 600});
+  body->setPosition({enemy_pos.x, enemy_pos.y});
+  body->setTexture(sprite.getTexture());
+  body->setFillColor(
+    rtype::Color{static_cast<unsigned char>(enemy_data["color"]["r"].asInt()),
+                 static_cast<unsigned char>(enemy_data["color"]["g"].asInt()),
+                 static_cast<unsigned char>(enemy_data["color"]["b"].asInt()),
+                 static_cast<unsigned char>(enemy_data["color"]["a"].asInt())});
+  body->setTextureRect(rtype::IntRect{0, 0, size.x, size.y});
+
+  AnimationObj *enemy_obj = new AnimationObj{
+    "endboss",
+    Pos{{-1, velocity_direction}, enemy_pos},
+    AnimationTime{.current_animation_time = 0,
+                  .display_time = 1,
+                  .last_timer = 0},
+    AnimationRect{.size = size.x, .limit = enemy_data["limit"].asInt()},
+    body,
+    15};
+
+  t_em->Assign<Enemy>(
+    enemy,
+    {enemy_obj, initEnemyHealth(t_graphic_loader, enemy_pos, {0, 400}, 500)});
+  t_server_com->addEvent(std::make_shared<Action>(CreateAction(
+    enemy, Action::ObjectType::ENDBOSS, enemy_pos, "", velocity_direction)));
+}
+
+void initEndbossClient(EntityID t_id, std::shared_ptr<EntityManager> t_em,
+                       rtype::IGraphicLoader *t_graphic_loader) {
+  Json::Value enemy_data_list = assetLoader.getEnemyData();
+  if (enemy_data_list.size() <= bullet_index) {
+    std::cout << "Error while loading enemy data" << std::endl;
+    return;
+  }
+  Json::Value enemy_data = enemy_data_list[bullet_index];
+  rtype::Vector2i size = {enemy_data["size"]["x"].asInt(),
+                          enemy_data["size"]["y"].asInt()};
+  EntityID enemy = t_em->createNewEntity();
+  SpriteECS sprite = SpriteECS(enemy_data["path"].asString(), t_graphic_loader);
+  rtype::Vector2f enemy_pos = {800, 75};
+  float velocity_direction = 0;
+
+  rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
+  body->setSize({400, 600});
+  body->setPosition({enemy_pos.x, enemy_pos.y});
+  body->setTexture(sprite.getTexture());
+  body->setFillColor(
+    rtype::Color{static_cast<unsigned char>(enemy_data["color"]["r"].asInt()),
+                 static_cast<unsigned char>(enemy_data["color"]["g"].asInt()),
+                 static_cast<unsigned char>(enemy_data["color"]["b"].asInt()),
+                 static_cast<unsigned char>(enemy_data["color"]["a"].asInt())});
+  body->setTextureRect(rtype::IntRect{0, 0, size.x, size.y});
+
+  AnimationObj *enemy_obj = new AnimationObj{
+    "endboss",
+    Pos{{-1, velocity_direction}, enemy_pos},
+    AnimationTime{.current_animation_time = 0,
+                  .display_time = 1,
+                  .last_timer = 0},
+    AnimationRect{.size = size.x, .limit = enemy_data["limit"].asInt()},
+    body,
+    15};
+
+  t_em->Assign<Enemy>(
+    enemy,
+    {enemy_obj, initEnemyHealth(t_graphic_loader, enemy_pos, {0, 400}, 500)});
 }

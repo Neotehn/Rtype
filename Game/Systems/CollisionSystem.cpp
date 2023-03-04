@@ -52,7 +52,7 @@ void CollisionSystem::playerAnimationCollision(Player *t_player,
       t_player->body->intersects(enemy->obj->body->getGlobalBounds());
 
     if (collision) {
-      if (enemy->obj->type == "paywall") {
+      if (enemy->obj->type == "paywall" || enemy->obj->type == "endboss") {
         m_serverCom->addEvent(
           std::make_shared<Action>(DamageAction(enemy_ent, 1, t_player_ent)));
       } else if (enemy->obj->type == "enemy") {
@@ -154,6 +154,9 @@ void CollisionSystem::bulletEnemyCollision() {
             std::make_shared<Action>(DestroyAction(bullet_ent)));
           m_em->destroyEntity(enemy_ent);
         } else {
+          m_serverCom->addEvent(std::make_shared<Action>(
+            IncreaseAction(bullet->owner, Action::IncreaseType::KILLS,
+                           enemy->obj->kill_value)));
           m_serverCom->addEvent(std::make_shared<Action>(
             DamageAction(enemy_ent, bullet->damage, enemy_ent)));
           m_serverCom->addEvent(

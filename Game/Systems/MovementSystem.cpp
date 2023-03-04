@@ -52,6 +52,9 @@ void MovementSystem::update() {
   }
   for (EntityID ent : EntityViewer<Enemy>(*m_em)) {
     Enemy *enem = (*m_em).Get<Enemy>(ent);
+    if (enem->obj->type == "endboss" && enem->obj->position.position.x < 450) {
+      continue;
+    }
     enem->obj->position.position += enem->obj->position.velocity;
     enem->obj->body->setPosition(
       {enem->obj->position.position.x, enem->obj->position.position.y});
@@ -111,7 +114,7 @@ void MovementSystem::keepPlayerInsideScreen(rtype::Vector2f &t_position,
 
   for (EntityID ent : EntityViewer<Enemy>(*m_em)) {
     Enemy *enem = (*m_em).Get<Enemy>(ent);
-    if (enem->obj->type == "paywall") {
+    if (enem->obj->type == "paywall" || enem->obj->type == "endboss") {
       screen_width = enem->obj->position.position.x + 30;
       if (screen_width > 800) screen_width = 800;
     }
