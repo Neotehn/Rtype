@@ -16,7 +16,7 @@ bool loadLevel(int *t_level, std::shared_ptr<EntityManager> t_em,
   for (EntityID ent : EntityViewer<Bullet>(*t_em)) {
     t_em->destroyEntity(ent);
   }
-  for (EntityID ent : EntityViewer<AnimationObj>(*t_em.get())) {
+  for (EntityID ent : EntityViewer<AnimationObj>(*t_em)) {
     t_em->destroyEntity(ent);
   }
   for (EntityID ent : EntityViewer<Enemy>(*t_em)) {
@@ -151,7 +151,6 @@ int getTotalObstacleWidth(rtype::IGraphicLoader *t_graphic_loader,
 
 void loadMap(std::shared_ptr<EntityManager> t_entity_manager,
              rtype::IGraphicLoader *t_graphic_loader, UdpServer *t_server_com) {
-  std::cout << "Will load map..." << std::endl;
   std::vector<std::vector<char>> map = readMap();
   float x = 0;
   Json::Value obstacle_list = assetLoader.getObstacleData();
