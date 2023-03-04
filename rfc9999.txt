@@ -107,8 +107,8 @@ RFC9999                     R-Type Protocol                   March 2023
             };
 
         The excact structure of the commands are explained throughout
-        the document.
-
+        the document. All commands are written in one line and seperated
+        by a semicolon(;) and end with a semicolon(;).
 
 
 
@@ -129,78 +129,81 @@ RFC9999                     R-Type Protocol                   March 2023
         In case the client chooses to create a lobby the client must 
         send following command: 
 
-            ACTION_ID;CREATELOBBY;ACTION_TYPE_ID;LOBBY_IP;PLAYERNAME;
+            ACTION_ID = automatic generated value
+            ACTION_TYPE = CREATELOBBY
+            ACTION_TYPE_ID = 16
+            LOBBY_IP = generated lobby code
+            PLAYERNAME = username
 
         Now the server waits for a second connection. When a second 
         player wants to join a lobby the client must send following
         command:
 
-            ACTION_ID;JOINLOBBY;ACTION_TYPE_ID;LOBBY_IP;PLAYERNAME;
+            ACTION_ID = automatic generated value
+            ACTION_TYPE = JOINLOBBY
+            ACTION_TYPE_ID = 15
+            LOBBY_IP = lobby ip you want to join
+            PLAYERNAME = username
 
         If the connection is successful the server sends back following
         command:
 
-       ACTION_ID;JOINSUCCESSFULL;ACTION_TYPE_ID;PLAYERNAME1;PLAYERNAME2;
+            ACTION_ID = automatic generated value
+            ACTION_TYPE = JOINSUCCESSFULL
+            ACTION_TYPE_ID = 18
+            PLAYERNAME1 = username of player one
+            PLAYERNAME2 = username of player two
 
-       Once both player are connected the players can press the start 
-       button and have to send the start command:
+        The client also has the option to leave the current lobby. For 
+        that the client sends the LEAVELOBBY command:
 
-            ACTION_ID;START;PORT_NB;CURRENT_PLAYER_ID;
+            ACTION_ID = automatic generated value
+            ACTION_TYPE = LEAVELOBBY
+            ACTION_TYPE_ID = 17
+            LOBBY_IP = lobby ip of current lobby
+            PLAYERNAME = username
 
-        It listens for a command containing:
+        In response the server sends the same command to both clients, 
+        in ordr to confirmthe action and to let the other player know 
+        the client has left his lobby.
 
-            ACTION_ID = 0
-            ACTION_TYPE = START
-            PORT_NB = port the client is running on
+        Once both player are connected the players can press the start 
+        button and have to send the start command:
 
-        On success the server response with command to
-        create the player:
-
-            ACTION_ID = 1
-            ACTION_TYPE = CREATE
-            ID = id of entity
-            TYPE = PLAYER (0)
-            X = x coordinate of player
-            Y = y coordinate of player
-            SPRITE_PATH = path to player sprite 
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+            ACTION_ID = automatic generated value
+            ACTION_TYPE = START;
+            PORT_NB = your port;
+            CURRENT_PLAYER_ID = 0
 
 Werner                       Standard Track                     [Page 3]
 
 RFC9999                     R-Type Protocol                   March 2023
+
+
+        The server registers the port and as soon as both clients are 
+        connected the server sends a START command back:
+
+            ACTION_ID = automatic generated value
+            ACTION_TYPE = START;
+            PLAYER_ID = id of player
+            PLAYER_NB = 1 or 2 depending on which player
+        
+
+
+        After that the client must receive the CREATE command for 
+        the both player character:
+
+            ACTION_ID = automatic generated value
+            ACTION_TYPE = CREATE;
+            PLAYER_ID = id of player
+            OBJECT_TYP = 0 for PLAYER
+            X_POS = x coordinate for spawn
+            Y_POS = y coordinate for spawn
+            SPRITE_PATH = path to player sprite
+            PLAYER_NB = 1 or 2 depending on which player
+
+        Now the game will start. The client and server now send each
+        other new commands if there is a new action.
     
     
     3.3 Game start 
@@ -225,6 +228,18 @@ RFC9999                     R-Type Protocol                   March 2023
             ID = id of the player
             USER_TRIGGERED = TRUE (bool)
 
+
+
+
+
+
+
+
+Werner                       Standard Track                     [Page 4]
+
+RFC9999                     R-Type Protocol                   March 2023
+
+
         The server answers with the new position of the player:
 
             ACTION_ID = automatic generated value
@@ -242,7 +257,7 @@ RFC9999                     R-Type Protocol                   March 2023
             DAMAGE = amount of damage based on load time
             TYPE = 1, 2, ... (what kind of bullet gets shot)
 
-        The server answers with another CREATE command:
+        The server answers with a CREATE command for the bullet:
 
             ACTION_ID = automatic generated value
             ACTION_TYPE = CREATE
@@ -258,4 +273,26 @@ RFC9999                     R-Type Protocol                   March 2023
             ACTION_TYPE = END
             PORT_NB = port the client is running in
 
-Werner                       Standard Track                     [Page 4]       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Werner                       Standard Track                     [Page 5]
