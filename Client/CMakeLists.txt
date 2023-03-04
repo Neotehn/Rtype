@@ -81,6 +81,7 @@ set(CLIENT_HPP ../Game/ECS/ComponentPool.hpp
         ../Game/Encapsulation/SFML/GraphicLoader.hpp
         ../Game/CreateEntities/AssetLoader.hpp
         ../Server/src/Logger.hpp
+        ../Server/src/ServerChadFilter.hpp
         ../GameEngine/src/States/IntroState.hpp)
 
 set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
@@ -142,6 +143,7 @@ set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         ../Game/Encapsulation/SFML/GraphicLoader.cpp
         ../Game/CreateEntities/AssetLoader.cpp
         ../Server/src/Logger.cpp
+        ../Server/src/ServerChadFilter.cpp
         ../GameEngine/src/States/IntroState.cpp ../GameEngine/src/States/ProvideUserNameState.cpp ../GameEngine/src/States/ProvideUserNameState.hpp)
 
 include(FetchContent)

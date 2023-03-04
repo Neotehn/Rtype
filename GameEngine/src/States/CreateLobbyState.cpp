@@ -188,6 +188,7 @@ void CreateLobbyState::update() {
         m_clientCom->sendMessage(create_lobby_action.getCommand());
         m_clientCom->m_lobby_code = "";
         m_clientCom->m_lobby_successfull_connected = false;
+        m_clientCom->m_chad_msgs.clear();
         m_next = StateMachine::build<MainState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, "", m_clientCom);
@@ -209,9 +210,10 @@ void CreateLobbyState::update() {
           case rtype::EventKey::Enter:
             if (m_chat.getSelected() && m_chat.getTextString() != "_") {
               std::cout << "prep push\n";
-              ChadAction chad_action =
-                ChadAction(Action::ActionType::CHAD, m_chat.getTextString(),
-                           m_clientCom->m_lobby_code);
+              ChadAction chad_action = ChadAction(
+                Action::ActionType::CHAD,
+                m_clientCom->getPlayerName() + ": " + m_chat.getTextString(),
+                m_clientCom->m_lobby_code);
               m_clientCom->sendMessage(chad_action.getCommand());
               m_chat.resetString();
 

@@ -2,7 +2,7 @@
 
 Logger::Logger() {
   auto time = std::chrono::system_clock::now();
-  m_file_name = "../Server/src/Logfiles/" +
+  m_file_name = "../Server/src/Data/Logfiles/" +
                 std::to_string(std::chrono::duration_cast<std::chrono::seconds>(
                                  time.time_since_epoch())
                                  .count()) +
