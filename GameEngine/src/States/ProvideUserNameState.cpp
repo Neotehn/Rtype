@@ -33,7 +33,12 @@ void ProvideUserNameState::update() {
       if (m_home_btn.is_pressed(mouse_pos_f)) {
         std::cout << "homebtn pressed" << std::endl;
         std::cout << m_clientCom->getPlayerName() << "  \n";
-        m_clientCom->setPlayerName(m_textbox.getTextString());
+        std::string name = m_textbox.getTextString();
+        if (name != "") {
+          m_clientCom->setPlayerName(m_textbox.getTextString());
+        } else {
+          m_clientCom->setPlayerName("Chad");
+        }
         std::cout << m_clientCom->getPlayerName() << "  \n";
         m_next = StateMachine::build<MainState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
