@@ -107,7 +107,7 @@ void MovementSystem::playerObstacleInteraction(Pos &t_position,
 void MovementSystem::keepPlayerInsideScreen(rtype::Vector2f &t_position,
                                             const rtype::Vector2f &t_size) {
   int screen_width = 800;
-  int screen_height = 800;
+  int screen_height = 750;
 
   for (EntityID ent : EntityViewer<Enemy>(*m_em)) {
     Enemy *enem = (*m_em).Get<Enemy>(ent);

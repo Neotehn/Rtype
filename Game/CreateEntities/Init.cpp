@@ -165,7 +165,7 @@ void loadMap(std::shared_ptr<EntityManager> t_entity_manager,
       initObstacle(t_entity_manager, t_graphic_loader, {x, 0},
                    obstacle["upper"].asString(), total_width, t_server_com);
       x +=
-        initObstacle(t_entity_manager, t_graphic_loader, {x, 800},
+        initObstacle(t_entity_manager, t_graphic_loader, {x, 750},
                      obstacle["lower"].asString(), total_width, t_server_com);
     }
   }
@@ -316,7 +316,7 @@ void initEnemy(std::shared_ptr<EntityManager> t_em,
                           enemy_data["size"]["y"].asInt()};
   EntityID enemy = t_em->createNewEntity();
   SpriteECS sprite = SpriteECS(enemy_data["path"].asString(), t_graphic_loader);
-  rtype::Vector2f enemy_pos = {800, float(rand() % 600 + 100)};
+  rtype::Vector2f enemy_pos = {800, float(rand() % 550 + 100)};
   if (t_pos != rtype::Vector2f{0, 0}) { enemy_pos = t_pos; }
   float velocity_direction = (rand() % 3 - 1);
 
@@ -401,7 +401,7 @@ void createCoin(std::shared_ptr<EntityManager> t_em,
   EntityID powerup = t_em->createNewEntity();
   SpriteECS sprite =
     SpriteECS("./../Client/sprites/powerup/coin.png", t_graphic_loader);
-  rtype::Vector2f powerup_pos = {800, float(rand() % 600 + 100)};
+  rtype::Vector2f powerup_pos = {800, float(rand() % 550 + 100)};
 
   rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
   body->setSize({30, 30});
@@ -427,7 +427,7 @@ void createItem(std::string t_path, rtype::ItemType t_type, int t_value,
                 UdpServer *t_serverCom) {
   EntityID powerup = t_em->createNewEntity();
   SpriteECS sprite = SpriteECS(t_path, t_graphic_loader);
-  rtype::Vector2f powerup_pos = {800, float(rand() % 600 + 100)};
+  rtype::Vector2f powerup_pos = {800, float(rand() % 550 + 100)};
 
   rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
   body->setSize({30, 30});
@@ -702,11 +702,11 @@ void initPayWall(std::shared_ptr<EntityManager> t_em,
                           enemy_data["size"]["y"].asInt()};
   EntityID enemy = t_em->createNewEntity();
   SpriteECS sprite = SpriteECS(enemy_data["path"].asString(), t_graphic_loader);
-  rtype::Vector2f enemy_pos = {800, 0};
+  rtype::Vector2f enemy_pos = {750, 0};
   float velocity_direction = 0;
 
   rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
-  body->setSize({80, 1600});
+  body->setSize({200, 1500});
   body->setPosition({enemy_pos.x, enemy_pos.y});
   body->setTexture(sprite.getTexture());
   body->setFillColor(
@@ -742,10 +742,10 @@ void initPayWallClient(EntityID t_id, std::shared_ptr<EntityManager> t_em,
                           enemy_data["size"]["y"].asInt()};
   EntityID enemy = t_em->createNewEntity(t_id);
   SpriteECS sprite = SpriteECS(enemy_data["path"].asString(), t_graphic_loader);
-  rtype::Vector2f enemy_pos = {800, 0};
+  rtype::Vector2f enemy_pos = {750, 0};
 
   rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
-  body->setSize({80, 1600});
+  body->setSize({200, 1500});
   body->setPosition({enemy_pos.x, enemy_pos.y});
   body->setTexture(sprite.getTexture());
   body->setFillColor(
