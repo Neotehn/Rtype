@@ -44,6 +44,7 @@ class Action : public IAction {
     CREATESUCCESSFULL,  // ACTION_ID;
     CHAD,               // ACTION_ID;CHAT_MSG
     ERROR,
+    CLOSE,
   };
   enum ShootingType { NORMAL, FIRE, BOMB, COIN };
   enum ObjectType {
@@ -114,6 +115,7 @@ class Action : public IAction {
 
   std::string getChadMsg() const;
   void setChadMsg(std::string t_chad_msg);
+
 
  protected:
   int m_action_id;

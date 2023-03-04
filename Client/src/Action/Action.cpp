@@ -69,7 +69,8 @@ std::string Action::getCommand() const {
       if (m_lobby_ip != "") { lobby_code = m_lobby_ip; }
       return std::to_string(m_action_id) + ";" + type_string + ";" +
              std::to_string(m_id) + ";" + lobby_code + ";" +
-             std::to_string(m_client_id) + ";";
+             std::to_string(m_client_id) + ";" +
+             m_player_name + ";";
     case ActionType::DEAD:
     case ActionType::END:
       return std::to_string(m_action_id) + ";" + type_string + ";" +

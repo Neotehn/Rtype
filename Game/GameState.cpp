@@ -49,7 +49,6 @@ GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
     //client creation
   } else {
     m_flag = CommunicationFlag::server;
-
     m_serverCom =
       new UdpServer(m_io_service, m_input_manager, m_is_running, m_ip);
   }
@@ -183,7 +182,7 @@ void GameState::update() {
       boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
       StateAction start_action =
         StateAction(Action::ActionType::START, m_clientCom->getPortNumber(),
-                    m_clientCom->m_lobby_code);
+                    m_clientCom->m_lobby_code, m_clientCom->getPlayerName());
       m_clientCom->sendMessage(start_action.getCommand());
       std::cout << "waiting on Server Connection" << std::endl;
       m_window->clear();
@@ -211,6 +210,10 @@ void GameState::update() {
         loadLevel(m_level, m_em, m_graphic_loader, m_music,
                   (m_flag == CommunicationFlag::client), m_serverCom);
       }
+      if (type == Action::ActionType::END && !action->isTriggeredByUser()) {
+        m_is_running = false;
+        break ;
+      }
     }
     manageLevels();
     SystemData data = {.event_queue = m_input_manager.getInputs()};
@@ -231,6 +234,9 @@ void GameState::update() {
              type == Action::ActionType::SHOOT) &&
             action->isTriggeredByUser())
           m_clientCom->sendMessage(action->getCommand());
+        if (type == Action::ActionType::CLOSE) {
+          m_is_running = false;
+        }
       }
     }
     if (m_flag == CommunicationFlag::server && m_serverCom->m_flag == 2) {
@@ -241,6 +247,14 @@ void GameState::update() {
       system->update();
     }
   }
+  if (m_flag == CommunicationFlag::server) {
+    for (EntityID ent : EntityViewer<Player>(*m_em)) {
+      Player *player = (*m_em).Get<Player>(ent);
+      std::cout << "updating leaderboard with " << player->name << " " << player->exp << std::endl;
+      m_serverCom->updateLeaderboard(player->name, player->exp);
+    }
+  }
+
   if (m_window->isOpen()) { m_window->close(); }
   if (m_flag == CommunicationFlag::client) {
     std::cout << "Stop connection to Server ..." << std::endl;

@@ -316,7 +316,6 @@ void UdpServer::updateLeaderboard(std::string t_name, int t_score) {
     size_t pos = element.find(":");
     if (pos != std::string::npos) {
       int scorePlace =std::stoi(element.substr(0, pos));
-      std::cout << scorePlace << std::endl;
       if (scorePlace != correct_place) {
         m_leaderboard[correct_place - 1] = std::to_string(correct_place) + ": " + element.substr(pos + 2);
       }

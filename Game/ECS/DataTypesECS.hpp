@@ -112,6 +112,7 @@ struct Player {
   Health health;
   float speed;
   int player_id;
+  std::string name;
   int fire_shot = 0;
   int bomb_shot = 0;
   int coin_shot = 0;
