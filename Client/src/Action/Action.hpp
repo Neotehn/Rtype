@@ -23,13 +23,14 @@ class Action : public IAction {
     // DAMAGE = amount of damage based on load time
     // TYPE = 1, 2, ...
     CREATE,  // ACTION_ID;CREATE;ID;TYPE;TYPE_DATA
-    // TYPE = PLAYER, ENEMY, BULLET, EXPLOSION, POWER_UP, ITEM
+    // TYPE = PLAYER, ENEMY, BULLET, EXPLOSION, POWER_UP, ITEM, OBSTACLE
     // PLAYER_DATA: X;Y;SPRITE_PATH
     // ENEMY_DATA:  X;Y;VELOCITY
     // BULLET_DATA: X;Y;SHOOTING_TYPE;OWNER_ID
     // EXPLOSION_DATA: X;Y
     // POWER_UP_DATA: X;Y
     // ITEM:  X;Y;ITEM_TYPE
+    // OBSTACLE: X;Y;SPRITE_PATH;TOTAL_WIDTH
     INCREASE,  // ACTION_ID;INCREASE;ID;TYPE;VALUE
     // TYPE = LIFE, SPEED, SHOOTING_SPEED
     COLLISION,          // ACTION_ID;COLLISION;ID1;ID2
@@ -54,6 +55,7 @@ class Action : public IAction {
     EXPLOSION,
     POWER_UP,
     ITEM,
+    OBSTACLE,
     ERROR_O
   };
   enum IncreaseType {
@@ -94,6 +96,7 @@ class Action : public IAction {
 
   float getVelocity() const;
   int getItemType() const;
+  int getTotalObstacleWidth() const;
 
   void setPlayerId(EntityID t_id);
 
@@ -138,6 +141,7 @@ class Action : public IAction {
   std::vector<std::string> m_lobby_player_names;
   std::string m_chad_msg = "";
   int m_lobby_id = 0;
+  int m_total_obstacle_width = 0;
 };
 
 #endif  //R_TYPE_CLIENT_ACTION_HPP

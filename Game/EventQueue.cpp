@@ -46,6 +46,16 @@ bool EventQueue::empty() { return m_eventQueue.empty(); }
 
 void EventQueue::clear() { m_eventQueue.clear(); }
 
+bool EventQueue::hasLatestPos(EntityID t_id) {
+  for (std::shared_ptr<Action> event : m_eventQueue) {
+    if (event.get()->getType() == Action::ActionType::POS &&
+        event.get()->getId() == t_id) {
+      return true;
+    }
+  }
+  return false;
+}
+
 rtype::Vector2f EventQueue::getLatestPos(EntityID t_id) {
   rtype::Vector2f pos = {0, 0};
   for (std::shared_ptr<Action> event : m_eventQueue) {

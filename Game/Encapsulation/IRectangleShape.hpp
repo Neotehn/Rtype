@@ -7,6 +7,7 @@
 namespace rtype {
   class IRectangleShape {
    public:
+    enum SIDE { TOP, BOTTOM, LEFT, RIGHT, NONE };
     virtual ~IRectangleShape() = default;
 
     virtual void setFillColor(const rtype::Color &) = 0;
@@ -24,6 +25,7 @@ namespace rtype {
     virtual void scale(const rtype::Vector2f &) = 0;
 
     virtual bool intersects(const rtype::FloatRect &) = 0;
+    virtual SIDE intersectsSide(const rtype::FloatRect &) = 0;
 
     virtual const rtype::Vector2f &getSize() = 0;
     virtual const rtype::Vector2f &getPosition() = 0;
