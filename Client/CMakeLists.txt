@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 3.6)
 project(r-type_client)
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
-SET(OpenGL_GL_PREFERENCE GLVND)
+SET(OpenGL_GL_PREFERENCE LEGACY)
+set(CMAKE_REQUIRED_LIBRARIES "-L${atomic_lib_dir}" "-latomic")
 
 set(CLIENT_HPP ../Game/ECS/ComponentPool.hpp
         ../Game/ECS/ECS.hpp
@@ -187,8 +188,9 @@ pkg_check_modules(JSONCPP jsoncpp)
 
 find_package(Boost 1.69.0 COMPONENTS chrono system thread REQUIRED)
 
-#find_package(OpenGL REQUIRED OPTIONAL_COMPONENTS OpenGL)
-#include_directories(${OPENGL_INCLUDE_DIR})
+
+find_package(OpenGL REQUIRED OPTIONAL_COMPONENTS OpenGL)
+include_directories(${OPENGL_INCLUDE_DIR})
 add_executable(r-type_client ${CLIENT_SRC} ${CLIENT_HPP})
 
 # Add Raylib
@@ -199,18 +201,18 @@ if (NOT raylib_FOUND) # If there's none, fetch and build raylib
             GIT_REPOSITORY https://github.com/raysan5/raylib.git
             GIT_TAG 4.2.0
     )
-    #    FetchContent_GetProperties(raylib)
-    #    if (NOT raylib_POPULATED) # Have we downloaded raylib yet?
-    #        set(FETCHCONTENT_QUIET NO)
-    #        FetchContent_Populate(raylib)
-    #        set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE) # don't build the supplied examples
-    #        add_subdirectory(${raylib_SOURCE_DIR} ${raylib_BINARY_DIR})
-    #    endif()
+        FetchContent_GetProperties(raylib)
+        if (NOT raylib_POPULATED) # Have we downloaded raylib yet?
+            set(FETCHCONTENT_QUIET NO)
+            FetchContent_Populate(raylib)
+            set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE) # don't build the supplied examples
+            add_subdirectory(${raylib_SOURCE_DIR} ${raylib_BINARY_DIR})
+        endif()
     FetchContent_MakeAvailable(raylib)
 endif ()
 
 target_link_libraries(r-type_client sfml-graphics sfml-audio ${JSONCPP_LIBRARIES}
-        ${Boost_SYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY}
+        ${OPENGL_LIBRARIES} ${Boost_SYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY}
         ${Boost_CHRONO_LIBRARY} raylib)
 target_link_directories(r-type_client PUBLIC ${Boost_LIBRARY_DIRS})
 

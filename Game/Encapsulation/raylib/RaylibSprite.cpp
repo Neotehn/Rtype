@@ -61,6 +61,15 @@ namespace rtype {
             static_cast<int>(rect.width), static_cast<int>(rect.height)};
   }
 
+  bool RaylibSprite::contains(const rtype::Vector2f &point) const {
+    if (point.x < m_texture->getPosition().x ||
+        point.x > m_texture->getPosition().x + m_texture->getSize().x ||
+        point.y < m_texture->getPosition().y ||
+        point.y > m_texture->getPosition().y + m_texture->getSize().y)
+      return false;
+    return true;
+  }
+
   Vector2f RaylibSprite::getPosition() { return m_texture->getPosition(); }
 
   Vector2f RaylibSprite::getScale() { return m_texture->getScale(); }
