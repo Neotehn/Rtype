@@ -18,6 +18,7 @@ IntroState::IntroState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
   m_music_player.play(MusicID::MENU_THEME);
   initSprites();
   m_sound_manager.init(m_graphic_loader, false);
+  m_sound_manager.setVolume(m_music_player.getVolume());
 }
 
 void IntroState::loadTextureAndSpritesForFlyingObj() {
