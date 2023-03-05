@@ -11,6 +11,7 @@ int bullet_index = 0;
 bool loadLevel(int *t_level, std::shared_ptr<EntityManager> t_em,
                rtype::IGraphicLoader *t_graphic_loader, rtype::IMusic *t_music,
                bool t_play_music, UdpServer *t_server_com) {
+  if (*t_level == 1) { background_entities.clear(); }
   for (EntityID ent : EntityViewer<Obstacle>(*t_em)) {
     t_em->destroyEntity(ent);
   }
@@ -175,7 +176,8 @@ void loadMap(std::shared_ptr<EntityManager> t_entity_manager,
 
 EntityID initPlayer(std::shared_ptr<EntityManager> t_entity_manager,
                     UdpServer *t_serverCom,
-                    rtype::IGraphicLoader *t_graphic_loader) {
+                    rtype::IGraphicLoader *t_graphic_loader,
+                    std::string t_player_name) {
   EntityID player = t_entity_manager->createNewEntity();
 
   SpriteECS player_sprite =
@@ -192,7 +194,8 @@ EntityID initPlayer(std::shared_ptr<EntityManager> t_entity_manager,
   Health health = initPlayerHealthBar(t_graphic_loader);
   Player player_obj =
     Player{player_sprite, player_pos, body,
-           health,        10,         t_serverCom->getPlayerIdCount()};
+           health,        10,         t_serverCom->getPlayerIdCount(),
+           t_player_name};
   t_serverCom->setPlayerIdCount(t_serverCom->getPlayerIdCount() + 1);
   t_entity_manager->Assign<Player>(player, player_obj);
   t_serverCom->addEvent(std::make_shared<Action>(CreateAction(
@@ -204,8 +207,8 @@ EntityID initPlayer(std::shared_ptr<EntityManager> t_entity_manager,
 void initPlayerClient(EntityID t_id, std::string t_sprite_path,
                       rtype::Vector2f t_pos,
                       std::shared_ptr<EntityManager> t_entity_manager,
-                      rtype::IGraphicLoader *t_graphic_loader,
-                      int t_player_id) {
+                      rtype::IGraphicLoader *t_graphic_loader, int t_player_id,
+                      std::string t_name) {
   EntityID player = t_entity_manager->createNewEntity(t_id);
   SpriteECS player_sprite =
     SpriteECS(std::move(t_sprite_path), t_graphic_loader);
@@ -219,8 +222,9 @@ void initPlayerClient(EntityID t_id, std::string t_sprite_path,
   body->setRotation(90.0);
 
   Health health = initPlayerHealthBar(t_graphic_loader);
+  std::cout << "init player client with playername: " << t_name << std::endl;
   Player player_obj =
-    Player{player_sprite, player_pos, body, health, 10, t_player_id};
+    Player{player_sprite, player_pos, body, health, 10, t_player_id, t_name};
   t_entity_manager->Assign<Player>(player, player_obj);
 }
 

@@ -155,7 +155,6 @@ CreateLobbyState::CreateLobbyState(
   initSprites();
   initText();
   initChad();
-  m_music_player.play(MusicID::MENU_THEME);
   m_start_is_pressed = false;
   // call protocol for creating lobby
 }
@@ -186,7 +185,6 @@ void CreateLobbyState::update() {
         m_clientCom->m_lobby_code = "";
         m_clientCom->m_lobby_successfull_connected = false;
         m_clientCom->m_chad_msgs.clear();
-        m_music_player.stop();
         m_next = StateMachine::build<MainState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, "", m_clientCom);

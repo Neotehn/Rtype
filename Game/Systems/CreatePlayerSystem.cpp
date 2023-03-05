@@ -25,7 +25,8 @@ void CreatePlayerSystem::update() {
        m_event_queue.getAllOfType(Action::ActionType::START)) {
     if (!isRegistered(action->getId())) {
       m_registered_players.push_back(action->getId());
-      EntityID player_id = initPlayer(m_em, m_server_com, m_graphic_loader);
+      EntityID player_id = initPlayer(m_em, m_server_com, m_graphic_loader,
+                                      action->getPlayerName());
       action->setPlayerId(player_id);
     }
   }

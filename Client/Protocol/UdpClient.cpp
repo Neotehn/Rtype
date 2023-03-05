@@ -97,6 +97,7 @@ void UdpClient::handleReceive(const boost::system::error_code &t_error,
       setPlayerId(action);
       //      if (!m_client_input_manager.doesActionExist(action)) {
       m_client_input_manager->addActionsToQueue(action);
+      checkIfLeaderboard(action);
       //      }
     } catch (std::exception &e) {
       std::cout << "Error: " << e.what() << std::endl;
@@ -131,4 +132,30 @@ std::string UdpClient::getPlayerName() { return m_player_name; }
 
 void UdpClient::setPlayerName(std::string t_new_name) {
   m_player_name = t_new_name;
+}
+
+void UdpClient::setLeaderboard(std::vector<std::string> t_leaderboard) {
+  m_leaderboard = t_leaderboard;
+}
+
+std::vector<std::string> UdpClient::getLeaderboard() { return m_leaderboard; }
+
+void UdpClient::checkIfLeaderboard(std::shared_ptr<Action> t_action) {
+  if (t_action->getType() == Action::ActionType::SENDLEADERBOARD) {
+    setLeaderboard(t_action->getLeaderboard());
+    std::cout << "leaderboard: " << std::endl;
+    for (auto &i : m_leaderboard) {
+      std::cout << i << std::endl;
+    }
+  }
+}
+
+void UdpClient::clearData() {
+  m_id = 0;
+  m_lobby_code = "";
+  m_lobby_names.clear();
+  m_chad_msgs.clear();
+  m_input_manager = nullptr;
+  m_client_input_manager = nullptr;
+  m_flag = ConnectState::none;
 }

@@ -30,8 +30,6 @@ void DamageSystem::update() {
         player->bomb_shot = 0;
         player->exp = 0;
         m_play_sounds.push_back(SoundSystem::SoundType::death);
-        m_client_input_manager.addActionsToQueue(std::make_shared<Action>(
-          StateAction(Action::ActionType::END, m_port_number)));
       }
       player->health.healthbar.setHealth(new_health);
 
