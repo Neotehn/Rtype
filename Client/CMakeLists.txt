@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.6)
 project(r-type_client)
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+SET(OpenGL_GL_PREFERENCE GLVND)
 
 set(CLIENT_HPP ../Game/ECS/ComponentPool.hpp
         ../Game/ECS/ECS.hpp
@@ -85,7 +86,17 @@ set(CLIENT_HPP ../Game/ECS/ComponentPool.hpp
         ../Game/CreateEntities/AssetLoader.hpp
         ../Server/src/Logger.hpp
         ../Server/src/ServerChadFilter.hpp
-        ../GameEngine/src/States/IntroState.hpp)
+        ../GameEngine/src/States/IntroState.hpp
+        ../Game/Encapsulation/raylib/RaylibWindow.hpp
+        ../Game/Encapsulation/raylib/RaylibSound.hpp
+        ../Game/Encapsulation/raylib/RaylibFont.hpp
+        ../Game/Encapsulation/raylib/RaylibMouse.hpp
+        ../Game/Encapsulation/raylib/RaylibMusic.hpp
+        ../Game/Encapsulation/raylib/RaylibText.hpp
+        ../Game/Encapsulation/raylib/RaylibTexture.hpp
+        ../Game/Encapsulation/raylib/RaylibSprite.hpp
+        ../Game/Encapsulation/raylib/RaylibRectangleShape.hpp
+        ../Game/Encapsulation/raylib/RaylibGraphicLoader.hpp)
 
 set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         src/InputManager/InputManager.cpp
@@ -150,7 +161,18 @@ set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         ../Game/CreateEntities/AssetLoader.cpp
         ../Server/src/Logger.cpp
         ../Server/src/ServerChadFilter.cpp
-        ../GameEngine/src/States/IntroState.cpp ../GameEngine/src/States/ProvideUserNameState.cpp ../GameEngine/src/States/ProvideUserNameState.hpp)
+        ../GameEngine/src/States/IntroState.cpp
+        ../GameEngine/src/States/ProvideUserNameState.cpp
+        ../Game/Encapsulation/raylib/RaylibWindow.cpp
+        ../Game/Encapsulation/raylib/RaylibSound.cpp
+        ../Game/Encapsulation/raylib/RaylibFont.cpp
+        ../Game/Encapsulation/raylib/RaylibMouse.cpp
+        ../Game/Encapsulation/raylib/RaylibMusic.cpp
+        ../Game/Encapsulation/raylib/RaylibText.cpp
+        ../Game/Encapsulation/raylib/RaylibTexture.cpp
+        ../Game/Encapsulation/raylib/RaylibSprite.cpp
+        ../Game/Encapsulation/raylib/RaylibRectangleShape.cpp
+        ../Game/Encapsulation/raylib/RaylibGraphicLoader.cpp)
 
 include(FetchContent)
 FetchContent_Declare(SFML
@@ -160,18 +182,36 @@ FetchContent_MakeAvailable(SFML)
 find_package(Boost 1.69.0 COMPONENTS chrono system thread REQUIRED)
 
 
-
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(JSONCPP jsoncpp)
 
 find_package(Boost 1.69.0 COMPONENTS chrono system thread REQUIRED)
 
-find_package(OpenGL REQUIRED OPTIONAL_COMPONENTS OpenGL)
-include_directories(${OPENGL_INCLUDE_DIR})
+#find_package(OpenGL REQUIRED OPTIONAL_COMPONENTS OpenGL)
+#include_directories(${OPENGL_INCLUDE_DIR})
 add_executable(r-type_client ${CLIENT_SRC} ${CLIENT_HPP})
 
+# Add Raylib
+find_package(raylib 4.2.0 QUIET) # QUIET or REQUIRED
+if (NOT raylib_FOUND) # If there's none, fetch and build raylib
+    FetchContent_Declare(
+            raylib
+            GIT_REPOSITORY https://github.com/raysan5/raylib.git
+            GIT_TAG 4.2.0
+    )
+    #    FetchContent_GetProperties(raylib)
+    #    if (NOT raylib_POPULATED) # Have we downloaded raylib yet?
+    #        set(FETCHCONTENT_QUIET NO)
+    #        FetchContent_Populate(raylib)
+    #        set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE) # don't build the supplied examples
+    #        add_subdirectory(${raylib_SOURCE_DIR} ${raylib_BINARY_DIR})
+    #    endif()
+    FetchContent_MakeAvailable(raylib)
+endif ()
+
 target_link_libraries(r-type_client sfml-graphics sfml-audio ${JSONCPP_LIBRARIES}
-        ${OPENGL_LIBRARIES} ${Boost_SYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY} ${Boost_CHRONO_LIBRARY})
+        ${Boost_SYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY}
+        ${Boost_CHRONO_LIBRARY} raylib)
 target_link_directories(r-type_client PUBLIC ${Boost_LIBRARY_DIRS})
 
 target_compile_features(r-type_client PRIVATE cxx_std_17)
