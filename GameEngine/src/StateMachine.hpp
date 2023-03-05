@@ -18,7 +18,6 @@ class StateMachine {
   void update();
   void draw();
   void quit();
-  void lastState();
 
   template<typename T>
   static std::unique_ptr<T>
@@ -30,7 +29,6 @@ class StateMachine {
 
  private:
   bool m_running;
-  bool m_resume;
   std::stack<std::unique_ptr<State>> m_states;
 };
 

@@ -19,6 +19,8 @@ namespace rtype {
     void stop(int t_index) override;
     void pause(int t_index) override;
     void setVolume(float t_volume) override;
+    float getVolume(int t_index) override;
+    void setVolume(int t_index, float t_volume);
 
    private:
     std::vector<sf::SoundBuffer *> m_soundBuffer;

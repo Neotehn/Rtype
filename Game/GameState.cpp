@@ -55,6 +55,7 @@ GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
   }
   loadLevel(m_level, m_em, m_graphic_loader, m_music,
             m_flag == CommunicationFlag::client, m_serverCom);
+  m_music->setVolume(m_music_player.getVolume());
   m_systems = initSystems();
 }
 
@@ -100,10 +101,6 @@ std::vector<std::shared_ptr<ISystem>> GameState::initSystems() {
   systems.push_back(std::make_shared<DestroySystem>(m_em));
   return systems;
 }
-
-void GameState::pause() { std::cout << "GameState Pause\n"; }
-
-void GameState::resume() { std::cout << "GameState Resume\n"; }
 
 bool GameState::playerAlive() {
   for (EntityID ent : EntityViewer<Player>(*m_em)) {
@@ -167,6 +164,7 @@ void GameState::manageLevels() {
       m_level_two_enemy_created = false;
       loadLevel(m_level, m_em, m_graphic_loader, m_music,
                 (m_flag == CommunicationFlag::client), m_serverCom);
+      m_music->setVolume(m_music_player.getVolume());
       std::cout << "finished level 2" << std::endl;
       return;
     }
@@ -196,6 +194,7 @@ void GameState::manageLevels() {
       m_level_two_enemy_created = false;
       loadLevel(m_level, m_em, m_graphic_loader, m_music,
                 (m_flag == CommunicationFlag::client), m_serverCom);
+      m_music->setVolume(m_music_player.getVolume());
       std::cout << "finished level 2" << std::endl;
     }
   } else if (*m_level == 1) {
@@ -204,6 +203,7 @@ void GameState::manageLevels() {
       *m_level += 1;
       loadLevel(m_level, m_em, m_graphic_loader, m_music,
                 (m_flag == CommunicationFlag::client), m_serverCom);
+      m_music->setVolume(m_music_player.getVolume());
       std::cout << "finished level 1" << std::endl;
       return;
     }
@@ -220,6 +220,7 @@ void GameState::manageLevels() {
 
       loadLevel(m_level, m_em, m_graphic_loader, m_music,
                 (m_flag == CommunicationFlag::client), m_serverCom);
+      m_music->setVolume(m_music_player.getVolume());
       std::cout << "finished level 1" << std::endl;
     }
   }
@@ -232,9 +233,8 @@ void GameState::update() {
       std::cout << "waiting on Client Connection" << std::endl;
       boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
     }
-    while (  // if wanted to revert to original remove everything except l.112 - 115
-      m_flag == CommunicationFlag::client &&
-      m_clientCom->m_flag != m_clientCom->connected && m_is_running) {
+    while (m_flag == CommunicationFlag::client &&
+           m_clientCom->m_flag != m_clientCom->connected && m_is_running) {
       std::cout << "Connecting to Server ..." << std::endl;
       boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
       StateAction start_action =
@@ -266,9 +266,11 @@ void GameState::update() {
         *m_level = action->getId();
         loadLevel(m_level, m_em, m_graphic_loader, m_music,
                   (m_flag == CommunicationFlag::client), m_serverCom);
+        m_music->setVolume(m_music_player.getVolume());
       }
     }
-    SystemData data = {.event_queue = m_input_manager.getInputs()};
+    SystemData data = {.event_queue = m_input_manager.getInputs(),
+                       m_music_player.getVolume()};
     if (m_flag == CommunicationFlag::client && m_clientCom->m_flag) {
       EventQueue eq = m_client_input_manager.getInputsWithoutPop();
       for (std::shared_ptr<Action> action : eq.getEventQueue()) {
@@ -303,9 +305,12 @@ void GameState::update() {
     StateAction start_action =
       StateAction(Action::ActionType::END, m_port_number);
     m_clientCom->sendMessage(start_action.getCommand());
+    std::cout << "send end com ..." << std::endl;
   }
   m_music->stop();
+  std::cout << "music stop" << std::endl;
   m_state_machine.quit();
+  std::cout << "quit" << std::endl;
 }
 
 void GameState::draw() {}

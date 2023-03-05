@@ -2,14 +2,18 @@
 #define SETTINGSSTATE_HPP_
 
 #include <iostream>
+#include <fstream>
 
 #include "../../../Game/Encapsulation/IRenderWindow.hpp"
 #include "../../../Game/Encapsulation/ITexture.hpp"
 #include "../../../Game/Encapsulation/ISprite.hpp"
 #include "../../../Game/Encapsulation/IFont.hpp"
 #include "../../../Game/Encapsulation/IText.hpp"
+#include "../../../Game/Encapsulation/IFont.hpp"
+#include "../../../Game/Encapsulation/IText.hpp"
 
 #include "./MainState.hpp"
+#include "../MusicPlayer.hpp"
 #include "../MusicPlayer.hpp"
 #include "../Button.hpp"
 #include "../State.hpp"
@@ -23,8 +27,6 @@ class SettingsState final : public State {
                 const std::string &t_path_to_sprite, bool t_replace = true,
                 std::string t_ip = "", UdpClient *t_clientCom = nullptr);
   ~SettingsState() override;
-  void pause() override;
-  void resume() override;
   void update() override;
   void draw() override;
 
@@ -37,6 +39,7 @@ class SettingsState final : public State {
   rtype::IFont *m_font;
   rtype::IText *m_title;
   rtype::IText *m_vol_txt;
+  rtype::IText *m_vol_digit;
   std::size_t m_flag;
 
   void initSprites();

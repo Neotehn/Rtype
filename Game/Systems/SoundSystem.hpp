@@ -1,6 +1,8 @@
 #ifndef R_TYPE_CLIENT_SOUNDSYSTEM_HPP
 #define R_TYPE_CLIENT_SOUNDSYSTEM_HPP
 
+#include <fstream>
+#include <iostream>
 #include <memory>
 
 #include "../CreateEntities/Init.hpp"
@@ -22,7 +24,7 @@ class SoundSystem : public ISystem {
  private:
   rtype::ISounds *m_sounds;
   rtype::IGraphicLoader *m_graphic_loader;
-
+  float m_vol;
   std::vector<SoundType> &m_play_sounds;
 };
 
