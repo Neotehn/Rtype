@@ -27,12 +27,12 @@ namespace rtype {
     rtype::Color getColor() const;
 
    private:
-    std::string m_text;
-    rtype::Vector2f m_position;
-    rtype::Color m_color;
-    unsigned int m_size;
+    std::string m_text = "";
+    rtype::Vector2f m_position = {0, 0};
+    rtype::Color m_color = {255, 255, 255, 255};
+    unsigned int m_size = 1;
     rtype::RaylibFont *m_font;
-    rtype::Vector2f m_scale;
+    rtype::Vector2f m_scale = {1, 1};
   };
 }  // namespace rtype
 

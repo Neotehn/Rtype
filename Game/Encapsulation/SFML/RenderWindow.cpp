@@ -53,7 +53,8 @@ void rtype::RenderWindow::create(unsigned int t_width, unsigned int t_height,
   m_window.create(sf::VideoMode(t_width, t_height), t_title, t_style);
 }
 
-bool rtype::RenderWindow::pollEvent(rtype::Event &t_event) {
+bool rtype::RenderWindow::pollEvent(rtype::Event &t_event,
+                                    rtype::Vector2i t_mouse_pos, bool first) {
   bool res = m_window.pollEvent(m_event);
   t_event.type = rtype::EventType(m_event.type);
   t_event.key = rtype::EventKey(m_event.key.code);

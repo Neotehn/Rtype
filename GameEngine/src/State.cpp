@@ -12,6 +12,7 @@ State::State(StateMachine &t_machine, rtype::IRenderWindow *t_window,
   m_ip = t_ip;
   m_clientCom = t_clientCom;
   m_path_to_sprite = t_path_to_sprite;
+  m_prev_mouse_pos = m_mouse->getMousePosition(m_window);
 }
 
 std::unique_ptr<State> State::next() { return std::move(m_next); }

@@ -27,7 +27,8 @@ namespace rtype {
                         std::string t_title) = 0;
     virtual void create(unsigned int t_width, unsigned int t_height,
                         std::string t_title, rtype::Style t_style) = 0;
-    virtual bool pollEvent(rtype::Event &t_event) = 0;
+    virtual bool pollEvent(rtype::Event &t_event, rtype::Vector2i t_mouse_pos,
+                           bool first = true) = 0;
   };
 }  // namespace rtype
 

@@ -12,7 +12,7 @@ void CreateLobbyState::initSprites() {
   float size_y = m_window->getSize().y;
   m_bg_t = m_graphic_loader->loadTexture();
   m_bg_s = m_graphic_loader->loadSprite();
-  if (!m_bg_t->loadFromFile("./assets/menubg.jpg")) {
+  if (!m_bg_t->loadFromFile("./assets/menubg.png")) {
     throw std::runtime_error("Unable to load image.");
   }
   float scale_x = size_x / m_bg_t->getSize().x;
@@ -172,7 +172,8 @@ void CreateLobbyState::update() {
   for (int i = 9; i > m_clientCom->m_chad_msgs.size(); i--) {
     m_chad_messages[i]->setString("");
   }
-  for (auto event = rtype::Event{}; m_window->pollEvent(event);) {
+  for (auto event = rtype::Event{};
+       m_window->pollEvent(event, m_prev_mouse_pos);) {
     rtype::Vector2i mouse_pos = m_mouse->getMousePosition(m_window);
     rtype::Vector2f mouse_pos_f{static_cast<float>(mouse_pos.x),
                                 static_cast<float>(mouse_pos.y)};
@@ -237,6 +238,7 @@ void CreateLobbyState::update() {
       default:
         break;
     }
+    m_prev_mouse_pos = m_mouse->getMousePosition(m_window);
   }
 }
 

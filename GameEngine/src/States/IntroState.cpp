@@ -30,9 +30,9 @@ void IntroState::loadTextureAndSpritesForFlyingObj() {
     //get random number between -500 and 0
 
     float r = rand() % 3000 - 3000;
+    sprite->setTexture(texture, true);
     sprite->setScale({0.2, 0.2});
     sprite->setPosition({r, static_cast<float>(100 * i)});
-    sprite->setTexture(texture, true);
     m_flying_obj_t.push_back(texture);
     m_flying_obj_s.push_back(sprite);
   }
@@ -54,7 +54,8 @@ void IntroState::resume() { std::cout << "MenuState resume\n"; }
 void IntroState::update() {
   animateAndMoveShip();
   animateAndMoveFlyingObj();
-  for (auto event = rtype::Event{}; m_window->pollEvent(event);) {
+  for (auto event = rtype::Event{};
+       m_window->pollEvent(event, m_prev_mouse_pos);) {
     rtype::Vector2i mouse_pos = m_mouse->getMousePosition(m_window);
     rtype::Vector2f mouse_pos_f{static_cast<float>(mouse_pos.x),
                                 static_cast<float>(mouse_pos.y)};
@@ -67,6 +68,7 @@ void IntroState::update() {
         m_next = StateMachine::build<ProvideUserNameState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, m_ip, m_clientCom);
+        break;
       }
     }
     switch (event.type) {
@@ -91,6 +93,7 @@ void IntroState::update() {
       default:
         break;
     }
+    m_prev_mouse_pos = m_mouse->getMousePosition(m_window);
   }
 }
 
@@ -169,17 +172,18 @@ void IntroState::initSprites() {
   m_bg_s = m_graphic_loader->loadSprite();
   m_spaceship_t = m_graphic_loader->loadTexture();
   m_spaceship_s = m_graphic_loader->loadSprite();
+  if (!m_spaceship_t->loadFromFile("./sprites/starship.png")) {
+    throw std::runtime_error("Unable to load image.");
+  }
+  if (!m_bg_t->loadFromFile("./assets/menubg.png")) {
+    throw std::runtime_error("Unable to load image.");
+  }
+  m_spaceship_s->setTexture(m_spaceship_t, true);
   m_spaceship_s->setScale({0.2, 0.2});
   m_spaceship_s->rotate(90);
   m_spaceship_s->setOrigin(
     {static_cast<float>(m_spaceship_t->getSize().x / 2),
      static_cast<float>(m_spaceship_t->getSize().y / 2)});
-  if (!m_spaceship_t->loadFromFile("./sprites/starship.png")) {
-    throw std::runtime_error("Unable to load image.");
-  }
-  if (!m_bg_t->loadFromFile("./assets/menubg.jpg")) {
-    throw std::runtime_error("Unable to load image.");
-  }
   float size_x = m_window->getSize().x;
   float size_y = m_window->getSize().y;
   float scale_x = size_x / m_bg_t->getSize().x;
@@ -187,6 +191,5 @@ void IntroState::initSprites() {
   m_bg_s->setTexture(m_bg_t, true);
   m_bg_s->setScale({scale_x, scale_y});
   m_spaceship_s->setPosition({size_x / 2 - 100, size_y / 2 - 100});
-  m_spaceship_s->setTexture(m_spaceship_t, true);
   loadTextureAndSpritesForFlyingObj();
 }

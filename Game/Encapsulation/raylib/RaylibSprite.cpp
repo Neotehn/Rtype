@@ -3,7 +3,7 @@
 namespace rtype {
   RaylibSprite::RaylibSprite() {}
 
-  RaylibSprite::~RaylibSprite() { delete m_texture; }
+  RaylibSprite::~RaylibSprite() {}
 
   void RaylibSprite::setTexture(ITexture *texture, bool reset_rect) {
     m_texture = dynamic_cast<RaylibTexture *>(texture);
@@ -50,9 +50,7 @@ namespace rtype {
   }
 
   FloatRect RaylibSprite::getGlobalBounds() const {
-    rtype::Vector2f position = m_texture->getPosition();
-    return {position.x, position.y, static_cast<float>(m_texture->getSize().x),
-            static_cast<float>(m_texture->getSize().y)};
+    return m_texture->getGlobalBounds();
   }
 
   IntRect RaylibSprite::getTextureRect() {
@@ -62,10 +60,11 @@ namespace rtype {
   }
 
   bool RaylibSprite::contains(const rtype::Vector2f &point) const {
-    if (point.x < m_texture->getPosition().x ||
-        point.x > m_texture->getPosition().x + m_texture->getSize().x ||
-        point.y < m_texture->getPosition().y ||
-        point.y > m_texture->getPosition().y + m_texture->getSize().y)
+    FloatRect global_bounds = getGlobalBounds();
+    if (point.x < global_bounds.left ||
+        point.x > global_bounds.left + global_bounds.width ||
+        point.y < global_bounds.top ||
+        point.y > global_bounds.top + global_bounds.height)
       return false;
     return true;
   }

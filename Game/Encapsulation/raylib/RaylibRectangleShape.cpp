@@ -103,8 +103,10 @@ namespace rtype {
 
   const rtype::IntRect &RaylibRectangleShape::getTextureRect() {
     Rectangle rect = m_texture->getRect();
-    return {static_cast<int>(rect.x), static_cast<int>(rect.y),
-            static_cast<int>(rect.width), static_cast<int>(rect.height)};
+    m_texture_rect = {static_cast<int>(rect.x), static_cast<int>(rect.y),
+                      static_cast<int>(rect.width),
+                      static_cast<int>(rect.height)};
+    return m_texture_rect;
   }
 
   float RaylibRectangleShape::getRotation() const {

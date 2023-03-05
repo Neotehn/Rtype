@@ -18,7 +18,7 @@ namespace rtype {
 
     rtype::Vector2u getSize() const override;
 
-    const Texture2D *getTexture();
+    Texture2D *getTexture();
     const Rectangle &getRect() const;
     void setRect(const Rectangle &t_rect);
     float getRotation() const;
@@ -35,24 +35,24 @@ namespace rtype {
     void move(const Vector2f &offset);
     void scale(const Vector2f &factor);
     void rotate(float angle);
-    rtype::FloatRect getGlobalBounds() const;
+    rtype::FloatRect getGlobalBounds();
 
     Texture *getTexture() const;
 
    private:
     Texture2D *m_texture;
-    Rectangle m_rect;
-    float m_rotation;
-    Vector2f m_origin;
-    Vector2f m_position;
-    Vector2f m_scale;
-    Vector2f m_size;
+    Rectangle m_rect = {0, 0, 0, 0};
+    float m_rotation = 0;
+    Vector2f m_origin = {0, 0};
+    Vector2f m_position = {0, 0};
+    Vector2f m_scale = {1, 1};
+    Vector2f m_size = {1, 1};
 
    public:
     void setSize(const Vector2f &t_size);
 
    private:
-    Color m_color;
+    Color m_color = {255, 255, 255, 255};
   };
 }  // namespace rtype
 

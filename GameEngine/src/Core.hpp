@@ -4,6 +4,7 @@
 #include "../../Game/Encapsulation/IRenderWindow.hpp"
 #include "../../Game/Encapsulation/IGraphicLoader.hpp"
 #include "../../Game/Encapsulation/SFML/GraphicLoader.hpp"
+#include "../../Game/Encapsulation/raylib/RaylibGraphicLoader.hpp"
 #include "./States/MainState.hpp"
 #include "./MusicPlayer.hpp"
 #include "./StateMachine.hpp"

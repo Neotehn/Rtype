@@ -41,6 +41,7 @@ namespace rtype {
 
    private:
     RaylibTexture *m_texture;
+    IntRect m_texture_rect;
   };
 }  // namespace rtype
 

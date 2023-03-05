@@ -2,7 +2,7 @@
 
 Core::Core(std::size_t t_flag, std::string t_ip, const std::string &t_path,
            int *t_level) {
-  m_graphic_loader = new rtype::GraphicLoader();
+  m_graphic_loader = new rtype::RaylibGraphicLoader();
   m_music_player.init(m_graphic_loader);
   m_window = m_graphic_loader->loadRenderWindow();
   m_window->create(

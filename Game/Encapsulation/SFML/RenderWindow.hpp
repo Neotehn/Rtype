@@ -32,7 +32,8 @@ namespace rtype {
                 std::string t_title) override;
     void create(unsigned int t_width, unsigned int t_height,
                 std::string t_title, rtype::Style t_style) override;
-    bool pollEvent(rtype::Event &t_event) override;
+    bool pollEvent(rtype::Event &t_event, rtype::Vector2i t_mouse_pos,
+                   bool first) override;
 
     sf::RenderWindow *getRenderWindow();
 

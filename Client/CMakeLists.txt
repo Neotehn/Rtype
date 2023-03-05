@@ -3,7 +3,7 @@ project(r-type_client)
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 SET(OpenGL_GL_PREFERENCE LEGACY)
-set(CMAKE_REQUIRED_LIBRARIES "-L${atomic_lib_dir}" "-latomic")
+#set(CMAKE_REQUIRED_LIBRARIES "-L${atomic_lib_dir}" "-latomic")
 
 set(CLIENT_HPP ../Game/ECS/ComponentPool.hpp
         ../Game/ECS/ECS.hpp
@@ -201,13 +201,13 @@ if (NOT raylib_FOUND) # If there's none, fetch and build raylib
             GIT_REPOSITORY https://github.com/raysan5/raylib.git
             GIT_TAG 4.2.0
     )
-        FetchContent_GetProperties(raylib)
-        if (NOT raylib_POPULATED) # Have we downloaded raylib yet?
-            set(FETCHCONTENT_QUIET NO)
-            FetchContent_Populate(raylib)
-            set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE) # don't build the supplied examples
-            add_subdirectory(${raylib_SOURCE_DIR} ${raylib_BINARY_DIR})
-        endif()
+    #        FetchContent_GetProperties(raylib)
+    #        if (NOT raylib_POPULATED) # Have we downloaded raylib yet?
+    #            set(FETCHCONTENT_QUIET NO)
+    #            FetchContent_Populate(raylib)
+    #            set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE) # don't build the supplied examples
+    #            add_subdirectory(${raylib_SOURCE_DIR} ${raylib_BINARY_DIR})
+    #        endif()
     FetchContent_MakeAvailable(raylib)
 endif ()
 

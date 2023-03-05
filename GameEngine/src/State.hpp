@@ -47,6 +47,7 @@ class State {
   int *m_level;
   std::string m_ip;
   std::string m_path_to_sprite;
+  rtype::Vector2i m_prev_mouse_pos;
 };
 
 #endif  // !STATE_HPP_

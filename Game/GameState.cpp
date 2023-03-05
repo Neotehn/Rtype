@@ -249,7 +249,7 @@ void GameState::update() {
     }
     rtype::Event event;
     if (m_window->isOpen()) {
-      while (m_window->pollEvent(event)) {
+      while (m_window->pollEvent(event, m_prev_mouse_pos)) {
         if (event.type == rtype::EventType::Closed) {
           m_is_running = false;
           std::cout << "yes close pls" << std::endl;
@@ -257,6 +257,7 @@ void GameState::update() {
         if (m_flag == CommunicationFlag::client) {
           m_client_input_manager.recordInputs(event, m_mouse, m_window);
         }
+        m_prev_mouse_pos = m_mouse->getMousePosition(m_window);
       }
     }
     EventQueue eq = m_input_manager.getInputsWithoutPop();
