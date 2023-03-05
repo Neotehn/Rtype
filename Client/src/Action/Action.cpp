@@ -74,8 +74,7 @@ std::string Action::getCommand() const {
       if (m_lobby_ip != "") { lobby_code = m_lobby_ip; }
       return std::to_string(m_action_id) + ";" + type_string + ";" +
              std::to_string(m_id) + ";" + lobby_code + ";" +
-             std::to_string(m_client_id) + ";" +
-             m_player_name + ";";
+             std::to_string(m_client_id) + ";" + m_player_name + ";";
     case ActionType::DEAD:
     case ActionType::END:
       return std::to_string(m_action_id) + ";" + type_string + ";" +
@@ -235,4 +234,6 @@ std::string Action::getChadMsg() const { return m_chad_msg; }
 
 void Action::setChadMsg(std::string t_chad_msg) { m_chad_msg = t_chad_msg; }
 
-std::vector<std::string> Action::getLeaderboard() const { return m_leaderboard;}
+std::vector<std::string> Action::getLeaderboard() const {
+  return m_leaderboard;
+}

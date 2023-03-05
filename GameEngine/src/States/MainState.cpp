@@ -1,22 +1,19 @@
 #include "./MainState.hpp"
 
-std::vector<std::string> initLeaderboard()
-{
+std::vector<std::string> initLeaderboard() {
   std::vector<std::string> lines;
   std::string filename = ".leaderboard.txt";
   std::ifstream infile(filename);
 
-  if (infile)
-  {
+  if (infile) {
     std::string line;
-    while (std::getline(infile, line))
-    {
+    while (std::getline(infile, line)) {
       lines.push_back(line);
     }
     infile.close();
-  } else{
+  } else {
     lines = {"No Score", "No Score", "No Score", "No Score", "No Score",
-       "No Score", "No Score", "No Score", "No Score", "No Score"};
+             "No Score", "No Score", "No Score", "No Score", "No Score"};
   }
   return lines;
 }
@@ -113,7 +110,9 @@ void MainState::update() {
       if (m_start_btn.is_pressed(mouse_pos_f) && m_start_pressed == false) {
         std::cout << "scorebtn pressed" << std::endl;
         m_clientCom->setLeaderboard(initLeaderboard());
-        m_next = StateMachine::build<LeaderboardState>(m_state_machine, m_window, m_music_player, m_flag,m_graphic_loader, m_level, m_path_to_sprite, false, m_ip, m_clientCom);
+        m_next = StateMachine::build<LeaderboardState>(
+          m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
+          m_level, m_path_to_sprite, false, m_ip, m_clientCom);
       }
       if (m_settings_btn.is_pressed(mouse_pos_f)) {
         std::cout << "settingsbtn pressed" << std::endl;

@@ -55,8 +55,7 @@ void ProvideUserNameState::update() {
         switch (event.key) {
           case rtype::EventKey::Enter:
             m_textbox.setSelected(true);
-            if (m_textbox.getTextString().size() >= 3)
-              pressed_enter = true;
+            if (m_textbox.getTextString().size() >= 3) pressed_enter = true;
             break;
           case rtype::EventKey::Escape:
             m_textbox.setSelected(false);
@@ -73,8 +72,8 @@ void ProvideUserNameState::update() {
             m_level, m_path_to_sprite, true, m_ip, m_clientCom);
           break;
         }
-        if (event.key == rtype::EventKey::Enter ||
-            event.key == 10 || m_textbox.getTextString().size() >= 7) {
+        if (event.key == rtype::EventKey::Enter || event.key == 10 ||
+            m_textbox.getTextString().size() >= 7) {
           break;
         }
         m_textbox.typedOn(event);
