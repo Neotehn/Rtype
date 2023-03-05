@@ -43,22 +43,12 @@ class EntityManager {
     return m_entities.back().id;
   }
   void destroyEntity(EntityID t_id) {
-    try {
-      std::cout << "start destroy entity" << std::endl;
-      EntityID newID =
-        createEntityId(EntityIndex(-1), getEntityVersion(t_id) + 1);
-      EntityIndex index = getEntityIndex(t_id);
-      std::cout << "destroy entity 1" << std::endl;
-      m_entities[index].id = newID;
-      std::cout << "destroy entity 2" << std::endl;
-      m_entities[index].mask.reset();
-      std::cout << "destroy entity 3: " << std::to_string(t_id) << std::endl;
-      m_free_entities.push_back(index);
-      std::cout << "destroy entity 4" << std::endl;
-    } catch (std::exception &e) {
-      std::cout << "Error destroying entity: " << e.what() << std::endl;
-    }
-    std::cout << "end destroy entity" << std::endl;
+    EntityID newID =
+      createEntityId(EntityIndex(-1), getEntityVersion(t_id) + 1);
+    EntityIndex index = getEntityIndex(t_id);
+    m_entities[index].id = newID;
+    m_entities[index].mask.reset();
+    m_free_entities.push_back(index);
   }
 
   template<typename T>
@@ -104,9 +94,9 @@ class EntityManager {
   std::vector<ComponentPool *> getComponentPools() { return m_component_pools; }
 
  private:
-  std::vector<EntityDesc> m_entities;
-  std::vector<ComponentPool *> m_component_pools;
-  std::vector<EntityIndex> m_free_entities;
+  std::vector<EntityDesc> m_entities = {};
+  std::vector<ComponentPool *> m_component_pools = {};
+  std::vector<EntityIndex> m_free_entities = {};
 };
 
 #endif  // ECS_ENTITYMANAGER_HPP_

@@ -53,7 +53,7 @@ GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
       new UdpServer(m_io_service, m_input_manager, m_is_running, m_ip);
   }
   loadLevel(m_level, m_em, m_graphic_loader, m_music,
-            m_flag == CommunicationFlag::client);
+            m_flag == CommunicationFlag::client, m_serverCom);
   m_systems = initSystems();
 }
 
@@ -93,7 +93,9 @@ std::vector<std::shared_ptr<ISystem>> GameState::initSystems() {
     systems.push_back(
       std::make_shared<SoundSystem>(m_em, m_sounds, m_graphic_loader));
   }
-  systems.push_back(std::make_shared<DisplaySystem>(m_em, m_window));
+
+  systems.push_back(std::make_shared<DisplaySystem>(
+    m_em, m_window, m_flag, m_graphic_loader, m_clientCom));
   systems.push_back(std::make_shared<DestroySystem>(m_em));
   return systems;
 }
@@ -102,8 +104,62 @@ void GameState::pause() { std::cout << "GameState Pause\n"; }
 
 void GameState::resume() { std::cout << "GameState Resume\n"; }
 
+bool GameState::playerAlive() {
+  for (EntityID ent : EntityViewer<Player>(*m_em)) {
+    Player *player = (*m_em).Get<Player>(ent);
+    if (player->health.healthbar.getHealth() > 0) { return true; }
+  }
+  return false;
+}
+
 void GameState::manageLevels() {
-  if (*m_level == 2) {
+  if (!playerAlive()) {
+    m_is_running = false;
+    std::cout << "you died under the epitech pressure" << std::endl;
+    return;
+  }
+  if (*m_level == 3) {
+    if (m_flag == CommunicationFlag::server && m_will_reload) {
+      m_level_three_enemy_created = false;
+      m_will_reload = false;
+      bool success = loadNewEndboss(m_em, m_graphic_loader, m_serverCom);
+      if (!success) {
+        m_is_running = false;
+        m_serverCom->addEvent(
+          std::make_shared<Action>(StateAction(Action::ActionType::END)));
+        return;
+      }
+      std::cout << "load new endboss" << std::endl;
+      return;
+    }
+    if (!m_level_three_enemy_created) {
+      for (EntityID ent : EntityViewer<Enemy>(*m_em)) {
+        Enemy *enem = (*m_em).Get<Enemy>(ent);
+        if (enem->obj->type == "endboss") {
+          m_level_three_enemy_created = true;
+          break;
+        }
+      }
+    }
+    if (!m_level_three_enemy_created) return;
+    bool endboss_exists = false;
+    for (EntityID ent : EntityViewer<Enemy>(*m_em)) {
+      Enemy *enem = (*m_em).Get<Enemy>(ent);
+      if (enem->obj->type == "endboss") {
+        endboss_exists = true;
+        break;
+      }
+    }
+    if (endboss_exists) return;
+    if (m_flag == CommunicationFlag::server) {
+      m_will_reload = true;
+    } else {
+      m_level_three_enemy_created = false;
+      bool success = loadNewEndboss(m_em, m_graphic_loader, m_serverCom);
+      if (!success) { m_is_running = false; }
+      std::cout << "load new endboss" << std::endl;
+    }
+  } else if (*m_level == 2) {
     if (m_flag == CommunicationFlag::server && m_will_reload) {
       m_will_reload = false;
       *m_level += 1;
@@ -215,7 +271,6 @@ void GameState::update() {
         break;
       }
     }
-    manageLevels();
     SystemData data = {.event_queue = m_input_manager.getInputs()};
     if (m_flag == CommunicationFlag::client && m_clientCom->m_flag) {
       EventQueue eq = m_client_input_manager.getInputsWithoutPop();
@@ -244,6 +299,7 @@ void GameState::update() {
       system->updateData(data);
       system->update();
     }
+    manageLevels();
   }
   if (m_flag == CommunicationFlag::server) {
     for (EntityID ent : EntityViewer<Player>(*m_em)) {

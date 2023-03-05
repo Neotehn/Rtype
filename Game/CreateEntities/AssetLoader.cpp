@@ -49,3 +49,7 @@ Json::Value AssetLoader::getEnemyData() { return m_level_data["enemies"]; }
 std::string AssetLoader::getMusicPath() {
   return m_level_data["music"].asString();
 }
+
+std::string AssetLoader::getMapPath() { return m_level_data["map"].asString(); }
+
+Json::Value AssetLoader::getObstacleData() { return m_level_data["obstacles"]; }

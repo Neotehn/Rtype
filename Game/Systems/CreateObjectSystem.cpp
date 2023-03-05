@@ -41,6 +41,9 @@ void CreateObjectSystem::update() {
       case Action::ObjectType::PAYWALL:
         initPayWallClient(id, m_em, m_graphic_loader);
         break;
+      case Action::ObjectType::ENDBOSS:
+        initEndbossClient(id, m_em, m_graphic_loader);
+        break;
       case Action::ObjectType::EXPLOSION:
         m_play_sounds.push_back(SoundSystem::SoundType::explosion);
         initExplosionClient(id, pos, m_em, m_graphic_loader);
@@ -51,6 +54,12 @@ void CreateObjectSystem::update() {
       case Action::ObjectType::ITEM:
         initItemClient(id, rtype::ItemType(action->getItemType()), pos, m_em,
                        m_graphic_loader);
+        break;
+      case Action::ObjectType::OBSTACLE:
+        initObstacleClient(m_em, m_graphic_loader, pos,
+                           action->getCreateSpritePath(),
+                           action->getTotalObstacleWidth(), id);
+        break;
       default:
         break;
     }

@@ -38,7 +38,7 @@ class InputManager {
 
  private:
   EntityID m_player_id = 0;
-  EventQueue m_input_queue;
+  EventQueue m_input_queue = {};
   rtype::Vector2i m_last_mouse_pos;
 };
 

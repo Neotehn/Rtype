@@ -118,6 +118,9 @@ std::string Action::getCommand() const {
         data += std::to_string(m_collision_partner_id) + ";";
       }
       if (m_damage != 0) { data += std::to_string(m_damage) + ";"; }
+      if (m_total_obstacle_width != 0) {
+        data += std::to_string(m_total_obstacle_width) + ";";
+      }
       std::cout << std::to_string(m_velocity) << std::endl;
 
       return std::to_string(m_action_id) + ";CREATE;" + std::to_string(m_id) +
@@ -196,6 +199,8 @@ Action::ShootingType Action::getShootType() const { return m_shoot_type; }
 float Action::getVelocity() const { return m_velocity; }
 
 int Action::getItemType() const { return m_item_type; }
+
+int Action::getTotalObstacleWidth() const { return m_total_obstacle_width; }
 
 void Action::setPlayerId(EntityID t_id) { m_id = t_id; }
 

@@ -25,6 +25,9 @@ IProtocol::getCreateAction(std::vector<std::string> commands, int action_id,
   } else if (type == Action::ObjectType::PAYWALL) {
     return std::make_shared<Action>(CreateAction(
       id, CreateAction::PAYWALL, rtype::Vector2f{x, y}, "", action_id, 0));
+  } else if (type == Action::ObjectType::ENDBOSS) {
+    return std::make_shared<Action>(CreateAction(
+      id, CreateAction::ENDBOSS, rtype::Vector2f{x, y}, "", action_id, 0));
   } else if (type == Action::ObjectType::BULLET) {
     shooting_type = Action::ShootingType(std::stoi(commands[6]));
     owner_id = std::stoull(commands[7]);
@@ -44,6 +47,12 @@ IProtocol::getCreateAction(std::vector<std::string> commands, int action_id,
     velocity = std::stof(commands[6]);
     return std::make_shared<Action>(CreateAction(
       id, CreateAction::ITEM, rtype::Vector2f{x, y}, "", action_id, velocity));
+  } else if (type == Action::ObjectType::OBSTACLE) {
+    sprite_path = commands[6];
+    player_id = std::stoi(commands[7]);  // actually total obstacle width
+    return std::make_shared<Action>(CreateAction(id, CreateAction::OBSTACLE,
+                                                 rtype::Vector2f{x, y},
+                                                 player_id, sprite_path));
   } else {
     return std::make_shared<Action>(VoidAction(id, 0));
   }

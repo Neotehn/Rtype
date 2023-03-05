@@ -63,9 +63,11 @@ class GameState final : public State {
   std::shared_ptr<EntityManager> m_em;
   std::vector<SoundSystem::SoundType> m_sounds;
   bool m_level_two_enemy_created = false;
+  bool m_level_three_enemy_created = false;
   bool m_will_reload = false;
   std::string m_path_to_sprite;
 
+  bool playerAlive();
   std::vector<std::shared_ptr<ISystem>> initSystems();
 
   rtype::ITexture *m_bg_t;

@@ -32,6 +32,9 @@ class CreateAction : public Action {
   CreateAction(EntityID t_id, ObjectType t_object_type,
                rtype::Vector2f t_position, EntityID t_owner_id, float t_damage,
                Action::ShootingType t_shooting_type);
+  CreateAction(EntityID t_id, ObjectType t_object_type,
+               rtype::Vector2f t_position, int t_total_obstacle_width,
+               std::string t_sprite_path);
   ~CreateAction() override = default;
 };
 

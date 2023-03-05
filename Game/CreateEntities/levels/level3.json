@@ -62,18 +62,59 @@
   "music": "../Client/assets/music/money.ogg",
   "enemies": [
     {
-      "path": "../Client/sprites/r-typesheet30a.gif",
+      "path": "../Client/sprites/enemies/rayann_pixelart.png",
       "size": {
-        "x": 34,
-        "y": 34
+        "x": 345,
+        "y": 376
       },
-      "limit": 68,
+      "limit": 0,
       "color": {
-        "r": 100,
+        "r": 255,
         "g": 255,
-        "b": 100,
+        "b": 255,
         "a": 255
       }
+    },
+    {
+      "path": "../Client/sprites/enemies/paul_pixelart.png",
+      "size": {
+        "x": 403,
+        "y": 396
+      },
+      "limit": 0,
+      "color": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 255
+      }
+    }
+  ],
+  "map": "../Game/CreateEntities/levels/map/level1.txt",
+  "obstacles": [
+    {
+      "upper": "../Client/sprites/obstacles/bg1_upper.png",
+      "lower": "../Client/sprites/obstacles/bg1_lower.png"
+    },
+    {
+      "upper": "../Client/sprites/obstacles/bg2_upper.png",
+      "lower": "../Client/sprites/obstacles/bg2_lower.png"
+    },
+    {
+      "upper": "../Client/sprites/obstacles/bg3_upper.png",
+      "lower": "../Client/sprites/obstacles/bg3_lower.png"
+    },
+    {
+      "upper": "../Client/sprites/obstacles/bg4_upper.png",
+      "lower": "../Client/sprites/obstacles/bg4_lower.png"
+    },
+    {
+      "upper": "../Client/sprites/obstacles/bg5_upper.png",
+      "lower": "../Client/sprites/obstacles/bg5_lower.png"
+    },
+    {
+      "upper": "../Client/sprites/obstacles/bg6_upper.png",
+      "lower": "../Client/sprites/obstacles/bg6_lower.png"
     }
   ]
 }

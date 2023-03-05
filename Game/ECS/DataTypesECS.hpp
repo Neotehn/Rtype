@@ -48,6 +48,10 @@ class HealthBar {
     m_health += t_health;
     if (m_health > m_max_health) m_health = m_max_health;
   }
+  void decreaseHealth(int t_health) {
+    m_health -= t_health;
+    if (m_health < 0) m_health = 0;
+  }
   void setMaxHealth(int t_max_health) { m_max_health = t_max_health; }
 
  private:
@@ -128,6 +132,13 @@ struct Bullet {
   rtype::Vector2f pos;
   EntityID owner = 0;
   float damage = 1;
+};
+
+struct Obstacle {
+  Pos position;
+  rtype::IRectangleShape *body;
+  float limit;
+  float original_x;
 };
 
 struct AnimationObj {

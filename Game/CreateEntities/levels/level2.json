@@ -76,7 +76,7 @@
       }
     },
     {
-      "path": "../Client/sprites/enemies/WallOfFlesh.png",
+      "path": "../Client/sprites/enemies/Paywall.png",
       "size": {
         "x": 190,
         "y": 800
@@ -88,6 +88,33 @@
         "b": 255,
         "a": 255
       }
+    }
+  ],
+  "map": "../Game/CreateEntities/levels/map/level1.txt",
+  "obstacles": [
+    {
+      "upper": "../Client/sprites/obstacles/bg1_upper.png",
+      "lower": "../Client/sprites/obstacles/bg1_lower.png"
+    },
+    {
+      "upper": "../Client/sprites/obstacles/bg2_upper.png",
+      "lower": "../Client/sprites/obstacles/bg2_lower.png"
+    },
+    {
+      "upper": "../Client/sprites/obstacles/bg3_upper.png",
+      "lower": "../Client/sprites/obstacles/bg3_lower.png"
+    },
+    {
+      "upper": "../Client/sprites/obstacles/bg4_upper.png",
+      "lower": "../Client/sprites/obstacles/bg4_lower.png"
+    },
+    {
+      "upper": "../Client/sprites/obstacles/bg5_upper.png",
+      "lower": "../Client/sprites/obstacles/bg5_lower.png"
+    },
+    {
+      "upper": "../Client/sprites/obstacles/bg6_upper.png",
+      "lower": "../Client/sprites/obstacles/bg6_lower.png"
     }
   ]
 }

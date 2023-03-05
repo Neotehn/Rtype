@@ -25,6 +25,21 @@ void MovementSystem::update() {
   for (EntityID ent : EntityViewer<BackgroundLayer>(*m_em)) {
     updateBackground(ent);
   }
+  for (EntityID ent : EntityViewer<Obstacle>(*m_em)) {
+    Obstacle *obstacle = (*m_em).Get<Obstacle>(ent);
+    obstacle->position.position.x += obstacle->position.velocity.x;
+    if (obstacle->position.position.x <= obstacle->limit) {
+      obstacle->position.position.x = obstacle->original_x;
+    }
+    if (int(obstacle->position.position.x) % 50 == 0 && m_serverCom) {
+      m_serverCom->addEvent(
+        std::make_shared<Action>(PosAction(ent, obstacle->position.position)));
+    }
+    if (!m_serverCom && m_event_queue.hasLatestPos(ent)) {
+      obstacle->position.position = m_event_queue.getLatestPos(ent);
+    }
+    obstacle->body->setPosition(obstacle->position.position);
+  }
   for (EntityID ent : EntityViewer<Bullet>(*m_em)) {
     updateBullets(ent);
   }
@@ -37,6 +52,9 @@ void MovementSystem::update() {
   }
   for (EntityID ent : EntityViewer<Enemy>(*m_em)) {
     Enemy *enem = (*m_em).Get<Enemy>(ent);
+    if (enem->obj->type == "endboss" && enem->obj->position.position.x < 450) {
+      continue;
+    }
     enem->obj->position.position += enem->obj->position.velocity;
     enem->obj->body->setPosition(
       {enem->obj->position.position.x, enem->obj->position.position.y});
@@ -57,14 +75,40 @@ void MovementSystem::update() {
   }
 }
 
+void MovementSystem::playerObstacleInteraction(Pos &t_position,
+                                               const rtype::Vector2f &t_size,
+                                               float t_speed) {
+  for (EntityID ent : EntityViewer<Obstacle>(*m_em)) {
+    Obstacle *obstacle = (*m_em).Get<Obstacle>(ent);
+    rtype::IRectangleShape::SIDE side = obstacle->body->intersectsSide({
+      t_position.position.x,
+      t_position.position.y,
+      t_size.x,
+      t_size.y,
+    });
+    if (side == rtype::IRectangleShape::SIDE::NONE) continue;
+    t_speed /= 2;
+    if (side == rtype::IRectangleShape::SIDE::LEFT) {
+      t_position.position.x += t_speed;
+    } else if (side == rtype::IRectangleShape::SIDE::RIGHT) {
+      t_position.position.x -= t_speed;
+    } else if (side == rtype::IRectangleShape::SIDE::TOP) {
+      t_position.position.y += t_speed;
+    } else if (side == rtype::IRectangleShape::SIDE::BOTTOM) {
+      t_position.position.y -= t_speed;
+    }
+    t_position.velocity = {0, 0};
+  }
+}
+
 void MovementSystem::keepPlayerInsideScreen(rtype::Vector2f &t_position,
                                             const rtype::Vector2f &t_size) {
   int screen_width = 800;
-  int screen_height = 800;
+  int screen_height = 750;
 
   for (EntityID ent : EntityViewer<Enemy>(*m_em)) {
     Enemy *enem = (*m_em).Get<Enemy>(ent);
-    if (enem->obj->type == "paywall") {
+    if (enem->obj->type == "paywall" || enem->obj->type == "endboss") {
       screen_width = enem->obj->position.position.x + 30;
       if (screen_width > 800) screen_width = 800;
     }
@@ -88,6 +132,7 @@ void MovementSystem::updatePlayer(EntityID t_ent) {
   int up = 0;
   int down = 0;
   int pos = 0;
+  rtype::Vector2f orig_pos = player->position.position;
 
   for (int i = 0; i < m_event_queue.getEventQueue().size(); i++) {
     Action::ActionType action =
@@ -133,6 +178,12 @@ void MovementSystem::updatePlayer(EntityID t_ent) {
   keepPlayerInsideScreen(
     player->position.position,
     {player->body->getSize().x, player->body->getSize().y});
+  playerObstacleInteraction(player->position,
+                            {
+                              player->body->getSize().x,
+                              player->body->getSize().y,
+                            },
+                            player->speed);
   if (pos) { player->position.position = m_event_queue.getLatestPos(t_ent); }
   player->body->setPosition(
     {player->position.position.x, player->position.position.y});
@@ -142,7 +193,7 @@ void MovementSystem::updatePlayer(EntityID t_ent) {
   if (player->position.velocity.x != 0 || player->position.velocity.y != 0)
     player->position.velocity *= 0.99f;
   if (m_serverCom != nullptr) {
-    if (direction != rtype::Vector2f{0, 0}) {
+    if (orig_pos != player->position.position) {
       m_serverCom->addEvent(
         std::make_shared<Action>(PosAction(t_ent, player->position.position)));
     }

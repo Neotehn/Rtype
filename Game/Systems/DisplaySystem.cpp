@@ -1,9 +1,13 @@
 #include "DisplaySystem.hpp"
 
 DisplaySystem::DisplaySystem(std::shared_ptr<EntityManager> t_em,
-                             rtype::IRenderWindow *t_window) {
+                             rtype::IRenderWindow *t_window, std::size_t t_flag,
+                             rtype::IGraphicLoader *t_graphic_loader,
+                             UdpClient *m_clientCom)
+    : m_gui(GUISystem(t_em, t_graphic_loader, t_window, m_clientCom)) {
   m_em = t_em;
   m_window = t_window;
+  m_flag = t_flag;
 }
 
 void DisplaySystem::update() {
@@ -11,6 +15,10 @@ void DisplaySystem::update() {
   for (EntityID ent : EntityViewer<BackgroundLayer>(*m_em.get())) {
     BackgroundLayer *background = (*m_em.get()).Get<BackgroundLayer>(ent);
     m_window->draw(background->sprite.getSprite());
+  }
+  for (EntityID ent : EntityViewer<Obstacle>(*m_em.get())) {
+    Obstacle *obstacle = (*m_em.get()).Get<Obstacle>(ent);
+    m_window->draw(obstacle->body);
   }
   for (EntityID ent : EntityViewer<Player>(*m_em.get())) {
     Player *player = (*m_em.get()).Get<Player>(ent);
@@ -35,8 +43,10 @@ void DisplaySystem::update() {
     SpinningItem *item = (*m_em.get()).Get<SpinningItem>(ent);
     m_window->draw(item->body);
   }
-
+  if (m_flag == 1) { m_gui.update(); }
   m_window->display();
 }
 
-void DisplaySystem::updateData(SystemData &t_data) {}
+void DisplaySystem::updateData(SystemData &t_data) {
+  if (m_flag == 1) { m_gui.updateData(t_data); }
+}

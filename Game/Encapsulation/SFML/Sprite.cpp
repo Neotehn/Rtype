@@ -40,6 +40,11 @@ void rtype::Sprite::scale(const rtype::Vector2f &factor) {
   m_sprite.scale(factor.x, factor.y);
 }
 
+rtype::Vector2u rtype::Sprite::getSize() const {
+  sf::Vector2u sfml_size = m_sprite.getTexture()->getSize();
+  return rtype::Vector2u{sfml_size.x, sfml_size.y};
+}
+
 const rtype::ITexture *rtype::Sprite::getTexture() const {
   const sf::Texture *sfml_texture = m_sprite.getTexture();
   rtype::Texture *texture = new rtype::Texture(*sfml_texture);

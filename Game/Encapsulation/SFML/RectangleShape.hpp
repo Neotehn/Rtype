@@ -27,6 +27,7 @@ namespace rtype {
     void scale(const rtype::Vector2f &factors) override;
 
     bool intersects(const rtype::FloatRect &rect) override;
+    SIDE intersectsSide(const rtype::FloatRect &rect) override;
 
     const rtype::Vector2f &getSize() override;
     const rtype::Vector2f &getPosition() override;
