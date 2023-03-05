@@ -17,6 +17,7 @@ void ShootingSystem::update() {
        m_event_queue.getAllOfType(Action::ActionType::SHOOT)) {
     for (EntityID ent : EntityViewer<Player>(*m_em)) {
       if (ent != action->getId()) continue;
+      if ((*m_em).Get<Player>(ent)->health.healthbar.getHealth() <= 0) continue;
 
       switch (action->getShootType()) {
         case Action::ShootingType::NORMAL:
