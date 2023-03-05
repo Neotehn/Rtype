@@ -123,8 +123,7 @@ void LeaderboardState::draw() {
   m_window->draw(m_next_btn.getSprite());
   m_window->draw(m_title);
   for (auto &text : m_leaderboard_list) {
-    if (text->getString().size() > 4)
-      m_window->draw(text);
+    m_window->draw(text);
   }
   m_window->display();
 }
