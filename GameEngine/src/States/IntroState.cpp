@@ -13,11 +13,12 @@ IntroState::IntroState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
                         static_cast<float>(m_window->getSize().y - 180)},
         rtype::Vector2f{270, 130}, t_graphic_loader, false)),
       m_flag(t_flag) {
-  m_spaceMovement = {0.5, 1};
+  m_spaceMovement = rtype::Vector2f{0.5, 1};
   m_path_to_sprite = t_path_to_sprite;
   m_music_player.play(MusicID::MENU_THEME);
   initSprites();
   m_sound_manager.init(m_graphic_loader, false);
+  m_sound_manager.setVolume(m_music_player.getSEVol());
 }
 
 void IntroState::loadTextureAndSpritesForFlyingObj() {
@@ -47,10 +48,6 @@ IntroState::~IntroState() {
   m_flying_obj_s.clear();
 }
 
-void IntroState::pause() { std::cout << "MenuState Pause\n"; }
-
-void IntroState::resume() { std::cout << "MenuState resume\n"; }
-
 void IntroState::update() {
   animateAndMoveShip();
   animateAndMoveFlyingObj();
@@ -64,6 +61,7 @@ void IntroState::update() {
     if (m_mouse->isLeftMouseButtonPressed()) {
       if (m_start_btn.is_pressed(mouse_pos_f)) {
         std::cout << "startbtn pressed" << std::endl;
+        m_music_player.stop();
         m_next = StateMachine::build<ProvideUserNameState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, m_ip, m_clientCom);
@@ -76,6 +74,7 @@ void IntroState::update() {
       case rtype::EventType::KeyPressed:
         switch (event.key) {
           case rtype::EventKey::Space:
+            m_music_player.stop();
             m_next = StateMachine::build<ProvideUserNameState>(
               m_state_machine, m_window, m_music_player, m_flag,
               m_graphic_loader, m_level, m_path_to_sprite, true, m_ip,

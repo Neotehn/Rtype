@@ -4,7 +4,26 @@ MusicPlayer::MusicPlayer() : m_volume(50.f) {}
 
 MusicPlayer::~MusicPlayer() { delete m_music; }
 
+std::vector<std::string> splitstr(std::string s, std::string delimiter) {
+  size_t pos_start = 0, pos_end, delim_len = delimiter.length();
+  std::string token;
+  std::vector<std::string> res;
+  while ((pos_end = s.find(delimiter, pos_start)) != std::string::npos) {
+    token = s.substr(pos_start, pos_end - pos_start);
+    pos_start = pos_end + delim_len;
+    res.push_back(token);
+  }
+  res.push_back(s.substr(pos_start));
+  return res;
+}
+
 void MusicPlayer::init(rtype::IGraphicLoader *t_graphic_loader) {
+  std::ifstream file_read("./assets/files/settings.txt");
+  std::string settxt((std::istreambuf_iterator<char>(file_read)),
+                     std::istreambuf_iterator<char>());
+  std::vector<std::string> v = splitstr(settxt, ":");
+  m_volume = atof(v[1].c_str());
+  m_vol_se = atof(v[3].c_str());
   m_graphic_loader = t_graphic_loader;
   m_music = m_graphic_loader->loadMusic();
   m_music->openFromFile("./assets/music/music1.ogg");
@@ -41,3 +60,7 @@ void MusicPlayer::setVolume(float t_volume) {
   m_volume = t_volume;
   m_music->setVolume(m_volume);
 }
+
+void MusicPlayer::setSEVol(float t_vol) { m_vol_se = t_vol; }
+
+float MusicPlayer::getSEVol() { return m_vol_se; }

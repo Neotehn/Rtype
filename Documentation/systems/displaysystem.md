@@ -1,0 +1,94 @@
+# DisplaySystem
+
+This system is responsible for showing all entities on screen.
+
+DisplaySystem.hpp:
+
+```
+#ifndef CLIENT_SRC_SYSTEMS_IDISPLAY_HPP_
+#define CLIENT_SRC_SYSTEMS_IDISPLAY_HPP_
+
+#include "../ECS/ISystem.hpp"
+#include "../Encapsulation/IRenderWindow.hpp"
+#include "GUISystem.hpp"
+#include "../../Client/Protocol/UdpClient.hpp"
+
+class DisplaySystem : public ISystem {
+ public:
+  DisplaySystem(std::shared_ptr<EntityManager> t_em,
+                rtype::IRenderWindow *t_window, std::size_t t_flag,
+                rtype::IGraphicLoader *t_graphic_loader,
+                UdpClient *m_clientCom = nullptr);
+  ~DisplaySystem() = default;
+
+  virtual void update() override;
+  virtual void updateData(SystemData &t_data) override;
+
+ private:
+  rtype::IRenderWindow *m_window;
+  std::size_t m_flag;
+  EventQueue m_event_queue;
+  GUISystem m_gui;
+};
+
+#endif  // CLIENT_SRC_SYSTEMS_IDISPLAY_HPP_
+```
+
+DisplaySystem.cpp:
+
+```
+#include "DisplaySystem.hpp"
+
+DisplaySystem::DisplaySystem(std::shared_ptr<EntityManager> t_em,
+                             rtype::IRenderWindow *t_window, std::size_t t_flag,
+                             rtype::IGraphicLoader *t_graphic_loader,
+                             UdpClient *m_clientCom)
+    : m_gui(GUISystem(t_em, t_graphic_loader, t_window, m_clientCom)) {
+  m_em = t_em;
+  m_window = t_window;
+  m_flag = t_flag;
+}
+
+void DisplaySystem::update() {
+  m_window->clear();
+  for (EntityID ent : EntityViewer<BackgroundLayer>(*m_em.get())) {
+    BackgroundLayer *background = (*m_em.get()).Get<BackgroundLayer>(ent);
+    m_window->draw(background->sprite.getSprite());
+  }
+  for (EntityID ent : EntityViewer<Obstacle>(*m_em.get())) {
+    Obstacle *obstacle = (*m_em.get()).Get<Obstacle>(ent);
+    m_window->draw(obstacle->body);
+  }
+  for (EntityID ent : EntityViewer<Player>(*m_em.get())) {
+    Player *player = (*m_em.get()).Get<Player>(ent);
+    m_window->draw(player->body);
+    m_window->draw(player->health.body);
+  }
+  for (EntityID ent : EntityViewer<Bullet>(*m_em.get())) {
+    Bullet *bullet = (*m_em.get()).Get<Bullet>(ent);
+    m_window->draw(bullet->body);
+  }
+  for (EntityID ent : EntityViewer<AnimationObj>(*m_em.get())) {
+    AnimationObj *anim = (*m_em.get()).Get<AnimationObj>(ent);
+    m_window->draw(anim->body);
+  }
+  for (EntityID ent : EntityViewer<Enemy>(*m_em.get())) {
+    Enemy *enem = (*m_em.get()).Get<Enemy>(ent);
+    m_window->draw(enem->obj->body);
+    m_window->draw(enem->health.missing_health);
+    m_window->draw(enem->health.left_health);
+  }
+  for (EntityID ent : EntityViewer<SpinningItem>(*m_em.get())) {
+    SpinningItem *item = (*m_em.get()).Get<SpinningItem>(ent);
+    m_window->draw(item->body);
+  }
+  if (m_flag == 1) { m_gui.update(); }
+  m_window->display();
+}
+
+void DisplaySystem::updateData(SystemData &t_data) {
+  if (m_flag == 1) { m_gui.updateData(t_data); }
+}
+```
+
+[Back](../game-engine/systems.md)

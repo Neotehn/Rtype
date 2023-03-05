@@ -1,0 +1,298 @@
+Epitech Berlin                                             Gylian Karsch
+Request for Comments: 9999                                Josefine Mende
+                                                             Marc Pister
+                                                            Ramon Werner
+                                                                 Epitech
+                                                              March 2023
+
+                            R-Type Protocol
+
+Status of this Memo
+
+    This memo is the official specification of the R-Type Protocol.
+    The R-Type is a year three project from EPITECH.
+
+Table of Contents
+
+    1. Introduction . . . . . . . . . . . . . . . . . . . . . . . 1
+    2. R-Type architecture  . . . . . . . . . . . . . . . . . . . 1
+    3. R-Type UDP Protocol  . . . . . . . . . . . . . . . . . . . 2
+    3.1. Commands . . . . . . . . . . . . . . . . . . . . . . . . 2
+    3.2. Server connection  . . . . . . . . . . . . . . . . . . . 3
+    3.3 Game start  . . . . . . . . . . . . . . . . . . . . . . . 4
+
+
+1. Introduction
+
+    The goal of the R-Type project is to create the classic R-Type game
+    with an online multiplayer.
+
+    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+    "SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and "OPTIONAL" in 
+    this document are to be interpreted as described in RFC 2119.
+
+2. R-Type architecture
+
+    R-Type is build like a classic server-client game. The game runs 
+    in the server and the client has to connect to the server. 
+    The connection works through an UDP protocol.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Werner                       Standard Track                     [Page 1]
+
+RFC9999                     R-Type Protocol                   March 2023
+
+
+3. R-Type UDP Protocol
+
+    The client and server communicate through during the game with the 
+    UDP protocol.
+
+    3.1. Commands
+
+        Every command must follow following structure:
+
+            int ACTION_ID;
+            ActionType ACTION_TYPE,
+            int ID;
+            // followed by ACTION_TYPE dependant data
+
+        Where ACTION_ID is an integer that increases with every command, 
+        ACTION_TYPE is an element of the ActionType enumeration
+        (described below), the ID is the identifier of an entity
+        (e.g.: Player, Enemy or Projectile). The remaining part of 
+        the command is dependant of the ACTION_TYPE.
+
+        The ActionType enumeration:
+
+            enum ActionType {
+                START, 
+                RESTART,
+                UP,       
+                DOWN,     
+                LEFT,     
+                RIGHT,    
+                POS,    
+                SHOOT, 
+                CREATE, 
+                INCREASE,
+                COLLISION,          
+                DAMAGE,             
+                DESTROY,            
+                DEAD,             
+                END,                
+                JOINLOBBY,          
+                CREATELOBBY,
+                LEAVELOBBY,         
+                JOINSUCCESSFULL,    
+                CREATESUCCESSFULL,
+                ERROR,
+            };
+
+        The exact structure of the commands are explained throughout
+        the document. All commands are written in one line and separated
+        by a semicolon(;) and end with a semicolon(;).
+
+
+
+
+
+
+Werner                       Standard Track                     [Page 2]
+
+RFC9999                     R-Type Protocol                   March 2023
+
+        
+
+    3.2. Server connection
+
+        When the server is running it waits for a client to connect.
+        The client has two options: create a lobby or join a lobby.
+
+        In case the client chooses to create a lobby the client must 
+        send following command: 
+
+            ACTION_ID = automatic generated value
+            ACTION_TYPE = CREATELOBBY
+            ACTION_TYPE_ID = 16
+            LOBBY_IP = generated lobby code
+            PLAYERNAME = username
+
+        Now the server waits for a second connection. When a second 
+        player wants to join a lobby the client must send following
+        command:
+
+            ACTION_ID = automatic generated value
+            ACTION_TYPE = JOINLOBBY
+            ACTION_TYPE_ID = 15
+            LOBBY_IP = lobby ip you want to join
+            PLAYERNAME = username
+
+        If the connection is successful the server sends back following
+        command:
+
+            ACTION_ID = automatic generated value
+            ACTION_TYPE = JOINSUCCESSFULL
+            ACTION_TYPE_ID = 18
+            PLAYERNAME1 = username of player one
+            PLAYERNAME2 = username of player two
+
+        The client also has the option to leave the current lobby. For 
+        that the client sends the LEAVELOBBY command:
+
+            ACTION_ID = automatic generated value
+            ACTION_TYPE = LEAVELOBBY
+            ACTION_TYPE_ID = 17
+            LOBBY_IP = lobby ip of current lobby
+            PLAYERNAME = username
+
+        In response the server sends the same command to both clients, 
+        in order to confirm the action and to let the other player know 
+        the client has left his lobby.
+
+        Once both player are connected the players can press the start 
+        button and have to send the start command:
+
+            ACTION_ID = automatic generated value
+            ACTION_TYPE = START;
+            PORT_NB = your port;
+            CURRENT_PLAYER_ID = 0
+
+Werner                       Standard Track                     [Page 3]
+
+RFC9999                     R-Type Protocol                   March 2023
+
+
+        The server registers the port and as soon as both clients are 
+        connected the server sends a START command back:
+
+            ACTION_ID = automatic generated value
+            ACTION_TYPE = START;
+            PLAYER_ID = id of player
+            PLAYER_NB = 1 or 2 depending on which player
+        
+        After that the client must receive the CREATE command for 
+        the both player character:
+
+            ACTION_ID = automatic generated value
+            ACTION_TYPE = CREATE;
+            PLAYER_ID = id of player
+            OBJECT_TYP = 0 for PLAYER
+            X_POS = x coordinate for spawn
+            Y_POS = y coordinate for spawn
+            SPRITE_PATH = path to player sprite
+            PLAYER_NB = 1 or 2 depending on which player
+
+        Now the game will start. The client and server now send each
+        other new commands if there is a new action.
+    
+    
+    3.3 Game start 
+
+        Once the game is running the client sends the player input or 
+        an end command to the server. 
+        The following ACTION_TYPES are possible:
+
+            enum ActionType {
+                UP,
+                DOWN,
+                LEFT,
+                RIGHT,
+                SHOOT,
+                END,
+            };
+
+        For the player movement the command has the same structure:
+
+            ACTION_ID = automatic generated value 
+            ACTION_TYPE = UP / DOWN / LEFT / RIGHT
+            ID = id of the player
+            USER_TRIGGERED = TRUE (bool)
+
+
+
+
+
+
+
+
+
+
+Werner                       Standard Track                     [Page 4]
+
+RFC9999                     R-Type Protocol                   March 2023
+
+
+        The server answers with the new position of the player:
+
+            ACTION_ID = automatic generated value
+            ACTION_TYPE = POS
+            ID = id of the player
+            X = new x coordinate of the player
+            Y = new y coordinate of the player 
+
+        The SHOOT command follows following structure:
+
+            ACTION_ID = automatic generated value
+            ACTION_TYPE = SHOOT
+            ID = id of the player
+            USER_TRIGGERED = TRUE (bool)
+            DAMAGE = amount of damage based on load time
+            TYPE = 1, 2, ... (what kind of bullet gets shot)
+
+        The server answers with a CREATE command for the bullet:
+
+            ACTION_ID = automatic generated value
+            ACTION_TYPE = CREATE
+            ID = id of the the bullet
+            TYPE = BULLET (2)
+            X = x coordinate of bullet
+            Y = y coordinate of bullet
+
+        If the client window gets closed the client sends a command that
+        disconnects the server and the client:
+
+            ACTION_ID = automatic generated value
+            ACTION_TYPE = END
+            PORT_NB = port the client is running in
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Werner                       Standard Track                     [Page 5]

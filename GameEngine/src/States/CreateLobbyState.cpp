@@ -160,10 +160,6 @@ CreateLobbyState::CreateLobbyState(
   // call protocol for creating lobby
 }
 
-void CreateLobbyState::pause() { std::cout << "MenuState Pause\n"; }
-
-void CreateLobbyState::resume() { std::cout << "MenuState resume\n"; }
-
 void CreateLobbyState::update() {
   for (int i = 0; i < m_clientCom->m_chad_msgs.size(); i++) {
     m_chad_messages[i]->setString(m_clientCom->m_chad_msgs[i]);
@@ -190,14 +186,15 @@ void CreateLobbyState::update() {
         m_clientCom->m_lobby_code = "";
         m_clientCom->m_lobby_successfull_connected = false;
         m_clientCom->m_chad_msgs.clear();
+        m_music_player.stop();
         m_next = StateMachine::build<MainState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, "", m_clientCom);
       }
-      if (m_start_btn.is_pressed(mouse_pos_f) &&
-          m_clientCom->m_lobby_names.size() == 2 &&
-          !m_start_is_pressed) {  // start game if pressed
+      if (m_start_btn.is_pressed(mouse_pos_f) &&  // start game if pressed
+          m_clientCom->m_lobby_names.size() == 2 && !m_start_is_pressed) {
         std::cout << "startbtn pressed from create to game" << std::endl;
+        m_music_player.stop();
         m_next = StateMachine::build<GameState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, "", m_clientCom);

@@ -26,6 +26,7 @@ Core::Core(std::size_t t_flag, std::string t_ip, const std::string &t_path,
 
 Core::~Core() {
   if (m_graphic_loader) delete m_graphic_loader;
+  if (m_clientCom) delete m_clientCom;
 }
 
 void Core::run() {

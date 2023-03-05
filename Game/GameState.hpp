@@ -44,9 +44,6 @@ class GameState final : public State {
             std::string t_ip = "", UdpClient *t_clientCom = nullptr);
   ~GameState();
 
-  void pause() override;
-  void resume() override;
-
   void update() override;
   void draw() override;
 
