@@ -196,9 +196,6 @@ void CreateLobbyState::update() {
         m_next = StateMachine::build<CharSelectState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, "", m_clientCom);
-        // m_next = StateMachine::build<GameState>(
-        //   m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-        //   m_level, m_path_to_sprite, true, "", m_clientCom);
         m_start_is_pressed = true;
       }  // currently lobby is just set between main and game
     }
