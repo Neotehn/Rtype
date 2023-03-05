@@ -173,6 +173,7 @@ else()
     find_package(jsoncpp REQUIRED)
 endif()
 
+find_package(Boost 1.69.0 COMPONENTS chrono system thread REQUIRED)
 
 find_package(OpenGL REQUIRED OPTIONAL_COMPONENTS OpenGL)
 include_directories(${OPENGL_INCLUDE_DIR})
