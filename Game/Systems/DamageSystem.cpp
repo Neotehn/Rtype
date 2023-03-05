@@ -25,6 +25,10 @@ void DamageSystem::update() {
       if (new_health < 0) { return; }
       if (new_health == 0) {
         std::cout << "Player died :(" << std::endl;
+        player->fire_shot = 0;
+        player->coin_shot = 0;
+        player->bomb_shot = 0;
+        player->exp = 0;
         m_play_sounds.push_back(SoundSystem::SoundType::death);
         m_client_input_manager.addActionsToQueue(std::make_shared<Action>(
           StateAction(Action::ActionType::END, m_port_number)));

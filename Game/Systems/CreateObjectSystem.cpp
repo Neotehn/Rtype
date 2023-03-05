@@ -41,6 +41,9 @@ void CreateObjectSystem::update() {
       case Action::ObjectType::PAYWALL:
         initPayWallClient(id, m_em, m_graphic_loader);
         break;
+      case Action::ObjectType::ENDBOSS:
+        initEndbossClient(id, m_em, m_graphic_loader);
+        break;
       case Action::ObjectType::EXPLOSION:
         m_play_sounds.push_back(SoundSystem::SoundType::explosion);
         initExplosionClient(id, pos, m_em, m_graphic_loader);

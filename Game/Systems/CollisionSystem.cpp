@@ -20,8 +20,10 @@ EntityID CollisionSystem::createExplosion() {
 void CollisionSystem::update() {
   for (EntityID player_ent : EntityViewer<Player>(*m_em)) {
     Player *player = (*m_em).Get<Player>(player_ent);
+    //    if (player->health.healthbar.getHealth() > 0) {
     playerAnimationCollision(player, player_ent);
     playerItemCollision(player, player_ent);
+    //    }
   }
   bulletEnemyCollision();
 }
@@ -52,7 +54,14 @@ void CollisionSystem::playerAnimationCollision(Player *t_player,
       t_player->body->intersects(enemy->obj->body->getGlobalBounds());
 
     if (collision) {
-      if (enemy->obj->type == "paywall") {
+      t_player->health.healthbar.decreaseHealth(1);
+      if (t_player->health.healthbar.getHealth() == 0) {
+        t_player->fire_shot = 0;
+        t_player->coin_shot = 0;
+        t_player->bomb_shot = 0;
+        t_player->exp = 0;
+      }
+      if (enemy->obj->type == "paywall" || enemy->obj->type == "endboss") {
         m_serverCom->addEvent(
           std::make_shared<Action>(DamageAction(enemy_ent, 1, t_player_ent)));
       } else if (enemy->obj->type == "enemy") {
@@ -154,6 +163,9 @@ void CollisionSystem::bulletEnemyCollision() {
             std::make_shared<Action>(DestroyAction(bullet_ent)));
           m_em->destroyEntity(enemy_ent);
         } else {
+          m_serverCom->addEvent(std::make_shared<Action>(
+            IncreaseAction(bullet->owner, Action::IncreaseType::KILLS,
+                           enemy->obj->kill_value)));
           m_serverCom->addEvent(std::make_shared<Action>(
             DamageAction(enemy_ent, bullet->damage, enemy_ent)));
           m_serverCom->addEvent(

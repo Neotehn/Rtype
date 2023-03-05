@@ -52,6 +52,9 @@ void MovementSystem::update() {
   }
   for (EntityID ent : EntityViewer<Enemy>(*m_em)) {
     Enemy *enem = (*m_em).Get<Enemy>(ent);
+    if (enem->obj->type == "endboss" && enem->obj->position.position.x < 450) {
+      continue;
+    }
     enem->obj->position.position += enem->obj->position.velocity;
     enem->obj->body->setPosition(
       {enem->obj->position.position.x, enem->obj->position.position.y});
@@ -75,7 +78,6 @@ void MovementSystem::update() {
 void MovementSystem::playerObstacleInteraction(Pos &t_position,
                                                const rtype::Vector2f &t_size,
                                                float t_speed) {
-  std::string type;
   for (EntityID ent : EntityViewer<Obstacle>(*m_em)) {
     Obstacle *obstacle = (*m_em).Get<Obstacle>(ent);
     rtype::IRectangleShape::SIDE side = obstacle->body->intersectsSide({
@@ -87,31 +89,26 @@ void MovementSystem::playerObstacleInteraction(Pos &t_position,
     if (side == rtype::IRectangleShape::SIDE::NONE) continue;
     t_speed /= 2;
     if (side == rtype::IRectangleShape::SIDE::LEFT) {
-      type = "LEFT";
       t_position.position.x += t_speed;
     } else if (side == rtype::IRectangleShape::SIDE::RIGHT) {
-      type = "RIGHT";
       t_position.position.x -= t_speed;
     } else if (side == rtype::IRectangleShape::SIDE::TOP) {
-      type = "TOP";
       t_position.position.y += t_speed;
     } else if (side == rtype::IRectangleShape::SIDE::BOTTOM) {
-      type = "BOTTOM";
       t_position.position.y -= t_speed;
     }
     t_position.velocity = {0, 0};
-    std::cout << "obstacle collision detected: " << type << std::endl;
   }
 }
 
 void MovementSystem::keepPlayerInsideScreen(rtype::Vector2f &t_position,
                                             const rtype::Vector2f &t_size) {
   int screen_width = 800;
-  int screen_height = 800;
+  int screen_height = 750;
 
   for (EntityID ent : EntityViewer<Enemy>(*m_em)) {
     Enemy *enem = (*m_em).Get<Enemy>(ent);
-    if (enem->obj->type == "paywall") {
+    if (enem->obj->type == "paywall" || enem->obj->type == "endboss") {
       screen_width = enem->obj->position.position.x + 30;
       if (screen_width > 800) screen_width = 800;
     }
