@@ -59,7 +59,7 @@ MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
     : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level,
             t_path_to_sprite, t_replace, t_ip, t_clientCom),
       m_start_btn(Button(
-        "./assets/startBtn.png",
+        "./assets/scoreBtn.png",
         rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 65),
                         static_cast<float>(m_window->getSize().y / 2 + 150)},
         rtype::Vector2f{130, 50}, t_graphic_loader, false)),
