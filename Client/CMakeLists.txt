@@ -76,6 +76,7 @@ set(CLIENT_HPP ../Game/ECS/ComponentPool.hpp
         ../GameEngine/src/States/MainState.hpp
         ../GameEngine/src/States/SettingsState.hpp
         ../GameEngine/src/States/JoinLobbyState.hpp
+        ../GameEngine/src/States/CharSelectState.hpp
         ../GameEngine/src/States/CreateLobbyState.hpp
         ../Game/Encapsulation/IMouse.hpp
         ../Game/Encapsulation/SFML/Mouse.hpp
@@ -144,6 +145,7 @@ set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         ../GameEngine/src/States/SettingsState.cpp
         ../GameEngine/src/States/JoinLobbyState.cpp
         ../GameEngine/src/States/CreateLobbyState.cpp
+        ../GameEngine/src/States/CharSelectState.cpp
         ../Game/Encapsulation/SFML/Mouse.cpp
         ../Game/Systems/CreatePlayerSystem.cpp
         ../Game/Encapsulation/SFML/GraphicLoader.cpp

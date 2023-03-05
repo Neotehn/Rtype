@@ -16,6 +16,7 @@
 #include "../../../Game/Encapsulation/IText.hpp"
 
 #include "../Button.hpp"
+#include "CharSelectState.hpp"
 #include "../MusicPlayer.hpp"
 #include "../State.hpp"
 #include "../StateMachine.hpp"
