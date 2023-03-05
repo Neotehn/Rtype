@@ -59,9 +59,7 @@ GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
 }
 
 GameState::~GameState() {
-  if (m_flag == CommunicationFlag::server) {
-    delete m_serverCom;
-  }
+  if (m_flag == CommunicationFlag::server) { delete m_serverCom; }
   if (m_music) { delete m_music; }
 }
 
@@ -119,9 +117,11 @@ void GameState::handleLeaderboardCom() {
       m_serverCom->updateLeaderboard(player->name, player->exp);
     }
     for (udp::endpoint client : m_serverCom->getEndpoints()) {
-      LeaderboardAction leaderboardAction(Action::ActionType::SENDLEADERBOARD, m_serverCom->getLeaderboard());
+      LeaderboardAction leaderboardAction(Action::ActionType::SENDLEADERBOARD,
+                                          m_serverCom->getLeaderboard());
       m_serverCom->sendMessage(leaderboardAction.getCommand(), client);
-      m_serverCom->sendMessage(StateAction(Action::ActionType::END).getCommand(), client);
+      m_serverCom->sendMessage(
+        StateAction(Action::ActionType::END).getCommand(), client);
     }
     m_is_running = false;
   }
@@ -324,14 +324,16 @@ void GameState::update() {
       StateAction(Action::ActionType::END, m_port_number);
     m_clientCom->sendMessage(start_action.getCommand());
     std::cout << "send end com ..." << std::endl;
-    m_next = StateMachine::build<LeaderboardState>(m_state_machine, m_window, m_music_player, m_flag,m_graphic_loader, m_level, m_path_to_sprite, true, m_ip, m_clientCom);
+    m_clientCom->clearData();
+    m_next = StateMachine::build<LeaderboardState>(
+      m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
+      m_level, m_path_to_sprite, true, m_ip, m_clientCom);
   }
-  if (m_flag == CommunicationFlag::server) { m_window->close();}
+  if (m_flag == CommunicationFlag::server) {
+    m_serverCom->clearData();
+    manageLevels();
+  }
   m_music->stop();
-  std::cout << "music stop" << std::endl;
-  //m_state_machine.quit();
-  //std::cout << "quit" << std::endl;
-  //m_state_machine.quit();
 }
 
 void GameState::draw() {}

@@ -149,3 +149,12 @@ void UdpClient::checkIfLeaderboard(std::shared_ptr<Action> t_action) {
     }
   }
 }
+
+void UdpClient::clearData() {
+  m_id = 0;
+  m_lobby_code = "";
+  m_lobby_names.clear();
+  m_chad_msgs.clear();
+  m_input_manager = nullptr;
+  m_client_input_manager = nullptr;
+}

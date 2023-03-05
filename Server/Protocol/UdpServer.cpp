@@ -252,18 +252,14 @@ void UdpServer::initLeaderboard() {
   std::string filename = ".leaderboard.txt";
   std::ifstream infile(filename);
 
-  if (infile)
-  {
+  if (infile) {
     std::string line;
-    while (std::getline(infile, line))
-    {
+    while (std::getline(infile, line)) {
       lines.push_back(line);
     }
     infile.close();
     m_leaderboard = lines;
-  }
-  else
-  {
+  } else {
     std::ofstream outfile(filename);
     outfile.close();
     std::cout << "File created: " << filename << std::endl;
@@ -278,12 +274,11 @@ void UdpServer::clearLeaderboard() {
   std::cout << "File cleared: " << filename << std::endl;
 }
 
-bool compare_scores(const std::string& t_s1, const std::string& t_s2)
-{
+bool compare_scores(const std::string &t_s1, const std::string &t_s2) {
   size_t pos1 = t_s1.find_last_of(" ");
   size_t pos2 = t_s2.find_last_of(" ");
-  int score1 = std::stoi(t_s1.substr(pos1+1));
-  int score2 = std::stoi(t_s2.substr(pos2+1));
+  int score1 = std::stoi(t_s1.substr(pos1 + 1));
+  int score2 = std::stoi(t_s2.substr(pos2 + 1));
   return score1 > score2;
 }
 
@@ -293,14 +288,13 @@ void UdpServer::updateLeaderboard(std::string t_name, int t_score) {
   bool is_in_leaderboard = false;
   for (auto element : m_leaderboard) {
     size_t pos = element.find(" ");
-    if (pos != std::string::npos)
-    {
+    if (pos != std::string::npos) {
       std::string name = element.substr(pos + 1);
       pos = name.find(" ");
       std::string score = name.substr(pos + 1);
       if (std::stoi(score) < t_score) {
-        m_leaderboard.push_back(
-          std::to_string(place) + ": " + t_name + " " + std::to_string(t_score));
+        m_leaderboard.push_back(std::to_string(place) + ": " + t_name + " " +
+                                std::to_string(t_score));
         is_in_leaderboard = true;
         break;
       }
@@ -310,8 +304,8 @@ void UdpServer::updateLeaderboard(std::string t_name, int t_score) {
   std::sort(m_leaderboard.begin(), m_leaderboard.end(), compare_scores);
   //inserted if not in leaderboard and not full
   if (!is_in_leaderboard && m_leaderboard.size() < 10) {
-    m_leaderboard.push_back(
-      std::to_string(place) + ": " + t_name + " " + std::to_string(t_score));
+    m_leaderboard.push_back(std::to_string(place) + ": " + t_name + " " +
+                            std::to_string(t_score));
   }
   //clear leaderboard if to full
   while (m_leaderboard.size() > 10) {
@@ -321,9 +315,10 @@ void UdpServer::updateLeaderboard(std::string t_name, int t_score) {
   for (auto element : m_leaderboard) {
     size_t pos = element.find(":");
     if (pos != std::string::npos) {
-      int scorePlace =std::stoi(element.substr(0, pos));
+      int scorePlace = std::stoi(element.substr(0, pos));
       if (scorePlace != correct_place) {
-        m_leaderboard[correct_place - 1] = std::to_string(correct_place) + ": " + element.substr(pos + 2);
+        m_leaderboard[correct_place - 1] =
+          std::to_string(correct_place) + ": " + element.substr(pos + 2);
       }
     }
     correct_place++;
@@ -339,12 +334,21 @@ void UdpServer::updateLeaderboard(std::string t_name, int t_score) {
 void UdpServer::checkIfLeaderboard(std::shared_ptr<Action> t_action) {
   if (t_action->getType() == Action::ActionType::ASKLEADERBOARD) {
     for (udp::endpoint client : m_endpoints) {
-      LeaderboardAction leaderboardAction(Action::ActionType::SENDLEADERBOARD, m_leaderboard);
+      LeaderboardAction leaderboardAction(Action::ActionType::SENDLEADERBOARD,
+                                          m_leaderboard);
       sendMessage(leaderboardAction.getCommand(), client);
     }
   }
 }
 
-std::vector<std::string> UdpServer::getLeaderboard() {return m_leaderboard;}
+void UdpServer::clearData() {
+  m_client_ids.clear();
+  m_client_connected.clear();
+  m_client_ports.clear();
+  m_is_running = true;
+  m_player_id_count = 0;
+}
 
-std::vector<udp::endpoint> UdpServer::getEndpoints() {return m_endpoints;}
+std::vector<std::string> UdpServer::getLeaderboard() { return m_leaderboard; }
+
+std::vector<udp::endpoint> UdpServer::getEndpoints() { return m_endpoints; }

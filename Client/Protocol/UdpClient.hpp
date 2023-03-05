@@ -34,8 +34,6 @@ class UdpClient : public IProtocol {
   void checkIfLeaderboard(std::shared_ptr<Action> t_action);
   void setLeaderboard(std::vector<std::string> t_leaderboard);
 
-
-
   enum ConnectState { none, connected };
   std::string getPlayerName();
   void setPlayerName(std::string t_new_name);
@@ -46,6 +44,7 @@ class UdpClient : public IProtocol {
   bool m_lobby_successfull_connected;
   std::vector<std::string> m_chad_msgs;
   std::vector<std::string> getLeaderboard();
+  void clearData();
 
  private:
   udp::socket m_socket;
