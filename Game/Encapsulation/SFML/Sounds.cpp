@@ -19,6 +19,7 @@ bool rtype::Sounds::addSoundFromFile(const std::string &t_path) {
   m_soundBuffer.push_back(buffer);
   sf::Sound sound;
   sound.setBuffer(*m_soundBuffer.back());
+  sound.setVolume(0);
   m_sound.push_back(sound);
   return true;
 }

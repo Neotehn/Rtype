@@ -13,7 +13,6 @@ State::State(StateMachine &t_machine, rtype::IRenderWindow *t_window,
   m_clientCom = t_clientCom;
   m_path_to_sprite = t_path_to_sprite;
 }
-
 std::unique_ptr<State> State::next() { return std::move(m_next); }
 
 const bool State::isReplacing() { return m_replace; }

@@ -68,7 +68,17 @@ MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
   initText();
   m_music_player.play(MusicID::MENU_THEME);
   m_start_pressed = false;
-  m_clientCom->m_lobby_names.clear();
+  if (m_clientCom != nullptr) {
+    int i = 0;
+    while (m_clientCom->m_lobby_names.size() > 0) {
+      std::cout << "size: " << m_clientCom->m_lobby_names.size() << std::endl;
+      std::cout << "pop " << m_clientCom->m_lobby_names[i] << std::endl;
+      m_clientCom->m_lobby_names.pop_back();
+      i++;
+    }
+  }
+
+
 }
 
 MainState::~MainState() {
