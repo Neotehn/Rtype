@@ -138,6 +138,8 @@ void UdpClient::setLeaderboard(std::vector<std::string> t_leaderboard) {
   m_leaderboard = t_leaderboard;
 }
 
+std::vector<std::string> UdpClient::getLeaderboard() { return m_leaderboard; }
+
 void UdpClient::checkIfLeaderboard(std::shared_ptr<Action> t_action) {
   if (t_action->getType() == Action::ActionType::SENDLEADERBOARD) {
     setLeaderboard(t_action->getLeaderboard());

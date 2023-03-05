@@ -97,9 +97,10 @@ void MainState::update() {
         std::cout << "startbtn pressed from main to game" << std::endl;
         std::cout << m_title->getString() << std::endl;
         m_music_player.stop();
-        m_next = StateMachine::build<GameState>(
-          m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, m_path_to_sprite, true, m_ip, m_clientCom);
+//        m_next = StateMachine::build<GameState>(
+//          m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
+//          m_level, m_path_to_sprite, true, m_ip, m_clientCom);
+        m_next = StateMachine::build<LeaderboardState>(m_state_machine, m_window, m_music_player, m_flag,m_graphic_loader, m_level, m_path_to_sprite, true, m_ip, m_clientCom);
         m_start_pressed = true;
       }
       if (m_settings_btn.is_pressed(mouse_pos_f)) {

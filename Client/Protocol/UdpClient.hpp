@@ -45,6 +45,7 @@ class UdpClient : public IProtocol {
   std::vector<std::string> m_lobby_names;
   bool m_lobby_successfull_connected;
   std::vector<std::string> m_chad_msgs;
+  std::vector<std::string> getLeaderboard();
 
  private:
   udp::socket m_socket;

@@ -318,16 +318,16 @@ void GameState::update() {
     }
     manageLevels();
   }
-
-  if (m_window->isOpen()) { m_window->close(); }
   if (m_flag == CommunicationFlag::client) {
     std::cout << "Stop connection to Server ..." << std::endl;
     StateAction start_action =
       StateAction(Action::ActionType::END, m_port_number);
     m_clientCom->sendMessage(start_action.getCommand());
+    m_next = StateMachine::build<LeaderboardState>(m_state_machine, m_window, m_music_player, m_flag,m_graphic_loader, m_level, m_path_to_sprite, true, m_ip, m_clientCom);
   }
+  if (m_flag == CommunicationFlag::server) { m_window->close();}
   m_music->stop();
-  m_state_machine.quit();
+  //m_state_machine.quit();
 }
 
 void GameState::draw() {}

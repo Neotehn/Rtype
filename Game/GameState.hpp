@@ -31,6 +31,7 @@
 #include "../GameEngine/src/State.hpp"
 #include "../GameEngine/src/StateMachine.hpp"
 #include "../GameEngine/src/States/MainState.hpp"
+#include "../GameEngine/src/States/LeaderboardState.hpp"
 
 class StateMachine;
 

@@ -17,6 +17,7 @@ LeaderboardState::LeaderboardState(StateMachine &t_machine,
                         static_cast<float>(m_window->getSize().y - 50)},
         rtype::Vector2f{150, 50}, t_graphic_loader, false)),
       m_flag(t_flag) {
+  std::cout << "init leaderboard" << std::endl;
   m_path_to_sprite = t_path_to_sprite;
   m_music_player.play(MusicID::MENU_THEME);
   initSprites();
@@ -27,6 +28,11 @@ LeaderboardState::LeaderboardState(StateMachine &t_machine,
 LeaderboardState::~LeaderboardState() {
   delete m_bg_t;
   delete m_bg_s;
+  delete m_font;
+  delete m_title;
+  for (auto &it : m_leaderboard_list) {
+    delete it;
+  }
 }
 
 void LeaderboardState::pause() { std::cout << "Pause\n"; }
@@ -43,11 +49,11 @@ void LeaderboardState::update() {
     }
     if (m_mouse->isLeftMouseButtonPressed()) {
       if (m_next_btn.is_pressed(mouse_pos_f)) {
-        //Todo: add action to server to reset, reset client here
         std::cout << "Mainmenubtn pressed" << std::endl;
         m_next = StateMachine::build<MainState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, m_ip, m_clientCom);
+        return ;
       }
     }
     switch (event.type) {
@@ -108,10 +114,7 @@ void LeaderboardState::initText() {
       {(size_x / 2) - 100, static_cast<float>(200 + (i * 50))});
     m_leaderboard_list.push_back(text);
   }
-  //Todo: get leaderboard from server
-  std::vector<std::string> leaderboard = {"Player1 3454", "Player2 1234", "Player3 994", "Player4 954", "Player5 854", "Player6 799", "Player7 554",
-                                          "Player8 478", "Player9 300", "Player10 20"};
-  setLeaderboard(leaderboard);
+  setLeaderboard(m_clientCom->getLeaderboard());
 }
 
 void LeaderboardState::draw() {
@@ -127,8 +130,8 @@ void LeaderboardState::draw() {
 }
 
 void LeaderboardState::setLeaderboard(std::vector<std::string> t_leaderboard) {
+  std::cout << "Leaderboard size: " << t_leaderboard.size() << std::endl;
   for (int i = 0; i < t_leaderboard.size(); i++) {
-    m_leaderboard_list[i]->setString(std::to_string(i+1) + ": "
-                                     + t_leaderboard[i]);
+    m_leaderboard_list[i]->setString(t_leaderboard[i]);
   }
 }
