@@ -44,8 +44,8 @@ class Action : public IAction {
     JOINSUCCESSFULL,    // ACTION_ID;
     CREATESUCCESSFULL,  // ACTION_ID;
     CHAD,               // ACTION_ID;CHAT_MSG
-    ASKLEADERBOARD,    // ACTION_ID;PLAYER_ID
-    SENDLEADERBOARD,   // ACTION_ID;PLAYER_ID;LEADERBOARD
+    ASKLEADERBOARD,     // ACTION_ID;PLAYER_ID
+    SENDLEADERBOARD,    // ACTION_ID;PLAYER_ID;LEADERBOARD
     ERROR,
   };
   enum ShootingType { NORMAL, FIRE, BOMB, COIN };
@@ -121,7 +121,6 @@ class Action : public IAction {
   std::string getChadMsg() const;
   void setChadMsg(std::string t_chad_msg);
   std::vector<std::string> getLeaderboard() const;
-
 
  protected:
   int m_action_id;

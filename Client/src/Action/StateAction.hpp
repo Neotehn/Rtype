@@ -18,7 +18,7 @@ class StateAction : public Action {
   StateAction(ActionType t_type, EntityID t_id, std::string t_lobby_code,
               std::string t_player_name);
   StateAction(ActionType t_type, EntityID t_id, int t_action_id,
-                           std::string t_lobby_code, int t_player_id, std::string t_name);
+              std::string t_lobby_code, int t_player_id, std::string t_name);
   ~StateAction() override = default;
 };
 

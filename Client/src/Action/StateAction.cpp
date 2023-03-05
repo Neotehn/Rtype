@@ -38,7 +38,8 @@ StateAction::StateAction(ActionType t_type, EntityID t_id, int t_action_id,
 }
 
 StateAction::StateAction(ActionType t_type, EntityID t_id, int t_action_id,
-                         std::string t_lobby_code, int t_player_id, std::string t_name)
+                         std::string t_lobby_code, int t_player_id,
+                         std::string t_name)
     : Action(t_type, t_id, t_action_id) {
   m_lobby_ip = t_lobby_code;
   m_client_id = t_player_id;

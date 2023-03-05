@@ -1,32 +1,27 @@
 #include "LeaderboardState.hpp"
 
-LeaderboardState::LeaderboardState(StateMachine &t_machine,
-                                   rtype::IRenderWindow *t_window,
-                                   MusicPlayer &t_music_player,
-                                   std::size_t t_flag,
-                                   rtype::IGraphicLoader *t_graphic_loader,
-                                   int *t_level,
-                                   const std::string &t_path_to_sprite,
-                                   bool t_replace, std::string t_ip,
-                                   UdpClient *t_clientCom)
+LeaderboardState::LeaderboardState(
+  StateMachine &t_machine, rtype::IRenderWindow *t_window,
+  MusicPlayer &t_music_player, std::size_t t_flag,
+  rtype::IGraphicLoader *t_graphic_loader, int *t_level,
+  const std::string &t_path_to_sprite, bool t_replace, std::string t_ip,
+  UdpClient *t_clientCom)
     : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level,
             t_path_to_sprite, t_replace, t_ip, t_clientCom),
-      m_next_btn(Button(
-        "./assets/homeBtn.png",
-        rtype::Vector2f{static_cast<float>(m_window->getSize().x - 150),
-                        static_cast<float>(m_window->getSize().y - 50)},
-        rtype::Vector2f{150, 50}, t_graphic_loader, false)),
+      m_next_btn(
+        Button("./assets/homeBtn.png",
+               rtype::Vector2f{static_cast<float>(m_window->getSize().x - 150),
+                               static_cast<float>(m_window->getSize().y - 50)},
+               rtype::Vector2f{150, 50}, t_graphic_loader, false)),
       m_flag(t_flag) {
   std::cout << "init leaderboard" << std::endl;
   m_path_to_sprite = t_path_to_sprite;
 
   initSprites();
   initText();
-  if (t_replace)
-    m_music_player.play(MusicID::MENU_THEME);
+  if (t_replace) m_music_player.play(MusicID::MENU_THEME);
   m_sound_manager.init(m_graphic_loader, false);
 }
-
 
 LeaderboardState::~LeaderboardState() {
   delete m_bg_t;
@@ -52,7 +47,7 @@ void LeaderboardState::update() {
         m_next = StateMachine::build<MainState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, m_ip, m_clientCom);
-        return ;
+        return;
       }
     }
     switch (event.type) {
@@ -106,10 +101,9 @@ void LeaderboardState::initText() {
   for (int i = 0; i < 10; i++) {
     rtype::IText *text = m_graphic_loader->loadText();
     text->setFont(m_font);
-    text->setString( std::to_string(i+1) + ": ");
+    text->setString(std::to_string(i + 1) + ": ");
     text->setCharacterSize(30);
-    text->setPosition(
-      {(size_x / 2) - 100, static_cast<float>(200 + (i * 50))});
+    text->setPosition({(size_x / 2) - 100, static_cast<float>(200 + (i * 50))});
     m_leaderboard_list.push_back(text);
   }
   setLeaderboard(m_clientCom->getLeaderboard());
