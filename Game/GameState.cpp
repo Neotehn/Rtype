@@ -270,7 +270,7 @@ void GameState::update() {
       }
     }
     SystemData data = {.event_queue = m_input_manager.getInputs(),
-                       m_music_player.getVolume()};
+                       m_music_player.getSEVol()};
     if (m_flag == CommunicationFlag::client && m_clientCom->m_flag) {
       EventQueue eq = m_client_input_manager.getInputsWithoutPop();
       for (std::shared_ptr<Action> action : eq.getEventQueue()) {

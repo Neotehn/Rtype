@@ -25,10 +25,13 @@ class MusicPlayer {
   void setPaused(bool t_paused);
   void setVolume(float t_volume);
   float getVolume();
+  void setSEVol(float t_vol);
+  float getSEVol();
 
  private:
   rtype::IMusic *m_music;
   float m_volume;
+  float m_vol_se;
   rtype::IGraphicLoader *m_graphic_loader;
 };
 
