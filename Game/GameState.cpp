@@ -107,7 +107,6 @@ bool GameState::playerAlive() {
 
 void GameState::handleLeaderboardCom() {
   if (m_flag == CommunicationFlag::server) {
-    std::cout << "test" << std::endl;
     for (EntityID ent : EntityViewer<Player>(*m_em)) {
       Player *player = (*m_em).Get<Player>(ent);
       std::cout << "updating leaderboard with " << player->name << " "
