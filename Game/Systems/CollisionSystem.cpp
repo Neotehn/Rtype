@@ -156,6 +156,7 @@ void CollisionSystem::bulletEnemyCollision() {
         enemy->health.cur_health -= bullet->damage;
         if (enemy->health.cur_health <= 0) {
           enemy->health.cur_health = 0;
+          (*m_em).Get<Player>(bullet->owner)->exp += enemy->obj->kill_value;
           m_serverCom->addEvent(std::make_shared<Action>(
             IncreaseAction(bullet->owner, Action::IncreaseType::KILLS,
                            enemy->obj->kill_value)));
@@ -165,6 +166,7 @@ void CollisionSystem::bulletEnemyCollision() {
             std::make_shared<Action>(DestroyAction(bullet_ent)));
           m_em->destroyEntity(enemy_ent);
         } else {
+          (*m_em).Get<Player>(bullet->owner)->exp += enemy->obj->kill_value;
           m_serverCom->addEvent(std::make_shared<Action>(
             IncreaseAction(bullet->owner, Action::IncreaseType::KILLS,
                            enemy->obj->kill_value)));
