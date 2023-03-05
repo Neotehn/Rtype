@@ -331,7 +331,7 @@ void GameState::update() {
   }
   if (m_flag == CommunicationFlag::server) {
     m_serverCom->clearData();
-    manageLevels();
+    update();
   }
   m_music->stop();
 }

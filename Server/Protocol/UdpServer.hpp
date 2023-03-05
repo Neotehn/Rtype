@@ -69,6 +69,7 @@ class UdpServer : public IProtocol {
   enum GameMode { none, single, coop, end };
   GameMode m_flag;
   std::vector<int> m_client_ids;
+  int m_end;
 
  private:
   std::vector<bool> m_client_connected;

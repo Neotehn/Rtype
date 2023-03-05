@@ -182,17 +182,12 @@ void UdpServer::handleReceive(const boost::system::error_code &t_error,
 
     checkIfLeaderboard(action);
 
-    if (action->getType() != Action::ActionType::END &&
-        m_client_ports.size() != 2) {
+    if (m_client_ports.size() != 2) {
       receiveClient();
     } else if (m_client_ports.size() == m_endpoints.size()) {
       std::cout << m_endpoints.size() << std::endl;
       m_flag = GameMode::coop;
       receiveClient();
-    } else {
-      m_flag = GameMode::end;
-      m_is_running = false;
-      m_socket.close();
     }
   } else {
     m_socket.close();
@@ -347,6 +342,10 @@ void UdpServer::clearData() {
   m_client_ports.clear();
   m_is_running = true;
   m_player_id_count = 0;
+  m_end = 0;
+  m_flag = GameMode::none;
+  m_input_manager = InputManager((int *) 1);
+  m_send_event_manager = InputManager((int *) 1);
 }
 
 std::vector<std::string> UdpServer::getLeaderboard() { return m_leaderboard; }
