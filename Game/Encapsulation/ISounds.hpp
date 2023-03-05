@@ -14,6 +14,8 @@ namespace rtype {
     virtual void stop(int t_index) = 0;
     virtual void pause(int t_index) = 0;
     virtual void setVolume(float t_volume) = 0;
+    virtual float getVolume(int t_index) = 0;
+    virtual void setVolume(int t_index, float t_vol) = 0;
 
     // private: vector of all sounds in the inherited class
   };

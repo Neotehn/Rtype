@@ -1,6 +1,7 @@
 #ifndef MUSICPLAYER_HPP_
 #define MUSICPLAYER_HPP_
 
+#include <fstream>
 #include <iostream>
 #include <map>
 

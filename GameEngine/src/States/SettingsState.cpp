@@ -35,6 +35,14 @@ void SettingsState::initText() {
   m_vol_txt->setPosition(
     {(size_x / 2) - (m_vol_txt->getLocalBounds().width / 2),
      (size_y / 2) - 50});
+  m_vol_digit = m_graphic_loader->loadText();
+  m_vol_digit->setFont(m_font);
+  m_vol_digit->setString(
+    std::to_string(static_cast<int>(m_music_player.getVolume())));
+  m_vol_digit->setCharacterSize(35);
+  m_vol_digit->setPosition(
+    {(size_x / 2) - (m_vol_digit->getLocalBounds().width / 2),
+     static_cast<float>((size_y / 2) + 14.5)});
 }
 
 SettingsState::SettingsState(StateMachine &t_machine,
@@ -71,9 +79,6 @@ SettingsState::~SettingsState() {
   delete m_bg_t;
   delete m_bg_s;
 }
-void SettingsState::pause() { std::cout << "MenuState Pause\n"; }
-
-void SettingsState::resume() { std::cout << "MenuState resume\n"; }
 
 void SettingsState::update() {
   for (auto event = rtype::Event{}; m_window->pollEvent(event);) {
@@ -88,6 +93,7 @@ void SettingsState::update() {
     if (m_mouse->isLeftMouseButtonPressed()) {
       if (m_start_btn.is_pressed(mouse_pos_f)) {
         std::cout << "startbtn pressed" << std::endl;
+        m_music_player.stop();
         m_next = StateMachine::build<MainState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, "", m_clientCom);
@@ -96,24 +102,30 @@ void SettingsState::update() {
         if (m_music_player.getVolume() > 0) {
           float tmp_vol = m_music_player.getVolume();
           m_music_player.setVolume(tmp_vol - 5);
+          m_vol_digit->setString(std::to_string(static_cast<int>(tmp_vol - 5)));
+          m_vol_digit->setPosition(
+            {(m_window->getSize().x / 2) -
+               (m_vol_digit->getLocalBounds().width / 2),
+             static_cast<float>(
+               (static_cast<float>(m_window->getSize().y) / 2) + 14.5)});
+          std::ofstream file_set("./assets/files/settings.txt");
+          file_set << "vol:" + std::to_string(static_cast<int>(tmp_vol - 5));
+          file_set.close();
         }
       }
       if (m_vol_up.is_pressed(mouse_pos_f)) {
         if (m_music_player.getVolume() < 100) {
           float tmp_vol = m_music_player.getVolume();
           m_music_player.setVolume(tmp_vol + 5);
-        }
-      }
-      if (m_vol_down.is_pressed(mouse_pos_f)) {
-        if (m_music_player.getVolume() > 0) {
-          float tmp_vol = m_music_player.getVolume();
-          m_music_player.setVolume(tmp_vol - 5);
-        }
-      }
-      if (m_vol_up.is_pressed(mouse_pos_f)) {
-        if (m_music_player.getVolume() < 100) {
-          float tmp_vol = m_music_player.getVolume();
-          m_music_player.setVolume(tmp_vol + 5);
+          m_vol_digit->setString(std::to_string(static_cast<int>(tmp_vol + 5)));
+          m_vol_digit->setPosition(
+            {(m_window->getSize().x / 2) -
+               (m_vol_digit->getLocalBounds().width / 2),
+             static_cast<float>(
+               (static_cast<float>(m_window->getSize().y) / 2) + 14.5)});
+          std::ofstream file_set("./assets/files/settings.txt");
+          file_set << "vol:" + std::to_string(static_cast<int>(tmp_vol + 5));
+          file_set.close();
         }
       }
     }
@@ -124,6 +136,7 @@ void SettingsState::update() {
       case rtype::EventType::KeyPressed:
         switch (event.key) {
           case rtype::EventKey::Space:
+            m_music_player.stop();
             m_next = StateMachine::build<MainState>(
               m_state_machine, m_window, m_music_player, m_flag,
               m_graphic_loader, m_level, m_path_to_sprite, true, "",
@@ -147,6 +160,7 @@ void SettingsState::draw() {
   m_window->draw(m_bg_s);
   m_window->draw(m_title);
   m_window->draw(m_vol_txt);
+  m_window->draw(m_vol_digit);
   m_window->draw(m_start_btn.getSprite());
   m_window->draw(m_vol_down.getSprite());
   m_window->draw(m_vol_up.getSprite());

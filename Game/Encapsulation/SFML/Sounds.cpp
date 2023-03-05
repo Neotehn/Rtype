@@ -52,3 +52,18 @@ void rtype::Sounds::setVolume(float t_volume) {
     sound.setVolume(t_volume);
   }
 }
+
+float rtype::Sounds::getVolume(int t_index) {
+  if (t_index >= 0 && t_index < m_sound.size()) {
+    return m_sound[t_index].getVolume();
+  }
+  return -1;
+}
+
+void rtype::Sounds::setVolume(int t_index, float t_volume) {
+  if (t_index < 0 || t_index >= m_sound.size()) {
+    std::cout << "Error while setting volume" << std::endl;
+    return;
+  }
+  m_sound[t_index].setVolume(t_volume);
+}
