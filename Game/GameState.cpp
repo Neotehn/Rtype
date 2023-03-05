@@ -102,10 +102,6 @@ std::vector<std::shared_ptr<ISystem>> GameState::initSystems() {
   return systems;
 }
 
-void GameState::pause() { std::cout << "GameState Pause\n"; }
-
-void GameState::resume() { std::cout << "GameState Resume\n"; }
-
 bool GameState::playerAlive() {
   for (EntityID ent : EntityViewer<Player>(*m_em)) {
     Player *player = (*m_em).Get<Player>(ent);
