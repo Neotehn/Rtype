@@ -164,6 +164,7 @@ void GameState::manageLevels() {
       m_level_two_enemy_created = false;
       loadLevel(m_level, m_em, m_graphic_loader, m_music,
                 (m_flag == CommunicationFlag::client), m_serverCom);
+      m_music->setVolume(m_music_player.getVolume());
       std::cout << "finished level 2" << std::endl;
       return;
     }
@@ -193,6 +194,7 @@ void GameState::manageLevels() {
       m_level_two_enemy_created = false;
       loadLevel(m_level, m_em, m_graphic_loader, m_music,
                 (m_flag == CommunicationFlag::client), m_serverCom);
+      m_music->setVolume(m_music_player.getVolume());
       std::cout << "finished level 2" << std::endl;
     }
   } else if (*m_level == 1) {
@@ -201,6 +203,7 @@ void GameState::manageLevels() {
       *m_level += 1;
       loadLevel(m_level, m_em, m_graphic_loader, m_music,
                 (m_flag == CommunicationFlag::client), m_serverCom);
+      m_music->setVolume(m_music_player.getVolume());
       std::cout << "finished level 1" << std::endl;
       return;
     }
@@ -217,6 +220,7 @@ void GameState::manageLevels() {
 
       loadLevel(m_level, m_em, m_graphic_loader, m_music,
                 (m_flag == CommunicationFlag::client), m_serverCom);
+      m_music->setVolume(m_music_player.getVolume());
       std::cout << "finished level 1" << std::endl;
     }
   }
@@ -262,6 +266,7 @@ void GameState::update() {
         *m_level = action->getId();
         loadLevel(m_level, m_em, m_graphic_loader, m_music,
                   (m_flag == CommunicationFlag::client), m_serverCom);
+        m_music->setVolume(m_music_player.getVolume());
       }
     }
     SystemData data = {.event_queue = m_input_manager.getInputs(),
