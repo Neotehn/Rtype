@@ -52,11 +52,11 @@ void InputManager::recordKeyPressedInputs(const rtype::Event &t_event) {
           MovementAction(Action::ActionType::LEFT, m_player_id, true)),
         Action::ActionType::LEFT);
       break;
-      case rtype::EventKey::Escape:
-      m_input_queue.addToQueueIfNotExist(
-        std::make_shared<Action>(
-          StateAction(Action::ActionType::CLOSE, 0, true)),
-        Action::ActionType::CLOSE);
+      //case rtype::EventKey::Escape:
+      //m_input_queue.addToQueueIfNotExist(
+      //  std::make_shared<Action>(
+      //    StateAction(Action::ActionType::CLOSE, 0, true)),
+      //  Action::ActionType::CLOSE);
     default:
       break;
   }

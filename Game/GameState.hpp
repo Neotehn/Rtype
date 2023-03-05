@@ -69,6 +69,7 @@ class GameState final : public State {
 
   bool playerAlive();
   std::vector<std::shared_ptr<ISystem>> initSystems();
+  void handleLeaderboardCom();
 
   rtype::ITexture *m_bg_t;
   rtype::ISprite *m_bg_s;

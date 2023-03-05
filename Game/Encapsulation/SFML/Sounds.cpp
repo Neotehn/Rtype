@@ -49,6 +49,6 @@ void rtype::Sounds::pause(int t_index) {
 
 void rtype::Sounds::setVolume(float t_volume) {
   for (sf::Sound sound : m_sound) {
-    sound.setVolume(t_volume);
+    sound.setVolume(0);
   }
 }

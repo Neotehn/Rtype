@@ -47,7 +47,6 @@ class Action : public IAction {
     ASKLEADERBOARD,    // ACTION_ID;PLAYER_ID
     SENDLEADERBOARD,   // ACTION_ID;PLAYER_ID;LEADERBOARD
     ERROR,
-    CLOSE,
   };
   enum ShootingType { NORMAL, FIRE, BOMB, COIN };
   enum ObjectType {

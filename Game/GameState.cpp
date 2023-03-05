@@ -112,10 +112,30 @@ bool GameState::playerAlive() {
   return false;
 }
 
+void GameState::handleLeaderboardCom() {
+  if (m_flag == CommunicationFlag::server) {
+    std::cout << "test" << std::endl;
+    for (EntityID ent : EntityViewer<Player>(*m_em)) {
+      Player *player = (*m_em).Get<Player>(ent);
+      std::cout << "updating leaderboard with " << player->name << " "
+                << player->exp << std::endl;
+      //if (player->name == "tube")
+      //  m_serverCom->updateLeaderboard("tube", 99999999999);
+      m_serverCom->updateLeaderboard(player->name, player->exp);
+    }
+    for (udp::endpoint client : m_serverCom->getEndpoints()) {
+      LeaderboardAction leaderboardAction(Action::ActionType::SENDLEADERBOARD, m_serverCom->getLeaderboard());
+      m_serverCom->sendMessage(leaderboardAction.getCommand(), client);
+      m_serverCom->sendMessage(StateAction(Action::ActionType::END).getCommand(), client);
+    }
+    m_is_running = false;
+  }
+}
+
 void GameState::manageLevels() {
   if (!playerAlive()) {
-    m_is_running = false;
     std::cout << "you died under the epitech pressure" << std::endl;
+    handleLeaderboardCom();
     return;
   }
   if (*m_level == 3) {
@@ -124,9 +144,7 @@ void GameState::manageLevels() {
       m_will_reload = false;
       bool success = loadNewEndboss(m_em, m_graphic_loader, m_serverCom);
       if (!success) {
-        m_is_running = false;
-        m_serverCom->addEvent(
-          std::make_shared<Action>(StateAction(Action::ActionType::END)));
+        handleLeaderboardCom();
         return;
       }
       std::cout << "load new endboss" << std::endl;
@@ -289,7 +307,6 @@ void GameState::update() {
              type == Action::ActionType::SHOOT) &&
             action->isTriggeredByUser())
           m_clientCom->sendMessage(action->getCommand());
-        if (type == Action::ActionType::CLOSE) { m_is_running = false; }
       }
     }
     if (m_flag == CommunicationFlag::server && m_serverCom->m_flag == 2) {
@@ -301,19 +318,6 @@ void GameState::update() {
     }
     manageLevels();
   }
-  if (m_flag == CommunicationFlag::server) {
-    for (EntityID ent : EntityViewer<Player>(*m_em)) {
-      Player *player = (*m_em).Get<Player>(ent);
-      std::cout << "updating leaderboard with " << player->name << " "
-                << player->exp << std::endl;
-      //if (player->name == "tube")
-      //  m_serverCom->updateLeaderboard("tube", 99999999999);
-      m_serverCom->updateLeaderboard(player->name, player->exp);
-    }
-    LeaderboardAction leader_action = LeaderboardAction(
-      Action::ActionType::SENDLEADERBOARD, m_serverCom->getLeaderboard());
-    m_clientCom->sendMessage(leader_action.getCommand());
-}
 
   if (m_window->isOpen()) { m_window->close(); }
   if (m_flag == CommunicationFlag::client) {

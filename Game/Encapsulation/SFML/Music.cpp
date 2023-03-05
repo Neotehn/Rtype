@@ -16,7 +16,7 @@ bool rtype::Music::openFromFile(const std::string &t_path) {
 
 void rtype::Music::setVolume(float t_volume) {
   for (sf::Music *music : m_music)
-    music->setVolume(t_volume);
+    music->setVolume(0);
 }
 
 void rtype::Music::setLoop(bool t_loop) {

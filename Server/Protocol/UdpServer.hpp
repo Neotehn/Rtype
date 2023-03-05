@@ -63,6 +63,8 @@ class UdpServer : public IProtocol {
   std::vector<std::string> getLeaderboard();
   float getTimeDiff();
   void resetTime();
+  std::vector<udp::endpoint> getEndpoints();
+
 
   enum GameMode { none, single, coop, end };
   GameMode m_flag;

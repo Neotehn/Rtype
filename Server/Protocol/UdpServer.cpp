@@ -346,3 +346,5 @@ void UdpServer::checkIfLeaderboard(std::shared_ptr<Action> t_action) {
 }
 
 std::vector<std::string> UdpServer::getLeaderboard() {return m_leaderboard;}
+
+std::vector<udp::endpoint> UdpServer::getEndpoints() {return m_endpoints;}
