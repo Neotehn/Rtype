@@ -117,6 +117,7 @@ class Action : public IAction {
 
   std::string getChadMsg() const;
   void setChadMsg(std::string t_chad_msg);
+  std::vector<std::string> getLeaderboard() const;
 
 
  protected:

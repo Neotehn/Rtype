@@ -212,7 +212,7 @@ void GameState::update() {
       }
       if (type == Action::ActionType::END && !action->isTriggeredByUser()) {
         m_is_running = false;
-        break ;
+        break;
       }
     }
     manageLevels();
@@ -234,9 +234,7 @@ void GameState::update() {
              type == Action::ActionType::SHOOT) &&
             action->isTriggeredByUser())
           m_clientCom->sendMessage(action->getCommand());
-        if (type == Action::ActionType::CLOSE) {
-          m_is_running = false;
-        }
+        if (type == Action::ActionType::CLOSE) { m_is_running = false; }
       }
     }
     if (m_flag == CommunicationFlag::server && m_serverCom->m_flag == 2) {
@@ -250,10 +248,16 @@ void GameState::update() {
   if (m_flag == CommunicationFlag::server) {
     for (EntityID ent : EntityViewer<Player>(*m_em)) {
       Player *player = (*m_em).Get<Player>(ent);
-      std::cout << "updating leaderboard with " << player->name << " " << player->exp << std::endl;
+      std::cout << "updating leaderboard with " << player->name << " "
+                << player->exp << std::endl;
+      //if (player->name == "tube")
+      //  m_serverCom->updateLeaderboard("tube", 99999999999);
       m_serverCom->updateLeaderboard(player->name, player->exp);
     }
-  }
+    LeaderboardAction leader_action = LeaderboardAction(
+      Action::ActionType::SENDLEADERBOARD, m_serverCom->getLeaderboard());
+    m_clientCom->sendMessage(leader_action.getCommand());
+}
 
   if (m_window->isOpen()) { m_window->close(); }
   if (m_flag == CommunicationFlag::client) {

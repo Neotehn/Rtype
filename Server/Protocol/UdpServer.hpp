@@ -50,8 +50,10 @@ class UdpServer : public IProtocol {
   bool checkAndLobbyHandling(std::shared_ptr<Action> t_action);
   bool chadHandling(std::shared_ptr<Action> t_action);
   void initLeaderboard();
+  void checkIfLeaderboard(std::shared_ptr<Action> t_action);
   void clearLeaderboard();
   void updateLeaderboard(std::string t_name, int t_score);
+  std::vector<std::string> getLeaderboard();
   float getTimeDiff();
   void resetTime();
 

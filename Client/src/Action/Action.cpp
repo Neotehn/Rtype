@@ -66,6 +66,7 @@ std::string Action::getCommand() const {
   std::string type_string = getTypeAsString();
   std::string data = "";
   std::string names = "";
+  std::string leaderboardline = "";
   std::string lobby_code = "";
 
   switch (m_type) {
@@ -156,6 +157,13 @@ std::string Action::getCommand() const {
     case ActionType::ASKLEADERBOARD:
       return std::to_string(m_action_id) + ";ASKLEADERBOARD;" +
              std::to_string(m_id) + ";";
+    case ActionType::SENDLEADERBOARD:
+      for (int i = 0; i < m_leaderboard.size(); i++) {
+        leaderboardline += m_leaderboard[i];
+        leaderboardline += ";";
+      }
+      return std::to_string(m_action_id) + ";SENDLEADERBOARD;" +
+             std::to_string(m_id) + ";" + leaderboardline;
   }
   return std::to_string(m_action_id) + ";" + type_string + ";" +
          std::to_string(m_id) + ";";
@@ -221,3 +229,5 @@ std::vector<std::string> Action::getLobbyPlayerNames() const {
 std::string Action::getChadMsg() const { return m_chad_msg; }
 
 void Action::setChadMsg(std::string t_chad_msg) { m_chad_msg = t_chad_msg; }
+
+std::vector<std::string> Action::getLeaderboard() const { return m_leaderboard;}

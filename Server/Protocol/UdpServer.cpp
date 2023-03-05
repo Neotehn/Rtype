@@ -176,6 +176,8 @@ void UdpServer::handleReceive(const boost::system::error_code &t_error,
       m_send_event_manager.addActionsToQueue(action);
     }
 
+    checkIfLeaderboard(action);
+
     if (action->getType() != Action::ActionType::END &&
         m_client_ports.size() != 2) {
       receiveClient();
@@ -329,3 +331,14 @@ void UdpServer::updateLeaderboard(std::string t_name, int t_score) {
   }
   outfile.close();
 }
+
+void UdpServer::checkIfLeaderboard(std::shared_ptr<Action> t_action) {
+  if (t_action->getType() == Action::ActionType::ASKLEADERBOARD) {
+    for (udp::endpoint client : m_endpoints) {
+      LeaderboardAction leaderboardAction(Action::ActionType::SENDLEADERBOARD, m_leaderboard);
+      sendMessage(leaderboardAction.getCommand(), client);
+    }
+  }
+}
+
+std::vector<std::string> UdpServer::getLeaderboard() {return m_leaderboard;}
