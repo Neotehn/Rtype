@@ -35,10 +35,6 @@ LeaderboardState::~LeaderboardState() {
   }
 }
 
-void LeaderboardState::pause() { std::cout << "Pause\n"; }
-
-void LeaderboardState::resume() { std::cout << "resume\n"; }
-
 void LeaderboardState::update() {
   for (auto event = rtype::Event{}; m_window->pollEvent(event);) {
     rtype::Vector2i mouse_pos = m_mouse->getMousePosition(m_window);

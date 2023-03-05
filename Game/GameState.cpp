@@ -61,8 +61,6 @@ GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
 GameState::~GameState() {
   if (m_flag == CommunicationFlag::server) {
     delete m_serverCom;
-  } else {
-    delete m_clientCom;
   }
   if (m_music) { delete m_music; }
 }
