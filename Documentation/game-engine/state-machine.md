@@ -30,82 +30,75 @@ CustomState.hpp:
 15        CustomState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
 16                               MusicPlayer &t_music_player, std::size_t T_flag,
 17                               bool t_replace = true);
-18        void pause() override;
-19        void resume() override;
-20        void update() override;
-21        void draw() override;
-22
-23    private:
-24        rtype::ITexture *m_bg_t;
-25        rtype::ISprite *m_bg_s;
-26        std::size_t m_flag;
-27 };
-28
-29 #endif /* !CUSTOMSTATE_HPP_ */
-30
+18        void update() override;
+19        void draw() override;
+20        
+21    private:    
+22        rtype::ITexture *m_bg_t;
+23        rtype::ISprite *m_bg_s;
+24        std::size_t m_flag;
+25 };        
+26        
+27 #endif /* !CUSTOMSTATE_HPP_ */
 ```
 
 CustomState.cpp:
 
 ```
-1  #include "{PATH_TO_FILE}/CustomState.hpp"
-2  #include "{PATH_TO_FILE}/MainState.hpp" 
-3  #include "{PATH_TO_FILE}/SettingsState.hpp"
-4  // or add other states
-5
-6  CustomState::CustomState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
-7                          MusicPlayer &t_music_player, std::size_t T_flag,
-8                          bool t_replace = true)
-9        : State(t_machine, t_window, t_music_player, t_replace), 
-10         m_flag(t_flag) {
-11     m_bg_t = new rtype::Texture();
-12     m_bg_s = new rtype::Sprite();
-13     if (!m_bg_t->loadFromFile("{PATH_TO_FILE}/{IMAGE_NAME}.{png/jpg}")) {
-14         throw std::runtime_error("Unable to load image.");
-15     };
-16     float size_x = m_window->getSize().x;
-17     float size_y = m_window->getSize().y;
-18     float scale_x = size_x / m_bg_t->getSize().x;
-19     float scale_y = size_y / m_bg_t->getSize().y;
-20     m_bg_s->setTexture(m_bg_t, true);
-21     m_bg_s->setScale({scale_x, scale_y});
-22     m_music_player.play(MusicID::{MUSIC_NAME});
-23 }
-24
-25 void CustomState::pause() { std::cout << "CustomState Pause\n"; }
-26
-27 void CustomState::resume() { std::cout << "CustomState resume\n"; }
-28
-29 void MainState::update() {
-30     for (auto event = rtype::Event{}; m_window->pollEvent(event);) {
-31         sf::Vector2i mouse_pos = m_mouse->getMousePosition(m_window);
-32         sf::Vector2f mouse_pos_f(static_cast(mouse_pos.x),
-33                                  static_cast(mouse_pos.y));
-34         switch (event.type) {
-35             case rtype::EventType::Closed:
-36                 m_state_machine.quit();
-37                 break;
-38             case rtype::EventType::KeyPressed:
-39                 switch (event.key.code) {
-40                     case rtype::EventKey::Escape:
-41                         m_state_machine.quit();
-42                         break;
-43                     default:
-44                         break;
-45                 }
-46                 break;
-47             default:
-48                 break;
-49        }
-50     }
-51 } 
-52
-53 void CustomState::draw() {
-54     m_window->clear();
-55     m_window->draw(m_bg_s);
-56     m_window->display();
-57 }
-58
+  #include "{PATH_TO_FILE}/CustomState.hpp"
+  #include "{PATH_TO_FILE}/MainState.hpp" 
+  #include "{PATH_TO_FILE}/SettingsState.hpp"
+  // or add other states
+
+  CustomState::CustomState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
+                          MusicPlayer &t_music_player, std::size_t T_flag,
+                          bool t_replace = true)
+        : State(t_machine, t_window, t_music_player, t_replace), 
+         m_flag(t_flag) {
+     m_bg_t = new rtype::Texture();
+     m_bg_s = new rtype::Sprite();
+     if (!m_bg_t->loadFromFile("{PATH_TO_FILE}/{IMAGE_NAME}.{png/jpg}")) {
+         throw std::runtime_error("Unable to load image.");
+     };
+     float size_x = m_window->getSize().x;
+     float size_y = m_window->getSize().y;
+     float scale_x = size_x / m_bg_t->getSize().x;
+     float scale_y = size_y / m_bg_t->getSize().y;
+     m_bg_s->setTexture(m_bg_t, true);
+     m_bg_s->setScale({scale_x, scale_y});
+     m_music_player.play(MusicID::{MUSIC_NAME});
+ }
+
+  void MainState::update() {
+     for (auto event = rtype::Event{}; m_window->pollEvent(event);) {
+         sf::Vector2i mouse_pos = m_mouse->getMousePosition(m_window);
+         sf::Vector2f mouse_pos_f(static_cast(mouse_pos.x),
+                                  static_cast(mouse_pos.y));
+         switch (event.type) {
+             case rtype::EventType::Closed:
+                 m_state_machine.quit();
+                 break;
+             case rtype::EventType::KeyPressed:
+                 switch (event.key.code) {
+                     case rtype::EventKey::Escape:
+                         m_state_machine.quit();
+                         break;
+                     default:
+                         break;
+                 }
+                 break;
+             default:
+                 break;
+        }
+     }
+ } 
+
+ void CustomState::draw() {
+     m_window->clear();
+     m_window->draw(m_bg_s);
+     m_window->display();
+ }
+
 ```
 
 

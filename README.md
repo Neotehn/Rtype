@@ -6,22 +6,22 @@ Made by: Gylian Karsch, Josefine Mende, Marc Pister and Ramon Werner
 
 ## Overview
 
-* [Client](overview/client.md)
-* [Server](overview/server.md)
-* [Game Engine](overview/game-engine.md)
-* [Protocol](overview/protocol.md)
-* [Libraries](overview/libraries.md)
+* [Client](./Documentation/overview/client.md)
+* [Server](./Documentation/overview/server.md)
+* [Game Engine](./Documentation/overview/game-engine.md)
+* [Protocol](./Documentation/overview/protocol.md)
+* [Libraries](./Documentation/overview/libraries.md)
 
 ## Fundamentals
 
-* [Getting started](fundamentals/getting-started.md)
-* [Controls](fundamentals/controls.md)
+* [Getting started](./Documentation/fundamentals/getting-started.md)
+* [Controls](./Documentation/fundamentals/controls.md)
 
 ## Technical Documentation
 
-* [Code Guidelines](technical-documentation/code-guidlines.md)
-* [Commit Policy](technical-documentation/commit-policy.md)
-* [Linter and Formatter](technical-documentation/linter-and-formatter.md)
+* [Code Guidelines](./Documentation/technical-documentation/code-guidlines.md)
+* [Commit Policy](./Documentation/technical-documentation/commit-policy.md)
+* [Linter and Formatter](./Documentation/technical-documentation/linter-and-formatter.md)
 
 ## Getting started
 
