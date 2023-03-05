@@ -39,10 +39,6 @@ class CharSelectState final : public State {
   rtype::IFont *m_font;
   rtype::IText *m_title;
   std::size_t m_flag;
-  //   std::string m_path_blue;
-  //   std::string m_path_green;
-  //   std::string m_path_pink;
-  //   std::string m_path_yellow;
   Button m_ship_blue;
   Button m_ship_green;
   Button m_ship_pink;
@@ -50,6 +46,11 @@ class CharSelectState final : public State {
   Button m_join_btn;
   bool m_is_pressed;
   std::string m_selected_ship;
+  bool m_sel_blue;
+  bool m_sel_green;
+  bool m_sel_pink;
+  bool m_sel_yellow;
+  rtype::IRectangleShape *m_bg_selected;
 
   void initText();
   void initSprites();

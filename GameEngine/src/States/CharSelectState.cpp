@@ -44,6 +44,10 @@ CharSelectState::CharSelectState(
   initText();
   initSprites();
   m_is_pressed = false;
+  m_sel_blue = false;
+  m_sel_green = false;
+  m_sel_pink = false;
+  m_sel_yellow = false;
   m_selected_ship = "";
   m_music_player.play(MusicID::MENU_THEME);
 }
@@ -75,6 +79,16 @@ void CharSelectState::initSprites() {
     static_cast<float>(m_window->getSize().y) / m_bg_t->getSize().y;
   m_bg_s->setTexture(m_bg_t, true);
   m_bg_s->setScale({scale_x, scale_y});
+  m_bg_selected = m_graphic_loader->loadRectangleShape();
+  SpriteECS sprite_bg_selected =
+    SpriteECS("./../Client/assets/bg_textbox.png", m_graphic_loader);
+  m_bg_selected->setTexture(sprite_bg_selected.getTexture());
+  m_bg_selected->setTextureRect({0, 0, 1018, 1938});
+  // m_bg_selected->setRotation(180);
+  m_bg_selected->setSize({225, 225});
+  m_bg_selected->setPosition(
+    {static_cast<float>(m_window->getSize().x) / 2 + 105,
+     static_cast<float>(m_window->getSize().y) - 5});
 }
 
 void CharSelectState::update() {
@@ -99,15 +113,27 @@ void CharSelectState::update() {
       }
       if (m_ship_blue.is_pressed(mouse_pos_f)) {
         m_selected_ship = "../Client/assets/starship_blue.png";
+        m_bg_selected->setPosition(
+          {static_cast<float>(m_window->getSize().x / 2 - 260),
+           static_cast<float>(m_window->getSize().y / 2 - 210)});
       }
       if (m_ship_green.is_pressed(mouse_pos_f)) {
         m_selected_ship = "../Client/assets/starship_green.png";
+        m_bg_selected->setPosition(
+          {static_cast<float>(m_window->getSize().x / 2 + 25.25),
+           static_cast<float>(m_window->getSize().y / 2 - 210)});
       }
       if (m_ship_pink.is_pressed(mouse_pos_f)) {
         m_selected_ship = "../Client/assets/starship_pink.png";
+        m_bg_selected->setPosition(
+          {static_cast<float>(m_window->getSize().x / 2 - 260),
+           static_cast<float>(m_window->getSize().y / 2 + 105.75)});
       }
       if (m_ship_yellow.is_pressed(mouse_pos_f)) {
         m_selected_ship = "../Client/assets/starship_yellow.png";
+        m_bg_selected->setPosition(
+          {static_cast<float>(m_window->getSize().x / 2 + 25.25),
+           static_cast<float>(m_window->getSize().y / 2 + 105.75)});
       }
     }
     switch (event.type) {
@@ -124,6 +150,7 @@ void CharSelectState::draw() {
   m_window->clear();
   m_window->draw(m_bg_s);
   m_window->draw(m_title);
+  if (!m_selected_ship.empty()) m_window->draw(m_bg_selected);
   m_window->draw(m_join_btn.getSprite());
   m_window->draw(m_ship_blue.getSprite());
   m_window->draw(m_ship_green.getSprite());
