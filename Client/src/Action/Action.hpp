@@ -51,6 +51,7 @@ class Action : public IAction {
     PLAYER,
     ENEMY,
     PAYWALL,
+    ENDBOSS,
     BULLET,
     EXPLOSION,
     POWER_UP,

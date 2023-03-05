@@ -76,7 +76,7 @@
       }
     },
     {
-      "path": "../Client/sprites/enemies/WallOfFlesh.png",
+      "path": "../Client/sprites/enemies/Paywall.png",
       "size": {
         "x": 190,
         "y": 800

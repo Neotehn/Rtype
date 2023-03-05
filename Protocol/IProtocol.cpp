@@ -25,6 +25,9 @@ IProtocol::getCreateAction(std::vector<std::string> commands, int action_id,
   } else if (type == Action::ObjectType::PAYWALL) {
     return std::make_shared<Action>(CreateAction(
       id, CreateAction::PAYWALL, rtype::Vector2f{x, y}, "", action_id, 0));
+  } else if (type == Action::ObjectType::ENDBOSS) {
+    return std::make_shared<Action>(CreateAction(
+      id, CreateAction::ENDBOSS, rtype::Vector2f{x, y}, "", action_id, 0));
   } else if (type == Action::ObjectType::BULLET) {
     shooting_type = Action::ShootingType(std::stoi(commands[6]));
     owner_id = std::stoull(commands[7]);
