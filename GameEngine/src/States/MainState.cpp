@@ -111,7 +111,7 @@ void MainState::update() {
     }
     if (m_mouse->isLeftMouseButtonPressed()) {
       if (m_start_btn.is_pressed(mouse_pos_f) && m_start_pressed == false) {
-        std::cout << "startbtn pressed from main to game" << std::endl;
+        std::cout << "scorebtn pressed" << std::endl;
         m_clientCom->setLeaderboard(initLeaderboard());
         m_next = StateMachine::build<LeaderboardState>(m_state_machine, m_window, m_music_player, m_flag,m_graphic_loader, m_level, m_path_to_sprite, false, m_ip, m_clientCom);
       }

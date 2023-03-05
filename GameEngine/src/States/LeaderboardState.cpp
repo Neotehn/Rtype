@@ -22,36 +22,11 @@ LeaderboardState::LeaderboardState(StateMachine &t_machine,
 
   initSprites();
   initText();
-  m_sound_manager.init(m_graphic_loader, false);
-}
-
-
-
-LeaderboardState::LeaderboardState(StateMachine &t_machine,
-                                   rtype::IRenderWindow *t_window,
-                                   MusicPlayer &t_music_player,
-                                   std::size_t t_flag,
-                                   rtype::IGraphicLoader *t_graphic_loader,
-                                   int *t_level,
-                                   const std::string &t_path_to_sprite, bool t_music,
-                                   bool t_replace, std::string t_ip,
-                                   UdpClient *t_clientCom)
-    : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level,
-            t_path_to_sprite, t_replace, t_ip, t_clientCom),
-      m_next_btn(Button(
-        "./assets/homeBtn.png",
-        rtype::Vector2f{static_cast<float>(m_window->getSize().x - 150),
-                        static_cast<float>(m_window->getSize().y - 50)},
-        rtype::Vector2f{150, 50}, t_graphic_loader, false)),
-      m_flag(t_flag) {
-  std::cout << "init leaderboard" << std::endl;
-  m_path_to_sprite = t_path_to_sprite;
-  if (t_music)
+  if (t_replace)
     m_music_player.play(MusicID::MENU_THEME);
-  initSprites();
-  initText();
   m_sound_manager.init(m_graphic_loader, false);
 }
+
 
 LeaderboardState::~LeaderboardState() {
   delete m_bg_t;
