@@ -52,6 +52,10 @@ std::string Action::getTypeAsString() const {
       return "JOINLOBBY";
     case ActionType::JOINSUCCESSFULL:
       return "JOINSUCCESSFULL";
+    case ActionType::ASKLEADERBOARD:
+      return "ASKLEADERBOARD";
+    case ActionType::SENDLEADERBOARD:
+      return "SENDLEADERBOARD";
     case ActionType::ERROR:
       return "ERROR";
   }
@@ -62,6 +66,7 @@ std::string Action::getCommand() const {
   std::string type_string = getTypeAsString();
   std::string data = "";
   std::string names = "";
+  std::string leaderboardline = "";
   std::string lobby_code = "";
 
   switch (m_type) {
@@ -69,7 +74,8 @@ std::string Action::getCommand() const {
       if (m_lobby_ip != "") { lobby_code = m_lobby_ip; }
       return std::to_string(m_action_id) + ";" + type_string + ";" +
              std::to_string(m_id) + ";" + lobby_code + ";" +
-             std::to_string(m_client_id) + ";";
+             std::to_string(m_client_id) + ";" +
+             m_player_name + ";";
     case ActionType::DEAD:
     case ActionType::END:
       return std::to_string(m_action_id) + ";" + type_string + ";" +
@@ -151,6 +157,16 @@ std::string Action::getCommand() const {
     case ActionType::CHAD:
       return std::to_string(m_action_id) + ";CHAD;" + std::to_string(m_id) +
              ";" + m_chad_msg + ";" + m_lobby_ip + ";";
+    case ActionType::ASKLEADERBOARD:
+      return std::to_string(m_action_id) + ";ASKLEADERBOARD;" +
+             std::to_string(m_id) + ";";
+    case ActionType::SENDLEADERBOARD:
+      for (int i = 0; i < m_leaderboard.size(); i++) {
+        leaderboardline += m_leaderboard[i];
+        leaderboardline += ";";
+      }
+      return std::to_string(m_action_id) + ";SENDLEADERBOARD;" +
+             std::to_string(m_id) + ";" + leaderboardline;
   }
   return std::to_string(m_action_id) + ";" + type_string + ";" +
          std::to_string(m_id) + ";";
@@ -218,3 +234,5 @@ std::vector<std::string> Action::getLobbyPlayerNames() const {
 std::string Action::getChadMsg() const { return m_chad_msg; }
 
 void Action::setChadMsg(std::string t_chad_msg) { m_chad_msg = t_chad_msg; }
+
+std::vector<std::string> Action::getLeaderboard() const { return m_leaderboard;}

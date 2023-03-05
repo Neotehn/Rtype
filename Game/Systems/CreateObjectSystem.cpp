@@ -25,7 +25,7 @@ void CreateObjectSystem::update() {
     switch (type) {
       case Action::ObjectType::PLAYER:
         initPlayerClient(id, m_path_to_sprite, pos, m_em, m_graphic_loader,
-                         player_id);
+                         player_id, action->getPlayerName());
         break;
       case Action::ObjectType::BULLET:
         m_play_sounds.push_back(SoundSystem::SoundType::shoot);

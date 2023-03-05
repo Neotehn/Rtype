@@ -61,6 +61,8 @@ void CollisionSystem::playerAnimationCollision(Player *t_player,
         t_player->bomb_shot = 0;
         t_player->exp = 0;
       }
+      std::cout << "Player health: " << t_player->health.healthbar.getHealth()
+                << std::endl;
       if (enemy->obj->type == "paywall" || enemy->obj->type == "endboss") {
         m_serverCom->addEvent(
           std::make_shared<Action>(DamageAction(enemy_ent, 1, t_player_ent)));

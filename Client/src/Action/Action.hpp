@@ -44,6 +44,8 @@ class Action : public IAction {
     JOINSUCCESSFULL,    // ACTION_ID;
     CREATESUCCESSFULL,  // ACTION_ID;
     CHAD,               // ACTION_ID;CHAT_MSG
+    ASKLEADERBOARD,    // ACTION_ID;PLAYER_ID
+    SENDLEADERBOARD,   // ACTION_ID;PLAYER_ID;LEADERBOARD
     ERROR,
   };
   enum ShootingType { NORMAL, FIRE, BOMB, COIN };
@@ -118,6 +120,8 @@ class Action : public IAction {
 
   std::string getChadMsg() const;
   void setChadMsg(std::string t_chad_msg);
+  std::vector<std::string> getLeaderboard() const;
+
 
  protected:
   int m_action_id;
@@ -142,6 +146,7 @@ class Action : public IAction {
   std::vector<std::string> m_lobby_player_names;
   std::string m_chad_msg = "";
   int m_lobby_id = 0;
+  std::vector<std::string> m_leaderboard;
   int m_total_obstacle_width = 0;
 };
 

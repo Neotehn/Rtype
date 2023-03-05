@@ -1,5 +1,26 @@
 #include "./MainState.hpp"
 
+std::vector<std::string> initLeaderboard()
+{
+  std::vector<std::string> lines;
+  std::string filename = ".leaderboard.txt";
+  std::ifstream infile(filename);
+
+  if (infile)
+  {
+    std::string line;
+    while (std::getline(infile, line))
+    {
+      lines.push_back(line);
+    }
+    infile.close();
+  } else{
+    lines = {"No Score", "No Score", "No Score", "No Score", "No Score",
+       "No Score", "No Score", "No Score", "No Score", "No Score"};
+  }
+  return lines;
+}
+
 void MainState::initSprites() {
   float size_x = m_window->getSize().x;
   float size_y = m_window->getSize().y;
@@ -38,7 +59,7 @@ MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
     : State(t_machine, t_window, t_music_player, t_graphic_loader, t_level,
             t_path_to_sprite, t_replace, t_ip, t_clientCom),
       m_start_btn(Button(
-        "./assets/startBtn.png",
+        "./assets/scoreBtn.png",
         rtype::Vector2f{static_cast<float>(m_window->getSize().x / 2 - 65),
                         static_cast<float>(m_window->getSize().y / 2 + 150)},
         rtype::Vector2f{130, 50}, t_graphic_loader, false)),
@@ -66,7 +87,6 @@ MainState::MainState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
       m_flag(t_flag) {
   initSprites();
   initText();
-  m_music_player.play(MusicID::MENU_THEME);
   m_start_pressed = false;
   m_join_pressed = false;
   m_clientCom->m_lobby_names.clear();
@@ -91,17 +111,12 @@ void MainState::update() {
     }
     if (m_mouse->isLeftMouseButtonPressed()) {
       if (m_start_btn.is_pressed(mouse_pos_f) && m_start_pressed == false) {
-        std::cout << "startbtn pressed from main to game" << std::endl;
-        std::cout << m_title->getString() << std::endl;
-        m_music_player.stop();
-        m_next = StateMachine::build<GameState>(
-          m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
-          m_level, m_path_to_sprite, true, m_ip, m_clientCom);
-        m_start_pressed = true;
+        std::cout << "scorebtn pressed" << std::endl;
+        m_clientCom->setLeaderboard(initLeaderboard());
+        m_next = StateMachine::build<LeaderboardState>(m_state_machine, m_window, m_music_player, m_flag,m_graphic_loader, m_level, m_path_to_sprite, false, m_ip, m_clientCom);
       }
       if (m_settings_btn.is_pressed(mouse_pos_f)) {
         std::cout << "settingsbtn pressed" << std::endl;
-        m_music_player.stop();
         m_next = StateMachine::build<SettingsState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, "", m_clientCom);
@@ -119,14 +134,12 @@ void MainState::update() {
         m_clientCom->m_lobby_code = lobby_code;
         m_clientCom->m_lobby_names.push_back(m_clientCom->getPlayerName());
         std::cout << "create lobby" << std::endl;
-        m_music_player.stop();
         m_next = StateMachine::build<CreateLobbyState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, "", m_clientCom);
       }
       if (m_join_btn.is_pressed(mouse_pos_f) && !m_join_pressed) {
         std::cout << "join lobby" << std::endl;
-        m_music_player.stop();
         m_next = StateMachine::build<JoinLobbyState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, "", m_clientCom);

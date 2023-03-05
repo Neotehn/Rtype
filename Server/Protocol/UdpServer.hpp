@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <fstream>
 #include <chrono>
 #include <thread>
 #include <fstream>
@@ -55,13 +56,20 @@ class UdpServer : public IProtocol {
 
   bool checkAndLobbyHandling(std::shared_ptr<Action> t_action);
   bool chadHandling(std::shared_ptr<Action> t_action);
-
+  void initLeaderboard();
+  void checkIfLeaderboard(std::shared_ptr<Action> t_action);
+  void clearLeaderboard();
+  void updateLeaderboard(std::string t_name, int t_score);
+  void clearData();
+  std::vector<std::string> getLeaderboard();
   float getTimeDiff();
   void resetTime();
+  std::vector<udp::endpoint> getEndpoints();
 
   enum GameMode { none, single, coop, end };
   GameMode m_flag;
   std::vector<int> m_client_ids;
+  int m_end;
 
  private:
   std::vector<bool> m_client_connected;
@@ -84,6 +92,7 @@ class UdpServer : public IProtocol {
 
   bool doesAlreadyExist(std::shared_ptr<Action> t_action);
   bool isUpdated(std::shared_ptr<Action> t_event);
+  std::vector<std::string> m_leaderboard;
 };
 
 #endif /* !PROTOCOL_UDPSERVER_HPP_ */

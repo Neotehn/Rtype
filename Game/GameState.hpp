@@ -31,6 +31,7 @@
 #include "../GameEngine/src/State.hpp"
 #include "../GameEngine/src/StateMachine.hpp"
 #include "../GameEngine/src/States/MainState.hpp"
+#include "../GameEngine/src/States/LeaderboardState.hpp"
 
 class StateMachine;
 
@@ -66,6 +67,8 @@ class GameState final : public State {
 
   bool playerAlive();
   std::vector<std::shared_ptr<ISystem>> initSystems();
+  void handleLeaderboardCom();
+  void resetLevel();
 
   rtype::ITexture *m_bg_t;
   rtype::ISprite *m_bg_s;
