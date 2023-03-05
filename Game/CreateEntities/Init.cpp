@@ -11,6 +11,7 @@ int bullet_index = 0;
 bool loadLevel(int *t_level, std::shared_ptr<EntityManager> t_em,
                rtype::IGraphicLoader *t_graphic_loader, rtype::IMusic *t_music,
                bool t_play_music, UdpServer *t_server_com) {
+  if (*t_level == 1) { background_entities.clear(); }
   for (EntityID ent : EntityViewer<Obstacle>(*t_em)) {
     t_em->destroyEntity(ent);
   }
