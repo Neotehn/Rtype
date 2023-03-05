@@ -157,4 +157,5 @@ void UdpClient::clearData() {
   m_chad_msgs.clear();
   m_input_manager = nullptr;
   m_client_input_manager = nullptr;
+  m_flag = ConnectState::none;
 }
