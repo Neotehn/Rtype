@@ -23,6 +23,7 @@ void MusicPlayer::init(rtype::IGraphicLoader *t_graphic_loader) {
                      std::istreambuf_iterator<char>());
   std::vector<std::string> v = splitstr(settxt, ":");
   m_volume = atof(v[1].c_str());
+  m_vol_se = atof(v[3].c_str());
   m_graphic_loader = t_graphic_loader;
   m_music = m_graphic_loader->loadMusic();
   m_music->openFromFile("./assets/music/music1.ogg");
@@ -59,3 +60,7 @@ void MusicPlayer::setVolume(float t_volume) {
   m_volume = t_volume;
   m_music->setVolume(m_volume);
 }
+
+void MusicPlayer::setSEVol(float t_vol) { m_vol_se = t_vol; }
+
+float MusicPlayer::getSEVol() { return m_vol_se; }

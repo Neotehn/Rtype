@@ -36,10 +36,14 @@ class SettingsState final : public State {
   Button m_start_btn;
   Button m_vol_up;
   Button m_vol_down;
+  Button m_vol_up_se;
+  Button m_vol_down_se;
   rtype::IFont *m_font;
   rtype::IText *m_title;
   rtype::IText *m_vol_txt;
   rtype::IText *m_vol_digit;
+  rtype::IText *m_vol_txt_se;
+  rtype::IText *m_vol_digit_se;
   std::size_t m_flag;
 
   void initSprites();
