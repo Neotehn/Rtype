@@ -87,52 +87,52 @@ GUISystem::GUISystem(std::shared_ptr<EntityManager> t_em,
   SpriteECS sprite =
     SpriteECS("./../Client/sprites/powerup/coin.png", t_graphic_loader);
   m_coin = m_graphic_loader->loadRectangleShape();
+  m_coin->setTexture(sprite.getTexture());
   m_coin->setSize({30, 30});
   m_coin->setPosition({10, static_cast<float>(m_window->getSize().y - 40)});
-  m_coin->setTexture(sprite.getTexture());
   m_coin->setTextureRect(rtype::IntRect{0, 0, 84, 84});
 
   SpriteECS sprite_coin =
     SpriteECS("./../Client/sprites/powerup/coin.png", t_graphic_loader);
   m_second_coin = m_graphic_loader->loadRectangleShape();
+  m_second_coin->setTexture(sprite_coin.getTexture());
   m_second_coin->setSize({30, 30});
   m_second_coin->setPosition({10, static_cast<float>(10)});
-  m_second_coin->setTexture(sprite_coin.getTexture());
   m_second_coin->setTextureRect(rtype::IntRect{0, 0, 84, 84});
 
   SpriteECS sprite_bomb =
     SpriteECS("./../Client/sprites/powerup/bomb_item.png", t_graphic_loader);
   m_bomb = m_graphic_loader->loadRectangleShape();
+  m_bomb->setTexture(sprite_bomb.getTexture());
   m_bomb->setSize({30, 30});
   m_bomb->setPosition(
     {static_cast<float>(m_window->getSize().x - 330), static_cast<float>(10)});
-  m_bomb->setTexture(sprite_bomb.getTexture());
   m_bomb->setTextureRect(rtype::IntRect{0, 0, 361, 361});
 
   SpriteECS sprite_fire =
     SpriteECS("./../Client/sprites/powerup/fire_item.png", t_graphic_loader);
   m_fire = m_graphic_loader->loadRectangleShape();
+  m_fire->setTexture(sprite_fire.getTexture());
   m_fire->setSize({30, 30});
   m_fire->setPosition(
     {static_cast<float>(m_window->getSize().x - 480), static_cast<float>(10)});
-  m_fire->setTexture(sprite_fire.getTexture());
   m_fire->setTextureRect(rtype::IntRect{0, 0, 361, 361});
 
   SpriteECS sprite_money =
     SpriteECS("./../Client/sprites/dollarPaul.png", t_graphic_loader);
   m_money = m_graphic_loader->loadRectangleShape();
+  m_money->setTexture(sprite_money.getTexture());
   m_money->setSize({70, 30});
   m_money->setPosition(
     {static_cast<float>(m_window->getSize().x - 180), static_cast<float>(10)});
-  m_money->setTexture(sprite_money.getTexture());
   m_money->setTextureRect(rtype::IntRect{0, 0, 800, 340});
 
   m_bg = m_graphic_loader->loadRectangleShape();
-  m_bg->setSize({static_cast<float>(m_window->getSize().x), 50});
-  m_bg->setPosition({0, static_cast<float>(m_window->getSize().y - 50)});
   SpriteECS spritebg =
     SpriteECS("./../Client/assets/bg_stats.png", t_graphic_loader);
   m_bg->setTexture(spritebg.getTexture());
+  m_bg->setSize({static_cast<float>(m_window->getSize().x), 50});
+  m_bg->setPosition({0, static_cast<float>(m_window->getSize().y - 50)});
   m_bg->setTextureRect(
     rtype::IntRect{0, 0, static_cast<int>(m_window->getSize().x), 50});
 }

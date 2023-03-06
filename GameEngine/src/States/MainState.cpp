@@ -81,8 +81,10 @@ void MainState::pause() { std::cout << "MenuState Pause\n"; }
 void MainState::resume() { std::cout << "MenuState resume\n"; }
 
 void MainState::update() {
+  bool first = true;
   for (auto event = rtype::Event{};
-       m_window->pollEvent(event, m_prev_mouse_pos);) {
+       m_window->pollEvent(event, m_prev_mouse_pos, first);) {
+    first = false;
     rtype::Vector2i mouse_pos = m_mouse->getMousePosition(m_window);
     rtype::Vector2f mouse_pos_f{static_cast<float>(mouse_pos.x),
                                 static_cast<float>(mouse_pos.y)};
@@ -102,12 +104,14 @@ void MainState::update() {
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, m_ip, m_clientCom);
         m_start_pressed = true;
+        break;
       }
       if (m_settings_btn.is_pressed(mouse_pos_f)) {
         std::cout << "settingsbtn pressed" << std::endl;
         m_next = StateMachine::build<SettingsState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, "", m_clientCom);
+        break;
       }
       if (m_exit_btn.is_pressed(mouse_pos_f)) {
         std::cout << "exitbtn pressed" << std::endl;
@@ -129,12 +133,14 @@ void MainState::update() {
         m_next = StateMachine::build<CreateLobbyState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, "", m_clientCom);
+        break;
       }
       if (m_join_btn.is_pressed(mouse_pos_f)) {
         std::cout << "join lobby" << std::endl;
         m_next = StateMachine::build<JoinLobbyState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, "", m_clientCom);
+        break;
       }
     }
     switch (event.type) {

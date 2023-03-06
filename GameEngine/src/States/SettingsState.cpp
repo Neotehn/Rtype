@@ -76,8 +76,10 @@ void SettingsState::pause() { std::cout << "MenuState Pause\n"; }
 void SettingsState::resume() { std::cout << "MenuState resume\n"; }
 
 void SettingsState::update() {
+  bool first = true;
   for (auto event = rtype::Event{};
-       m_window->pollEvent(event, m_prev_mouse_pos);) {
+       m_window->pollEvent(event, m_prev_mouse_pos, first);) {
+    first = false;
     rtype::Vector2i mouse_pos = m_mouse->getMousePosition(m_window);
     rtype::Vector2f mouse_pos_f{static_cast<float>(mouse_pos.x),
                                 static_cast<float>(mouse_pos.y)};
@@ -92,6 +94,7 @@ void SettingsState::update() {
         m_next = StateMachine::build<MainState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, "", m_clientCom);
+        break;
       }
       if (m_vol_down.is_pressed(mouse_pos_f)) {
         if (m_music_player.getVolume() > 0) {

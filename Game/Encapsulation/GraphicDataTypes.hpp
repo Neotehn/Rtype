@@ -3,8 +3,8 @@
 
 namespace rtype {
   struct Vector2f {
-    float x;
-    float y;
+    float x = 0;
+    float y = 0;
 
     Vector2f &operator=(const Vector2f &t_vector) {
       x = t_vector.x;

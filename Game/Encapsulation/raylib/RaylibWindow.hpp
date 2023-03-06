@@ -36,8 +36,8 @@ namespace rtype {
     bool pollEvent(rtype::Event &t_event, rtype::Vector2i t_mouse_pos,
                    bool first) override;
 
-    void collectEvents(rtype::Event &t_event, rtype::Vector2i t_mouse_pos);
-    void getTextEntered(rtype::Event &t_event);
+    void collectEvents(rtype::Vector2i t_mouse_pos);
+    void getTextEntered();
 
    private:
     std::vector<rtype::Event> m_events;

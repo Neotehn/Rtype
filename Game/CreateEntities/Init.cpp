@@ -92,10 +92,10 @@ unsigned int initObstacle(std::shared_ptr<EntityManager> t_entity_manager,
   Pos obstacle_pos = Pos{rtype::Vector2f{-3, 0}, t_pos};
 
   rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
+  body->setTexture(obstacle_sprite.getTexture());
   body->setSize({static_cast<float>(size.x), static_cast<float>(size.y)});
   body->setScale({scale, scale});
   body->setPosition({t_pos.x, t_pos.y});
-  body->setTexture(obstacle_sprite.getTexture());
 
   Obstacle obstacle_obj =
     Obstacle{obstacle_pos, body, static_cast<float>(-t_total_width), 800};
@@ -121,10 +121,10 @@ void initObstacleClient(std::shared_ptr<EntityManager> t_entity_manager,
   Pos obstacle_pos = Pos{rtype::Vector2f{-3, 0}, t_pos};
 
   rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
+  body->setTexture(obstacle_sprite.getTexture());
   body->setSize({static_cast<float>(size.x), static_cast<float>(size.y)});
   body->setScale({scale, scale});
   body->setPosition({t_pos.x, t_pos.y});
-  body->setTexture(obstacle_sprite.getTexture());
 
   Obstacle obstacle_obj =
     Obstacle{obstacle_pos, body, static_cast<float>(-t_total_width), 800};
@@ -184,9 +184,9 @@ EntityID initPlayer(std::shared_ptr<EntityManager> t_entity_manager,
   Pos player_pos = Pos{rtype::Vector2f{0.0, 0.0}, rtype::Vector2f{300, 300}};
 
   rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
+  body->setTexture(player_sprite.getTexture());
   body->setSize({200, 200});
   body->setPosition({player_pos.position.x, player_pos.position.y});
-  body->setTexture(player_sprite.getTexture());
   body->setRotation(90.0);
 
   Health health = initPlayerHealthBar(t_graphic_loader);
@@ -213,9 +213,9 @@ void initPlayerClient(EntityID t_id, std::string t_sprite_path,
   Pos player_pos = Pos{rtype::Vector2f{0, 0}, t_pos};
 
   rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
+  body->setTexture(player_sprite.getTexture());
   body->setSize({200, 200});
   body->setPosition({player_pos.position.x, player_pos.position.y});
-  body->setTexture(player_sprite.getTexture());
   body->setRotation(90.0);
 
   Health health = initPlayerHealthBar(t_graphic_loader);
@@ -239,9 +239,9 @@ Health initPlayerHealthBar(rtype::IGraphicLoader *t_graphic_loader) {
               3};
 
   rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
+  body->setTexture(player_health_bar_sprite_full.getTexture());
   body->setSize({126, 42});
   body->setPosition({bar_pos.position.x, bar_pos.position.y});
-  body->setTexture(player_health_bar_sprite_full.getTexture());
 
   return Health{bar_stats, bar_pos, body};
 }
@@ -254,8 +254,6 @@ void initBulletClient(EntityID t_id, rtype::Vector2f t_pos,
   EntityID bullet = t_em->createNewEntity(t_id);
 
   rtype::IRectangleShape *bullet_body = t_graphic_loader->loadRectangleShape();
-  bullet_body->setSize({20, 20});
-  bullet_body->setPosition({t_pos.x, t_pos.y});
   float speed = 10;
   Player *player = (*t_em).Get<Player>(t_owner_id);
 
@@ -295,6 +293,9 @@ void initBulletClient(EntityID t_id, rtype::Vector2f t_pos,
           .getTexture());
       break;
   }
+  bullet_body->setSize({20, 20});
+  bullet_body->setPosition({t_pos.x, t_pos.y});
+
   std::cout << "create bullet for player " << std::to_string(t_owner_id)
             << std::endl;
   Bullet displayable_bullet = {bullet_body, speed, t_pos, t_owner_id,
@@ -336,9 +337,9 @@ void initEnemy(std::shared_ptr<EntityManager> t_em,
   float velocity_direction = (rand() % 3 - 1);
 
   rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
+  body->setTexture(sprite.getTexture());
   body->setSize({33, 33});
   body->setPosition({enemy_pos.x, enemy_pos.y});
-  body->setTexture(sprite.getTexture());
   body->setFillColor(
     rtype::Color{static_cast<unsigned char>(enemy_data["color"]["r"].asInt()),
                  static_cast<unsigned char>(enemy_data["color"]["g"].asInt()),
@@ -368,9 +369,9 @@ void initEnemyClient(EntityID t_id, rtype::Vector2f t_pos, float t_velocity,
   EntityID enemy = t_em->createNewEntity(t_id);
   SpriteECS sprite = SpriteECS(enemy_data["path"].asString(), t_graphic_loader);
   rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
+  body->setTexture(sprite.getTexture());
   body->setSize({33, 33});
   body->setPosition({t_pos.x, t_pos.y});
-  body->setTexture(sprite.getTexture());
   body->setTextureRect(rtype::IntRect{0, 0, size.x, size.y});
   body->setFillColor(
     rtype::Color{static_cast<unsigned char>(enemy_data["color"]["r"].asInt()),
@@ -396,9 +397,9 @@ void initExplosionClient(EntityID t_id, rtype::Vector2f t_pos,
   SpriteECS sprite =
     SpriteECS("./../Client/sprites/explosion/Explosion.png", t_graphic_loader);
   rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
+  body->setTexture(sprite.getTexture());
   body->setSize({50, 50});
   body->setPosition({t_pos.x, t_pos.y});
-  body->setTexture(sprite.getTexture());
   body->setTextureRect(rtype::IntRect{0, 0, 96, 96});
 
   AnimationObj explosion_obj =
@@ -419,9 +420,9 @@ void createCoin(std::shared_ptr<EntityManager> t_em,
   rtype::Vector2f powerup_pos = {800, float(rand() % 550 + 100)};
 
   rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
+  body->setTexture(sprite.getTexture());
   body->setSize({30, 30});
   body->setPosition({powerup_pos.x, powerup_pos.y});
-  body->setTexture(sprite.getTexture());
   body->setTextureRect(rtype::IntRect{0, 0, 84, 84});
 
   AnimationObj powerup_obj =
@@ -445,9 +446,9 @@ void createItem(std::string t_path, rtype::ItemType t_type, int t_value,
   rtype::Vector2f powerup_pos = {800, float(rand() % 550 + 100)};
 
   rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
+  body->setTexture(sprite.getTexture());
   body->setSize({30, 30});
   body->setPosition({powerup_pos.x, powerup_pos.y});
-  body->setTexture(sprite.getTexture());
   body->setTextureRect(rtype::IntRect{0, 0, 84, 84});
 
   SpinningItem item_obj = {t_type,
@@ -494,9 +495,9 @@ void initPowerUpClient(EntityID t_id, rtype::Vector2f t_pos,
   SpriteECS sprite =
     SpriteECS("./../Client/sprites/powerup/coin.png", t_graphic_loader);
   rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
+  body->setTexture(sprite.getTexture());
   body->setSize({30, 30});
   body->setPosition({t_pos.x, t_pos.y});
-  body->setTexture(sprite.getTexture());
   body->setTextureRect(rtype::IntRect{0, 0, 84, 84});
 
   AnimationObj power_up =
@@ -539,10 +540,10 @@ void initItemClient(EntityID t_id, rtype::ItemType t_item_type,
   Pos player_pos = Pos{rtype::Vector2f{-7, 0}, t_pos};
 
   rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
+  body->setTexture(item_sprite.getTexture());
   body->setSize({40, 40});
   body->setOrigin({20, 20});
   body->setPosition({player_pos.position.x, player_pos.position.y});
-  body->setTexture(item_sprite.getTexture());
   body->setRotation(90.0);
 
   SpinningItem item_obj = {t_item_type,
@@ -569,9 +570,9 @@ void initShoot(std::shared_ptr<Action> t_action,
                                   player->body->getSize().y / 2 - 10};
   rtype::IRectangleShape *bullet_body = t_graphic_loader->loadRectangleShape();
 
+  bullet_body->setTexture(sprite.getTexture());
   bullet_body->setSize({20, 20});
   bullet_body->setPosition({bullet_pos.x, bullet_pos.y});
-  bullet_body->setTexture(sprite.getTexture());
   float bullet_damage = 1;
 
   std::cout << "init bullet with owner id: "
@@ -597,9 +598,9 @@ void initCoinShoot(std::shared_ptr<Action> t_action,
                                   player->body->getSize().y / 2 - 10};
   rtype::IRectangleShape *bullet_body = t_graphic_loader->loadRectangleShape();
 
+  bullet_body->setTexture(sprite.getTexture());
   bullet_body->setSize({40, 25});
   bullet_body->setPosition({bullet_pos.x, bullet_pos.y});
-  bullet_body->setTexture(sprite.getTexture());
   float bullet_damage = 6;
 
   t_em->Assign<Bullet>(bullet, Bullet{bullet_body, 10.0, bullet_pos,
@@ -624,9 +625,9 @@ void initFireShoot(std::shared_ptr<Action> t_action,
                                   player->body->getSize().y / 2 - 10};
   rtype::IRectangleShape *bullet_body = t_graphic_loader->loadRectangleShape();
 
+  bullet_body->setTexture(sprite.getTexture());
   bullet_body->setSize({20, 20});
   bullet_body->setPosition({bullet_pos.x, bullet_pos.y});
-  bullet_body->setTexture(sprite.getTexture());
   float bullet_damage = 3;
 
   t_em->Assign<Bullet>(bullet, Bullet{bullet_body, 10.0, bullet_pos,
@@ -651,9 +652,9 @@ void initBombShoot(std::shared_ptr<Action> t_action,
                                   player->body->getSize().y / 2 - 10};
   rtype::IRectangleShape *bullet_body = t_graphic_loader->loadRectangleShape();
 
+  bullet_body->setTexture(sprite.getTexture());
   bullet_body->setSize({20, 20});
   bullet_body->setPosition({bullet_pos.x, bullet_pos.y});
-  bullet_body->setTexture(sprite.getTexture());
   float bullet_damage = 5;
 
   t_em->Assign<Bullet>(bullet, Bullet{bullet_body, 10.0, bullet_pos,
@@ -721,9 +722,9 @@ void initPayWall(std::shared_ptr<EntityManager> t_em,
   float velocity_direction = 0;
 
   rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
+  body->setTexture(sprite.getTexture());
   body->setSize({200, 1500});
   body->setPosition({enemy_pos.x, enemy_pos.y});
-  body->setTexture(sprite.getTexture());
   body->setFillColor(
     rtype::Color{static_cast<unsigned char>(enemy_data["color"]["r"].asInt()),
                  static_cast<unsigned char>(enemy_data["color"]["g"].asInt()),
@@ -763,9 +764,9 @@ void initPayWallClient(EntityID t_id, std::shared_ptr<EntityManager> t_em,
   rtype::Vector2f enemy_pos = {750, 0};
 
   rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
+  body->setTexture(sprite.getTexture());
   body->setSize({200, 1500});
   body->setPosition({enemy_pos.x, enemy_pos.y});
-  body->setTexture(sprite.getTexture());
   body->setFillColor(
     rtype::Color{static_cast<unsigned char>(enemy_data["color"]["r"].asInt()),
                  static_cast<unsigned char>(enemy_data["color"]["g"].asInt()),
@@ -820,9 +821,9 @@ void initEndboss(std::shared_ptr<EntityManager> t_em,
   float velocity_direction = 0;
 
   rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
+  body->setTexture(sprite.getTexture());
   body->setSize({400, 600});
   body->setPosition({enemy_pos.x, enemy_pos.y});
-  body->setTexture(sprite.getTexture());
   body->setFillColor(
     rtype::Color{static_cast<unsigned char>(enemy_data["color"]["r"].asInt()),
                  static_cast<unsigned char>(enemy_data["color"]["g"].asInt()),
@@ -863,9 +864,9 @@ void initEndbossClient(EntityID t_id, std::shared_ptr<EntityManager> t_em,
   float velocity_direction = 0;
 
   rtype::IRectangleShape *body = t_graphic_loader->loadRectangleShape();
+  body->setTexture(sprite.getTexture());
   body->setSize({400, 600});
   body->setPosition({enemy_pos.x, enemy_pos.y});
-  body->setTexture(sprite.getTexture());
   body->setFillColor(
     rtype::Color{static_cast<unsigned char>(enemy_data["color"]["r"].asInt()),
                  static_cast<unsigned char>(enemy_data["color"]["g"].asInt()),

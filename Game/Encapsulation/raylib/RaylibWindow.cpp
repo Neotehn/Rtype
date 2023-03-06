@@ -55,9 +55,6 @@ namespace rtype {
 
     DrawTextureEx(texture, {position.x, position.y}, raylibShape->getRotation(),
                   scale.x, {color.r, color.g, color.b, color.a});
-    //    DrawTextureTiled(texture, rectangle, rectangle, {origin.x, origin.y},
-    //                     raylibShape->getRotation(), scale.x,
-    //                     {color.r, color.g, color.b, color.a});
   }
 
   void RaylibWindow::draw(const rtype::IText *t_text) {
@@ -108,118 +105,30 @@ namespace rtype {
     return event;
   }
 
-  void RaylibWindow::getTextEntered(rtype::Event &t_event) {
-    if (IsKeyPressed(KEY_A)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::A));
+  void RaylibWindow::getTextEntered() {
+    char uppercase = 'A';
+    char lowercase = 'a';
+    for (int key = KEY_A; key <= KEY_Z; key++, uppercase++, lowercase++) {
+      if (IsKeyPressed(key)) {
+        EventKey key;
+        if (IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT)) {
+          key = rtype::EventKey(uppercase);
+        } else {
+          key = rtype::EventKey(lowercase);
+        }
+        m_events.push_back(createEvent(EventType::TextEntered, key));
+      }
     }
-    if (IsKeyPressed(KEY_B)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::B));
-    }
-    if (IsKeyPressed(KEY_C)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::C));
-    }
-    if (IsKeyPressed(KEY_D)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::D));
-    }
-    if (IsKeyPressed(KEY_E)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::E));
-    }
-    if (IsKeyPressed(KEY_F)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::F));
-    }
-    if (IsKeyPressed(KEY_G)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::G));
-    }
-    if (IsKeyPressed(KEY_H)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::H));
-    }
-    if (IsKeyPressed(KEY_I)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::I));
-    }
-    if (IsKeyPressed(KEY_J)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::J));
-    }
-    if (IsKeyPressed(KEY_K)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::K));
-    }
-    if (IsKeyPressed(KEY_L)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::L));
-    }
-    if (IsKeyPressed(KEY_M)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::M));
-    }
-    if (IsKeyPressed(KEY_N)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::N));
-    }
-    if (IsKeyPressed(KEY_O)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::O));
-    }
-    if (IsKeyPressed(KEY_P)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::P));
-    }
-    if (IsKeyPressed(KEY_Q)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::Q));
-    }
-    if (IsKeyPressed(KEY_R)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::R));
-    }
-    if (IsKeyPressed(KEY_S)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::S));
-    }
-    if (IsKeyPressed(KEY_T)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::T));
-    }
-    if (IsKeyPressed(KEY_U)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::U));
-    }
-    if (IsKeyPressed(KEY_V)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::V));
-    }
-    if (IsKeyPressed(KEY_W)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::W));
-    }
-    if (IsKeyPressed(KEY_X)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::X));
-    }
-    if (IsKeyPressed(KEY_Y)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::Y));
-    }
-    if (IsKeyPressed(KEY_Z)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::Z));
-    }
-    if (IsKeyPressed(Num0)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::Num0));
-    }
-    if (IsKeyPressed(Num1)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::Num1));
-    }
-    if (IsKeyPressed(Num2)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::Num2));
-    }
-    if (IsKeyPressed(Num3)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::Num3));
-    }
-    if (IsKeyPressed(Num4)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::Num4));
-    }
-    if (IsKeyPressed(Num5)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::Num5));
-    }
-    if (IsKeyPressed(Num6)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::Num6));
-    }
-    if (IsKeyPressed(Num7)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::Num7));
-    }
-    if (IsKeyPressed(Num8)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::Num8));
-    }
-    if (IsKeyPressed(Num9)) {
-      m_events.push_back(createEvent(EventType::TextEntered, EventKey::Num9));
+
+    char nb = '0';
+    for (int key = KEY_ZERO; key <= KEY_NINE; key++, nb++) {
+      if (IsKeyPressed(key)) {
+        m_events.push_back(createEvent(EventType::TextEntered, EventKey(nb)));
+      }
     }
   }
 
-  void RaylibWindow::collectEvents(Event &t_event, Vector2i t_mouse_pos) {
+  void RaylibWindow::collectEvents(Vector2i t_mouse_pos) {
     if (WindowShouldClose()) {
       m_events.push_back(createEvent(EventType::Closed, EventKey::Left));
     }
@@ -237,12 +146,18 @@ namespace rtype {
     }
     if (IsKeyPressed(KEY_SPACE)) {
       m_events.push_back(createEvent(EventType::KeyPressed, EventKey::Space));
+      m_events.push_back(createEvent(EventType::KeyPressed, EventKey(' ')));
+      m_events.push_back(createEvent(EventType::TextEntered, EventKey(' ')));
     }
     if (IsKeyPressed(KEY_ENTER)) {
       m_events.push_back(createEvent(EventType::KeyPressed, EventKey::Enter));
     }
     if (IsKeyPressed(KEY_ESCAPE)) {
       m_events.push_back(createEvent(EventType::KeyPressed, EventKey::Escape));
+    }
+    if (IsKeyPressed(KEY_DELETE)) {
+      m_events.push_back(createEvent(EventType::KeyPressed, EventKey(8)));
+      m_events.push_back(createEvent(EventType::TextEntered, EventKey(8)));
     }
 
     if (IsKeyReleased(KEY_SPACE)) {
@@ -292,12 +207,12 @@ namespace rtype {
     if (t_mouse_pos.x != mouse_pos.x || t_mouse_pos.y != mouse_pos.y) {
       m_events.push_back(createEvent(EventType::MouseMoved, EventKey::Left));
     }
-    getTextEntered(t_event);
+    getTextEntered();
   }
 
   bool RaylibWindow::pollEvent(rtype::Event &t_event,
                                rtype::Vector2i t_mouse_pos, bool first) {
-    if (m_events.empty() && first) { collectEvents(t_event, t_mouse_pos); }
+    if (m_events.empty() && first) { collectEvents(t_mouse_pos); }
     if (m_events.empty()) { return false; }
     rtype::Event event = m_events.back();
     m_events.pop_back();

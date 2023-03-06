@@ -249,7 +249,9 @@ void GameState::update() {
     }
     rtype::Event event;
     if (m_window->isOpen()) {
-      while (m_window->pollEvent(event, m_prev_mouse_pos)) {
+      bool first = true;
+      while (m_window->pollEvent(event, m_prev_mouse_pos, first)) {
+        first = false;
         if (event.type == rtype::EventType::Closed) {
           m_is_running = false;
           std::cout << "yes close pls" << std::endl;

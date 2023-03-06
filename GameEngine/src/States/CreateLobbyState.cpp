@@ -172,8 +172,10 @@ void CreateLobbyState::update() {
   for (int i = 9; i > m_clientCom->m_chad_msgs.size(); i--) {
     m_chad_messages[i]->setString("");
   }
+  bool first = true;
   for (auto event = rtype::Event{};
-       m_window->pollEvent(event, m_prev_mouse_pos);) {
+       m_window->pollEvent(event, m_prev_mouse_pos, first);) {
+    first = false;
     rtype::Vector2i mouse_pos = m_mouse->getMousePosition(m_window);
     rtype::Vector2f mouse_pos_f{static_cast<float>(mouse_pos.x),
                                 static_cast<float>(mouse_pos.y)};
@@ -194,6 +196,7 @@ void CreateLobbyState::update() {
         m_next = StateMachine::build<MainState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, "", m_clientCom);
+        break;
       }
       if (m_start_btn.is_pressed(mouse_pos_f) &&
           m_clientCom->m_lobby_names.size() == 2 &&
@@ -203,6 +206,7 @@ void CreateLobbyState::update() {
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, "", m_clientCom);
         m_start_is_pressed = true;
+        break;
       }  // currently lobby is just set between main and game
     }
     switch (event.type) {
