@@ -21,6 +21,8 @@ ProvideUserNameState::ProvideUserNameState(
 }
 
 void ProvideUserNameState::update() {
+  bool pressed_enter = false;
+  for (auto event = rtype::Event{}; m_window->pollEvent(event);) {
   bool first = true;
   for (auto event = rtype::Event{};
        m_window->pollEvent(event, m_prev_mouse_pos, first);) {
@@ -49,6 +51,7 @@ void ProvideUserNameState::update() {
         break;
       }
     }
+
     switch (event.type) {
       case rtype::EventType::Closed:
         m_state_machine.quit();
@@ -57,6 +60,7 @@ void ProvideUserNameState::update() {
         switch (event.key) {
           case rtype::EventKey::Enter:
             m_textbox.setSelected(true);
+            if (m_textbox.getTextString().size() >= 3) pressed_enter = true;
             break;
           case rtype::EventKey::Escape:
             m_textbox.setSelected(false);
@@ -66,6 +70,17 @@ void ProvideUserNameState::update() {
         }
         break;
       case rtype::EventType::TextEntered:
+        if (pressed_enter) {
+          m_clientCom->setPlayerName(m_textbox.getTextString());
+          m_next = StateMachine::build<MainState>(
+            m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
+            m_level, m_path_to_sprite, true, m_ip, m_clientCom);
+          break;
+        }
+        if (event.key == rtype::EventKey::Enter || event.key == 10 ||
+            m_textbox.getTextString().size() >= 7) {
+          break;
+        }
         m_textbox.typedOn(event);
         m_textbox.setPosition(rtype::Vector2f{
           static_cast<float>(m_window->getSize().x / 2 -
@@ -124,14 +139,9 @@ void ProvideUserNameState::initText() {
   m_instructions->setPosition(
     {(size_x / 2) - (m_instructions->getLocalBounds().width / 2),
      static_cast<float>(m_window->getSize().y / 2 - 200)});
-  m_music_player.play(MusicID::MENU_THEME);
   m_textbox.setLimit(true, 10);
   m_textbox.setPosition(rtype::Vector2f{
     static_cast<float>(m_window->getSize().x / 2 -
                        m_textbox.getText()->getLocalBounds().width / 2),
     static_cast<float>(m_window->getSize().y / 2 - 100)});
 }
-
-void ProvideUserNameState::pause() { std::cout << "Pause" << std::endl; }
-
-void ProvideUserNameState::resume() { std::cout << "Resume" << std::endl; }

@@ -79,7 +79,6 @@ void JoinLobbyState::initText() {
   m_instructions->setPosition(
     {(size_x / 2) - (m_instructions->getLocalBounds().width / 2),
      static_cast<float>(m_window->getSize().y / 2 - 200)});
-  m_music_player.play(MusicID::MENU_THEME);
   m_textbox.setLimit(true, 10);
   m_textbox.setPosition(rtype::Vector2f{
     static_cast<float>(m_window->getSize().x / 2 -
@@ -120,10 +119,6 @@ JoinLobbyState::JoinLobbyState(StateMachine &t_machine,
   // call protocol to join lobby
 }
 
-void JoinLobbyState::pause() { std::cout << "MenuState Pause\n"; }
-
-void JoinLobbyState::resume() { std::cout << "MenuState resume\n"; }
-
 void JoinLobbyState::update() {
   bool first = true;
   for (auto event = rtype::Event{};
@@ -160,6 +155,7 @@ void JoinLobbyState::update() {
       }
 
       if (m_clientCom->m_lobby_successfull_connected) {
+        m_music_player.stop();
         m_next = StateMachine::build<CreateLobbyState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, m_ip, m_clientCom);

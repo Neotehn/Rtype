@@ -88,6 +88,8 @@ set(CLIENT_HPP ../Game/ECS/ComponentPool.hpp
         ../Server/src/Logger.hpp
         ../Server/src/ServerChadFilter.hpp
         ../GameEngine/src/States/IntroState.hpp
+        ../GameEngine/src/States/LeaderboardState.hpp
+        ../GameEngine/src/States/IntroState.hpp
         ../Game/Encapsulation/raylib/RaylibWindow.hpp
         ../Game/Encapsulation/raylib/RaylibSound.hpp
         ../Game/Encapsulation/raylib/RaylibFont.hpp
@@ -161,9 +163,12 @@ set(CLIENT_SRC ../Game/Systems/DisplaySystem.cpp
         ../Game/Encapsulation/SFML/GraphicLoader.cpp
         ../Game/CreateEntities/AssetLoader.cpp
         ../Server/src/Logger.cpp
-        ../Server/src/ServerChadFilter.cpp
         ../GameEngine/src/States/IntroState.cpp
         ../GameEngine/src/States/ProvideUserNameState.cpp
+        ../GameEngine/src/States/LeaderboardState.cpp
+        src/Action/LeaderboardAction.cpp
+        ../Server/src/ServerChadFilter.cpp
+        ../GameEngine/src/States/IntroState.cpp
         ../Game/Encapsulation/raylib/RaylibWindow.cpp
         ../Game/Encapsulation/raylib/RaylibSound.cpp
         ../Game/Encapsulation/raylib/RaylibFont.cpp
@@ -180,14 +185,17 @@ FetchContent_Declare(SFML
         GIT_REPOSITORY https://github.com/SFML/SFML.git
         GIT_TAG 2.6.x)
 FetchContent_MakeAvailable(SFML)
-find_package(Boost 1.69.0 COMPONENTS chrono system thread REQUIRED)
-
-
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(JSONCPP jsoncpp)
 
 find_package(Boost 1.69.0 COMPONENTS chrono system thread REQUIRED)
 
+if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(JSONCPP jsoncpp)
+else()
+    find_package(jsoncpp REQUIRED)
+endif()
+
+find_package(Boost 1.69.0 COMPONENTS chrono system thread REQUIRED)
 
 find_package(OpenGL REQUIRED OPTIONAL_COMPONENTS OpenGL)
 include_directories(${OPENGL_INCLUDE_DIR})

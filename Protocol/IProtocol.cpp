@@ -104,8 +104,10 @@ std::shared_ptr<Action> IProtocol::getAction(std::string command) {
   if (action_type == "START") {
     std::string lobby_code = commands[3];
     int player_id = std::stoi(commands[4]);
-    return std::make_shared<Action>(StateAction(
-      Action::ActionType::START, id, action_id, lobby_code, player_id));
+    std::string player_name = commands[5];
+    return std::make_shared<Action>(StateAction(Action::ActionType::START, id,
+                                                action_id, lobby_code,
+                                                player_id, player_name));
   } else if (action_type == "RESTART") {
     return std::make_shared<Action>(
       StateAction(Action::ActionType::RESTART, id, action_id));
@@ -146,6 +148,14 @@ std::shared_ptr<Action> IProtocol::getAction(std::string command) {
     EntityID player_id = std::stoull(commands[4]);
     return std::make_shared<Action>(
       DamageAction(id, damage, action_id, player_id));
+  } else if (action_type == "ASKLEADERBOARD") {
+    return std::make_shared<Action>(LeaderboardAction(id, action_id));
+  } else if (action_type == "SENDLEADERBOARD") {
+    std::vector<std::string> leaderboard;
+    for (int i = 3; i < commands.size() - 1; i++) {
+      leaderboard.push_back(commands[i]);
+    }
+    return std::make_shared<Action>(LeaderboardAction(id, leaderboard));
   } else if (action_type == "CREATELOBBY") {
     return std::make_shared<Action>(
       CreateLobbyAction(id, commands[3], commands[4], action_id));

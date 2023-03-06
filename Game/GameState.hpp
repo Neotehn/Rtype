@@ -31,6 +31,7 @@
 #include "../GameEngine/src/State.hpp"
 #include "../GameEngine/src/StateMachine.hpp"
 #include "../GameEngine/src/States/MainState.hpp"
+#include "../GameEngine/src/States/LeaderboardState.hpp"
 
 class StateMachine;
 
@@ -42,9 +43,6 @@ class GameState final : public State {
             const std::string &t_path_to_sprite, bool t_replace = true,
             std::string t_ip = "", UdpClient *t_clientCom = nullptr);
   ~GameState();
-
-  void pause() override;
-  void resume() override;
 
   void update() override;
   void draw() override;
@@ -69,6 +67,8 @@ class GameState final : public State {
 
   bool playerAlive();
   std::vector<std::shared_ptr<ISystem>> initSystems();
+  void handleLeaderboardCom();
+  void resetLevel();
 
   rtype::ITexture *m_bg_t;
   rtype::ISprite *m_bg_s;

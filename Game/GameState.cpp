@@ -49,21 +49,17 @@ GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
     //client creation
   } else {
     m_flag = CommunicationFlag::server;
-
     m_serverCom =
       new UdpServer(m_io_service, m_input_manager, m_is_running, m_ip);
   }
   loadLevel(m_level, m_em, m_graphic_loader, m_music,
             m_flag == CommunicationFlag::client, m_serverCom);
+  m_music->setVolume(m_music_player.getVolume());
   m_systems = initSystems();
 }
 
 GameState::~GameState() {
-  if (m_flag == CommunicationFlag::server) {
-    delete m_serverCom;
-  } else {
-    delete m_clientCom;
-  }
+  if (m_flag == CommunicationFlag::server) { delete m_serverCom; }
   if (m_music) { delete m_music; }
 }
 
@@ -101,10 +97,6 @@ std::vector<std::shared_ptr<ISystem>> GameState::initSystems() {
   return systems;
 }
 
-void GameState::pause() { std::cout << "GameState Pause\n"; }
-
-void GameState::resume() { std::cout << "GameState Resume\n"; }
-
 bool GameState::playerAlive() {
   for (EntityID ent : EntityViewer<Player>(*m_em)) {
     Player *player = (*m_em).Get<Player>(ent);
@@ -113,10 +105,31 @@ bool GameState::playerAlive() {
   return false;
 }
 
+void GameState::handleLeaderboardCom() {
+  if (m_flag == CommunicationFlag::server) {
+    for (EntityID ent : EntityViewer<Player>(*m_em)) {
+      Player *player = (*m_em).Get<Player>(ent);
+      std::cout << "updating leaderboard with " << player->name << " "
+                << player->exp << std::endl;
+      //if (player->name == "tube")
+      //  m_serverCom->updateLeaderboard("tube", 99999999999);
+      m_serverCom->updateLeaderboard(player->name, player->exp);
+    }
+    for (udp::endpoint client : m_serverCom->getEndpoints()) {
+      LeaderboardAction leaderboardAction(Action::ActionType::SENDLEADERBOARD,
+                                          m_serverCom->getLeaderboard());
+      m_serverCom->sendMessage(leaderboardAction.getCommand(), client);
+      m_serverCom->sendMessage(
+        StateAction(Action::ActionType::END).getCommand(), client);
+    }
+    m_is_running = false;
+  }
+}
+
 void GameState::manageLevels() {
   if (!playerAlive()) {
-    m_is_running = false;
     std::cout << "you died under the epitech pressure" << std::endl;
+    handleLeaderboardCom();
     return;
   }
   if (*m_level == 3) {
@@ -125,9 +138,8 @@ void GameState::manageLevels() {
       m_will_reload = false;
       bool success = loadNewEndboss(m_em, m_graphic_loader, m_serverCom);
       if (!success) {
-        m_is_running = false;
-        m_serverCom->addEvent(
-          std::make_shared<Action>(StateAction(Action::ActionType::END)));
+        std::cout << "why" << std::endl;
+        handleLeaderboardCom();
         return;
       }
       std::cout << "load new endboss" << std::endl;
@@ -167,6 +179,7 @@ void GameState::manageLevels() {
       m_level_two_enemy_created = false;
       loadLevel(m_level, m_em, m_graphic_loader, m_music,
                 (m_flag == CommunicationFlag::client), m_serverCom);
+      m_music->setVolume(m_music_player.getVolume());
       std::cout << "finished level 2" << std::endl;
       return;
     }
@@ -196,6 +209,7 @@ void GameState::manageLevels() {
       m_level_two_enemy_created = false;
       loadLevel(m_level, m_em, m_graphic_loader, m_music,
                 (m_flag == CommunicationFlag::client), m_serverCom);
+      m_music->setVolume(m_music_player.getVolume());
       std::cout << "finished level 2" << std::endl;
     }
   } else if (*m_level == 1) {
@@ -204,6 +218,7 @@ void GameState::manageLevels() {
       *m_level += 1;
       loadLevel(m_level, m_em, m_graphic_loader, m_music,
                 (m_flag == CommunicationFlag::client), m_serverCom);
+      m_music->setVolume(m_music_player.getVolume());
       std::cout << "finished level 1" << std::endl;
       return;
     }
@@ -220,6 +235,7 @@ void GameState::manageLevels() {
 
       loadLevel(m_level, m_em, m_graphic_loader, m_music,
                 (m_flag == CommunicationFlag::client), m_serverCom);
+      m_music->setVolume(m_music_player.getVolume());
       std::cout << "finished level 1" << std::endl;
     }
   }
@@ -232,14 +248,13 @@ void GameState::update() {
       std::cout << "waiting on Client Connection" << std::endl;
       boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
     }
-    while (  // if wanted to revert to original remove everything except l.112 - 115
-      m_flag == CommunicationFlag::client &&
-      m_clientCom->m_flag != m_clientCom->connected && m_is_running) {
+    while (m_flag == CommunicationFlag::client &&
+           m_clientCom->m_flag != m_clientCom->connected && m_is_running) {
       std::cout << "Connecting to Server ..." << std::endl;
       boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
       StateAction start_action =
         StateAction(Action::ActionType::START, m_clientCom->getPortNumber(),
-                    m_clientCom->m_lobby_code);
+                    m_clientCom->m_lobby_code, m_clientCom->getPlayerName());
       m_clientCom->sendMessage(start_action.getCommand());
       std::cout << "waiting on Server Connection" << std::endl;
       m_window->clear();
@@ -269,9 +284,15 @@ void GameState::update() {
         *m_level = action->getId();
         loadLevel(m_level, m_em, m_graphic_loader, m_music,
                   (m_flag == CommunicationFlag::client), m_serverCom);
+        m_music->setVolume(m_music_player.getVolume());
+      }
+      if (type == Action::ActionType::END && !action->isTriggeredByUser()) {
+        m_is_running = false;
+        break;
       }
     }
-    SystemData data = {.event_queue = m_input_manager.getInputs()};
+    SystemData data = {.event_queue = m_input_manager.getInputs(),
+                       m_music_player.getSEVol()};
     if (m_flag == CommunicationFlag::client && m_clientCom->m_flag) {
       EventQueue eq = m_client_input_manager.getInputsWithoutPop();
       for (std::shared_ptr<Action> action : eq.getEventQueue()) {
@@ -300,15 +321,37 @@ void GameState::update() {
     }
     manageLevels();
   }
-  if (m_window->isOpen()) { m_window->close(); }
   if (m_flag == CommunicationFlag::client) {
     std::cout << "Stop connection to Server ..." << std::endl;
     StateAction start_action =
       StateAction(Action::ActionType::END, m_port_number);
     m_clientCom->sendMessage(start_action.getCommand());
+    std::cout << "send end com ..." << std::endl;
+    m_clientCom->clearData();
+    m_next = StateMachine::build<LeaderboardState>(
+      m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
+      m_level, m_path_to_sprite, true, m_ip, m_clientCom);
+  }
+  if (m_flag == CommunicationFlag::server) {
+    m_serverCom->clearData();
+    resetLevel();
+    update();
   }
   m_music->stop();
-  m_state_machine.quit();
+}
+
+void GameState::resetLevel() {
+  m_systems.clear();
+  m_input_manager = InputManager(m_level);
+  m_client_input_manager = InputManager(m_level);
+  m_port_number = 0;
+  m_is_running = true;
+  m_em = std::make_shared<EntityManager>();
+  m_flag = CommunicationFlag::server;
+  loadLevel(m_level, m_em, m_graphic_loader, m_music,
+            m_flag == CommunicationFlag::client, m_serverCom);
+  m_music->setVolume(m_music_player.getVolume());
+  m_systems = initSystems();
 }
 
 void GameState::draw() {}

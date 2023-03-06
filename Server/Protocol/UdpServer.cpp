@@ -15,6 +15,7 @@ UdpServer::UdpServer(boost::asio::io_service &t_io_service,
   m_player_id_count = 0;
   m_start_time = std::chrono::system_clock::now();
   m_time_went_by = std::chrono::system_clock::now();
+  initLeaderboard();
 
   m_thread = boost::thread([&t_io_service]() { t_io_service.run(); });
 }
@@ -179,17 +180,14 @@ void UdpServer::handleReceive(const boost::system::error_code &t_error,
       m_send_event_manager.addActionsToQueue(action);
     }
 
-    if (action->getType() != Action::ActionType::END &&
-        m_client_ports.size() != 2) {
+    checkIfLeaderboard(action);
+
+    if (m_client_ports.size() != 2) {
       receiveClient();
     } else if (m_client_ports.size() == m_endpoints.size()) {
       std::cout << m_endpoints.size() << std::endl;
       m_flag = GameMode::coop;
       receiveClient();
-    } else {
-      m_flag = GameMode::end;
-      m_is_running = false;
-      m_socket.close();
     }
   } else {
     m_socket.close();
@@ -243,3 +241,113 @@ void UdpServer::resetTime() {
   m_time_went_by = std::chrono::system_clock::now();
   m_start_time = std::chrono::system_clock::now();
 }
+
+void UdpServer::initLeaderboard() {
+  std::vector<std::string> lines;
+  std::string filename = ".leaderboard.txt";
+  std::ifstream infile(filename);
+
+  if (infile) {
+    std::string line;
+    while (std::getline(infile, line)) {
+      lines.push_back(line);
+    }
+    infile.close();
+    m_leaderboard = lines;
+  } else {
+    std::ofstream outfile(filename);
+    outfile.close();
+    std::cout << "File created: " << filename << std::endl;
+  }
+}
+
+void UdpServer::clearLeaderboard() {
+  m_leaderboard.clear();
+  std::string filename = ".leaderboard.txt";
+  std::ofstream outfile(filename);
+  outfile.close();
+  std::cout << "File cleared: " << filename << std::endl;
+}
+
+bool compare_scores(const std::string &t_s1, const std::string &t_s2) {
+  size_t pos1 = t_s1.find_last_of(" ");
+  size_t pos2 = t_s2.find_last_of(" ");
+  int score1 = std::stoi(t_s1.substr(pos1 + 1));
+  int score2 = std::stoi(t_s2.substr(pos2 + 1));
+  return score1 > score2;
+}
+
+void UdpServer::updateLeaderboard(std::string t_name, int t_score) {
+  int place = 1;
+
+  bool is_in_leaderboard = false;
+  for (auto element : m_leaderboard) {
+    size_t pos = element.find(" ");
+    if (pos != std::string::npos) {
+      std::string name = element.substr(pos + 1);
+      pos = name.find(" ");
+      std::string score = name.substr(pos + 1);
+      if (std::stoi(score) < t_score) {
+        m_leaderboard.push_back(std::to_string(place) + ": " + t_name + " " +
+                                std::to_string(t_score));
+        is_in_leaderboard = true;
+        break;
+      }
+    }
+    place++;
+  }
+  std::sort(m_leaderboard.begin(), m_leaderboard.end(), compare_scores);
+  //inserted if not in leaderboard and not full
+  if (!is_in_leaderboard && m_leaderboard.size() < 10) {
+    m_leaderboard.push_back(std::to_string(place) + ": " + t_name + " " +
+                            std::to_string(t_score));
+  }
+  //clear leaderboard if to full
+  while (m_leaderboard.size() > 10) {
+    m_leaderboard.pop_back();
+  }
+  int correct_place = 1;
+  for (auto element : m_leaderboard) {
+    size_t pos = element.find(":");
+    if (pos != std::string::npos) {
+      int scorePlace = std::stoi(element.substr(0, pos));
+      if (scorePlace != correct_place) {
+        m_leaderboard[correct_place - 1] =
+          std::to_string(correct_place) + ": " + element.substr(pos + 2);
+      }
+    }
+    correct_place++;
+  }
+  std::string filename = ".leaderboard.txt";
+  std::ofstream outfile(filename);
+  for (auto element : m_leaderboard) {
+    outfile << element << std::endl;
+  }
+  outfile.close();
+}
+
+void UdpServer::checkIfLeaderboard(std::shared_ptr<Action> t_action) {
+  if (t_action->getType() == Action::ActionType::ASKLEADERBOARD) {
+    for (udp::endpoint client : m_endpoints) {
+      LeaderboardAction leaderboardAction(Action::ActionType::SENDLEADERBOARD,
+                                          m_leaderboard);
+      sendMessage(leaderboardAction.getCommand(), client);
+    }
+  }
+}
+
+void UdpServer::clearData() {
+  m_client_ids.clear();
+  m_client_connected.clear();
+  m_client_ports.clear();
+  m_is_running = true;
+  m_player_id_count = 0;
+  m_end = 0;
+  m_flag = GameMode::none;
+  m_input_manager = InputManager((int *) 1);
+  m_send_event_manager = InputManager((int *) 1);
+}
+
+std::vector<std::string> UdpServer::getLeaderboard() { return m_leaderboard; }
+
+std::vector<udp::endpoint> UdpServer::getEndpoints() { return m_endpoints; }
