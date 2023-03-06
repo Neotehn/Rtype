@@ -19,9 +19,11 @@ void CreateObjectSystem::update() {
        m_event_queue.getAllOfType(Action::ActionType::CREATE)) {
     Action::ObjectType type = action->getCreateType();
     EntityID id = action->getId();
+    std::cout << std::to_string(getEntityIndex(id)) << std::endl;
     rtype::Vector2f pos = action->getCreatePosition();
     float velocity;
     int player_id = action->getClientId();
+    std::cout << "begin" << std::endl;
     switch (type) {
       case Action::ObjectType::PLAYER:
         initPlayerClient(id, m_path_to_sprite, pos, m_em, m_graphic_loader,

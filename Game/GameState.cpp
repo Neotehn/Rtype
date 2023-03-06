@@ -1,5 +1,7 @@
 #include "./GameState.hpp"
 
+extern int counter;
+
 void GameState::initClientLoad() {
   float size_x = m_window->getSize().x;
   float size_y = m_window->getSize().y;
@@ -61,6 +63,7 @@ GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
 GameState::~GameState() {
   if (m_flag == CommunicationFlag::server) { delete m_serverCom; }
   if (m_music) { delete m_music; }
+  if (m_em) { m_em.reset(); }
 }
 
 std::vector<std::shared_ptr<ISystem>> GameState::initSystems() {
@@ -116,6 +119,7 @@ void GameState::handleLeaderboardCom() {
       m_serverCom->updateLeaderboard(player->name, player->exp);
     }
     for (udp::endpoint client : m_serverCom->getEndpoints()) {
+      std::cout << "handle" << std::endl;
       LeaderboardAction leaderboardAction(Action::ActionType::SENDLEADERBOARD,
                                           m_serverCom->getLeaderboard());
       m_serverCom->sendMessage(leaderboardAction.getCommand(), client);
@@ -127,7 +131,8 @@ void GameState::handleLeaderboardCom() {
 }
 
 void GameState::manageLevels() {
-  if (!playerAlive()) {
+  std::cout << "manageLevels" << std::endl;
+  if (m_player_created == 2 && !playerAlive()) {
     std::cout << "you died under the epitech pressure" << std::endl;
     handleLeaderboardCom();
     return;
@@ -269,7 +274,7 @@ void GameState::update() {
           m_is_running = false;
           std::cout << "yes close pls" << std::endl;
         }
-        if (m_flag == CommunicationFlag::client) {
+        if (m_flag == CommunicationFlag::client && m_player_created == 2) {
           m_client_input_manager.recordInputs(event, m_mouse, m_window);
         }
       }
@@ -283,9 +288,12 @@ void GameState::update() {
                   (m_flag == CommunicationFlag::client), m_serverCom);
         m_music->setVolume(m_music_player.getVolume());
       }
-      if (type == Action::ActionType::END && !action->isTriggeredByUser()) {
+      if (type == Action::ActionType::END && !action->isTriggeredByUser() &&
+          m_player_created == 2) {
         m_is_running = false;
         break;
+      } else if (type == Action::ActionType::END) {
+        m_input_manager.removeEvent(action->getActionId());
       }
     }
     SystemData data = {.event_queue = m_input_manager.getInputs(),
@@ -317,6 +325,11 @@ void GameState::update() {
       system->update();
     }
     manageLevels();
+
+    m_player_created = 0;
+    for (EntityID ent : EntityViewer<Player>(*m_em)) {
+      m_player_created += 1;
+    }
   }
   if (m_flag == CommunicationFlag::client) {
     std::cout << "Stop connection to Server ..." << std::endl;
@@ -328,8 +341,10 @@ void GameState::update() {
     m_next = StateMachine::build<LeaderboardState>(
       m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
       m_level, m_path_to_sprite, true, m_ip, m_clientCom);
+    counter = 0;
   }
   if (m_flag == CommunicationFlag::server) {
+    std::cout << "End" << std::endl;
     m_serverCom->clearData();
     resetLevel();
     update();
@@ -349,6 +364,7 @@ void GameState::resetLevel() {
             m_flag == CommunicationFlag::client, m_serverCom);
   m_music->setVolume(m_music_player.getVolume());
   m_systems = initSystems();
+  counter = 0;
 }
 
 void GameState::draw() {}

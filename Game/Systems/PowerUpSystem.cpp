@@ -13,6 +13,7 @@ void PowerUpSystem::updateData(SystemData &t_data) {
 }
 
 void PowerUpSystem::update() {
+  std::cout << "powerup" << std::endl;
   for (std::shared_ptr<Action> action :
        m_event_queue.getAllOfType(Action::ActionType::INCREASE)) {
     for (EntityID ent : EntityViewer<Player>(*m_em)) {

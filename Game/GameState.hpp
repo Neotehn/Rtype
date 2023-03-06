@@ -64,6 +64,7 @@ class GameState final : public State {
   bool m_level_three_enemy_created = false;
   bool m_will_reload = false;
   std::string m_path_to_sprite;
+  int m_player_created = 0;
 
   bool playerAlive();
   std::vector<std::shared_ptr<ISystem>> initSystems();

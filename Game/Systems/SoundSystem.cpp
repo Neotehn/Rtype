@@ -23,6 +23,7 @@ SoundSystem::~SoundSystem() {
 void SoundSystem::updateData(SystemData &t_data) { m_vol = t_data.volume; }
 
 void SoundSystem::update() {
+  std::cout << "sound" << std::endl;
   for (SoundType sound : m_play_sounds) {
     m_sounds->setVolume(sound, m_vol);
     m_sounds->play(sound);
