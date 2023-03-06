@@ -127,13 +127,13 @@ void MovementSystem::keepPlayerInsideScreen(rtype::Vector2f &t_position,
 
 void MovementSystem::updatePlayer(EntityID t_ent) {
   Player *player = (*m_em).Get<Player>(t_ent);
+  std::cout << std::to_string(t_ent) << std::endl;
   int left = 0;
   int right = 0;
   int up = 0;
   int down = 0;
   int pos = 0;
   rtype::Vector2f orig_pos = player->position.position;
-
   for (int i = 0; i < m_event_queue.getEventQueue().size(); i++) {
     Action::ActionType action =
       m_event_queue.getEventQueue()[i].get()->getType();
@@ -189,7 +189,6 @@ void MovementSystem::updatePlayer(EntityID t_ent) {
     {player->position.position.x, player->position.position.y});
   player->health.body->setPosition(
     {player->position.position.x - 180, player->position.position.y - 70});
-
   if (player->position.velocity.x != 0 || player->position.velocity.y != 0)
     player->position.velocity *= 0.99f;
   if (m_serverCom != nullptr) {
