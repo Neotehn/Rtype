@@ -76,7 +76,7 @@ void LeaderboardState::update() {
 void LeaderboardState::initSprites() {
   m_bg_t = m_graphic_loader->loadTexture();
   m_bg_s = m_graphic_loader->loadSprite();
-  if (!m_bg_t->loadFromFile("./assets/menubg.jpg")) {
+  if (!m_bg_t->loadFromFile("./assets/menubg.png")) {
     throw std::runtime_error("Unable to load image.");
   }
   float size_x = m_window->getSize().x;

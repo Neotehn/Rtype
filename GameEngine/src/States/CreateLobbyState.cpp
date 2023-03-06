@@ -197,10 +197,10 @@ void CreateLobbyState::update() {
           m_clientCom->m_lobby_names.size() == 2 && !m_start_is_pressed) {
         std::cout << "startbtn pressed from create to game" << std::endl;
         m_music_player.stop();
+        m_start_is_pressed = true;
         m_next = StateMachine::build<GameState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, "", m_clientCom);
-        m_start_is_pressed = true;
         break;
       }  // currently lobby is just set between main and game
     }

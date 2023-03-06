@@ -312,6 +312,8 @@ DynamicHealthBar initEnemyHealth(rtype::IGraphicLoader *t_graphic_loader,
                                  rtype::Vector2f t_offset, int t_max_health) {
   rtype::IRectangleShape *missing_health =
     t_graphic_loader->loadRectangleShape();
+  rtype::ITexture *texture = t_graphic_loader->loadTexture();
+  missing_health->setTexture(texture);
   Pos bar_pos = Pos{rtype::Vector2f{0, 0}, t_pos};
   missing_health->setPosition(
     {bar_pos.position.x + t_offset.x, bar_pos.position.y + t_offset.y});
@@ -319,6 +321,7 @@ DynamicHealthBar initEnemyHealth(rtype::IGraphicLoader *t_graphic_loader,
   missing_health->setFillColor(rtype::Red);
 
   rtype::IRectangleShape *health_bar = t_graphic_loader->loadRectangleShape();
+  health_bar->setTexture(texture);
   health_bar->setPosition(
     {bar_pos.position.x + t_offset.x, bar_pos.position.y + t_offset.y});
   health_bar->setSize({100, 10});

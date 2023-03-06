@@ -8,8 +8,8 @@ rtype::RaylibTexture::RaylibTexture(const Texture2D &texture) {
 
 bool rtype::RaylibTexture::loadFromFile(const std::string &filename) {
   *m_texture = LoadTexture(filename.c_str());
-  m_size = {static_cast<float>(m_texture->width),
-            static_cast<float>(m_texture->height)};
+  m_size = {static_cast<unsigned int>(m_texture->width),
+            static_cast<unsigned int>(m_texture->height)};
   if (m_size.x == 0 || m_size.y == 0) return false;
   m_rect.width = m_texture->width;
   m_rect.height = m_texture->height;
@@ -19,17 +19,14 @@ bool rtype::RaylibTexture::loadFromFile(const std::string &filename) {
 bool rtype::RaylibTexture::loadFromFile(const std::string &filename,
                                         const IntRect &area) {
   *m_texture = LoadTexture(filename.c_str());
-  m_size = {static_cast<float>(m_texture->width),
-            static_cast<float>(m_texture->height)};
+  m_size = {static_cast<unsigned int>(m_texture->width),
+            static_cast<unsigned int>(m_texture->height)};
   m_rect.width = m_texture->width;
   m_rect.height = m_texture->height;
   return true;
 }
 
-rtype::Vector2u rtype::RaylibTexture::getSize() const {
-  return {static_cast<unsigned int>(m_texture->width),
-          static_cast<unsigned int>(m_texture->height)};
-}
+rtype::Vector2u rtype::RaylibTexture::getSize() const { return m_size; }
 
 Texture2D *rtype::RaylibTexture::getTexture() { return m_texture; }
 
@@ -87,12 +84,15 @@ void rtype::RaylibTexture::scale(const rtype::Vector2f &factor) {
 }
 
 void rtype::RaylibTexture::setSize(const rtype::Vector2f &t_size) {
-  m_size = t_size;
+  m_scale = {static_cast<float>(t_size.x / m_size.x),
+             static_cast<float>(t_size.y / m_size.y)};
+  m_size = {static_cast<unsigned int>(t_size.x),
+            static_cast<unsigned int>(t_size.y)};
 }
 
 rtype::FloatRect rtype::RaylibTexture::getGlobalBounds() {
-  return {m_position.x, m_position.y, m_size.x * m_scale.x,
-          m_size.y * m_scale.y};
+  return {m_position.x, m_position.y, static_cast<float>(m_size.x),
+          static_cast<float>(m_size.y)};
 }
 
 Texture *rtype::RaylibTexture::getTexture() const { return m_texture; }

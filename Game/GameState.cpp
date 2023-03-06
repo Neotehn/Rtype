@@ -5,7 +5,7 @@ void GameState::initClientLoad() {
   float size_y = m_window->getSize().y;
   m_bg_t = m_graphic_loader->loadTexture();
   m_bg_s = m_graphic_loader->loadSprite();
-  if (!m_bg_t->loadFromFile("./assets/menubg.jpg")) {
+  if (!m_bg_t->loadFromFile("./assets/menubg.png")) {
     throw std::runtime_error("Unable to load image.");
   }
   float scale_x = size_x / m_bg_t->getSize().x;
@@ -41,6 +41,7 @@ GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
     m_path_to_sprite = "../Client/sprites/starship.png";
   else
     m_path_to_sprite = t_path_to_sprite;
+  std::cout << "sprite path: " << m_path_to_sprite << std::endl;
   if (t_flag == client) {
     initClientLoad();
     m_flag = CommunicationFlag::client;
@@ -52,10 +53,13 @@ GameState::GameState(StateMachine &t_machine, rtype::IRenderWindow *t_window,
     m_serverCom =
       new UdpServer(m_io_service, m_input_manager, m_is_running, m_ip);
   }
+  std::cout << "did init udp" << std::endl;
   loadLevel(m_level, m_em, m_graphic_loader, m_music,
             m_flag == CommunicationFlag::client, m_serverCom);
+  std::cout << "loaded level" << std::endl;
   m_music->setVolume(m_music_player.getVolume());
   m_systems = initSystems();
+  std::cout << "game state constructor done" << std::endl;
 }
 
 GameState::~GameState() {

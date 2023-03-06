@@ -42,6 +42,8 @@ namespace rtype {
    private:
     RaylibTexture *m_texture;
     IntRect m_texture_rect;
+    Vector2f m_size = {0, 0};
+    FloatRect m_global_bounds = {0, 0, 0, 0};
   };
 }  // namespace rtype
 

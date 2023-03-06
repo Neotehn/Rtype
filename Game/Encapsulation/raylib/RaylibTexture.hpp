@@ -46,7 +46,7 @@ namespace rtype {
     Vector2f m_origin = {0, 0};
     Vector2f m_position = {0, 0};
     Vector2f m_scale = {1, 1};
-    Vector2f m_size = {1, 1};
+    Vector2u m_size = {1, 1};
 
    public:
     void setSize(const Vector2f &t_size);

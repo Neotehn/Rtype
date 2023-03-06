@@ -10,6 +10,7 @@ namespace rtype {
   void RaylibRectangleShape::setOutlineThickness(float thickness) {}
 
   void RaylibRectangleShape::setSize(const rtype::Vector2f &size) {
+    m_size = size;
     m_texture->setSize(size);
   }
 
@@ -90,7 +91,8 @@ namespace rtype {
 
   const rtype::Vector2f &RaylibRectangleShape::getSize() {
     rtype::Vector2u size = m_texture->getSize();
-    return {static_cast<float>(size.x), static_cast<float>(size.y)};
+    m_size = {static_cast<float>(size.x), static_cast<float>(size.y)};
+    return m_size;
   }
 
   const rtype::Vector2f &RaylibRectangleShape::getPosition() {
@@ -98,7 +100,8 @@ namespace rtype {
   }
 
   const rtype::FloatRect &RaylibRectangleShape::getGlobalBounds() {
-    return m_texture->getGlobalBounds();
+    m_global_bounds = m_texture->getGlobalBounds();
+    return m_global_bounds;
   }
 
   const rtype::IntRect &RaylibRectangleShape::getTextureRect() {
