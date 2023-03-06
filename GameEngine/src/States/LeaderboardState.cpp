@@ -34,7 +34,10 @@ LeaderboardState::~LeaderboardState() {
 }
 
 void LeaderboardState::update() {
-  for (auto event = rtype::Event{}; m_window->pollEvent(event);) {
+  bool first = true;
+  for (auto event = rtype::Event{};
+       m_window->pollEvent(event, m_prev_mouse_pos, first);) {
+    first = false;
     rtype::Vector2i mouse_pos = m_mouse->getMousePosition(m_window);
     rtype::Vector2f mouse_pos_f{static_cast<float>(mouse_pos.x),
                                 static_cast<float>(mouse_pos.y)};
@@ -67,6 +70,7 @@ void LeaderboardState::update() {
         break;
     }
   }
+  m_prev_mouse_pos = m_mouse->getMousePosition(m_window);
 }
 
 void LeaderboardState::initSprites() {

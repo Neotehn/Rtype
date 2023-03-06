@@ -22,7 +22,6 @@ ProvideUserNameState::ProvideUserNameState(
 
 void ProvideUserNameState::update() {
   bool pressed_enter = false;
-  for (auto event = rtype::Event{}; m_window->pollEvent(event);) {
   bool first = true;
   for (auto event = rtype::Event{};
        m_window->pollEvent(event, m_prev_mouse_pos, first);) {

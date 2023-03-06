@@ -19,9 +19,12 @@ namespace rtype {
     void stop(int t_index) override;
     void pause(int t_index) override;
     void setVolume(float t_volume) override;
+    float getVolume(int t_index) override;
+    void setVolume(int t_index, float t_vol) override;
 
    private:
     std::vector<Sound> m_sound;
+    std::vector<float> m_volume = {};
   };
 }  // namespace rtype
 

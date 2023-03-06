@@ -8,6 +8,12 @@ CPackConfig.cmake
 CPackSourceConfig.cmake
 Makefile
 _deps
-r-type_client
+r-type_client*
 Client/cmake-build-debug/
 Client/.idea
+Client/.cmake
+Client/compile_commands.json*
+Client/Testing
+Server/src/Data/Logfiles
+Client/cmake
+.leaderboard.txt
