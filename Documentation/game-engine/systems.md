@@ -72,3 +72,5 @@ systems.push_back(std::make_shared<NameSystem>(m_em));
 ```
 
 Depending on if your system is relevant to the server add it in the first block of the if statement, if it is only relevant for the client to the second block and if it is relevant for both add it below the if statement.
+
+[Back](../overview/game-engine.md)

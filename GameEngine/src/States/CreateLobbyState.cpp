@@ -107,14 +107,12 @@ void CreateLobbyState::initText() {
   m_chat_title->setFont(m_font);
   m_chat_title->setString("CHAT:");
   m_chat_title->setCharacterSize(20);
-  // m_chat_title->setColor({18, 107, 165, 255});
   m_chat_title->setPosition(
     {20, static_cast<float>(m_window->getSize().y - 70)});
   m_placeholder = m_graphic_loader->loadText();
   m_placeholder->setFont(m_font);
   m_placeholder->setString("PRESS ENTER FOR CHAT");
   m_placeholder->setCharacterSize(20);
-  // m_placeholder->setColor({18, 107, 165, 255});
   m_placeholder->setPosition(
     {20, static_cast<float>(m_window->getSize().y - 40)});
   m_chat.setLimit(true, 20);
@@ -156,7 +154,6 @@ CreateLobbyState::CreateLobbyState(
   initText();
   initChad();
   m_start_is_pressed = false;
-  // call protocol for creating lobby
 }
 
 void CreateLobbyState::update() {
@@ -177,7 +174,6 @@ void CreateLobbyState::update() {
     }
     if (m_mouse->isLeftMouseButtonPressed()) {
       if (m_home_btn.is_pressed(mouse_pos_f)) {
-        std::cout << "homebtn pressed" << std::endl;
         LeaveLobbyAction create_lobby_action = LeaveLobbyAction(
           Action::ActionType::LEAVELOBBY, m_clientCom->m_lobby_code,
           m_clientCom->getPlayerName());
@@ -189,15 +185,14 @@ void CreateLobbyState::update() {
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, "", m_clientCom);
       }
-      if (m_start_btn.is_pressed(mouse_pos_f) &&  // start game if pressed
+      if (m_start_btn.is_pressed(mouse_pos_f) &&
           m_clientCom->m_lobby_names.size() == 2 && !m_start_is_pressed) {
-        std::cout << "startbtn pressed from create to game" << std::endl;
         m_music_player.stop();
-        m_next = StateMachine::build<GameState>(
+        m_next = StateMachine::build<CharSelectState>(
           m_state_machine, m_window, m_music_player, m_flag, m_graphic_loader,
           m_level, m_path_to_sprite, true, "", m_clientCom);
         m_start_is_pressed = true;
-      }  // currently lobby is just set between main and game
+      }
     }
     switch (event.type) {
       case rtype::EventType::Closed:
@@ -207,15 +202,12 @@ void CreateLobbyState::update() {
         switch (event.key) {
           case rtype::EventKey::Enter:
             if (m_chat.getSelected() && m_chat.getTextString() != "_") {
-              std::cout << "prep push\n";
               ChadAction chad_action = ChadAction(
                 Action::ActionType::CHAD,
                 m_clientCom->getPlayerName() + ": " + m_chat.getTextString(),
                 m_clientCom->m_lobby_code);
               m_clientCom->sendMessage(chad_action.getCommand());
               m_chat.resetString();
-
-              std::cout << "reset string textbox\n";
             } else {
               m_chat.setSelected(true);
             }
@@ -251,8 +243,6 @@ void CreateLobbyState::draw() {
       m_window->draw(m_player_two_s);
     }
   }
-  // m_window->draw(m_player_three_s);
-  // m_window->draw(m_player_four_s);
   m_window->draw(m_bg_text);
   m_window->draw(m_chat_title);
   if (!m_chad_messages.empty()) {
