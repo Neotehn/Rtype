@@ -11,7 +11,6 @@ AnimationSystem::AnimationSystem(std::shared_ptr<EntityManager> t_em,
 void AnimationSystem::updateData(SystemData &t_data) {}
 
 void AnimationSystem::update() {
-  std::cout << "anim" << std::endl;
   animateAnimationObj();
   animateSpinningItem();
 }

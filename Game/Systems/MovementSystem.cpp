@@ -19,11 +19,9 @@ void MovementSystem::updateData(SystemData &t_data) {
 }
 
 void MovementSystem::update() {
-  std::cout << "movement" << std::endl;
   for (EntityID ent : EntityViewer<Player>(*m_em)) {
     updatePlayer(ent);
   }
-  std::cout << "player" << std::endl;
   for (EntityID ent : EntityViewer<BackgroundLayer>(*m_em)) {
     updateBackground(ent);
   }

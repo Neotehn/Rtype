@@ -354,11 +354,13 @@ void GameState::update() {
 
 void GameState::resetLevel() {
   m_systems.clear();
-  m_input_manager = InputManager(m_level);
-  m_client_input_manager = InputManager(m_level);
+  m_input_manager.clearInputQueue();
+  m_input_manager.setPlayerId(0);
+  m_client_input_manager.clearInputQueue();
+  m_client_input_manager.setPlayerId(0);
   m_port_number = 0;
   m_is_running = true;
-  m_em = std::make_shared<EntityManager>();
+  m_em->resetManager();
   m_flag = CommunicationFlag::server;
   loadLevel(m_level, m_em, m_graphic_loader, m_music,
             m_flag == CommunicationFlag::client, m_serverCom);

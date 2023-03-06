@@ -51,6 +51,12 @@ class EntityManager {
     m_free_entities.push_back(index);
   }
 
+  void resetManager() {
+    m_entities.clear();
+    m_component_pools.clear();
+    m_free_entities.clear();
+  }
+
   template<typename T>
   T *Assign(EntityID t_id, T t_value) {
     int componentId = getId<T>();
