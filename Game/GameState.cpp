@@ -143,7 +143,6 @@ void GameState::manageLevels() {
       m_will_reload = false;
       bool success = loadNewEndboss(m_em, m_graphic_loader, m_serverCom);
       if (!success) {
-        std::cout << "why" << std::endl;
         handleLeaderboardCom();
         return;
       }
