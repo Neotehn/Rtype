@@ -84,7 +84,6 @@ void CharSelectState::initSprites() {
     SpriteECS("./../Client/assets/bg_textbox.png", m_graphic_loader);
   m_bg_selected->setTexture(sprite_bg_selected.getTexture());
   m_bg_selected->setTextureRect({0, 0, 1018, 1938});
-  // m_bg_selected->setRotation(180);
   m_bg_selected->setSize({225, 225});
   m_bg_selected->setPosition(
     {static_cast<float>(m_window->getSize().x) / 2 + 105,
