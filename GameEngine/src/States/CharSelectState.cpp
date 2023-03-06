@@ -48,7 +48,7 @@ CharSelectState::CharSelectState(
   m_sel_green = false;
   m_sel_pink = false;
   m_sel_yellow = false;
-  m_selected_ship = "";
+  m_selected_ship = t_path_to_sprite;
   m_music_player.play(MusicID::MENU_THEME);
 }
 

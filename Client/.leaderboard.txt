@@ -1,10 +1,4 @@
-1: sdd 0
-2: ddd 0
-3: sdd 0
-4: ddd 0
-5: sadd 0
-6: ddd 0
-7: sdd 0
-8: dd 0
-9: dff 0
-10: ddd 0
+1: Chad 500
+2: Player1 455
+3: qwerty 395
+4: wasd 350
