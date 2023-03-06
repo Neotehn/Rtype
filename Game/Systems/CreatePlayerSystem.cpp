@@ -24,9 +24,12 @@ void CreatePlayerSystem::update() {
   for (std::shared_ptr<Action> action :
        m_event_queue.getAllOfType(Action::ActionType::START)) {
     if (!isRegistered(action->getId())) {
+      std::cout << "heya" << std::endl;
       m_registered_players.push_back(action->getId());
+      std::cout << "heys" << std::endl;
       EntityID player_id = initPlayer(m_em, m_server_com, m_graphic_loader,
                                       action->getPlayerName());
+      std::cout << "heyb" << std::endl;
       action->setPlayerId(player_id);
     }
   }

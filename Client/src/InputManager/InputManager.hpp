@@ -34,6 +34,7 @@ class InputManager {
   bool doesActionExist(std::shared_ptr<Action> t_action_id);
   bool isPlayerIdSet();
   void setPlayerId(EntityID t_player_id);
+  void clearInputQueue();
   int *m_level;
 
  private:

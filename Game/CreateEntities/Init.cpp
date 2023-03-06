@@ -225,7 +225,9 @@ void initPlayerClient(EntityID t_id, std::string t_sprite_path,
   std::cout << "init player client with playername: " << t_name << std::endl;
   Player player_obj =
     Player{player_sprite, player_pos, body, health, 10, t_player_id, t_name};
+  std::cout << "init player client with playername: " << t_name << std::endl;
   t_entity_manager->Assign<Player>(player, player_obj);
+  std::cout << "init player client with playername: " << t_name << std::endl;
 }
 
 Health initPlayerHealthBar(rtype::IGraphicLoader *t_graphic_loader) {

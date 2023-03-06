@@ -202,6 +202,8 @@ void InputManager::setPlayerId(EntityID t_player_id) {
   m_player_id = t_player_id;
 }
 
+void InputManager::clearInputQueue() { m_input_queue.clear(); }
+
 //sf::Vector2i InputManager::getMousePosition() {
 //  return sf::Mouse::getPosition();
 //}
